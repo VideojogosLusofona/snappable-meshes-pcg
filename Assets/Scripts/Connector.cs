@@ -9,48 +9,7 @@ namespace trinityGen
 
     public class Connector : MonoBehaviour, IComparable<Connector>
     {
-/// <summary>
-///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-///     guide   W,  
-///             R,
-///             G,
-///             B,
-///             CYAN
-///             ORNG,
-///             YLLW,
-///             PINK,
-///             PRPL,
-///             BRWN,
-///             BLACK,
-///             GREY
-/// </summary>
-/// <value></value>
-        public static bool[,] ColorMatchMatrix = {
-        {true, true, true, true, true, true, true, true, true, true, true, true},
-        {true, true, false, false, false, false, false, false, false, false, false, false},
 
-        {true, false, true, false, false, false, false, false, false, false, false, false},
-
-        {true, false, false, true, false, false, false, false, false, false, false, false},
-
-        {true, false, false, false, true, false, false, false, false, false, false, false},
-
-        {true, false, false, false, false, true, false, false, false, false, false, false},
-
-        {true, false, false, false, false, false, true, false, false, false, false, false},
-
-        {true, false, false, false, false, false, false, true, false, false, false, false},
-
-        {true, false, false, false, false, false, false, false, true, false, false, false},
-
-        {true, false, false, false, false, false, false, false, false, true, false, false},
-
-        {true, false, false, false, false, false, false, false, false, false, true, false},
-
-        {true, false, false, false, false, false, false, false, false, false, false, true},
-
-
-        };
         [SerializeField] public ConnectorColor color;
         public Vector3 heading => transform.forward;
 

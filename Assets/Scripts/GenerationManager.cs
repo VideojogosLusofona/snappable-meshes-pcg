@@ -28,7 +28,50 @@ namespace trinityGen
 
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
-        [SerializeField] private bool[,] _colorMatchRules;
+
+/// <summary>
+///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+///     guide   W,  
+///             R,
+///             G,
+///             B,
+///             CYAN
+///             ORNG,
+///             YLLW,
+///             PINK,
+///             PRPL,
+///             BRWN,
+///             BLACK,
+///             GREY
+/// </summary>
+/// <value></value>
+        [SerializeField] private bool[,] _colorMatchMatrix = {
+// tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+        {true, true, true, true, true, true, true, true, true, true, true, true},
+        {true, true, false, false, false, false, false, false, false, false, false, false},
+
+        {true, false, true, false, false, false, false, false, false, false, false, false},
+
+        {true, false, false, true, false, false, false, false, false, false, false, false},
+
+        {true, false, false, false, true, false, false, false, false, false, false, false},
+
+        {true, false, false, false, false, true, false, false, false, false, false, false},
+
+        {true, false, false, false, false, false, true, false, false, false, false, false},
+
+        {true, false, false, false, false, false, false, true, false, false, false, false},
+
+        {true, false, false, false, false, false, false, false, true, false, false, false},
+
+        {true, false, false, false, false, false, false, false, false, true, false, false},
+
+        {true, false, false, false, false, false, false, false, false, false, true, false},
+
+        {true, false, false, false, false, false, false, false, false, false, false, true},
+
+
+        };
 
         [Header("----------- Generation Settings --------")]
 
@@ -148,8 +191,7 @@ namespace trinityGen
             _placedPieces.Add(inst.GetComponent<ArenaPiece>());
             inst.name += " - START ";
             _guidePiece = _placedPieces[0];
-            // Place the first piece
-            // PickFirstPiece();
+
 
             // Make base level of Arena and add those pieces to the list
             int placement = 0;
@@ -182,9 +224,10 @@ namespace trinityGen
                 ArenaPiece spawnedScript = spawnedPiece.GetComponent<ArenaPiece>();
 
                 (bool valid, Transform trn) evaluationResult =
-                    _guidePiece.EvaluatePiece(spawnedScript, 
+                    _guidePiece.EvaluatePiece(_matchingRules, spawnedScript, 
                     _pieceDistance, 
-                    _pinCountTolerance);
+                    _pinCountTolerance,
+                    _colorMatchMatrix);
 
                 // If things worked out, spawn the piece in the correct position
                 if(evaluationResult.valid)

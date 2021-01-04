@@ -104,29 +104,44 @@ namespace trinityGen
         }
     
 
-        public (bool valid, Transform positionRot) EvaluatePiece(
-            ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0)
+        public (bool valid, Transform positionRot) EvaluatePiece(ConnectorMatchingRules rules, ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0,  bool[,] colorMatrix = null)
         {
             
             List<(Connector mine, Connector oth)> possibleCombos =
             new List<(Connector mine, Connector oth)>();
             //Check for intersecting geometry?
-            //Spawn the piece and have it tell if the trigger collider reports back
+            //Spawn the piece and have it tell if the trigger collider reports back?
             // ...but what if the piece is not all in one mesh?
 
             foreach(Connector co in other._connectors)
             {
                 foreach(Connector ct in this._connectors)
                 {
-                    if(!co.isUsed && !ct.isUsed && 
-                        co.pins >= ct.pins - groupTolerance &&
-                        co.pins <= ct.pins + groupTolerance)
+                    bool pinMatch = false;
+                    bool colorMatch = false;
+                    bool fullMatch = false;
+                    // Match criteria
+                    if(!co.isUsed && !ct.isUsed)
                     {
-                        // SIDE connects with SIDE
-                        if(Connector.ColorMatchMatrix[(int)ct.color, (int)co.color])
+                        if((Mathf.Abs(co.pins - ct.pins) <= groupTolerance) && colorMatrix != null)
+                            pinMatch = true;
+                        
+                        if(colorMatrix[(int)ct.color, (int)co.color])
                         {
-                            possibleCombos.Add((ct, co));
+                            colorMatch = true;
                         }
+
+                        if(rules == ConnectorMatchingRules.PINS && pinMatch)
+                            fullMatch = true;
+                        else if(rules == ConnectorMatchingRules.COLOURS && colorMatch)
+                            fullMatch = true;
+                        else if(rules == ConnectorMatchingRules.PINS_AND_COLORS && pinMatch && colorMatch)
+                            fullMatch = true;
+                        else
+                            fullMatch = false;
+                        
+                        if(fullMatch)
+                            possibleCombos.Add((ct, co));
                         
                     }
                 }
