@@ -3,7 +3,7 @@ using System;
 
 namespace trinityGen
 {
-    [System.Serializable]
+    
     public sealed class BranchGM : GenerationMethod
     {
 
@@ -16,12 +16,21 @@ namespace trinityGen
         private int _currentBranchLength;
         private int _currentBranchPlaced;
 
+        public BranchGM(int maxBranches, int branchLength, int branchLengthVariance, int pieceJumpSize)
+        {
+            this.maxBranches = maxBranches;
+            this.branchLength = branchLength;
+            this.branchLengthVariance = branchLengthVariance;
+            this.pieceJumpSize = pieceJumpSize;
 
+            this.pieceJumpSize = branchLength / maxBranches;
+
+        }
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where 
-            // [0] is the index with least connectors
-            int botConnectorCount = starterList[0].ConnectorsCount;
+            // [0] is the index with most connectors
+            int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
@@ -32,10 +41,10 @@ namespace trinityGen
 
             }
 
-            Random rng = new Random();
+            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng.Next(starterList.Count)];
-            if(_firstPiece == null)
+            ArenaPiece chosen = possibles[rng];
+            if (_firstPiece == null)
                 _firstPiece = chosen;
 
             StartBranch();
@@ -46,12 +55,12 @@ namespace trinityGen
         public override ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
         {
             ArenaPiece chosen;
-            Random rng = new Random();
+            //Random rng = new Random();
 
-            if(_branchesMade >= maxBranches)
+            if(_branchesMade > maxBranches)
                 return null;
 
-            if(_currentBranchPlaced >= _currentBranchLength)
+            if(_currentBranchPlaced > _currentBranchLength)
             {
                 int boundJump = pieceJumpSize * _branchesMade;
 
@@ -64,8 +73,13 @@ namespace trinityGen
 
                 if(chosen.IsFull())
                 {
-                    chosen = worldPieceList[rng.Next(1, _currentBranchLength)];
-
+                    int index = worldPieceList.FindIndex(a => a.gameObject.name == chosen.gameObject.name) + pieceJumpSize;
+                    if (index < worldPieceList.Count)
+                        chosen = worldPieceList[index];
+                    else
+                        return null;
+               
+                    
                 }
 
 
@@ -79,6 +93,7 @@ namespace trinityGen
             }
             
             _lastGuideSelected = lastPlaced;
+            _currentBranchPlaced++;
             return _lastGuideSelected;
                 
 
@@ -87,10 +102,11 @@ namespace trinityGen
 
         public void StartBranch()
         {
-            Random rng = new Random();
-            int chosenVar = rng.Next(0, branchLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, branchLengthVariance + 1);
+            int chosenVar = rng;
             int[] mults = {-1, 1};
-            int chosenMult = mults[rng.Next(0, mults.Length)];
+            rng = UnityEngine.Random.Range(0, mults.Length);
+            int chosenMult = mults[rng];
             _currentBranchLength = branchLength + (chosenVar * chosenMult);
             _currentBranchPlaced = 0;
             _branchesMade ++;

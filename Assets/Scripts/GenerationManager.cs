@@ -12,31 +12,41 @@ namespace trinityGen
         [Header("----- Content Settings ------")]
         [SerializeField] private List<ArenaPiece> piecesForGeneration;
 
-        [SerializeField] private bool defineSeed;
-        [SerializeField] private int seed;
-
-
         [Header("Starting Piece Settings ---")]
         [SerializeField] private bool _setStartingPiece = false;
         [SerializeField] private List<ArenaPiece> _possibleStartingPieces;
         [SerializeField] private uint _connectorCountTolerance = 0;
 
-        [Header("------ General Generation Settings --------")]
+        [Header("------ World Settings --------")]
 
-        [SerializeField] private GenerationTypes _generationMethod;
-        [SerializeField] private uint _maxPieceCount;
-        [SerializeField] private uint _pinCountTolerance = 0;
-
-        
+        [SerializeField] private bool defineSeed;
+        [SerializeField] private int seed;
         [SerializeField] private bool _useClippingCorrection = false;
         [SerializeField] private float _pieceDistance = 0.0001f;
 
-        [Header("Star & Branch Generation Settings --------")]
+        [Header("------ Connection Settings --------")]
+
+        [SerializeField] private ConnectorMatchingRules _matchingRules;
+        [SerializeField] private uint _pinCountTolerance = 0;
+        [SerializeField] private bool[,] _colorMatchRules;
+
+        [Header("----------- Generation Settings --------")]
+
+        [SerializeField] private GenerationTypes _generationMethod;
+
+        [Header("Arena & Corridor Generation Settings --------")]
+        [SerializeField] private uint _maxPieceCount;
+
+        [Header("Star Generation Settings --------")]
+        [SerializeField] private uint _spokePieceCount;
+        [SerializeField] private int _spokeSizeVariance = 0;
+
+        [Header("Branch Generation Settings --------")]
+        [SerializeField] private uint _branchCount;
         [SerializeField] private uint _branchPieceCount;
         [SerializeField] private int _branchSizeVariance = 0;
-
-        [Header("---")]
-        [SerializeField] private uint _branchGenPieceSkipping = 0;
+        // Dont expose this to have branch calculate the jumping
+        private uint _branchGenPieceSkipping = 0;
         [SerializeField] private uint _PieceSkippingVariance = 0;
 
         [Header("------ Testing Settings -------")]
@@ -66,13 +76,16 @@ namespace trinityGen
 
 
         /// Already placed piece being used to judge others
-        private ArenaPiece _selectedPiece;
+        private ArenaPiece _guidePiece;
 
         /// Piece being evaluated against selectedPiece
-        private ArenaPiece _evaluatingPiece;
+        private ArenaPiece _tentativePiece;
 
+
+        private GenerationMethod _choosenMethod;
 
         private int largestGroup;
+    
         
         // Start is called before the first frame update
         void Awake()
@@ -99,6 +112,22 @@ namespace trinityGen
             foreach (ArenaPiece a in piecesForGeneration)
                 a.Setup(_useClippingCorrection);
 
+            switch(_generationMethod)
+            {
+                case(GenerationTypes.ARENA):
+                    _choosenMethod = new ArenaGM((int)_maxPieceCount);
+                    break;
+                case(GenerationTypes.CORRIDOR):
+                    _choosenMethod = new CorridorGM((int)_maxPieceCount);
+                    break;
+                case(GenerationTypes.STAR):
+                    _choosenMethod = new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
+                    break;
+                case(GenerationTypes.BRANCH):
+                    _choosenMethod = new BranchGM((int)_branchCount,(int)_branchPieceCount, _branchSizeVariance, (int)_branchGenPieceSkipping);
+                    break;
+            }
+
             piecesForGeneration.Sort();
             largestGroup = 
                 piecesForGeneration[0].ConnectorsCount;
@@ -108,60 +137,30 @@ namespace trinityGen
             // Seperate pieces into seperate lists based on largest group
             _sortedPieces = SplitList();
 
+            _placedPieces = new List<ArenaPiece>();
+            ArenaPiece started;
+            if(_setStartingPiece)
+                started = _choosenMethod.SelectStartPiece(_possibleStartingPieces, (int)_connectorCountTolerance);
+            else
+                started = _choosenMethod.SelectStartPiece(piecesForGeneration, (int)_connectorCountTolerance);
+            
+            GameObject inst = Instantiate(started.gameObject);
+            _placedPieces.Add(inst.GetComponent<ArenaPiece>());
+            inst.name += " - START ";
+            _guidePiece = _placedPieces[0];
             // Place the first piece
-            PickFirstPiece();
+            // PickFirstPiece();
 
             // Make base level of Arena and add those pieces to the list
-            _placedPieces.AddRange(MakeHorizontalArena(_placedPieces[0]));
-
-            Debug.Log("Generated with seed: " + _currentSeed);
-
-            /*if(!_autoCreate)
-                InitArenas();*/
-        }
-
-       /* private void InitArenas()
-        {
-            foreach (ArenaPiece piece in _placedPieces)
+            int placement = 0;
+            do
             {
-                piece.Initialize();
-            }
-        }*/
-
-
-
-
-
-
-        /// <summary>
-        /// Populates a horizontal level of the arena
-        /// </summary>
-        /// <param name="startingPiece"> The first piece of the arena</param>
-        /// <returns> The pieces placed during this method's process</returns>
-        private List<ArenaPiece> MakeHorizontalArena(ArenaPiece startingPiece)
-        {
-            int placedAmount = 0;
-            int jumpsTaken = 0;
-            
-            uint maxFailures = _maxPieceCount;
-            // Pieces placed by this method call
-            List<ArenaPiece> arena = new List<ArenaPiece>(); 
-            //List<ArenaPiece> spawnedArena = new List<ArenaPiece>();
-
-            // Check what list of the sorted list the selected belongs to
-            int myPieceList = 0;
-
-            for (int i = -1; i < arena.Count; i++)
-            {
+                
+                int maxFailures = 10;
                 int failureCount = 0;
-                if(i == -1)
-                    _selectedPiece = startingPiece;
-                else
-                {
-                    _selectedPiece = arena[i];
-                    //placedAmount++;
-                }
-                    
+
+                // Check what list of the sorted list the selected belongs to
+                int myPieceList = 0;
                 // Pick a piece to evaluate against our selected placed one
                 selectPiece:
 
@@ -176,180 +175,50 @@ namespace trinityGen
                 
                 }
 
-        
-                _evaluatingPiece = _sortedPieces[myPieceList][rng];
-                
-                
+                _tentativePiece = _sortedPieces[myPieceList][rng];
 
-                GameObject spawnedPiece = Instantiate(_evaluatingPiece).gameObject;
+
+                GameObject spawnedPiece = Instantiate(_tentativePiece).gameObject;
                 ArenaPiece spawnedScript = spawnedPiece.GetComponent<ArenaPiece>();
 
                 (bool valid, Transform trn) evaluationResult =
-                    _selectedPiece.EvaluatePiece(spawnedScript, 
+                    _guidePiece.EvaluatePiece(spawnedScript, 
                     _pieceDistance, 
                     _pinCountTolerance);
 
                 // If things worked out, spawn the piece in the correct position
                 if(evaluationResult.valid)
                 {
-                    spawnedPiece.name += $" - {i}" ;
-                    arena.Add(spawnedScript);
-                    placedAmount++;
-                    spawnedScript.gameObject.transform.SetParent(_selectedPiece.transform);
-
-                    if(arena.Count >= _maxPieceCount)
-                        return arena;
-
+                    placement++;
+                    spawnedPiece.name += $" - {placement}" ;
+                    spawnedPiece.transform.SetParent(_guidePiece.transform);
+                    _placedPieces.Add(spawnedScript);
+                    
                 }
                 else
                 {
-                    if (failureCount > maxFailures)
-                        continue;
-
+                    
+                    print("No valid found");
                     // No valid connectors in the given piece
                     Destroy(spawnedPiece);
                     failureCount++;
-                    
+                    if (failureCount > maxFailures)
+                        continue;
                     goto selectPiece;
 
-                } 
-
-                
-                // if this one has no more free connectors, move on to the next 
-                // placed piece
-                switch(_generationMethod)
-                {
-                    case GenerationTypes.CORRIDOR:
-                    continue;
-
-                    // For some reason the first branch gets double pieces
-                    case GenerationTypes.STAR:
-                        int[] multi = new int[] {-1, 1};
-                        int variance = 
-                            multi[Random.Range(0,2)] * _branchSizeVariance;
-
-                        if(placedAmount < _branchPieceCount + variance)
-                        {
-                            
-                            continue;
-                        }
-                            
-
-                        else if(placedAmount >= _branchPieceCount + variance &&
-                                !startingPiece.IsFull())
-                        {
-                            //print($"placed: {placedAmount}, arena: {arena.Count}");
-                            placedAmount = 0;
-                            _selectedPiece = startingPiece;
-
-                            // it works dont ask me why
-                            i += 1;
-                            //print($"Selected piece is now {_selectedPiece.gameObject} - index {i}");
-                            goto selectPiece;
-                        }
-                        return arena;
-
-                    case GenerationTypes.BRANCH:
-                        int[] mult = new int[] {-1, 1};
-                        int multiplier =  
-                            mult[Random.Range(0,2)] * _branchSizeVariance;
-
-                        if(placedAmount < _branchPieceCount + multiplier)
-                            continue;
-                        else if(placedAmount > _branchPieceCount + multiplier)
-                        {
-                            int variableVariance;
-                            variableVariance =mult[(int)Random.Range(0,
-                                _PieceSkippingVariance + 1)];
-
-                            int dist = 
-                            (int)_branchGenPieceSkipping + variableVariance * jumpsTaken;
-
-                            int jump = (int)Mathf.Clamp(dist,
-                            1, arena.Count - 1);
-
-                            if(!arena[0 + jump].IsFull())
-                            {
-                                //print($"{jumpsTaken} - {jump}");
-                                placedAmount = 0;
-                                //_selectedPiece = arena[jump];
-                                i =  jump;
-                                //i = Mathf.Clamp(i, 0, arena.Count - 1);
-                                jumpsTaken++;
-                                continue;
-
-                            }
-                                
-                        }
-                        break;
                 }
 
-
-                if(_selectedPiece.IsFull())
-                    continue;
-                else // else choose another piece to evaluate for this one
-                    goto selectPiece;
+                _guidePiece = _choosenMethod.SelectGuidePiece(_placedPieces, _placedPieces[_placedPieces.Count - 1]);
             }
+            while(_guidePiece != null);
+            
 
-            return arena;
+
+
+
+            Debug.Log("Generated with seed: " + _currentSeed);
         }
-
-        /// <summary>
-        /// Select and place the first piece of the arena
-        /// </summary>
-        private void PickFirstPiece()
-        {
-            // To be safe if the starters list fails
-            chooseStarter:
-
-            ArenaPiece choosen = null;
-            
-            
-            int choosenIndex = 0;
-            _placedPieces = new List<ArenaPiece>();
-
-            if (_setStartingPiece)
-            {
-                if(_possibleStartingPieces.Count == 0)
-                {
-                    Debug.LogError(
-                        "'Set starting piece' is on but no ArenaPieces were given");
-                    _setStartingPiece = false;
-                    goto chooseStarter;
-                }
-
-                choosenIndex = Random.Range(0, _possibleStartingPieces.Count);
-                choosen =     _possibleStartingPieces[choosenIndex];    
         
-            }
-            else
-            {
-                
-                if(_generationMethod == GenerationTypes.CORRIDOR ||
-                _generationMethod == GenerationTypes.BRANCH)
-                {
-
-                    choosenIndex = Random.Range(
-                        0, _sortedPieces[_sortedPieces.Count - 1].Count);
-                        
-                    choosen = _sortedPieces[_sortedPieces.Count - 1][choosenIndex];
-
-                }
-                    
-                else
-                {
-
-                    choosenIndex = Random.Range(0, _sortedPieces[0].Count);
-                    choosen = _sortedPieces[0][choosenIndex];
-
-
-                }
-                    
-            }
-            GameObject piece = Instantiate(choosen.gameObject);
-            _placedPieces.Add(piece.GetComponent<ArenaPiece>());
-            
-        }
 
         /// <summary>
         /// Seperate pieces into seperate lists based on largest group

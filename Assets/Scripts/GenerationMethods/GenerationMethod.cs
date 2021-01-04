@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace trinityGen
 {
-    [System.Serializable]
+ 
     public abstract class GenerationMethod
     {
         //TODO: Make some sort of container for all the parameters of a given 

@@ -3,7 +3,7 @@ using System;
 
 namespace trinityGen
 {
-    [System.Serializable]
+   
     public sealed class CorridorGM : GenerationMethod
     {
 
@@ -14,11 +14,18 @@ namespace trinityGen
         public bool useEndPiece;
         public List<ArenaPiece> enderList;
 
+        public CorridorGM(int maxPieces)
+        {
+
+            this.MaxPieces = maxPieces;
+
+        }
+
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where 
-            // [0] is the index with least connectors
-            int botConnectorCount = starterList[0].ConnectorsCount;
+            // [0] is the index with most connectors
+            int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
@@ -29,10 +36,10 @@ namespace trinityGen
 
             }
 
-            Random rng = new Random();
+            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng.Next(starterList.Count)];
-            if(_firstPiece == null)
+            ArenaPiece chosen = possibles[rng];
+            if (_firstPiece == null)
                 _firstPiece = chosen;
 
             _lastGuideSelected = chosen;
