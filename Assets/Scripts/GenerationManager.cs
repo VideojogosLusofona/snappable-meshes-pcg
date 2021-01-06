@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace trinityGen
@@ -136,13 +137,14 @@ namespace trinityGen
             if(_autoCreate)
             {
                 Debug.Log("ATENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
+                ClearEditorGeneration();
                 Create();
             }
                 
 
         }
 
-        public void Create()
+        public GameObject Create()
         {
             if(defineSeed)
                 _currentSeed = seed;
@@ -190,8 +192,9 @@ namespace trinityGen
             GameObject inst = Instantiate(started.gameObject);
             _placedPieces.Add(inst.GetComponent<ArenaPiece>());
             inst.name += " - START ";
-            _guidePiece = _placedPieces[0];
 
+            GameObject initialPiece = inst;
+            _guidePiece = _placedPieces[0];
 
             // Make base level of Arena and add those pieces to the list
             int placement = 0;
@@ -255,11 +258,9 @@ namespace trinityGen
             }
             while(_guidePiece != null);
             
-
-
-
-
             Debug.Log("Generated with seed: " + _currentSeed);
+
+            return initialPiece;
         }
         
 
@@ -297,6 +298,30 @@ namespace trinityGen
 
             return sortedList;
         }
+
+        [Button("Generate")]
+        void EditorGenerate()
+        {
+            ClearEditorGeneration();
+
+            var initialPiece = Create();
+
+            // Add a component to identify this case, so we can delete it on a new generation
+            initialPiece.AddComponent<EditorGenerationPiece>();
+        }
+
+        [Button("Clear")]
+        void ClearEditorGeneration()
+        {
+            // Find any pieces with the EditorGenerationPiece component
+            // This component is indicative of a piece that was generated in the editor and has to be deleted (and all it's children)
+            // when we regenerate from the editor
+            // The script also deletes on Start, so it doesn't "survive" play mode
+            EditorGenerationPiece[] editorGenerations = FindObjectsOfType<EditorGenerationPiece>();
+            foreach (var obj in editorGenerations)
+            {
+                DestroyImmediate(obj.gameObject);
+            }
+        }
     }
 }
-

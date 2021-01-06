@@ -55,28 +55,28 @@ namespace trinityGen
                     Gizmos.color = Color.red;
                     break;
                 case(ConnectorColor.GREEN):
-                    Gizmos.color = Color.green;
+                    Gizmos.color = new Color(0.25f, 0.9f, 0.25f);
                     break;
                 case(ConnectorColor.BLUE):
-                    Gizmos.color = Color.blue;
+                    Gizmos.color = new Color(0.25f, 0.5f, 0.9f);
                     break;
                 case(ConnectorColor.CYAN):
-                    Gizmos.color = Color.cyan;
+                    Gizmos.color = new Color(0.25f, 0.9f, 1.0f);
                     break;
                 case(ConnectorColor.ORANGE):
-                    Gizmos.color = new Color(255, 165, 0);
+                    Gizmos.color = new Color(1.0f, 0.6f, 0);
                     break;
                 case(ConnectorColor.YELLOW):
                     Gizmos.color = Color.yellow;
                     break;
                 case(ConnectorColor.PINK):
-                    Gizmos.color = new Color(238,130,238);
+                    Gizmos.color = new Color(0.9f,0.6f,0.9f);
                     break;
                 case(ConnectorColor.PURPLE):
                     Gizmos.color = Color.magenta;
                     break;
                 case(ConnectorColor.BROWN):
-                    Gizmos.color = new Color(165,42,42);
+                    Gizmos.color = new Color(0.6f,0.2f,0.2f);
                     break;
                 case(ConnectorColor.BLACK):
                     Gizmos.color = Color.black;
@@ -107,11 +107,12 @@ namespace trinityGen
                 //pos.x = transform.position.x + (i * connectorSpacing);
                 pos = transform.position + transform.right * i * _pinSpacing;
                 //pos.z = transform.position.z * transform.right.z  + (i * connectorSpacing);
-                
-                    Gizmos.DrawWireCube(pos , new Vector3(
-                        _pinSpacing,
-                        _pinSpacing,
-                        _pinSpacing) );
+
+                Gizmos.matrix = Matrix4x4.TRS(pos, transform.rotation, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, new Vector3(
+                    _pinSpacing * 0.9f,
+                    _pinSpacing * 0.9f,
+                    _pinSpacing * 0.9f) );
              
             }
         
