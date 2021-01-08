@@ -2,13 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace trinityGen
 {
-
+    enum ConnectorVisual { WIREFRAME, OPAQUE }
 
     public class Connector : MonoBehaviour, IComparable<Connector>
     {
+
+        static float ConnectorSize = 0.5f;
+        static float GizmoTransparency;
+        static ConnectorVisual GizmoVisuals;
 
         [SerializeField] public ConnectorColor color;
         public Vector3 heading => transform.forward;
@@ -18,8 +23,17 @@ namespace trinityGen
 
         public int pins = 0;
 
-        [SerializeField]private  float _pinSpacing = 0.5f;
+        [OnValueChanged("OnSpacingChanged")]
+        [SerializeField] private  float _pinSpacing = 0.5f;
+        [OnValueChanged("OnTransparencyChanged")]
+        [Range(0,1)]
+        [SerializeField] private float _gizmoTransparecy = 0.5f;
+        [OnValueChanged("OnLooksChanged")]
+        [SerializeField] private ConnectorVisual _gizmoLooks;
 
+        void OnSpacingChanged() => ConnectorSize = _pinSpacing;
+        void OnTransparencyChanged() => GizmoTransparency = _gizmoTransparecy;
+        void OnLooksChanged() => GizmoVisuals = _gizmoLooks;
 
         //[SerializeField] private Color _gizmoColor;
 
@@ -45,54 +59,57 @@ namespace trinityGen
 
         private void OnDrawGizmos()
         {
-
+            Color col = new Color();
             switch(color)
             {
                 case(ConnectorColor.WHITE):
-                    Gizmos.color = Color.white;
+                    col = Color.white;
                     break;
                 case(ConnectorColor.RED):
-                    Gizmos.color = Color.red;
+                    col = Color.red;
                     break;
                 case(ConnectorColor.GREEN):
-                    Gizmos.color = new Color(0.25f, 0.9f, 0.25f);
+                    col = new Color(0.25f, 0.9f, 0.25f);
                     break;
                 case(ConnectorColor.BLUE):
-                    Gizmos.color = new Color(0.25f, 0.5f, 0.9f);
+                    col = new Color(0.25f, 0.5f, 0.9f);
                     break;
                 case(ConnectorColor.CYAN):
-                    Gizmos.color = new Color(0.25f, 0.9f, 1.0f);
+                    col = new Color(0.25f, 0.9f, 1.0f);
                     break;
                 case(ConnectorColor.ORANGE):
-                    Gizmos.color = new Color(1.0f, 0.6f, 0);
+                    col = new Color(1.0f, 0.6f, 0);
                     break;
                 case(ConnectorColor.YELLOW):
-                    Gizmos.color = Color.yellow;
+                    col = Color.yellow;
                     break;
                 case(ConnectorColor.PINK):
-                    Gizmos.color = new Color(0.9f,0.6f,0.9f);
+                    col = new Color(0.9f,0.6f,0.9f);
                     break;
                 case(ConnectorColor.PURPLE):
-                    Gizmos.color = Color.magenta;
+                    col = Color.magenta;
                     break;
                 case(ConnectorColor.BROWN):
-                    Gizmos.color = new Color(0.6f,0.2f,0.2f);
+                    col = new Color(0.6f,0.2f,0.2f);
                     break;
                 case(ConnectorColor.BLACK):
-                    Gizmos.color = Color.black;
+                    col = Color.black;
                     break;
                 case(ConnectorColor.GREY):
-                    Gizmos.color = Color.grey;
+                    col = Color.grey;
                     break;
                 
 
 
             }
-    
+            ;
+
+            col.a = GizmoTransparency;
+            Gizmos.color = col;
             Gizmos.DrawLine(transform.position, transform.position + heading * 2);
             Gizmos.DrawSphere(transform.position, 0.1f);
-            Gizmos.DrawLine(transform.position, transform.position + transform.right * (pins+1) /2 * _pinSpacing);
-            Gizmos.DrawLine(transform.position, transform.position - transform.right * (pins+1) /2 * _pinSpacing);
+            Gizmos.DrawLine(transform.position, transform.position + transform.right * (pins+1) /2 * ConnectorSize);
+            Gizmos.DrawLine(transform.position, transform.position - transform.right * (pins+1) /2 * ConnectorSize);
 
             Vector3 pos;
 
@@ -105,15 +122,25 @@ namespace trinityGen
 
                 }
                 //pos.x = transform.position.x + (i * connectorSpacing);
-                pos = transform.position + transform.right * i * _pinSpacing;
+                pos = transform.position + transform.right * i * ConnectorSize;
                 //pos.z = transform.position.z * transform.right.z  + (i * connectorSpacing);
 
                 Gizmos.matrix = Matrix4x4.TRS(pos, transform.rotation, Vector3.one);
-                Gizmos.DrawCube(Vector3.zero, new Vector3(
-                    _pinSpacing * 0.9f,
-                    _pinSpacing * 0.9f,
-                    _pinSpacing * 0.9f) );
-             
+
+                if (GizmoVisuals == ConnectorVisual.OPAQUE)
+                {
+                    Gizmos.DrawCube(Vector3.zero, new Vector3(
+                    ConnectorSize * 0.9f,
+                    ConnectorSize * 0.9f,
+                    ConnectorSize * 0.9f));
+                }
+                else
+                    Gizmos.DrawWireCube(Vector3.zero, new Vector3(
+                        ConnectorSize * 0.9f,
+                        ConnectorSize * 0.9f,
+                        ConnectorSize * 0.9f));
+
+
             }
         
 
