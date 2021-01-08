@@ -391,6 +391,8 @@ MonoBehaviour:
   isUsed: 0
   pins: 1
   _pinSpacing: 0.5
+  _gizmoTransparecy: 0.5
+  _gizmoLooks: 0
 --- !u!1 &4922867932572182887
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,6 +440,8 @@ MonoBehaviour:
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 0.5
+  _gizmoLooks: 0
 --- !u!1 &5189247530134762411
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,6 +489,8 @@ MonoBehaviour:
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 0.5
+  _gizmoLooks: 0
 --- !u!1 &7501618392534187546
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,6 +538,8 @@ MonoBehaviour:
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 0.5
+  _gizmoLooks: 0
 --- !u!1 &8693739196114803964
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,3 +587,5 @@ MonoBehaviour:
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 0.5
+  _gizmoLooks: 0
