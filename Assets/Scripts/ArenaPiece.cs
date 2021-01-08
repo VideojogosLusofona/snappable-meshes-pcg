@@ -157,6 +157,9 @@ namespace trinityGen
                 choosenCombo.chosenOther.isUsed = true;
                 choosenCombo.chosenMine.isUsed = true;
 
+                choosenCombo.chosenMine.myMatch = choosenCombo.chosenOther;
+                choosenCombo.chosenOther.myMatch = choosenCombo.chosenMine;
+
                 Transform trn = TransformPiece(choosenCombo.chosenMine,
                 choosenCombo.chosenOther, other, pieceDistance);
 

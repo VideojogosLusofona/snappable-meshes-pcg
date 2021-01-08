@@ -18,7 +18,8 @@ namespace trinityGen
         [SerializeField] public ConnectorColor color;
         public Vector3 heading => transform.forward;
 
-
+        [ReadOnly]
+        public Connector myMatch = null;
         [HideInInspector] public bool isUsed = false;
 
         public int pins = 0;
