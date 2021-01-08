@@ -12,7 +12,7 @@ namespace trinityGen
     {
 
         static float ConnectorSize = 0.5f;
-        static float GizmoTransparency;
+        static float GizmoTransparency = 1;
         static ConnectorVisual GizmoVisuals;
 
         [SerializeField] public ConnectorColor color;
@@ -27,7 +27,7 @@ namespace trinityGen
         [SerializeField] private  float _pinSpacing = 0.5f;
         [OnValueChanged("OnTransparencyChanged")]
         [Range(0,1)]
-        [SerializeField] private float _gizmoTransparecy = 0.5f;
+        [SerializeField] private float _gizmoTransparecy = 1;
         [OnValueChanged("OnLooksChanged")]
         [SerializeField] private ConnectorVisual _gizmoLooks;
 
