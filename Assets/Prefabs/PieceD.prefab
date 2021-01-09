@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7248e44c40b6b24478afb3d5bad44690, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -165,7 +165,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7248e44c40b6b24478afb3d5bad44690, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -293,9 +293,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &2535973599679725656
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +359,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7248e44c40b6b24478afb3d5bad44690, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -435,9 +438,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 1
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &7424550089590689139
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,9 +488,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &8045776446285750841
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,9 +538,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 3
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &8978064720500844161
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,6 +588,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 1
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 1
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0

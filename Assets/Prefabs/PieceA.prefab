@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a0a3225eab3b68c418a0ca01eb28d5b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -192,9 +192,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 1
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 1
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &5976855990536354074
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,9 +242,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 4
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 1
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
 --- !u!1 &5976855990683632111
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +292,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
+  myMatch: {fileID: 0}
   isUsed: 0
   pins: 4
   _pinSpacing: 0.5
+  _gizmoTransparecy: 1
+  _gizmoLooks: 0
