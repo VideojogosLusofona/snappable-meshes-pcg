@@ -22,24 +22,40 @@ using UnityEngine;
 
 namespace TrinityGen
 {
-
-
     public class ArenaPiece : MonoBehaviour, IComparable<ArenaPiece>
     {
-        /// <summary>
-        /// DO NOT UNDER ANY EXCUSE REMOVE THE [SERIALIZEFIELD] OR
-        /// THE INITIALIZATION FROM THESE LINES IT WILL MAKE UNITY HANG AND
-        /// EAT YOUR MEMORY.
-        /// </summary>
-        [HideInInspector] [SerializeField] private List<Connector> _connectors
-        = new List<Connector>();
+        // Never access this variable directly
+        // Do so via the _Connectors property
+        private ICollection<Connector> _connectors;
 
+        // Connectors in this piece
+        private ICollection<Connector> _Connectors
+        {
+            get
+            {
+                // Make sure connector collection is initialized
+                if (_connectors is null)
+                {
+                    IEnumerable<Connector> children =
+                        GetComponentsInChildren<Connector>();
+
+                    _connectors = children
+                        .Distinct()
+                        .OrderBy(n => n)
+                        .ToArray();
+                }
+                // Return collector collection
+                return _connectors;
+            }
+        }
+
+        // Use clipping correction?
         private bool _useRigidBody;
 
-        [HideInInspector] public int ConnectorsCount;
-
-       /* [SerializeField] private List<IArenaInitializable> initList = new List<IArenaInitializable>();*/
-
+        /// <summary>
+        /// Number of connectors in this piece.
+        /// </summary>
+        public int ConnectorsCount => _Connectors.Count;
 
         /// <summary>
         /// Detects the connectors, sorts them and activates the rigidbodies
@@ -47,51 +63,23 @@ namespace TrinityGen
         /// <param name="spawnRigid"></param>
         public void Setup(bool spawnRigid)
         {
-
-            //Debug.Log("Using first bottom/top connectors found.");
-            List<Connector> children = new List<Connector>();
+            // //Debug.Log("Using first bottom/top connectors found.");
             _useRigidBody = spawnRigid;
-            //Detect connectors
-            foreach(Connector c in GetComponentsInChildren<Connector>())
-            {
 
-                children.Add(c);
-
-            }
-
-           /* List<IArenaInitializable> initChildren =
-                new List<IArenaInitializable>();
-
-            foreach (IArenaInitializable init in
-                GetComponentsInChildren<IArenaInitializable>())
-            {
-                initChildren.Add(init);
-            }
-
-            initList = initChildren.Distinct().ToList();*/
-
-            _connectors = children.Distinct().ToList();
-            _useRigidBody = spawnRigid;
-            _connectors.Sort();
-            ConnectorsCount = _connectors.Count;
-
-
-            foreach (Connector g in _connectors)
+            foreach (Connector g in _Connectors)
             {
                 g.isUsed = false;
             }
 
-
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
 
-            if(rb == null)
+            if (rb == null)
                 rb = gameObject.AddComponent<Rigidbody>();
             if (mc == null)
                 mc = gameObject.AddComponent<MeshCollider>();
 
-
-            if(_useRigidBody)
+            if (_useRigidBody)
             {
                 rb.isKinematic = false;
                 mc.convex = true;
@@ -113,15 +101,15 @@ namespace TrinityGen
         /// <returns> Are all the connectors in this piece used?</returns>
         public bool IsFull()
         {
-            foreach(Connector c in _connectors)
-                if(!c.isUsed)
+            foreach (Connector c in _Connectors)
+                if (!c.isUsed)
                     return false;
             return true;
 
         }
 
 
-        public (bool valid, Transform positionRot) EvaluatePiece(ConnectorMatchingRules rules, ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0,  bool[,] colorMatrix = null)
+        public (bool valid, Transform positionRot) EvaluatePiece(ConnectorMatchingRules rules, ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0, bool[,] colorMatrix = null)
         {
 
             List<(Connector mine, Connector oth)> possibleCombos =
@@ -130,34 +118,34 @@ namespace TrinityGen
             //Spawn the piece and have it tell if the trigger collider reports back?
             // ...but what if the piece is not all in one mesh?
 
-            foreach(Connector co in other._connectors)
+            foreach (Connector co in other._Connectors)
             {
-                foreach(Connector ct in this._connectors)
+                foreach (Connector ct in this._Connectors)
                 {
                     bool pinMatch = false;
                     bool colorMatch = false;
                     bool fullMatch = false;
                     // Match criteria
-                    if(!co.isUsed && !ct.isUsed)
+                    if (!co.isUsed && !ct.isUsed)
                     {
-                        if((Mathf.Abs(co.pins - ct.pins) <= groupTolerance) && colorMatrix != null)
+                        if ((Mathf.Abs(co.pins - ct.pins) <= groupTolerance) && colorMatrix != null)
                             pinMatch = true;
 
-                        if(colorMatrix[(int)ct.color, (int)co.color])
+                        if (colorMatrix[(int)ct.color, (int)co.color])
                         {
                             colorMatch = true;
                         }
 
-                        if(rules == ConnectorMatchingRules.PINS && pinMatch)
+                        if (rules == ConnectorMatchingRules.PINS && pinMatch)
                             fullMatch = true;
-                        else if(rules == ConnectorMatchingRules.COLOURS && colorMatch)
+                        else if (rules == ConnectorMatchingRules.COLOURS && colorMatch)
                             fullMatch = true;
-                        else if(rules == ConnectorMatchingRules.PINS_AND_COLORS && pinMatch && colorMatch)
+                        else if (rules == ConnectorMatchingRules.PINS_AND_COLORS && pinMatch && colorMatch)
                             fullMatch = true;
                         else
                             fullMatch = false;
 
-                        if(fullMatch)
+                        if (fullMatch)
                             possibleCombos.Add((ct, co));
 
                     }
@@ -165,7 +153,7 @@ namespace TrinityGen
 
             }
 
-            if(possibleCombos.Count > 0)
+            if (possibleCombos.Count > 0)
             {
                 (Connector chosenMine, Connector chosenOther)
                 choosenCombo = possibleCombos[
@@ -209,13 +197,13 @@ namespace TrinityGen
             // Put the other piece on my connector
             newPieceTrn.position = myConnectorGroup.transform.position;
 
-                // Have the other connector group look towards my connector group
-                connectorPointRotation.SetLookRotation(
-                    -myConnectorGroup.heading,
-                    transform.up);
+            // Have the other connector group look towards my connector group
+            connectorPointRotation.SetLookRotation(
+                -myConnectorGroup.heading,
+                transform.up);
 
-                // Apply the rotation acquired above
-                newPieceTrn.rotation = connectorPointRotation;
+            // Apply the rotation acquired above
+            newPieceTrn.rotation = connectorPointRotation;
 
 
 
@@ -239,11 +227,9 @@ namespace TrinityGen
         /// <returns></returns>
         public int CompareTo(ArenaPiece other)
         {
-            if (this._connectors.Count >
-                other._connectors.Count)
+            if (_Connectors.Count > other._Connectors.Count)
                 return -1;
-            else if (this._connectors.Count <
-                other._connectors.Count)
+            else if (_Connectors.Count < other._Connectors.Count)
                 return 1;
             else
                 return 0;

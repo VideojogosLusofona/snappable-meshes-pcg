@@ -117,13 +117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577b0b5e3d196aa49944d107d4bbcc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _connectors:
-  - {fileID: 9202115196628844530}
-  - {fileID: 3824016744299925091}
-  - {fileID: 59956663471363562}
-  - {fileID: 8121730182590813959}
-  - {fileID: 7018503886242410663}
-  ConnectorsCount: 5
 --- !u!54 &-6612591300203380600
 Rigidbody:
   m_ObjectHideFlags: 0

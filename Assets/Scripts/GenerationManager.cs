@@ -150,7 +150,7 @@ namespace TrinityGen
 
 
         // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
             if(_autoCreate)
             {
@@ -158,8 +158,6 @@ namespace TrinityGen
                 ClearEditorGeneration();
                 Create();
             }
-
-
         }
 
         public GameObject Create()
@@ -264,7 +262,10 @@ namespace TrinityGen
 
                     print("No valid found");
                     // No valid connectors in the given piece
-                    Destroy(spawnedPiece);
+                    if (Application.isPlaying)
+                        Destroy(spawnedPiece);
+                    else
+                        DestroyImmediate(spawnedPiece);
                     failureCount++;
                     if (failureCount > maxFailures)
                         continue;
