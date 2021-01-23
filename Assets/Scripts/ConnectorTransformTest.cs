@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace trinityGen
+namespace TrinityGen
 {
 
     public class ConnectorTransformTest : MonoBehaviour
@@ -25,7 +25,7 @@ namespace trinityGen
 
             print(connectorPointRotation);
             newPieceTrn.position = myConnector.transform.position;
-            
+
             connectorPointRotation.SetLookRotation(
                 -myConnector.transform.forward, otherConnector.up);
 

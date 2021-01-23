@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 
 
-namespace trinityGen
+namespace TrinityGen.GenerationMethods
 {
- 
+
     public abstract class GenerationMethod
     {
-        //TODO: Make some sort of container for all the parameters of a given 
+        //TODO: Make some sort of container for all the parameters of a given
         //method
-        
+
 
         protected ArenaPiece _firstPiece;
         protected ArenaPiece _lastGuideSelected;

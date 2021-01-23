@@ -1,4 +1,4 @@
-namespace trinityGen
+namespace TrinityGen
 {
     public enum ConnectorColor
     {
@@ -14,8 +14,8 @@ namespace trinityGen
         BROWN,
         BLACK,
         GREY,
-          
+
     }
-    
+
 }
 

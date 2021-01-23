@@ -1,13 +1,14 @@
 ﻿using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
+using TrinityGen.GenerationMethods;
 
-namespace trinityGen
+namespace TrinityGen
 {
 
     public class GenerationManager : MonoBehaviour
     {
-    
+
 
 
         [Header("----- Content Settings ------")]
@@ -32,7 +33,7 @@ namespace trinityGen
 
 /// <summary>
 ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-///     guide   W,  
+///     guide   W,
 ///             R,
 ///             G,
 ///             B,
@@ -91,7 +92,7 @@ namespace trinityGen
         [SerializeField] private int _branchSizeVariance = 0;
         // Dont expose this to have branch calculate the jumping
         private uint _branchGenPieceSkipping = 0;
-        [SerializeField] private uint _PieceSkippingVariance = 0;
+        [SerializeField] private uint PieceSkippingVariance = 0;
 
         [Header("------ Testing Settings -------")]
         [Tooltip("Generate Arena on scene start automaticly. (DANGEROUS)")]
@@ -129,8 +130,8 @@ namespace trinityGen
         private GenerationMethod _choosenMethod;
 
         private int largestGroup;
-    
-        
+
+
         // Start is called before the first frame update
         void Awake()
         {
@@ -140,7 +141,7 @@ namespace trinityGen
                 ClearEditorGeneration();
                 Create();
             }
-                
+
 
         }
 
@@ -150,7 +151,7 @@ namespace trinityGen
                 _currentSeed = seed;
             else
                 _currentSeed = System.Environment.TickCount;
-            
+
             Random.InitState(_currentSeed);
             _sortedPieces = new List<List<ArenaPiece>>();
 
@@ -174,11 +175,11 @@ namespace trinityGen
             }
 
             piecesForGeneration.Sort();
-            largestGroup = 
+            largestGroup =
                 piecesForGeneration[0].ConnectorsCount;
 
 
-            
+
             // Seperate pieces into seperate lists based on largest group
             _sortedPieces = SplitList();
 
@@ -188,7 +189,7 @@ namespace trinityGen
                 started = _choosenMethod.SelectStartPiece(_possibleStartingPieces, (int)_connectorCountTolerance);
             else
                 started = _choosenMethod.SelectStartPiece(piecesForGeneration, (int)_connectorCountTolerance);
-            
+
             GameObject inst = Instantiate(started.gameObject);
             _placedPieces.Add(inst.GetComponent<ArenaPiece>());
             inst.name += " - START ";
@@ -200,7 +201,7 @@ namespace trinityGen
             int placement = 0;
             do
             {
-                
+
                 int maxFailures = 10;
                 int failureCount = 0;
 
@@ -217,7 +218,7 @@ namespace trinityGen
                 else
                 {
                     goto selectPiece;
-                
+
                 }
 
                 _tentativePiece = _sortedPieces[myPieceList][rng];
@@ -227,8 +228,8 @@ namespace trinityGen
                 ArenaPiece spawnedScript = spawnedPiece.GetComponent<ArenaPiece>();
 
                 (bool valid, Transform trn) evaluationResult =
-                    _guidePiece.EvaluatePiece(_matchingRules, spawnedScript, 
-                    _pieceDistance, 
+                    _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
+                    _pieceDistance,
                     _pinCountTolerance,
                     _colorMatchMatrix);
 
@@ -239,11 +240,11 @@ namespace trinityGen
                     spawnedPiece.name += $" - {placement}" ;
                     spawnedPiece.transform.SetParent(_guidePiece.transform);
                     _placedPieces.Add(spawnedScript);
-                    
+
                 }
                 else
                 {
-                    
+
                     print("No valid found");
                     // No valid connectors in the given piece
                     Destroy(spawnedPiece);
@@ -257,12 +258,12 @@ namespace trinityGen
                 _guidePiece = _choosenMethod.SelectGuidePiece(_placedPieces, _placedPieces[_placedPieces.Count - 1]);
             }
             while(_guidePiece != null);
-            
+
             Debug.Log("Generated with seed: " + _currentSeed);
 
             return initialPiece;
         }
-        
+
 
         /// <summary>
         /// Seperate pieces into seperate lists based on largest group
@@ -273,10 +274,10 @@ namespace trinityGen
             List<ArenaPiece> considererdList = new List<ArenaPiece>();
             List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
-            
+
             for (int i = 0; i < piecesForGeneration.Count; i++)
             {
-                // Piece belongs in a new list made for its size            
+                // Piece belongs in a new list made for its size
                 if (piecesForGeneration[i].ConnectorsCount < lastConsidered)
                 {
                     considererdList = new List<ArenaPiece>();
@@ -286,7 +287,7 @@ namespace trinityGen
 
                 }
                 // piece belongs in the already made list
-                else if (piecesForGeneration[i].ConnectorsCount >= 
+                else if (piecesForGeneration[i].ConnectorsCount >=
                 lastConsidered - _connectorCountTolerance)
                 {
 

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System;
 
-namespace trinityGen
+namespace TrinityGen.GenerationMethods
 {
-    
+
     public sealed class BranchGM : GenerationMethod
     {
 
@@ -28,7 +27,7 @@ namespace trinityGen
         }
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
-            // Assumes that the list is sorted by number of connectors where 
+            // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
             int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
 
@@ -78,26 +77,26 @@ namespace trinityGen
                         chosen = worldPieceList[index];
                     else
                         return null;
-               
-                    
+
+
                 }
 
 
                 // Start a new branch from there
                 StartBranch();
-                
+
                 _lastGuideSelected = chosen;
                 return chosen;
 
 
             }
-            
+
             _lastGuideSelected = lastPlaced;
             _currentBranchPlaced++;
             return _lastGuideSelected;
-                
 
-            
+
+
         }
 
         public void StartBranch()
@@ -115,6 +114,6 @@ namespace trinityGen
 
 
 
-        
+
     }
 }

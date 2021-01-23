@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace trinityGen
+﻿namespace TrinityGen
 {
 
-    public enum GenerationTypes 
+    public enum GenerationTypes
     {
         ARENA,
         CORRIDOR,

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System;
 
-namespace trinityGen
+namespace TrinityGen.GenerationMethods
 {
-   
+
     public sealed class CorridorGM : GenerationMethod
     {
 
@@ -23,7 +23,7 @@ namespace trinityGen
 
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
-            // Assumes that the list is sorted by number of connectors where 
+            // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
             int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
 
@@ -46,7 +46,7 @@ namespace trinityGen
             return chosen;
 
         }
-        
+
         public override ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
         {
             _placedPieces = worldPieceList.Count;
@@ -65,7 +65,7 @@ namespace trinityGen
                         return SelectEndPiece(enderList);
 
                 }
-                    
+
             }
             _lastGuideSelected = lastPlaced;
             return lastPlaced;

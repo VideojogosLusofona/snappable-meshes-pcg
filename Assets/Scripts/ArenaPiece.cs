@@ -3,14 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace trinityGen
+namespace TrinityGen
 {
 
 
     public class ArenaPiece : MonoBehaviour, IComparable<ArenaPiece>
     {
         /// <summary>
-        /// DO NOT UNDER ANY EXCUSE REMOVE THE [SERIALIZEFIELD] OR 
+        /// DO NOT UNDER ANY EXCUSE REMOVE THE [SERIALIZEFIELD] OR
         /// THE INITIALIZATION FROM THESE LINES IT WILL MAKE UNITY HANG AND
         /// EAT YOUR MEMORY.
         /// </summary>
@@ -18,7 +18,7 @@ namespace trinityGen
         = new List<Connector>();
 
         private bool _useRigidBody;
-        
+
         [HideInInspector] public int ConnectorsCount;
 
        /* [SerializeField] private List<IArenaInitializable> initList = new List<IArenaInitializable>();*/
@@ -37,12 +37,12 @@ namespace trinityGen
             //Detect connectors
             foreach(Connector c in GetComponentsInChildren<Connector>())
             {
- 
+
                 children.Add(c);
 
             }
 
-           /* List<IArenaInitializable> initChildren = 
+           /* List<IArenaInitializable> initChildren =
                 new List<IArenaInitializable>();
 
             foreach (IArenaInitializable init in
@@ -57,14 +57,14 @@ namespace trinityGen
             _useRigidBody = spawnRigid;
             _connectors.Sort();
             ConnectorsCount = _connectors.Count;
-            
+
 
             foreach (Connector g in _connectors)
             {
                 g.isUsed = false;
             }
-            
-            
+
+
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
 
@@ -73,7 +73,7 @@ namespace trinityGen
             if (mc == null)
                 mc = gameObject.AddComponent<MeshCollider>();
 
-            
+
             if(_useRigidBody)
             {
                 rb.isKinematic = false;
@@ -102,11 +102,11 @@ namespace trinityGen
             return true;
 
         }
-    
+
 
         public (bool valid, Transform positionRot) EvaluatePiece(ConnectorMatchingRules rules, ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0,  bool[,] colorMatrix = null)
         {
-            
+
             List<(Connector mine, Connector oth)> possibleCombos =
             new List<(Connector mine, Connector oth)>();
             //Check for intersecting geometry?
@@ -125,7 +125,7 @@ namespace trinityGen
                     {
                         if((Mathf.Abs(co.pins - ct.pins) <= groupTolerance) && colorMatrix != null)
                             pinMatch = true;
-                        
+
                         if(colorMatrix[(int)ct.color, (int)co.color])
                         {
                             colorMatch = true;
@@ -139,10 +139,10 @@ namespace trinityGen
                             fullMatch = true;
                         else
                             fullMatch = false;
-                        
+
                         if(fullMatch)
                             possibleCombos.Add((ct, co));
-                        
+
                     }
                 }
 
@@ -176,10 +176,10 @@ namespace trinityGen
         /// <param name="otherConnectorGroup"></param>
         /// <param name="otherPiece"></param>
         /// <returns></returns>
-        private Transform TransformPiece(Connector myConnectorGroup, Connector otherConnectorGroup, ArenaPiece otherPiece, 
+        private Transform TransformPiece(Connector myConnectorGroup, Connector otherConnectorGroup, ArenaPiece otherPiece,
         float offset)
         {
-            
+
             Transform newPieceTrn = otherConnectorGroup.transform;
             Quaternion connectorPointRotation = new Quaternion();
 
@@ -188,7 +188,7 @@ namespace trinityGen
 
             otherConnectorGroup.transform.SetParent(null, true);
             otherPiece.transform.SetParent(otherConnectorGroup.transform, true);
-        
+
             // Put the other piece on my connector
             newPieceTrn.position = myConnectorGroup.transform.position;
 
@@ -200,7 +200,7 @@ namespace trinityGen
                 // Apply the rotation acquired above
                 newPieceTrn.rotation = connectorPointRotation;
 
-            
+
 
 
             // move the pieces away from each other based on an offset
@@ -209,10 +209,10 @@ namespace trinityGen
             // get the parenting back to normal to safeguard future transformations.
             otherPiece.transform.SetParent(null, true);
             otherConnectorGroup.transform.SetParent(otherPiece.transform, true);
-                
+
 
             return newPieceTrn;
-            
+
         }
 
         /// <summary>

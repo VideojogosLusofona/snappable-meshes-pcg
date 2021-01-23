@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace trinityGen
+namespace TrinityGen
 {
     enum ConnectorVisual { WIREFRAME, OPAQUE }
 
@@ -43,8 +43,8 @@ namespace trinityGen
             //GetUnionPoint();
             /*foreach (Connector c in _connectors)
                 c.groupColor = gizmoColor;
-            */  
-            
+            */
+
         }
 
         public int CompareTo(Connector other)
@@ -99,7 +99,7 @@ namespace trinityGen
                 case(ConnectorColor.GREY):
                     col = Color.grey;
                     break;
-                
+
 
 
             }
@@ -143,9 +143,9 @@ namespace trinityGen
 
 
             }
-        
 
-            
+
+
         }
     }
 }

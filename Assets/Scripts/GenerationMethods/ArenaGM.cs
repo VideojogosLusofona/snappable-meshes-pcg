@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System;
-using UnityEngine;
 
-namespace trinityGen
+namespace TrinityGen.GenerationMethods
 {
     public sealed class ArenaGM : GenerationMethod
     {
@@ -12,11 +10,11 @@ namespace trinityGen
 
         public ArenaGM(int maxPieces)
         {
-            this.MaxPieces = maxPieces; 
+            this.MaxPieces = maxPieces;
         }
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
-            // Assumes that the list is sorted by number of connectors where 
+            // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
             int topConnectorCount = starterList[0].ConnectorsCount;
 
