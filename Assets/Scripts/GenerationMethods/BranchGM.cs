@@ -19,20 +19,19 @@ using System.Collections.Generic;
 
 namespace TrinityGen.GenerationMethods
 {
-
     public sealed class BranchGM : GenerationMethod
     {
-
-        private int maxBranches;
-        private int branchLength;
-        private int branchLengthVariance;
-        private int pieceJumpSize;
+        private readonly int maxBranches;
+        private readonly int branchLength;
+        private readonly int branchLengthVariance;
+        private readonly int pieceJumpSize;
 
         private int _branchesMade;
         private int _currentBranchLength;
         private int _currentBranchPlaced;
 
-        public BranchGM(int maxBranches, int branchLength, int branchLengthVariance, int pieceJumpSize)
+        public BranchGM(int maxBranches, int branchLength,
+            int branchLengthVariance, int pieceJumpSize)
         {
             this.maxBranches = maxBranches;
             this.branchLength = branchLength;
@@ -40,13 +39,15 @@ namespace TrinityGen.GenerationMethods
             this.pieceJumpSize = pieceJumpSize;
 
             this.pieceJumpSize = branchLength / maxBranches;
-
         }
-        public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
+
+        public override ArenaPiece SelectStartPiece(
+            List<ArenaPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
-            int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
+            int botConnectorCount =
+                starterList[starterList.Count - 1].ConnectorsCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
@@ -54,7 +55,6 @@ namespace TrinityGen.GenerationMethods
             {
                 if(g.ConnectorsCount <= maximumAllowed)
                     possibles.Add(g);
-
             }
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
@@ -68,7 +68,8 @@ namespace TrinityGen.GenerationMethods
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override ArenaPiece SelectGuidePiece(
+            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
         {
             ArenaPiece chosen;
             //Random rng = new Random();
@@ -89,13 +90,14 @@ namespace TrinityGen.GenerationMethods
 
                 if(chosen.IsFull())
                 {
-                    int index = worldPieceList.FindIndex(a => a.gameObject.name == chosen.gameObject.name) + pieceJumpSize;
+                    int index =
+                        worldPieceList.FindIndex(
+                            a => a.gameObject.name == chosen.gameObject.name)
+                        + pieceJumpSize;
                     if (index < worldPieceList.Count)
                         chosen = worldPieceList[index];
                     else
                         return null;
-
-
                 }
 
                 // Start a new branch from there
@@ -122,8 +124,6 @@ namespace TrinityGen.GenerationMethods
             _currentBranchLength = branchLength + (chosenVar * chosenMult);
             _currentBranchPlaced = 0;
             _branchesMade ++;
-
         }
-
     }
 }

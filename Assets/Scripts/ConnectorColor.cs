@@ -31,8 +31,6 @@ namespace TrinityGen
         BROWN,
         BLACK,
         GREY,
-
     }
-
 }
 

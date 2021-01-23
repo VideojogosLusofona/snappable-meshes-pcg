@@ -22,16 +22,14 @@ using TrinityGen.GenerationMethods;
 
 namespace TrinityGen
 {
-
     public class GenerationManager : MonoBehaviour
     {
-
-
-
         [Header("----- Content Settings ------")]
+
         [SerializeField] private List<ArenaPiece> piecesForGeneration;
 
         [Header("Starting Piece Settings ---")]
+
         [SerializeField] private bool _setStartingPiece = false;
         [SerializeField] private List<ArenaPiece> _possibleStartingPieces;
         [SerializeField] private uint _connectorCountTolerance = 0;
@@ -48,48 +46,36 @@ namespace TrinityGen
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
 
-/// <summary>
-///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-///     guide   W,
-///             R,
-///             G,
-///             B,
-///             CYAN
-///             ORNG,
-///             YLLW,
-///             PINK,
-///             PRPL,
-///             BRWN,
-///             BLACK,
-///             GREY
-/// </summary>
-/// <value></value>
-        [SerializeField] private bool[,] _colorMatchMatrix = {
-// tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-        {true, true, true, true, true, true, true, true, true, true, true, true},
-        {true, true, false, false, false, false, false, false, false, false, false, false},
-
-        {true, false, true, false, false, false, false, false, false, false, false, false},
-
-        {true, false, false, true, false, false, false, false, false, false, false, false},
-
-        {true, false, false, false, true, false, false, false, false, false, false, false},
-
-        {true, false, false, false, false, true, false, false, false, false, false, false},
-
-        {true, false, false, false, false, false, true, false, false, false, false, false},
-
-        {true, false, false, false, false, false, false, true, false, false, false, false},
-
-        {true, false, false, false, false, false, false, false, true, false, false, false},
-
-        {true, false, false, false, false, false, false, false, false, true, false, false},
-
-        {true, false, false, false, false, false, false, false, false, false, true, false},
-
-        {true, false, false, false, false, false, false, false, false, false, false, true},
-
-
+        /// <summary>
+        ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+        ///     guide   W,
+        ///             R,
+        ///             G,
+        ///             B,
+        ///             CYAN
+        ///             ORNG,
+        ///             YLLW,
+        ///             PINK,
+        ///             PRPL,
+        ///             BRWN,
+        ///             BLACK,
+        ///             GREY
+        /// </summary>
+        [SerializeField]
+        private bool[,] _colorMatchMatrix = {
+            // tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+            {true, true, true, true, true, true, true, true, true, true, true, true},
+            {true, true, false, false, false, false, false, false, false, false, false, false},
+            {true, false, true, false, false, false, false, false, false, false, false, false},
+            {true, false, false, true, false, false, false, false, false, false, false, false},
+            {true, false, false, false, true, false, false, false, false, false, false, false},
+            {true, false, false, false, false, true, false, false, false, false, false, false},
+            {true, false, false, false, false, false, true, false, false, false, false, false},
+            {true, false, false, false, false, false, false, true, false, false, false, false},
+            {true, false, false, false, false, false, false, false, true, false, false, false},
+            {true, false, false, false, false, false, false, false, false, true, false, false},
+            {true, false, false, false, false, false, false, false, false, false, true, false},
+            {true, false, false, false, false, false, false, false, false, false, false, true},
         };
 
         [Header("----------- Generation Settings --------")]
@@ -107,11 +93,10 @@ namespace TrinityGen
         [SerializeField] private uint _branchCount;
         [SerializeField] private uint _branchPieceCount;
         [SerializeField] private int _branchSizeVariance = 0;
-        // Dont expose this to have branch calculate the jumping
-        private uint _branchGenPieceSkipping = 0;
         [SerializeField] private uint PieceSkippingVariance = 0;
 
         [Header("------ Testing Settings -------")]
+
         [Tooltip("Generate Arena on scene start automaticly. (DANGEROUS)")]
         [SerializeField] private bool _autoCreate = false;
 
@@ -129,30 +114,27 @@ namespace TrinityGen
         [SerializeField] private bool _lowerLevelIslandGeneration;
         [SerializeField] private int _lowerIslandsCount = 1;*/
 
+        // Dont expose this to have branch calculate the jumping
+        private uint _branchGenPieceSkipping = 0;
 
         private List<ArenaPiece> _placedPieces;
         private int _currentSeed;
+        private IList<List<ArenaPiece>> _sortedPieces;
 
-
-        private List<List<ArenaPiece>> _sortedPieces;
-
-
-        /// Already placed piece being used to judge others
+        // Already placed piece being used to judge others
         private ArenaPiece _guidePiece;
 
-        /// Piece being evaluated against selectedPiece
+        // Piece being evaluated against selectedPiece
         private ArenaPiece _tentativePiece;
-
 
         private GenerationMethod _choosenMethod;
 
         private int largestGroup;
 
-
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            if(_autoCreate)
+            if (_autoCreate)
             {
                 Debug.Log("ATENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
                 ClearEditorGeneration();
@@ -162,7 +144,7 @@ namespace TrinityGen
 
         public GameObject Create()
         {
-            if(defineSeed)
+            if (defineSeed)
                 _currentSeed = seed;
             else
                 _currentSeed = System.Environment.TickCount;
@@ -173,19 +155,22 @@ namespace TrinityGen
             foreach (ArenaPiece a in piecesForGeneration)
                 a.Setup(_useClippingCorrection);
 
-            switch(_generationMethod)
+            switch (_generationMethod)
             {
-                case(GenerationTypes.ARENA):
+                case GenerationTypes.ARENA:
                     _choosenMethod = new ArenaGM((int)_maxPieceCount);
                     break;
-                case(GenerationTypes.CORRIDOR):
+                case GenerationTypes.CORRIDOR:
                     _choosenMethod = new CorridorGM((int)_maxPieceCount);
                     break;
-                case(GenerationTypes.STAR):
-                    _choosenMethod = new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
+                case GenerationTypes.STAR:
+                    _choosenMethod = new StarGM(
+                        (int)_spokePieceCount, (int)_spokeSizeVariance);
                     break;
-                case(GenerationTypes.BRANCH):
-                    _choosenMethod = new BranchGM((int)_branchCount,(int)_branchPieceCount, _branchSizeVariance, (int)_branchGenPieceSkipping);
+                case GenerationTypes.BRANCH:
+                    _choosenMethod = new BranchGM(
+                        (int)_branchCount, (int)_branchPieceCount,
+                        _branchSizeVariance, (int)_branchGenPieceSkipping);
                     break;
             }
 
@@ -193,17 +178,21 @@ namespace TrinityGen
             largestGroup =
                 piecesForGeneration[0].ConnectorsCount;
 
-
-
             // Seperate pieces into seperate lists based on largest group
             _sortedPieces = SplitList();
 
             _placedPieces = new List<ArenaPiece>();
             ArenaPiece started;
-            if(_setStartingPiece)
-                started = _choosenMethod.SelectStartPiece(_possibleStartingPieces, (int)_connectorCountTolerance);
+            if (_setStartingPiece)
+            {
+                started = _choosenMethod.SelectStartPiece(
+                    _possibleStartingPieces, (int)_connectorCountTolerance);
+            }
             else
-                started = _choosenMethod.SelectStartPiece(piecesForGeneration, (int)_connectorCountTolerance);
+            {
+                started = _choosenMethod.SelectStartPiece(
+                    piecesForGeneration, (int)_connectorCountTolerance);
+            }
 
             GameObject inst = Instantiate(started.gameObject);
             _placedPieces.Add(inst.GetComponent<ArenaPiece>());
@@ -222,60 +211,64 @@ namespace TrinityGen
 
                 // Check what list of the sorted list the selected belongs to
                 int myPieceList = 0;
+
                 // Pick a piece to evaluate against our selected placed one
-                selectPiece:
-
-                int rng;
-                int wideRng = Random.Range(0,_sortedPieces.Count);
-                myPieceList = wideRng;
-                if(_sortedPieces[myPieceList].Count != 0)
-                    rng = Random.Range(0,_sortedPieces[myPieceList].Count);
-                else
+                while (true)
                 {
-                    goto selectPiece;
-
-                }
-
-                _tentativePiece = _sortedPieces[myPieceList][rng];
-
-
-                GameObject spawnedPiece = Instantiate(_tentativePiece).gameObject;
-                ArenaPiece spawnedScript = spawnedPiece.GetComponent<ArenaPiece>();
-
-                (bool valid, Transform trn) evaluationResult =
-                    _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
-                    _pieceDistance,
-                    _pinCountTolerance,
-                    _colorMatchMatrix);
-
-                // If things worked out, spawn the piece in the correct position
-                if(evaluationResult.valid)
-                {
-                    placement++;
-                    spawnedPiece.name += $" - {placement}" ;
-                    spawnedPiece.transform.SetParent(_guidePiece.transform);
-                    _placedPieces.Add(spawnedScript);
-
-                }
-                else
-                {
-
-                    print("No valid found");
-                    // No valid connectors in the given piece
-                    if (Application.isPlaying)
-                        Destroy(spawnedPiece);
+                    int rng;
+                    myPieceList = Random.Range(0, _sortedPieces.Count);
+                    if (_sortedPieces[myPieceList].Count != 0)
+                    {
+                        rng = Random.Range(0, _sortedPieces[myPieceList].Count);
+                    }
                     else
-                        DestroyImmediate(spawnedPiece);
-                    failureCount++;
-                    if (failureCount > maxFailures)
+                    {
                         continue;
-                    goto selectPiece;
+                    }
 
-                }
+                    _tentativePiece = _sortedPieces[myPieceList][rng];
 
-                _guidePiece = _choosenMethod.SelectGuidePiece(_placedPieces, _placedPieces[_placedPieces.Count - 1]);
+                    GameObject spawnedPiece =
+                        Instantiate(_tentativePiece).gameObject;
+                    ArenaPiece spawnedScript =
+                        spawnedPiece.GetComponent<ArenaPiece>();
+
+                    (bool valid, Transform trn) evaluationResult =
+                        _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
+                        _pieceDistance,
+                        _pinCountTolerance,
+                        _colorMatchMatrix);
+
+                    // If things worked out, spawn the piece in the correct
+                    // position
+                    if (evaluationResult.valid)
+                    {
+                        placement++;
+                        spawnedPiece.name += $" - {placement}";
+                        spawnedPiece.transform.SetParent(_guidePiece.transform);
+                        _placedPieces.Add(spawnedScript);
+                    }
+                    else
+                    {
+                        print("No valid found");
+                        // No valid connectors in the given piece
+                        if (Application.isPlaying)
+                            Destroy(spawnedPiece);
+                        else
+                            DestroyImmediate(spawnedPiece);
+                        failureCount++;
+                        if (failureCount > maxFailures)
+                            break;
+                        continue;
+                    }
+
+                    _guidePiece = _choosenMethod.SelectGuidePiece(
+                        _placedPieces, _placedPieces[_placedPieces.Count - 1]);
+
+                    break;
+                } // selectPiece
             }
-            while(_guidePiece != null);
+            while (_guidePiece != null);
 
             Debug.Log("Generated with seed: " + _currentSeed);
 
@@ -284,12 +277,12 @@ namespace TrinityGen
 
 
         /// <summary>
-        /// Seperate pieces into seperate lists based on largest group
+        /// Separate pieces into separate lists based on largest group
         /// </summary>
         private List<List<ArenaPiece>> SplitList()
         {
             int lastConsidered = largestGroup + 1;
-            List<ArenaPiece> considererdList = new List<ArenaPiece>();
+            List<ArenaPiece> consideredList = new List<ArenaPiece>();
             List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
 
@@ -298,45 +291,46 @@ namespace TrinityGen
                 // Piece belongs in a new list made for its size
                 if (piecesForGeneration[i].ConnectorsCount < lastConsidered)
                 {
-                    considererdList = new List<ArenaPiece>();
-                    considererdList.Add(piecesForGeneration[i]);
+                    consideredList = new List<ArenaPiece>();
+                    consideredList.Add(piecesForGeneration[i]);
                     lastConsidered = piecesForGeneration[i].ConnectorsCount;
-                    sortedList.Add(considererdList);
+                    sortedList.Add(consideredList);
 
                 }
                 // piece belongs in the already made list
                 else if (piecesForGeneration[i].ConnectorsCount >=
                 lastConsidered - _connectorCountTolerance)
                 {
-
-                    considererdList.Add(piecesForGeneration[i]);
-
+                    consideredList.Add(piecesForGeneration[i]);
                 }
-
             }
 
             return sortedList;
         }
 
         [Button("Generate")]
-        void EditorGenerate()
+        private void EditorGenerate()
         {
             ClearEditorGeneration();
 
             var initialPiece = Create();
 
-            // Add a component to identify this case, so we can delete it on a new generation
+            // Add a component to identify this case, so we can delete it on a
+            // new generation
             initialPiece.AddComponent<EditorGenerationPiece>();
         }
 
         [Button("Clear")]
-        void ClearEditorGeneration()
+        private void ClearEditorGeneration()
         {
             // Find any pieces with the EditorGenerationPiece component
-            // This component is indicative of a piece that was generated in the editor and has to be deleted (and all it's children)
-            // when we regenerate from the editor
-            // The script also deletes on Start, so it doesn't "survive" play mode
-            EditorGenerationPiece[] editorGenerations = FindObjectsOfType<EditorGenerationPiece>();
+            // This component is indicative of a piece that was generated in the
+            // editor and has to be deleted (and all it's children) when we
+            // regenerate from the editor
+            // The script also deletes on Start, so it doesn't "survive" play
+            // mode
+            EditorGenerationPiece[] editorGenerations =
+                FindObjectsOfType<EditorGenerationPiece>();
             foreach (var obj in editorGenerations)
             {
                 DestroyImmediate(obj.gameObject);

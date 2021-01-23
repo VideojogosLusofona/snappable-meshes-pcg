@@ -22,6 +22,5 @@ namespace TrinityGen
         PINS_AND_COLORS = 0,
         PINS,
         COLOURS,
-
     }
 }

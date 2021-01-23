@@ -20,35 +20,34 @@ using System;
 
 namespace TrinityGen.GenerationMethods
 {
-
     public sealed class CorridorGM : GenerationMethod
     {
+        private readonly int maxPieces;
+        private readonly bool pinchEnd;
+        private readonly bool useEndPiece;
+        private readonly List<ArenaPiece> enderList;
 
-        private int maxPieces;
         private int _placedPieces;
-
-        private bool pinchEnd;
-        private bool useEndPiece;
-        private List<ArenaPiece> enderList;
 
         public CorridorGM(int maxPieces)
         {
             this.maxPieces = maxPieces;
         }
 
-        public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
+        public override ArenaPiece SelectStartPiece(
+            List<ArenaPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
-            int botConnectorCount = starterList[starterList.Count - 1].ConnectorsCount;
+            int botConnectorCount =
+                starterList[starterList.Count - 1].ConnectorsCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
-            foreach(ArenaPiece g in starterList)
+            foreach (ArenaPiece g in starterList)
             {
-                if(g.ConnectorsCount <= maximumAllowed)
+                if (g.ConnectorsCount <= maximumAllowed)
                     possibles.Add(g);
-
             }
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
@@ -62,19 +61,21 @@ namespace TrinityGen.GenerationMethods
 
         }
 
-        public override ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override ArenaPiece SelectGuidePiece(
+            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
         {
             _placedPieces = worldPieceList.Count;
 
-            if(_placedPieces >= maxPieces)
-                return null;
-
-            // Select a special piece for the final piece
-            else if(_placedPieces == maxPieces - 1)
+            if (_placedPieces >= maxPieces)
             {
-                if(useEndPiece && enderList.Count > 0)
+                return null;
+            }
+            // Select a special piece for the final piece
+            else if (_placedPieces == maxPieces - 1)
+            {
+                if (useEndPiece && enderList.Count > 0)
                 {
-                    if(pinchEnd)
+                    if (pinchEnd)
                         return SelectStartPiece(enderList);
                     else
                         return SelectEndPiece(enderList);
@@ -84,17 +85,16 @@ namespace TrinityGen.GenerationMethods
             }
             _lastGuideSelected = lastPlaced;
             return lastPlaced;
-
         }
 
-        protected override ArenaPiece SelectEndPiece(List<ArenaPiece> enderList = null)
+        protected override ArenaPiece SelectEndPiece(
+            List<ArenaPiece> enderList = null)
         {
             Random rng = new Random();
             // Upper limit is exclusive
             ArenaPiece chosen = enderList[rng.Next(enderList.Count)];
             _lastGuideSelected = chosen;
             return chosen;
-
         }
     }
 }

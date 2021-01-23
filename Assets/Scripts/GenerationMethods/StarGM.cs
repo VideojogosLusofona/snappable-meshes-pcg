@@ -19,11 +19,10 @@ using System.Collections.Generic;
 
 namespace TrinityGen.GenerationMethods
 {
-
     public sealed class StarGM : GenerationMethod
     {
-        private int spokeLength;
-        private int spokeLengthVariance;
+        private readonly int spokeLength;
+        private readonly int spokeLengthVariance;
 
         public StarGM(int spokeLength, int spokeLengthVariance)
         {
@@ -31,7 +30,8 @@ namespace TrinityGen.GenerationMethods
             this.spokeLengthVariance = spokeLengthVariance;
         }
 
-        public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
+        public override ArenaPiece SelectStartPiece(
+            List<ArenaPiece> starterList, int starterConTol = 0)
         {
 
             // Assumes that the list is sorted by number of connectors where
@@ -40,11 +40,11 @@ namespace TrinityGen.GenerationMethods
 
             int minimumAllowed = topConnectorCount - starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
+
             foreach(ArenaPiece g in starterList)
             {
                 if(g.ConnectorsCount >= minimumAllowed)
                     possibles.Add(g);
-
             }
 
             // Upper limit is exclusive
@@ -55,7 +55,8 @@ namespace TrinityGen.GenerationMethods
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override ArenaPiece SelectGuidePiece(
+            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
         {
             int rng = UnityEngine.Random.Range(0, spokeLengthVariance + 1);
             int chosenVar = rng;
@@ -71,7 +72,6 @@ namespace TrinityGen.GenerationMethods
                 // A number of pieces equal to the spokeLength have been placed
                 // Return the first piece if it still has unused connectors
                 return (worldPieceList[0].IsFull()) ? null : worldPieceList[0];
-
             }
 
          _lastGuideSelected = lastPlaced;
@@ -79,7 +79,5 @@ namespace TrinityGen.GenerationMethods
                 return null;
          return _lastGuideSelected;
         }
-
-
     }
 }

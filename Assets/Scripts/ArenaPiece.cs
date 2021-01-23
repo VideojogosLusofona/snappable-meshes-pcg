@@ -60,7 +60,7 @@ namespace TrinityGen
         /// <summary>
         /// Detects the connectors, sorts them and activates the rigidbodies
         /// </summary>
-        /// <param name="spawnRigid"></param>
+        /// <param name="spawnRigid">Use clipping correction?</param>
         public void Setup(bool spawnRigid)
         {
             // //Debug.Log("Using first bottom/top connectors found.");
@@ -102,34 +102,39 @@ namespace TrinityGen
         public bool IsFull()
         {
             foreach (Connector c in _Connectors)
-                if (!c.isUsed)
-                    return false;
+                if (!c.isUsed) return false;
             return true;
-
         }
 
-
-        public (bool valid, Transform positionRot) EvaluatePiece(ConnectorMatchingRules rules, ArenaPiece other, float pieceDistance = 0.00f, uint groupTolerance = 0, bool[,] colorMatrix = null)
+        public (bool valid, Transform positionRot) EvaluatePiece(
+            ConnectorMatchingRules rules, ArenaPiece other,
+            float pieceDistance = 0.00f, uint groupTolerance = 0,
+            bool[,] colorMatrix = null)
         {
 
             List<(Connector mine, Connector oth)> possibleCombos =
-            new List<(Connector mine, Connector oth)>();
-            //Check for intersecting geometry?
-            //Spawn the piece and have it tell if the trigger collider reports back?
-            // ...but what if the piece is not all in one mesh?
+                new List<(Connector mine, Connector oth)>();
+
+            // Check for intersecting geometry?
+            // Spawn the piece and have it tell if the trigger collider
+            // reports back? ...but what if the piece is not all in one mesh?
 
             foreach (Connector co in other._Connectors)
             {
                 foreach (Connector ct in this._Connectors)
                 {
-                    bool pinMatch = false;
-                    bool colorMatch = false;
-                    bool fullMatch = false;
                     // Match criteria
                     if (!co.isUsed && !ct.isUsed)
                     {
-                        if ((Mathf.Abs(co.pins - ct.pins) <= groupTolerance) && colorMatrix != null)
+                        bool pinMatch = false;
+                        bool colorMatch = false;
+                        bool fullMatch;
+
+                        if ((Mathf.Abs(co.Pins - ct.Pins) <= groupTolerance)
+                                && colorMatrix != null)
+                        {
                             pinMatch = true;
+                        }
 
                         if (colorMatrix[(int)ct.color, (int)co.color])
                         {
@@ -137,36 +142,43 @@ namespace TrinityGen
                         }
 
                         if (rules == ConnectorMatchingRules.PINS && pinMatch)
+                        {
                             fullMatch = true;
-                        else if (rules == ConnectorMatchingRules.COLOURS && colorMatch)
+                        }
+                        else if (rules == ConnectorMatchingRules.COLOURS
+                            && colorMatch)
+                        {
                             fullMatch = true;
-                        else if (rules == ConnectorMatchingRules.PINS_AND_COLORS && pinMatch && colorMatch)
+                        }
+                        else if (rules == ConnectorMatchingRules.PINS_AND_COLORS
+                            && pinMatch && colorMatch)
+                        {
                             fullMatch = true;
+                        }
                         else
+                        {
                             fullMatch = false;
+                        }
 
                         if (fullMatch)
                             possibleCombos.Add((ct, co));
-
                     }
                 }
-
             }
 
             if (possibleCombos.Count > 0)
             {
-                (Connector chosenMine, Connector chosenOther)
-                choosenCombo = possibleCombos[
-                    UnityEngine.Random.Range(0, possibleCombos.Count)];
+                (Connector chosenMine, Connector chosenOther) chosenCombo =
+                    possibleCombos[UnityEngine.Random.Range(0, possibleCombos.Count)];
 
-                choosenCombo.chosenOther.isUsed = true;
-                choosenCombo.chosenMine.isUsed = true;
+                chosenCombo.chosenOther.isUsed = true;
+                chosenCombo.chosenMine.isUsed = true;
 
-                choosenCombo.chosenMine.myMatch = choosenCombo.chosenOther;
-                choosenCombo.chosenOther.myMatch = choosenCombo.chosenMine;
+                chosenCombo.chosenMine.myMatch = chosenCombo.chosenOther;
+                chosenCombo.chosenOther.myMatch = chosenCombo.chosenMine;
 
-                Transform trn = TransformPiece(choosenCombo.chosenMine,
-                choosenCombo.chosenOther, other, pieceDistance);
+                Transform trn = TransformPiece(chosenCombo.chosenMine,
+                chosenCombo.chosenOther, other, pieceDistance);
 
                 return (true, trn);
             }
@@ -181,14 +193,14 @@ namespace TrinityGen
         /// <param name="otherConnectorGroup"></param>
         /// <param name="otherPiece"></param>
         /// <returns></returns>
-        private Transform TransformPiece(Connector myConnectorGroup, Connector otherConnectorGroup, ArenaPiece otherPiece,
-        float offset)
+        private Transform TransformPiece(Connector myConnectorGroup,
+            Connector otherConnectorGroup, ArenaPiece otherPiece, float offset)
         {
 
             Transform newPieceTrn = otherConnectorGroup.transform;
             Quaternion connectorPointRotation = new Quaternion();
 
-            // temprarily revert parenting so we can move the connector
+            // temporarily revert parenting so we can move the connector
             // group and have the geometry follow.
 
             otherConnectorGroup.transform.SetParent(null, true);
@@ -199,32 +211,32 @@ namespace TrinityGen
 
             // Have the other connector group look towards my connector group
             connectorPointRotation.SetLookRotation(
-                -myConnectorGroup.heading,
+                -myConnectorGroup.Heading,
                 transform.up);
 
             // Apply the rotation acquired above
             newPieceTrn.rotation = connectorPointRotation;
 
+            // Move the pieces away from each other based on an offset
+            newPieceTrn.position -= otherConnectorGroup.Heading * offset;
 
-
-
-            // move the pieces away from each other based on an offset
-            newPieceTrn.position -= otherConnectorGroup.heading * offset;
-
-            // get the parenting back to normal to safeguard future transformations.
+            // Get the parenting back to normal to safeguard future
+            // transformations
             otherPiece.transform.SetParent(null, true);
             otherConnectorGroup.transform.SetParent(otherPiece.transform, true);
 
-
             return newPieceTrn;
-
         }
 
         /// <summary>
-        /// Order the peices by how many connectors they have
+        /// Order the pieces by how many connectors they have
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">Piece to compare with this one.</param>
+        /// <returns>
+        /// Returns -1 if this piece has more connectors than the other, 0 if
+        /// they have the same amount of connectors or 1 if this piece has less
+        /// connectors than the other.
+        /// </returns>
         public int CompareTo(ArenaPiece other)
         {
             if (_Connectors.Count > other._Connectors.Count)
@@ -234,7 +246,6 @@ namespace TrinityGen
             else
                 return 0;
         }
-
 
         /*public void Initialize()
         {

@@ -23,14 +23,17 @@ namespace TrinityGen
     public class ConnectorTransformTest : MonoBehaviour
     {
         //This is the Transform of the second GameObject
-        public Transform otherPiece;
-        public Transform otherConnector;
-        Quaternion m_MyQuaternion;
-        float m_Speed = 1.0f;
+        private Transform otherPiece;
 
-        public GameObject myConnector;
+        private Transform otherConnector;
 
-        void Start()
+        private Quaternion _myQuaternion;
+
+        private float _speed = 1.0f;
+
+        private GameObject myConnector;
+
+        private void Start()
         {
             Transform newPieceTrn = otherConnector;
             Quaternion connectorPointRotation = new Quaternion();
@@ -50,19 +53,20 @@ namespace TrinityGen
 
             otherConnector.SetParent(null, true);
             otherPiece.SetParent(otherConnector, true);
-
         }
 
-
-        private void OnDrawGizmos() {
-            Gizmos.DrawWireCube(transform.position, new Vector3(0.5f,0.5f,0.5f));
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireCube(transform.position,
+                new Vector3(0.5f, 0.5f, 0.5f));
             Gizmos.DrawWireSphere(myConnector.transform.position, 0.2f);
-            Gizmos.DrawLine(myConnector.transform.position, myConnector.transform.position + myConnector.transform.forward );
+            Gizmos.DrawLine(myConnector.transform.position,
+                myConnector.transform.position + myConnector.transform.forward);
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(otherConnector.position, 0.2f);
-            Gizmos.DrawLine(otherConnector.position, otherConnector.position + otherConnector.forward );
-
+            Gizmos.DrawLine(otherConnector.position,
+                otherConnector.position + otherConnector.forward);
         }
     }
 }
