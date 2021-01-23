@@ -21,14 +21,15 @@ namespace TrinityGen.GenerationMethods
 {
     public sealed class ArenaGM : GenerationMethod
     {
-        public int MaxPieces;
+        private int maxPieces;
         private int _placedPieces;
 
 
         public ArenaGM(int maxPieces)
         {
-            this.MaxPieces = maxPieces;
+            this.maxPieces = maxPieces;
         }
+
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
@@ -58,7 +59,7 @@ namespace TrinityGen.GenerationMethods
                 _lastGuideSelected = worldPieceList[0];
             _placedPieces = worldPieceList.Count;
 
-            if(_placedPieces > MaxPieces)
+            if(_placedPieces > maxPieces)
                 return null;
 
             if(_lastGuideSelected.IsFull())
@@ -69,10 +70,8 @@ namespace TrinityGen.GenerationMethods
                 return _lastGuideSelected;
             }
 
-
             return _lastGuideSelected;
         }
-
 
     }
 }

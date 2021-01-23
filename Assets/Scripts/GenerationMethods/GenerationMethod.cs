@@ -26,7 +26,6 @@ namespace TrinityGen.GenerationMethods
         //TODO: Make some sort of container for all the parameters of a given
         //method
 
-
         protected ArenaPiece _firstPiece;
         protected ArenaPiece _lastGuideSelected;
 
@@ -38,12 +37,11 @@ namespace TrinityGen.GenerationMethods
         /// </summary>
         /// <param name="worldPieceList">Placed Geometry to select Guide from
         /// </param>
-        /// <param name="lastPlaced">Last succesfully placed geometry</param>
+        /// <param name="lastPlaced">Last successfully placed geometry</param>
         /// <returns></returns>
         public abstract ArenaPiece SelectGuidePiece(List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced);
-        protected virtual ArenaPiece SelectEndPiece
-        (List<ArenaPiece> enderList = null) => null;
 
+        protected virtual ArenaPiece SelectEndPiece(List<ArenaPiece> enderList = null) => null;
 
     }
 }

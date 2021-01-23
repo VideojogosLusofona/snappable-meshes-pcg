@@ -24,18 +24,16 @@ namespace TrinityGen.GenerationMethods
     public sealed class CorridorGM : GenerationMethod
     {
 
-        public int MaxPieces;
+        private int maxPieces;
         private int _placedPieces;
 
-        public bool pinchEnd;
-        public bool useEndPiece;
-        public List<ArenaPiece> enderList;
+        private bool pinchEnd;
+        private bool useEndPiece;
+        private List<ArenaPiece> enderList;
 
         public CorridorGM(int maxPieces)
         {
-
-            this.MaxPieces = maxPieces;
-
+            this.maxPieces = maxPieces;
         }
 
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
@@ -68,11 +66,11 @@ namespace TrinityGen.GenerationMethods
         {
             _placedPieces = worldPieceList.Count;
 
-            if(_placedPieces >= MaxPieces)
+            if(_placedPieces >= maxPieces)
                 return null;
 
             // Select a special piece for the final piece
-            else if(_placedPieces == MaxPieces - 1)
+            else if(_placedPieces == maxPieces - 1)
             {
                 if(useEndPiece && enderList.Count > 0)
                 {

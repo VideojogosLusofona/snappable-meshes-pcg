@@ -23,10 +23,10 @@ namespace TrinityGen.GenerationMethods
     public sealed class BranchGM : GenerationMethod
     {
 
-        public int maxBranches;
-        public int branchLength;
-        public int branchLengthVariance;
-        public int pieceJumpSize;
+        private int maxBranches;
+        private int branchLength;
+        private int branchLengthVariance;
+        private int pieceJumpSize;
 
         private int _branchesMade;
         private int _currentBranchLength;
@@ -98,21 +98,17 @@ namespace TrinityGen.GenerationMethods
 
                 }
 
-
                 // Start a new branch from there
                 StartBranch();
 
                 _lastGuideSelected = chosen;
                 return chosen;
 
-
             }
 
             _lastGuideSelected = lastPlaced;
             _currentBranchPlaced++;
             return _lastGuideSelected;
-
-
 
         }
 
@@ -128,9 +124,6 @@ namespace TrinityGen.GenerationMethods
             _branchesMade ++;
 
         }
-
-
-
 
     }
 }

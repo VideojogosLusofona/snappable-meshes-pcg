@@ -29,7 +29,6 @@ namespace TrinityGen.GenerationMethods
         {
             this.spokeLength = spokeLength;
             this.spokeLengthVariance = spokeLengthVariance;
-
         }
 
         public override ArenaPiece SelectStartPiece(List<ArenaPiece> starterList, int starterConTol = 0)
