@@ -19,6 +19,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using TrinityGen.GenerationMethods;
+using Array2DEditor;
 
 namespace TrinityGen
 {
@@ -46,37 +47,52 @@ namespace TrinityGen
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
 
-        /// <summary>
-        ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-        ///     guide   W,
-        ///             R,
-        ///             G,
-        ///             B,
-        ///             CYAN
-        ///             ORNG,
-        ///             YLLW,
-        ///             PINK,
-        ///             PRPL,
-        ///             BRWN,
-        ///             BLACK,
-        ///             GREY
-        /// </summary>
-        [SerializeField]
-        private bool[,] _colorMatchMatrix = {
-            // tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-            {true, true, true, true, true, true, true, true, true, true, true, true},
-            {true, true, false, false, false, false, false, false, false, false, false, false},
-            {true, false, true, false, false, false, false, false, false, false, false, false},
-            {true, false, false, true, false, false, false, false, false, false, false, false},
-            {true, false, false, false, true, false, false, false, false, false, false, false},
-            {true, false, false, false, false, true, false, false, false, false, false, false},
-            {true, false, false, false, false, false, true, false, false, false, false, false},
-            {true, false, false, false, false, false, false, true, false, false, false, false},
-            {true, false, false, false, false, false, false, false, true, false, false, false},
-            {true, false, false, false, false, false, false, false, false, true, false, false},
-            {true, false, false, false, false, false, false, false, false, false, true, false},
-            {true, false, false, false, false, false, false, false, false, false, false, true},
-        };
+        [Expandable]
+        [SerializeField] private Array2DBool colorMatrix;
+/// <summary>
+///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+///     guide   W,
+///             R,
+///             G,
+///             B,
+///             CYAN
+///             ORNG,
+///             YLLW,
+///             PINK,
+///             PRPL,
+///             BRWN,
+///             BLACK,
+///             GREY
+/// </summary>
+/// <value></value>
+        [SerializeField] private bool[,] _colorMatchMatrix => colorMatrix.GetCells();
+        /*{
+// tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+        {true, true, true, true, true, true, true, true, true, true, true, true},
+        {true, true, false, false, false, false, false, false, false, false, false, false},
+
+        {true, false, true, false, false, false, false, false, false, false, false, false},
+
+        {true, false, false, true, false, false, false, false, false, false, false, false},
+
+        {true, false, false, false, true, false, false, false, false, false, false, false},
+
+        {true, false, false, false, false, true, false, false, false, false, false, false},
+
+        {true, false, false, false, false, false, true, false, false, false, false, false},
+
+        {true, false, false, false, false, false, false, true, false, false, false, false},
+
+        {true, false, false, false, false, false, false, false, true, false, false, false},
+
+        {true, false, false, false, false, false, false, false, false, true, false, false},
+
+        {true, false, false, false, false, false, false, false, false, false, true, false},
+
+        {true, false, false, false, false, false, false, false, false, false, false, true},
+
+
+        };*/
 
         [Header("----- Generation Settings -----")]
 
