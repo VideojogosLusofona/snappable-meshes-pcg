@@ -29,24 +29,25 @@ namespace TrinityGen
         private static float GizmoTransparency = 1;
         private static ConnectorVisual GizmoVisuals;
 
-        [SerializeField] public ConnectorColor color;
-
         [ReadOnly]
         public Connector myMatch = null;
 
         [HideInInspector] public bool isUsed = false;
 
+        [SerializeField] public ConnectorColor color;
+
+        // Number of pins in this connector
+        [SerializeField]
+        private int pins = 0;
+
         [OnValueChanged("OnSpacingChanged")]
         [SerializeField] private float _pinSpacing = 0.5f;
 
         [OnValueChanged("OnTransparencyChanged")] [Range(0, 1)] [SerializeField]
-        private float gizmoTransparency = 1;
+        private float _gizmoTransparency = 1;
 
         [OnValueChanged("OnLooksChanged")] [SerializeField]
         private ConnectorVisual _gizmoLooks;
-
-        // Number of pins in this connector
-        private int pins = 0;
 
         /// <summary>
         /// Number of pins in this connector.
@@ -58,7 +59,7 @@ namespace TrinityGen
         private void OnSpacingChanged() =>
             ConnectorSize = _pinSpacing;
         private void OnTransparencyChanged() =>
-            GizmoTransparency = gizmoTransparency;
+            GizmoTransparency = _gizmoTransparency;
         private void OnLooksChanged() =>
             GizmoVisuals = _gizmoLooks;
 

@@ -186,12 +186,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 1
   myMatch: {fileID: 0}
   isUsed: 0
+  color: 1
   pins: 1
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &5976855990536354074
 GameObject:
@@ -236,12 +236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 4
   myMatch: {fileID: 0}
   isUsed: 0
+  color: 4
   pins: 1
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &5976855990683632111
 GameObject:
@@ -286,10 +286,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
   myMatch: {fileID: 0}
   isUsed: 0
+  color: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
