@@ -36,14 +36,14 @@ namespace TrinityGen
         private bool isUsed;
 
         [SerializeField]
-        public ConnectorColor color;
+        private ConnectorColor connColor;
 
         // Number of pins in this connector
         [SerializeField]
         private int pins = 0;
 
-        [OnValueChanged("OnSpacingChanged")]
-        [SerializeField] private float _pinSpacing = 0.5f;
+        [OnValueChanged("OnSpacingChanged")] [SerializeField]
+        private float _pinSpacing = 0.5f;
 
         [OnValueChanged("OnTransparencyChanged")] [Range(0, 1)] [SerializeField]
         private float _gizmoTransparency = 1;
@@ -60,6 +60,11 @@ namespace TrinityGen
         /// Is this connector currently being used?
         /// </summary>
         public bool IsUsed => isUsed;
+
+        /// <summary>
+        /// The color of this connector.
+        /// </summary>
+        public ConnectorColor ConnColor => connColor;
 
         public Vector3 Heading => transform.forward;
 
@@ -107,7 +112,7 @@ namespace TrinityGen
         private void OnDrawGizmos()
         {
             Color col;
-            switch (color)
+            switch (connColor)
             {
                 case ConnectorColor.WHITE:
                     col = Color.white;

@@ -126,7 +126,7 @@ namespace TrinityGen
                             pinMatch = true;
                         }
 
-                        if (colorMatrix[(int)ct.color, (int)co.color])
+                        if (colorMatrix[(int)ct.ConnColor, (int)co.ConnColor])
                         {
                             colorMatch = true;
                         }
