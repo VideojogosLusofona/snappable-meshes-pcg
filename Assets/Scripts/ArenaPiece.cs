@@ -19,6 +19,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace TrinityGen
 {
@@ -34,16 +35,8 @@ namespace TrinityGen
             get
             {
                 // Make sure connector collection is initialized
-                if (_connectors is null)
-                {
-                    IEnumerable<Connector> children =
-                        GetComponentsInChildren<Connector>();
+                if (_connectors is null) InitConnectors();
 
-                    _connectors = children
-                        .Distinct()
-                        .OrderBy(n => n)
-                        .ToArray();
-                }
                 // Return collector collection
                 return _connectors;
             }
@@ -58,21 +51,18 @@ namespace TrinityGen
         public int ConnectorsCount => _Connectors.Count;
 
         /// <summary>
-        /// Detects the connectors, sorts them and activates the rigidbodies
+        /// Initializes the connectors and activates the rigidbodies.
         /// </summary>
         /// <param name="spawnRigid">Use clipping correction?</param>
         public void Setup(bool spawnRigid)
         {
-            // //Debug.Log("Using first bottom/top connectors found.");
-            _useRigidBody = spawnRigid;
-
-            foreach (Connector g in _Connectors)
-            {
-                g.isUsed = false;
-            }
-
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
+
+            _useRigidBody = spawnRigid;
+
+            // Make sure connector collection is initialized
+            if (_connectors is null) InitConnectors();
 
             if (rb == null)
                 rb = gameObject.AddComponent<Rigidbody>();
@@ -102,7 +92,7 @@ namespace TrinityGen
         public bool IsFull()
         {
             foreach (Connector c in _Connectors)
-                if (!c.isUsed) return false;
+                if (!c.IsUsed) return false;
             return true;
         }
 
@@ -124,7 +114,7 @@ namespace TrinityGen
                 foreach (Connector ct in this._Connectors)
                 {
                     // Match criteria
-                    if (!co.isUsed && !ct.isUsed)
+                    if (!co.IsUsed && !ct.IsUsed)
                     {
                         bool pinMatch = false;
                         bool colorMatch = false;
@@ -251,5 +241,24 @@ namespace TrinityGen
                 init.Initialize();
             }
         }*/
+
+        /// <summary>
+        /// Initializes the connectors.
+        /// </summary>
+        private void InitConnectors()
+        {
+            // Calling this method if _connectors is not null is a bug
+            Assert.IsNull(_connectors);
+
+            // Get connectors
+            IEnumerable<Connector> children =
+                GetComponentsInChildren<Connector>();
+
+            // Sort connectors using their default ordering
+            _connectors = children
+                .Distinct()
+                .OrderBy(n => n)
+                .ToArray();
+        }
     }
 }

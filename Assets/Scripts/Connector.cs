@@ -30,10 +30,10 @@ namespace TrinityGen
         private static ConnectorVisual GizmoVisuals;
 
         [SerializeField] [ReadOnly]
-        private Connector match = null;
+        private Connector match;
 
-        [HideInInspector]
-        public bool isUsed = false;
+        [SerializeField] [HideInInspector]
+        private bool isUsed;
 
         [SerializeField]
         public ConnectorColor color;
@@ -55,6 +55,11 @@ namespace TrinityGen
         /// Number of pins in this connector.
         /// </summary>
         public int Pins => pins;
+
+        /// <summary>
+        /// Is this connector currently being used?
+        /// </summary>
+        public bool IsUsed => isUsed;
 
         public Vector3 Heading => transform.forward;
 
