@@ -29,12 +29,14 @@ namespace TrinityGen
         private static float GizmoTransparency = 1;
         private static ConnectorVisual GizmoVisuals;
 
-        [ReadOnly]
-        public Connector myMatch = null;
+        [SerializeField] [ReadOnly]
+        private Connector match = null;
 
-        [HideInInspector] public bool isUsed = false;
+        [HideInInspector]
+        public bool isUsed = false;
 
-        [SerializeField] public ConnectorColor color;
+        [SerializeField]
+        public ConnectorColor color;
 
         // Number of pins in this connector
         [SerializeField]
@@ -71,6 +73,19 @@ namespace TrinityGen
             /*foreach (Connector c in _connectors)
                 c.groupColor = gizmoColor;
             */
+        }
+
+        /// <summary>
+        /// Match two connectors.
+        /// </summary>
+        /// <param name="conn1">First connector to match.</param>
+        /// <param name="conn2">Second connector to match.</param>
+        public static void Match(Connector conn1, Connector conn2)
+        {
+            conn1.match = conn2;
+            conn1.isUsed = true;
+            conn2.match = conn1;
+            conn2.isUsed = true;
         }
 
         public int CompareTo(Connector other)

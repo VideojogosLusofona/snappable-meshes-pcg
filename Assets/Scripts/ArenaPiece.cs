@@ -171,14 +171,11 @@ namespace TrinityGen
                 (Connector chosenMine, Connector chosenOther) chosenCombo =
                     possibleCombos[UnityEngine.Random.Range(0, possibleCombos.Count)];
 
-                chosenCombo.chosenOther.isUsed = true;
-                chosenCombo.chosenMine.isUsed = true;
+                Connector.Match(chosenCombo.chosenMine, chosenCombo.chosenOther);
 
-                chosenCombo.chosenMine.myMatch = chosenCombo.chosenOther;
-                chosenCombo.chosenOther.myMatch = chosenCombo.chosenMine;
-
-                Transform trn = TransformPiece(chosenCombo.chosenMine,
-                chosenCombo.chosenOther, other, pieceDistance);
+                Transform trn = TransformPiece(
+                    chosenCombo.chosenMine, chosenCombo.chosenOther,
+                    other, pieceDistance);
 
                 return (true, trn);
             }
