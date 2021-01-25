@@ -24,24 +24,24 @@ namespace TrinityGen
 {
     public class GenerationManager : MonoBehaviour
     {
-        [Header("----- Content Settings ------")]
+        [Header("----- Content Settings -----")]
 
         [SerializeField] private List<ArenaPiece> _piecesForGeneration;
 
-        [Header("Starting Piece Settings ---")]
+        [Header("----- Starting Piece Settings -----")]
 
         [SerializeField] private bool _setStartingPiece = false;
         [SerializeField] private List<ArenaPiece> _possibleStartingPieces;
         [SerializeField] private uint _connectorCountTolerance = 0;
 
-        [Header("------ World Settings --------")]
+        [Header("----- World Settings -----")]
 
         [SerializeField] private bool defineSeed;
         [SerializeField] private int seed;
         [SerializeField] private bool _useClippingCorrection = false;
         [SerializeField] private float _pieceDistance = 0.0001f;
 
-        [Header("------ Connection Settings --------")]
+        [Header("----- Connection Settings -----")]
 
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
@@ -78,24 +78,24 @@ namespace TrinityGen
             {true, false, false, false, false, false, false, false, false, false, false, true},
         };
 
-        [Header("----------- Generation Settings --------")]
+        [Header("----- Generation Settings -----")]
 
         [SerializeField] private GenerationTypes _generationMethod;
 
-        [Header("Arena & Corridor Generation Settings --------")]
+        [Header("----- Arena & Corridor Generation Settings -----")]
         [SerializeField] private uint _maxPieceCount;
 
-        [Header("Star Generation Settings --------")]
+        [Header("----- Star Generation Settings -----")]
         [SerializeField] private uint _spokePieceCount;
         [SerializeField] private int _spokeSizeVariance = 0;
 
-        [Header("Branch Generation Settings --------")]
+        [Header("----- Branch Generation Settings -----")]
         [SerializeField] private uint _branchCount;
         [SerializeField] private uint _branchPieceCount;
         [SerializeField] private int _branchSizeVariance = 0;
         [SerializeField] private uint PieceSkippingVariance = 0;
 
-        [Header("------ Testing Settings -------")]
+        [Header("----- Testing Settings -----")]
 
         [Tooltip("Generate Arena on scene start automaticly. (DANGEROUS)")]
         [SerializeField] private bool _autoCreate = false;
@@ -159,9 +159,6 @@ namespace TrinityGen
             _piecesForGenerationWorkList =
                 new List<ArenaPiece>(_piecesForGeneration);
 
-            foreach (ArenaPiece a in _piecesForGenerationWorkList)
-                a.Setup(_useClippingCorrection);
-
             switch (_generationMethod)
             {
                 case GenerationTypes.ARENA:
@@ -205,7 +202,7 @@ namespace TrinityGen
                     (int)_connectorCountTolerance);
             }
 
-            GameObject inst = Instantiate(started.gameObject);
+            GameObject inst = started.ClonePiece(_useClippingCorrection);
             _placedPieces.Add(inst.GetComponent<ArenaPiece>());
             inst.name += " - START ";
 
@@ -216,18 +213,17 @@ namespace TrinityGen
             int placement = 0;
             do
             {
-
                 int maxFailures = 10;
                 int failureCount = 0;
-
-                // Check what list of the sorted list the selected belongs to
-                int myPieceList = 0;
 
                 // Pick a piece to evaluate against our selected placed one
                 while (true)
                 {
                     int rng;
-                    myPieceList = Random.Range(0, _sortedPieces.Count);
+
+                    // Check what list of the sorted list the selected belongs to
+                    int myPieceList = Random.Range(0, _sortedPieces.Count);
+
                     if (_sortedPieces[myPieceList].Count != 0)
                     {
                         rng = Random.Range(0, _sortedPieces[myPieceList].Count);
@@ -240,7 +236,7 @@ namespace TrinityGen
                     _tentativePiece = _sortedPieces[myPieceList][rng];
 
                     GameObject spawnedPiece =
-                        Instantiate(_tentativePiece).gameObject;
+                        _tentativePiece.ClonePiece(_useClippingCorrection);
                     ArenaPiece spawnedScript =
                         spawnedPiece.GetComponent<ArenaPiece>();
 

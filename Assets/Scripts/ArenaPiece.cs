@@ -51,42 +51,8 @@ namespace TrinityGen
         public int ConnectorsCount => _Connectors.Count;
 
         /// <summary>
-        /// Initializes the connectors and activates the rigidbodies.
-        /// </summary>
-        /// <param name="spawnRigid">Use clipping correction?</param>
-        public void Setup(bool spawnRigid)
-        {
-            Rigidbody rb = GetComponent<Rigidbody>();
-            MeshCollider mc = GetComponent<MeshCollider>();
-
-            _useRigidBody = spawnRigid;
-
-            // Make sure connector collection is initialized
-            if (_connectors is null) InitConnectors();
-
-            if (rb == null)
-                rb = gameObject.AddComponent<Rigidbody>();
-            if (mc == null)
-                mc = gameObject.AddComponent<MeshCollider>();
-
-            if (_useRigidBody)
-            {
-                rb.isKinematic = false;
-                mc.convex = true;
-                rb = GetComponent<Rigidbody>();
-                rb.useGravity = false;
-                rb.mass = 0;
-                rb.drag = 900;
-                rb.constraints = RigidbodyConstraints.FreezeRotation;
-            }
-            else
-            {
-                rb.isKinematic = true;
-            }
-        }
-
-        /// <summary>
-        /// Checks all connectors to see if they're already connected to another
+        /// Checks all connectors to see if they're already connected to
+        /// another.
         /// </summary>
         /// <returns> Are all the connectors in this piece used?</returns>
         public bool IsFull()
@@ -96,6 +62,28 @@ namespace TrinityGen
             return true;
         }
 
+        /// <summary>
+        /// Create a copy of this piece.
+        /// </summary>
+        /// <param name="useRigidBody">Use clipping correction?</param>
+        /// <returns>A copy of this piece.</returns>
+        public GameObject ClonePiece(bool useRigidBody)
+        {
+            ArenaPiece clonedPiece = Instantiate(this);
+            clonedPiece.Setup(useRigidBody);
+            return clonedPiece.gameObject;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="valid"></param>
+        /// <param name="rules"></param>
+        /// <param name="other"></param>
+        /// <param name="pieceDistance"></param>
+        /// <param name="groupTolerance"></param>
+        /// <param name="colorMatrix"></param>
+        /// <returns></returns>
         public (bool valid, Transform positionRot) EvaluatePiece(
             ConnectorMatchingRules rules, ArenaPiece other,
             float pieceDistance = 0.00f, uint groupTolerance = 0,
@@ -216,31 +204,39 @@ namespace TrinityGen
         }
 
         /// <summary>
-        /// Order the pieces by how many connectors they have
+        /// Initializes the connectors and activates the rigidbodies.
         /// </summary>
-        /// <param name="other">Piece to compare with this one.</param>
-        /// <returns>
-        /// Returns -1 if this piece has more connectors than the other, 0 if
-        /// they have the same amount of connectors or 1 if this piece has less
-        /// connectors than the other.
-        /// </returns>
-        public int CompareTo(ArenaPiece other)
+        /// <param name="spawnRigid">Use clipping correction?</param>
+        private void Setup(bool spawnRigid)
         {
-            if (ConnectorsCount > other.ConnectorsCount)
-                return -1;
-            else if (ConnectorsCount < other.ConnectorsCount)
-                return 1;
-            else
-                return 0;
-        }
+            Rigidbody rb = GetComponent<Rigidbody>();
+            MeshCollider mc = GetComponent<MeshCollider>();
 
-        /*public void Initialize()
-        {
-            foreach (IArenaInitializable init in initList)
+            _useRigidBody = spawnRigid;
+
+            // Make sure connector collection is initialized
+            if (_connectors is null) InitConnectors();
+
+            if (rb == null)
+                rb = gameObject.AddComponent<Rigidbody>();
+            if (mc == null)
+                mc = gameObject.AddComponent<MeshCollider>();
+
+            if (_useRigidBody)
             {
-                init.Initialize();
+                rb.isKinematic = false;
+                mc.convex = true;
+                rb = GetComponent<Rigidbody>();
+                rb.useGravity = false;
+                rb.mass = 0;
+                rb.drag = 900;
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
             }
-        }*/
+            else
+            {
+                rb.isKinematic = true;
+            }
+        }
 
         /// <summary>
         /// Initializes the connectors.
@@ -259,6 +255,25 @@ namespace TrinityGen
                 .Distinct()
                 .OrderBy(n => n)
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Order the pieces by how many connectors they have
+        /// </summary>
+        /// <param name="other">Piece to compare with this one.</param>
+        /// <returns>
+        /// Returns -1 if this piece has more connectors than the other, 0 if
+        /// they have the same amount of connectors or 1 if this piece has less
+        /// connectors than the other.
+        /// </returns>
+        public int CompareTo(ArenaPiece other)
+        {
+            if (ConnectorsCount > other.ConnectorsCount)
+                return -1;
+            else if (ConnectorsCount < other.ConnectorsCount)
+                return 1;
+            else
+                return 0;
         }
     }
 }
