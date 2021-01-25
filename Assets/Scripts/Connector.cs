@@ -66,6 +66,9 @@ namespace TrinityGen
         /// </summary>
         public ConnectorColor ConnColor => connColor;
 
+        /// <summary>
+        /// Connector heading.
+        /// </summary>
         public Vector3 Heading => transform.forward;
 
         private void OnSpacingChanged() =>
