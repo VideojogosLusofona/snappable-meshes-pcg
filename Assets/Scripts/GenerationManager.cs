@@ -150,7 +150,6 @@ namespace TrinityGen
                 _currentSeed = System.Environment.TickCount;
 
             Random.InitState(_currentSeed);
-            _sortedPieces = new List<List<ArenaPiece>>();
 
             foreach (ArenaPiece a in piecesForGeneration)
                 a.Setup(_useClippingCorrection);
@@ -178,7 +177,7 @@ namespace TrinityGen
             largestGroup =
                 piecesForGeneration[0].ConnectorsCount;
 
-            // Seperate pieces into seperate lists based on largest group
+            // Separate pieces into separate lists based on largest group
             _sortedPieces = SplitList();
 
             _placedPieces = new List<ArenaPiece>();
@@ -285,7 +284,6 @@ namespace TrinityGen
             List<ArenaPiece> consideredList = new List<ArenaPiece>();
             List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
-
             for (int i = 0; i < piecesForGeneration.Count; i++)
             {
                 // Piece belongs in a new list made for its size
@@ -299,7 +297,7 @@ namespace TrinityGen
                 }
                 // piece belongs in the already made list
                 else if (piecesForGeneration[i].ConnectorsCount >=
-                lastConsidered - _connectorCountTolerance)
+                    lastConsidered - _connectorCountTolerance)
                 {
                     consideredList.Add(piecesForGeneration[i]);
                 }
