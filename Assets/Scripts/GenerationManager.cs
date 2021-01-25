@@ -127,7 +127,7 @@ namespace TrinityGen
         // Piece being evaluated against selectedPiece
         private ArenaPiece _tentativePiece;
 
-        private GenerationMethod _choosenMethod;
+        private GenerationMethod _chosenMethod;
 
         private int largestGroup;
 
@@ -158,17 +158,17 @@ namespace TrinityGen
             switch (_generationMethod)
             {
                 case GenerationTypes.ARENA:
-                    _choosenMethod = new ArenaGM((int)_maxPieceCount);
+                    _chosenMethod = new ArenaGM((int)_maxPieceCount);
                     break;
                 case GenerationTypes.CORRIDOR:
-                    _choosenMethod = new CorridorGM((int)_maxPieceCount);
+                    _chosenMethod = new CorridorGM((int)_maxPieceCount);
                     break;
                 case GenerationTypes.STAR:
-                    _choosenMethod = new StarGM(
+                    _chosenMethod = new StarGM(
                         (int)_spokePieceCount, (int)_spokeSizeVariance);
                     break;
                 case GenerationTypes.BRANCH:
-                    _choosenMethod = new BranchGM(
+                    _chosenMethod = new BranchGM(
                         (int)_branchCount, (int)_branchPieceCount,
                         _branchSizeVariance, (int)_branchGenPieceSkipping);
                     break;
@@ -185,12 +185,12 @@ namespace TrinityGen
             ArenaPiece started;
             if (_setStartingPiece)
             {
-                started = _choosenMethod.SelectStartPiece(
+                started = _chosenMethod.SelectStartPiece(
                     _possibleStartingPieces, (int)_connectorCountTolerance);
             }
             else
             {
-                started = _choosenMethod.SelectStartPiece(
+                started = _chosenMethod.SelectStartPiece(
                     piecesForGeneration, (int)_connectorCountTolerance);
             }
 
@@ -262,7 +262,7 @@ namespace TrinityGen
                         continue;
                     }
 
-                    _guidePiece = _choosenMethod.SelectGuidePiece(
+                    _guidePiece = _chosenMethod.SelectGuidePiece(
                         _placedPieces, _placedPieces[_placedPieces.Count - 1]);
 
                     break;
