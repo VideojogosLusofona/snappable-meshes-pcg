@@ -81,6 +81,8 @@ namespace TrinityGen
         [Header("----- Generation Settings -----")]
 
         [SerializeField] private GenerationTypes _generationMethod;
+        [SerializeField] private int maxFailures = 10;
+
 
         [Header("----- Arena & Corridor Generation Settings -----")]
         [SerializeField] private uint _maxPieceCount;
@@ -213,7 +215,6 @@ namespace TrinityGen
             int placement = 0;
             do
             {
-                int maxFailures = 10;
                 int failureCount = 0;
 
                 // Pick a piece to evaluate against our selected placed one

@@ -414,6 +414,7 @@ MonoBehaviour:
   _matchingRules: 0
   _pinCountTolerance: 0
   _generationMethod: 0
+  maxFailures: 10
   _maxPieceCount: 12
   _spokePieceCount: 4
   _spokeSizeVariance: 0
