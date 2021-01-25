@@ -226,9 +226,9 @@ namespace TrinityGen
         /// </returns>
         public int CompareTo(ArenaPiece other)
         {
-            if (_Connectors.Count > other._Connectors.Count)
+            if (ConnectorsCount > other.ConnectorsCount)
                 return -1;
-            else if (_Connectors.Count < other._Connectors.Count)
+            else if (ConnectorsCount < other.ConnectorsCount)
                 return 1;
             else
                 return 0;
