@@ -26,7 +26,7 @@ namespace TrinityGen
     {
         [Header("----- Content Settings ------")]
 
-        [SerializeField] private List<ArenaPiece> piecesForGeneration;
+        [SerializeField] private List<ArenaPiece> _piecesForGeneration;
 
         [Header("Starting Piece Settings ---")]
 
@@ -114,9 +114,10 @@ namespace TrinityGen
         [SerializeField] private bool _lowerLevelIslandGeneration;
         [SerializeField] private int _lowerIslandsCount = 1;*/
 
-        // Dont expose this to have branch calculate the jumping
+        // Don't expose this to have branch calculate the jumping
         private uint _branchGenPieceSkipping = 0;
 
+        private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
         private int _currentSeed;
         private IList<List<ArenaPiece>> _sortedPieces;
@@ -144,14 +145,21 @@ namespace TrinityGen
 
         public GameObject Create()
         {
+            // Use predefined seed if set or one based on current time
             if (defineSeed)
                 _currentSeed = seed;
             else
-                _currentSeed = System.Environment.TickCount;
+                _currentSeed = System.DateTime.Now.Millisecond;
 
+            // Initialize random number generator
             Random.InitState(_currentSeed);
 
-            foreach (ArenaPiece a in piecesForGeneration)
+            // Work on a copy and not in the original field, since we will sort
+            // this list and we don't want this to be reflected in the editor
+            _piecesForGenerationWorkList =
+                new List<ArenaPiece>(_piecesForGeneration);
+
+            foreach (ArenaPiece a in _piecesForGenerationWorkList)
                 a.Setup(_useClippingCorrection);
 
             switch (_generationMethod)
@@ -173,9 +181,12 @@ namespace TrinityGen
                     break;
             }
 
-            piecesForGeneration.Sort();
-            largestGroup =
-                piecesForGeneration[0].ConnectorsCount;
+            // Sort list of pieces to use according to the pieces natural order
+            _piecesForGenerationWorkList.Sort();
+
+            // Get the number of connectors from the piece with the most
+            // connectors
+            largestGroup = _piecesForGenerationWorkList[0].ConnectorsCount;
 
             // Separate pieces into separate lists based on largest group
             _sortedPieces = SplitList();
@@ -190,7 +201,8 @@ namespace TrinityGen
             else
             {
                 started = _chosenMethod.SelectStartPiece(
-                    piecesForGeneration, (int)_connectorCountTolerance);
+                    _piecesForGenerationWorkList,
+                    (int)_connectorCountTolerance);
             }
 
             GameObject inst = Instantiate(started.gameObject);
@@ -274,7 +286,6 @@ namespace TrinityGen
             return initialPiece;
         }
 
-
         /// <summary>
         /// Separate pieces into separate lists based on largest group
         /// </summary>
@@ -284,22 +295,24 @@ namespace TrinityGen
             List<ArenaPiece> consideredList = new List<ArenaPiece>();
             List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
-            for (int i = 0; i < piecesForGeneration.Count; i++)
+            for (int i = 0; i < _piecesForGenerationWorkList.Count; i++)
             {
                 // Piece belongs in a new list made for its size
-                if (piecesForGeneration[i].ConnectorsCount < lastConsidered)
+                if (_piecesForGenerationWorkList[i].ConnectorsCount
+                    < lastConsidered)
                 {
                     consideredList = new List<ArenaPiece>();
-                    consideredList.Add(piecesForGeneration[i]);
-                    lastConsidered = piecesForGeneration[i].ConnectorsCount;
+                    consideredList.Add(_piecesForGenerationWorkList[i]);
+                    lastConsidered =
+                        _piecesForGenerationWorkList[i].ConnectorsCount;
                     sortedList.Add(consideredList);
 
                 }
                 // piece belongs in the already made list
-                else if (piecesForGeneration[i].ConnectorsCount >=
+                else if (_piecesForGenerationWorkList[i].ConnectorsCount >=
                     lastConsidered - _connectorCountTolerance)
                 {
-                    consideredList.Add(piecesForGeneration[i]);
+                    consideredList.Add(_piecesForGenerationWorkList[i]);
                 }
             }
 
