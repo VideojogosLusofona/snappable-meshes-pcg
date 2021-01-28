@@ -46,8 +46,6 @@ namespace TrinityGen
 
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
-
-        [Expandable]
         [SerializeField] private Array2DBool colorMatrix;
 /// <summary>
 ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY

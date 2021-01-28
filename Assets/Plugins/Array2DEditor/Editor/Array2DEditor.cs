@@ -42,6 +42,10 @@ namespace Array2DEditor
 
         protected virtual void OnEndInspectorGUI()
         {
+             if (GUILayout.Button("Reset to Defaults"))
+             {
+                 InitNewGrid(new Vector2(12,12));
+             }
         }
 
 
@@ -49,7 +53,7 @@ namespace Array2DEditor
         {
             gridSize = serializedObject.FindProperty("gridSize");
             cells = serializedObject.FindProperty("cells");
-
+            
             newGridSize = gridSize.vector2IntValue;
 
             cellSize = new Vector2(CellWidth, CellHeight);
@@ -62,40 +66,12 @@ namespace Array2DEditor
             using (var h = new EditorGUILayout.HorizontalScope())
             {
                 EditorGUI.BeginChangeCheck();
-
                 SetBoldDefaultFont(gridSizeChanged);
-                newGridSize = EditorGUILayout.Vector2IntField(
-                    new GUIContent("Grid Size", "NOTE: X is the number of ROWS and Y the number of COLUMNS."),
-                    newGridSize);
-                SetBoldDefaultFont(false);
-                gridSizeChanged = newGridSize != gridSize.vector2IntValue;
-                wrongSize = (newGridSize.x <= 0 || newGridSize.y <= 0);
-
-                GUI.enabled = gridSizeChanged && !wrongSize;
-
-                if (GUILayout.Button("Apply", EditorStyles.miniButton))
-                {
-                    var operationAllowed = false;
-
-                    if (newGridSize.x < gridSize.vector2IntValue.x ||
-                        newGridSize.y < gridSize.vector2IntValue.y) // Smaller grid
-                    {
-                        operationAllowed = EditorUtility.DisplayDialog("Are you sure?",
-                            "You're about to reduce the width or height of the grid. This may erase some cells. Do you really want this?",
-                            "Yes", "No");
-                    }
-                    else // Bigger grid
-                    {
-                        operationAllowed = true;
-                    }
-
-                    if (operationAllowed)
-                    {
-                        InitNewGrid(newGridSize);
-                    }
-                }
-
+                
+                GUILayout.Label("Guide / Tentative");
                 GUI.enabled = true;
+
+                
                 EditorGUI.EndChangeCheck();
             }
 
@@ -118,7 +94,6 @@ namespace Array2DEditor
             serializedObject
                 .ApplyModifiedProperties(); // Apply changes to all serializedProperties - always do this at the end of OnInspectorGUI.
         }
-
         private void InitNewGrid(Vector2 newSize)
         {
             cells.ClearArray();
@@ -141,18 +116,42 @@ namespace Array2DEditor
 
         private void DisplayGrid(Rect startRect)
         {
+            string[] colorNames = {"WHT","RED","GRN","BLU","CYN","RNG","YLW","PNK","PRP","BRW","BLK","GRY"};
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
             {
+                EditorGUILayout.BeginHorizontal();
+                
+                 for(int x = 0; x < gridSize.vector2IntValue.x; x++)
+                 {
+                    if(x == 0)
+                    {
+                        GUILayout.Space(26);
+                    }
+                    GUILayout.Space(cellSize.x);
+                    EditorGUILayout.LabelField(colorNames[x], GUILayout.Width(32));
+
+                 }
+                EditorGUILayout.EndHorizontal();
                 for (var x = 0; x < gridSize.vector2IntValue.x; x++)
                 {
+                
                     var row = GetRowAt(x);
 
                     using (var h = new EditorGUILayout.HorizontalScope())
                     {
                         for (var y = 0; y < gridSize.vector2IntValue.y; y++)
                         {
+                            
+                            
+                            EditorGUILayout.BeginHorizontal();
+
+                            if(y == 0)
+                                EditorGUILayout.LabelField(colorNames[x], GUILayout.Width(32));
+                            
                             EditorGUILayout.PropertyField(row.GetArrayElementAtIndex(y), GUIContent.none,
                                 GUILayout.Width(cellSize.x), GUILayout.Height(cellSize.y));
+                            
+                            EditorGUILayout.EndHorizontal();
                         }
                     }
                     
