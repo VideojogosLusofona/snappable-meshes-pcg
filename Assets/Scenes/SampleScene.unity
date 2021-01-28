@@ -366,6 +366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1676127935}
   - component: {fileID: 1676127936}
+  - component: {fileID: 1676127937}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -415,6 +416,7 @@ MonoBehaviour:
   _pinCountTolerance: 0
   colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
   _generationMethod: 0
+  generationMethodConfigurator: Star
   maxFailures: 10
   _maxPieceCount: 12
   _spokePieceCount: 4
@@ -424,6 +426,19 @@ MonoBehaviour:
   _branchSizeVariance: 0
   PieceSkippingVariance: 0
   _autoCreate: 1
+--- !u!114 &1676127937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676127934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 549561f7f0a4036b59b26ad501f5062a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starTest: 0
 --- !u!1 &1724673651
 GameObject:
   m_ObjectHideFlags: 0

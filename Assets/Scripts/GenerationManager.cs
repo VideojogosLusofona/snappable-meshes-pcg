@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-using NaughtyAttributes;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using TrinityGen.GenerationMethods;
+using NaughtyAttributes;
 using Array2DEditor;
+using TrinityGen.GenerationMethods;
 
 namespace TrinityGen
 {
@@ -47,22 +48,22 @@ namespace TrinityGen
         [SerializeField] private ConnectorMatchingRules _matchingRules;
         [SerializeField] private uint _pinCountTolerance = 0;
         [SerializeField] private Array2DBool colorMatrix;
-/// <summary>
-///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-///     guide   W,
-///             R,
-///             G,
-///             B,
-///             CYAN
-///             ORNG,
-///             YLLW,
-///             PINK,
-///             PRPL,
-///             BRWN,
-///             BLACK,
-///             GREY
-/// </summary>
-/// <value></value>
+        /// <summary>
+        ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
+        ///     guide   W,
+        ///             R,
+        ///             G,
+        ///             B,
+        ///             CYAN
+        ///             ORNG,
+        ///             YLLW,
+        ///             PINK,
+        ///             PRPL,
+        ///             BRWN,
+        ///             BLACK,
+        ///             GREY
+        /// </summary>
+        /// <value></value>
         [SerializeField] private bool[,] _colorMatchMatrix => colorMatrix.GetCells();
         /*{
 // tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
@@ -95,6 +96,12 @@ namespace TrinityGen
         [Header("----- Generation Settings -----")]
 
         [SerializeField] private GenerationTypes _generationMethod;
+
+        [SerializeField]
+        [Dropdown("GenMethodNames")]
+        [OnValueChanged("OnChangeGenMethod")]
+        private string generationMethodConfigurator;
+
         [SerializeField] private int maxFailures = 10;
 
 
@@ -147,6 +154,66 @@ namespace TrinityGen
         private GenerationMethod _chosenMethod;
 
         private int largestGroup;
+
+        // Keys are the generation method simple names, values are the
+        // generation methods fully qualified names
+        private IDictionary<string, string> genMethodTable;
+
+        // Get generation method names
+        private ICollection<string> GenMethodNames
+        {
+            get
+            {
+                if (genMethodTable is null)
+                {
+                    string[] genMethodNames =
+                        GenMethodManager.Instance.GenMethodNames;
+                    genMethodTable = new Dictionary<string, string>()
+                        {{ "<Select generation method>", null}};
+
+                    foreach (Component component in GetComponents<IGMConfig>())
+                    {
+                        DestroyImmediate(component);
+                    }
+
+                    foreach (string fqName in genMethodNames)
+                    {
+                        string simpleName = fqName;
+                        // Strip namespace
+                        if (simpleName.Contains("."))
+                        {
+                            simpleName = fqName.Substring(fqName.LastIndexOf(".") + 1);
+                        }
+                        // Strip "GMConfig"
+                        if (simpleName.EndsWith("GMConfig"))
+                        {
+                            simpleName = simpleName.Substring(0, simpleName.Length - "GMConfig".Length);
+                        }
+                        // Add simple name as key, fully qualified name as value
+                        genMethodTable.Add(simpleName, fqName);
+                    }
+                }
+                // Return existing methods
+                return genMethodTable.Keys.OrderBy(s => s).ToArray();
+            }
+        }
+
+        private void OnChangeGenMethod()
+        {
+            string gmFQN = genMethodTable[generationMethodConfigurator];
+            foreach (Component component in GetComponents<IGMConfig>())
+            {
+                DestroyImmediate(component);
+            }
+
+            if (gmFQN != null)
+            {
+                System.Type gmConfig = GenMethodManager.Instance.GetTypeFromFQN(gmFQN);
+                gameObject.AddComponent(gmConfig);
+            }
+
+            Debug.Log(genMethodTable[generationMethodConfigurator]);
+        }
 
         // Start is called before the first frame update
         private void Start()
