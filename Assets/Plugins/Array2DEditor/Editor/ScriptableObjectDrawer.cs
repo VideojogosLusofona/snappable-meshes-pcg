@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ScriptableObject), true)]
+[CustomPropertyDrawer(typeof(Array2DEditor.Array2DBool), true)]
 public class ScriptableObjectDrawer : PropertyDrawer
 {
     // Cached scriptable object editor
