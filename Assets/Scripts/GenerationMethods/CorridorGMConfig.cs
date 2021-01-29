@@ -24,19 +24,7 @@ namespace TrinityGen.GenerationMethods
         [SerializeField]
         private uint _maxPieceCount;
 
-        private GenerationMethod _method;
-
-        public override GenerationMethod Method
-        {
-            get
-            {
-                if (_method is null)
-                {
-                    _method = new CorridorGM((int)_maxPieceCount);
-                }
-                return _method;
-            }
-        }
-
+        public override GenerationMethod Method =>
+            new CorridorGM((int)_maxPieceCount);
     }
 }

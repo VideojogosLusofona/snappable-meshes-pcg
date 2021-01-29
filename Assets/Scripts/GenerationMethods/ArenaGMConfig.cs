@@ -24,18 +24,7 @@ namespace TrinityGen.GenerationMethods
         [SerializeField]
         private uint _maxPieceCount;
 
-        private GenerationMethod _method;
-
-        public override GenerationMethod Method
-        {
-            get
-            {
-                if (_method is null)
-                {
-                    _method = new ArenaGM((int)_maxPieceCount);
-                }
-                return _method;
-            }
-        }
+        public override GenerationMethod Method =>
+            new ArenaGM((int)_maxPieceCount);
     }
 }

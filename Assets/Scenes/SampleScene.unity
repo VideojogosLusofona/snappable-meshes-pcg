@@ -411,11 +411,11 @@ MonoBehaviour:
   seed: 1234
   _useClippingCorrection: 0
   _pieceDistance: 0.0001
-  _matchingRules: 0
+  _matchingRules: -1
   _pinCountTolerance: 0
   colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _generationMethod: Corridor
-  _generationParams: {fileID: 11400000, guid: 7bf6cf47ee2296ec6b691e82a2ac9b99, type: 2}
+  _generationMethod: Arena
+  _generationParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
   _maxFailures: 10
   _autoCreate: 1
 --- !u!1 &1724673651

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2021 TrinityGenerator_Standalone contributors
  * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
  *
@@ -15,19 +15,16 @@
  * limitations under the License.
  */
 
-using UnityEngine;
-
-namespace TrinityGen.GenerationMethods
+namespace TrinityGen
 {
-    public class StarGMConfig : GMConfig
+    public static class SnapRulesExtensions
     {
-        [SerializeField]
-        private uint _spokePieceCount;
+        // Is the use of colours specified in this rule?
+        public static bool UseColours(this SnapRules rules)
+            => (rules & SnapRules.Colours) == SnapRules.Colours;
 
-        [SerializeField]
-        private int _spokeSizeVariance = 0;
-
-        public override GenerationMethod Method =>
-            new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
+        // Is the use of pins specified in this rule?
+        public static bool UsePins(this SnapRules rules)
+            => (rules & SnapRules.Pins) == SnapRules.Pins;
     }
 }

@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
+using System;
 namespace TrinityGen
 {
-    public enum ConnectorMatchingRules
+    [Flags]
+    public enum SnapRules
     {
-        PINS_AND_COLORS = 0,
-        PINS,
-        COLOURS,
+        None = 0 << 0,
+        Pins = 1 << 1,
+        Colours = 1 << 2
     }
 }
