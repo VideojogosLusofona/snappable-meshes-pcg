@@ -18,7 +18,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 using TrinityGen.GenerationMethods;
 
 namespace TrinityGen
@@ -79,18 +78,13 @@ namespace TrinityGen
         private GenMethodManager()
         {
             // Get a reference to the generation method configurator type
-            Type typeIGenMethCfg = typeof(IGMConfig);
+            Type typeGMConfig = typeof(GMConfig);
 
-            // Get a reference to the MonoBehaviour type
-            Type typeMonoBehave = typeof(MonoBehaviour);
-
-            // Get known methods, i.e. classes which implement IGMConfig,
-            // extend MonoBehaviour and are not abstract
+            // Get known methods, i.e. classes which extends GMConfig,
+            // and are not abstract
             genMethCfgTable = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(t => typeIGenMethCfg.IsAssignableFrom(t)
-                    && t.IsSubclassOf(typeMonoBehave)
-                    && !t.IsAbstract)
+                .Where(t => t.IsSubclassOf(typeGMConfig) && !t.IsAbstract)
                 .ToDictionary(t => t.FullName, t => t);
         }
     }

@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace TrinityGen.GenerationMethods
 {
-    public class StarGMConfig : MonoBehaviour, IGMConfig
+    public class StarGMConfig : GMConfig
     {
         [SerializeField]
         private uint _spokePieceCount;
@@ -29,7 +29,7 @@ namespace TrinityGen.GenerationMethods
 
         private GenerationMethod _method;
 
-        public GenerationMethod Method
+        public override GenerationMethod Method
         {
             get
             {

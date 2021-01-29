@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace TrinityGen.GenerationMethods
 {
-    public class BranchGMConfig : MonoBehaviour, IGMConfig
+    public class BranchGMConfig : GMConfig
     {
         [SerializeField]
         private uint _branchCount;
@@ -38,7 +38,7 @@ namespace TrinityGen.GenerationMethods
 
         private GenerationMethod _method;
 
-        public GenerationMethod Method
+        public override GenerationMethod Method
         {
             get
             {

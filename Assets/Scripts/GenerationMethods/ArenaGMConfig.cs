@@ -19,14 +19,14 @@ using UnityEngine;
 
 namespace TrinityGen.GenerationMethods
 {
-    public class ArenaGMConfig : MonoBehaviour, IGMConfig
+    public class ArenaGMConfig : GMConfig
     {
         [SerializeField]
         private uint _maxPieceCount;
 
         private GenerationMethod _method;
 
-        public GenerationMethod Method
+        public override GenerationMethod Method
         {
             get
             {

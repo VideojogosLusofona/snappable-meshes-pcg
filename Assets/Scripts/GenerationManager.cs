@@ -100,13 +100,16 @@ namespace TrinityGen
         [Dropdown("GenMethodNames")] [OnValueChanged("OnChangeGenMethod")]
         private string _generationMethod;
 
+        [SerializeField] [Expandable]
+        private GMConfig _generationParams;
+
         [SerializeField]
         private uint _maxFailures = 10;
 
 
         [Header("----- Testing Settings -----")]
 
-        [Tooltip("Generate Arena on scene start automaticly. (DANGEROUS)")]
+        [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
 
@@ -156,10 +159,7 @@ namespace TrinityGen
                     genMethodTable = new Dictionary<string, string>()
                         {{ "<Select generation method>", null}};
 
-                    foreach (Component component in GetComponents<IGMConfig>())
-                    {
-                        DestroyImmediate(component);
-                    }
+                    _generationMethod = null;
 
                     foreach (string fqName in genMethodNames)
                     {
@@ -177,6 +177,8 @@ namespace TrinityGen
                         // Add simple name as key, fully qualified name as value
                         genMethodTable.Add(simpleName, fqName);
                     }
+
+                    OnChangeGenMethod();
                 }
                 // Return existing methods
                 return genMethodTable.Keys.OrderBy(s => s).ToArray();
@@ -185,19 +187,21 @@ namespace TrinityGen
 
         private void OnChangeGenMethod()
         {
-            string gmFQN = genMethodTable[_generationMethod];
-            foreach (Component component in GetComponents<IGMConfig>())
-            {
-                DestroyImmediate(component);
-            }
+            string gmFQN = _generationMethod != null ?
+                genMethodTable[_generationMethod] : null;
 
-            if (gmFQN != null)
+            if (gmFQN is null)
+            {
+                _generationParams = null;
+            }
+            else
             {
                 System.Type gmConfig = GenMethodManager.Instance.GetTypeFromFQN(gmFQN);
-                gameObject.AddComponent(gmConfig);
+
+                _generationParams = GMConfig.GetInstance(gmConfig);
             }
 
-            Debug.Log(genMethodTable[_generationMethod]);
+            //Debug.Log(genMethodTable[_generationMethod]);
         }
 
         // Start is called before the first frame update
@@ -213,9 +217,7 @@ namespace TrinityGen
 
         public GameObject Create()
         {
-            IGMConfig genMethodConfigurator = GetComponent<IGMConfig>();
-
-            if (genMethodConfigurator is null)
+            if (_generationParams is null)
             {
                 EditorUtility.DisplayDialog(
                     "Warning", "Please select a generation method", "Ok");
@@ -237,7 +239,7 @@ namespace TrinityGen
                 new List<ArenaPiece>(_piecesForGeneration);
 
             // Get chosen generation method (strategy pattern)
-            _chosenMethod = GetComponent<IGMConfig>().Method;
+            _chosenMethod = _generationParams.Method; //GetComponent<IGMConfig>().Method;
 
             // Sort list of pieces to use according to the pieces natural order
             _piecesForGenerationWorkList.Sort();
