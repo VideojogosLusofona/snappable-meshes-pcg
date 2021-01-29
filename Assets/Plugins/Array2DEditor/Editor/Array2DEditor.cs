@@ -86,8 +86,6 @@ namespace Array2DEditor
             if (Event.current.type == EventType.Repaint)
             {
                 lastRect = GUILayoutUtility.GetLastRect();
-
-                Debug.Log("lastRect = " + lastRect);
             }
 
             DisplayGrid(lastRect);
@@ -129,7 +127,7 @@ namespace Array2DEditor
             string[]    colorNames = { "WHT", "RED", "GRN", "BLU", "CYN", "RNG", "YLW", "PNK", "PRP", "BRW", "BLK", "GRY" };
             Color32[] colors = { new Color32(255,255,255,255), new Color32(255, 0, 0, 255), new Color32(0, 255, 0, 255), new Color32(0, 128, 255, 255),
                                    new Color32(0,255,255,255), new Color32(255, 128, 0, 255), new Color32(255, 255, 0, 255), new Color32(255, 128, 255, 255),
-                                   new Color32(255,0,255,255), new Color32(200, 128, 255, 255), new Color32(0, 0, 0, 255), new Color32(128, 128, 128, 255) };
+                                   new Color32(255,0,255,255), new Color32(136, 100, 32, 255), new Color32(0, 0, 0, 255), new Color32(128, 128, 128, 255) };
             Color32[] foregroundColors = { new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255),
                                            new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255),
                                            new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(255, 255, 255, 255), new Color32(0, 0, 0, 255) };
