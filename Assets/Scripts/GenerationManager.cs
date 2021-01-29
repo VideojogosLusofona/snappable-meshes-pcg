@@ -18,6 +18,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using NaughtyAttributes;
 using Array2DEditor;
 using TrinityGen.GenerationMethods;
@@ -95,33 +96,19 @@ namespace TrinityGen
 
         [Header("----- Generation Settings -----")]
 
-        [SerializeField] private GenerationTypes _generationMethod;
+        [SerializeField]
+        [Dropdown("GenMethodNames")] [OnValueChanged("OnChangeGenMethod")]
+        private string _generationMethod;
 
         [SerializeField]
-        [Dropdown("GenMethodNames")]
-        [OnValueChanged("OnChangeGenMethod")]
-        private string generationMethodConfigurator;
+        private uint _maxFailures = 10;
 
-        [SerializeField] private int maxFailures = 10;
-
-
-        [Header("----- Arena & Corridor Generation Settings -----")]
-        [SerializeField] private uint _maxPieceCount;
-
-        [Header("----- Star Generation Settings -----")]
-        [SerializeField] private uint _spokePieceCount;
-        [SerializeField] private int _spokeSizeVariance = 0;
-
-        [Header("----- Branch Generation Settings -----")]
-        [SerializeField] private uint _branchCount;
-        [SerializeField] private uint _branchPieceCount;
-        [SerializeField] private int _branchSizeVariance = 0;
-        [SerializeField] private uint PieceSkippingVariance = 0;
 
         [Header("----- Testing Settings -----")]
 
         [Tooltip("Generate Arena on scene start automaticly. (DANGEROUS)")]
-        [SerializeField] private bool _autoCreate = false;
+        [SerializeField]
+        private bool _autoCreate = false;
 
         /*[Header("------ Vertical Level Settings --------")]
         [SerializeField] private bool _createUpperLevel;
@@ -137,8 +124,6 @@ namespace TrinityGen
         [SerializeField] private bool _lowerLevelIslandGeneration;
         [SerializeField] private int _lowerIslandsCount = 1;*/
 
-        // Don't expose this to have branch calculate the jumping
-        private uint _branchGenPieceSkipping = 0;
 
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
@@ -200,7 +185,7 @@ namespace TrinityGen
 
         private void OnChangeGenMethod()
         {
-            string gmFQN = genMethodTable[generationMethodConfigurator];
+            string gmFQN = genMethodTable[_generationMethod];
             foreach (Component component in GetComponents<IGMConfig>())
             {
                 DestroyImmediate(component);
@@ -212,7 +197,7 @@ namespace TrinityGen
                 gameObject.AddComponent(gmConfig);
             }
 
-            Debug.Log(genMethodTable[generationMethodConfigurator]);
+            Debug.Log(genMethodTable[_generationMethod]);
         }
 
         // Start is called before the first frame update
@@ -228,6 +213,15 @@ namespace TrinityGen
 
         public GameObject Create()
         {
+            IGMConfig genMethodConfigurator = GetComponent<IGMConfig>();
+
+            if (genMethodConfigurator is null)
+            {
+                EditorUtility.DisplayDialog(
+                    "Warning", "Please select a generation method", "Ok");
+                return null;
+            }
+
             // Use predefined seed if set or one based on current time
             if (defineSeed)
                 _currentSeed = seed;
@@ -242,24 +236,8 @@ namespace TrinityGen
             _piecesForGenerationWorkList =
                 new List<ArenaPiece>(_piecesForGeneration);
 
-            switch (_generationMethod)
-            {
-                case GenerationTypes.ARENA:
-                    _chosenMethod = new ArenaGM((int)_maxPieceCount);
-                    break;
-                case GenerationTypes.CORRIDOR:
-                    _chosenMethod = new CorridorGM((int)_maxPieceCount);
-                    break;
-                case GenerationTypes.STAR:
-                    _chosenMethod = new StarGM(
-                        (int)_spokePieceCount, (int)_spokeSizeVariance);
-                    break;
-                case GenerationTypes.BRANCH:
-                    _chosenMethod = new BranchGM(
-                        (int)_branchCount, (int)_branchPieceCount,
-                        _branchSizeVariance, (int)_branchGenPieceSkipping);
-                    break;
-            }
+            // Get chosen generation method (strategy pattern)
+            _chosenMethod = GetComponent<IGMConfig>().Method;
 
             // Sort list of pieces to use according to the pieces natural order
             _piecesForGenerationWorkList.Sort();
@@ -346,7 +324,7 @@ namespace TrinityGen
                         else
                             DestroyImmediate(spawnedPiece);
                         failureCount++;
-                        if (failureCount > maxFailures)
+                        if (failureCount > _maxFailures)
                             break;
                         continue;
                     }
@@ -402,11 +380,11 @@ namespace TrinityGen
         {
             ClearEditorGeneration();
 
-            var initialPiece = Create();
+            GameObject initialPiece = Create();
 
             // Add a component to identify this case, so we can delete it on a
             // new generation
-            initialPiece.AddComponent<EditorGenerationPiece>();
+            initialPiece?.AddComponent<EditorGenerationPiece>();
         }
 
         [Button("Clear")]

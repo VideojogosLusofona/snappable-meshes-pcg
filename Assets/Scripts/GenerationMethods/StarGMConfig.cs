@@ -1,5 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * Copyright 2021 TrinityGenerator_Standalone contributors
+ * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 using UnityEngine;
 
 namespace TrinityGen.GenerationMethods
@@ -7,7 +22,24 @@ namespace TrinityGen.GenerationMethods
     public class StarGMConfig : MonoBehaviour, IGMConfig
     {
         [SerializeField]
-        private int starTest;
+        private uint _spokePieceCount;
 
+        [SerializeField]
+        private int _spokeSizeVariance = 0;
+
+        private GenerationMethod _method;
+
+        public GenerationMethod Method
+        {
+            get
+            {
+                if (_method is null)
+                {
+                    _method = new StarGM(
+                        (int)_spokePieceCount, (int)_spokeSizeVariance);
+                }
+                return _method;
+            }
+        }
     }
 }
