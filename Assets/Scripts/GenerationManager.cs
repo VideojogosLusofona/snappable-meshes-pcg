@@ -58,8 +58,8 @@ namespace TrinityGen
 
         [Header("----- Connection Settings -----")]
 
-        [SerializeField]
-        private ConnectorMatchingRules _matchingRules;
+        [SerializeField] [EnumFlags]
+        private SnapRules _matchingRules;
 
         [SerializeField]
         private uint _pinCountTolerance = 0;

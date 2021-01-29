@@ -77,7 +77,6 @@ namespace TrinityGen
         /// <summary>
         ///
         /// </summary>
-        /// <param name="valid"></param>
         /// <param name="rules"></param>
         /// <param name="other"></param>
         /// <param name="pieceDistance"></param>
@@ -85,7 +84,7 @@ namespace TrinityGen
         /// <param name="colorMatrix"></param>
         /// <returns></returns>
         public (bool valid, Transform positionRot) EvaluatePiece(
-            ConnectorMatchingRules rules, ArenaPiece other,
+            SnapRules rules, ArenaPiece other,
             float pieceDistance = 0.00f, uint groupTolerance = 0,
             bool[,] colorMatrix = null)
         {
@@ -99,46 +98,30 @@ namespace TrinityGen
 
             foreach (Connector co in other._Connectors)
             {
-                foreach (Connector ct in this._Connectors)
+                foreach (Connector ct in _Connectors)
                 {
                     // Match criteria
                     if (!co.IsUsed && !ct.IsUsed)
                     {
-                        bool pinMatch = false;
-                        bool colorMatch = false;
-                        bool fullMatch;
+                        bool pinMatch = true;
+                        bool colorMatch = true;
 
-                        if ((Mathf.Abs(co.Pins - ct.Pins) <= groupTolerance)
-                                && colorMatrix != null)
+                        // If we're using pins count as criteria, check pins
+                        if (rules.UsePins())
                         {
-                            pinMatch = true;
-                        }
-
-                        if (colorMatrix[(int)ct.ConnColor, (int)co.ConnColor])
-                        {
-                            colorMatch = true;
+                            pinMatch = Mathf.Abs(co.Pins - ct.Pins) <= groupTolerance;
                         }
 
-                        if (rules == ConnectorMatchingRules.PINS && pinMatch)
+                        // If we're using colour as criteria, check colour matrix
+                        if (rules.UseColours())
                         {
-                            fullMatch = true;
-                        }
-                        else if (rules == ConnectorMatchingRules.COLOURS
-                            && colorMatch)
-                        {
-                            fullMatch = true;
-                        }
-                        else if (rules == ConnectorMatchingRules.PINS_AND_COLORS
-                            && pinMatch && colorMatch)
-                        {
-                            fullMatch = true;
-                        }
-                        else
-                        {
-                            fullMatch = false;
+                            colorMatch =
+                                colorMatrix?[(int)ct.ConnColor, (int)co.ConnColor]
+                                ?? true;
                         }
 
-                        if (fullMatch)
+                        // If we have a match, then this is a possible connection
+                        if (pinMatch && colorMatch)
                             possibleCombos.Add((ct, co));
                     }
                 }
