@@ -36,20 +36,9 @@ namespace TrinityGen.GenerationMethods
         // Don't expose this to have branch calculate the jumping
         private uint _branchGenPieceSkipping = 0;
 
-        private GenerationMethod _method;
+        public override GenerationMethod Method =>
+            new BranchGM((int)_branchCount, (int)_branchPieceCount,
+                _branchSizeVariance, (int)_branchGenPieceSkipping);
 
-        public override GenerationMethod Method
-        {
-            get
-            {
-                if (_method is null)
-                {
-                    _method = new BranchGM(
-                        (int)_branchCount, (int)_branchPieceCount,
-                        _branchSizeVariance, (int)_branchGenPieceSkipping);
-                }
-                return _method;
-            }
-        }
     }
 }

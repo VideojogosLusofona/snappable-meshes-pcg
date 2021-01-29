@@ -27,19 +27,7 @@ namespace TrinityGen.GenerationMethods
         [SerializeField]
         private int _spokeSizeVariance = 0;
 
-        private GenerationMethod _method;
-
-        public override GenerationMethod Method
-        {
-            get
-            {
-                if (_method is null)
-                {
-                    _method = new StarGM(
-                        (int)_spokePieceCount, (int)_spokeSizeVariance);
-                }
-                return _method;
-            }
-        }
+        public override GenerationMethod Method =>
+            new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
     }
 }

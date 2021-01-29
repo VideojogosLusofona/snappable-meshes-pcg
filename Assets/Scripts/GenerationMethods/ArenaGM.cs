@@ -26,6 +26,7 @@ namespace TrinityGen.GenerationMethods
 
         public ArenaGM(int maxPieces)
         {
+            UnityEngine.Debug.Log(maxPieces);
             this.maxPieces = maxPieces;
         }
 
