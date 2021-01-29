@@ -114,51 +114,62 @@ namespace Array2DEditor
             gridSize.vector2IntValue = newGridSize;
         }
 
+        static GUIStyle[] backgroundColors;
+
         private void DisplayGrid(Rect startRect)
         {
-            string[] colorNames = {"WHT","RED","GRN","BLU","CYN","RNG","YLW","PNK","PRP","BRW","BLK","GRY"};
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
+            string[]    colorNames = { "WHT", "RED", "GRN", "BLU", "CYN", "RNG", "YLW", "PNK", "PRP", "BRW", "BLK", "GRY" };
+            Color32[] colors = { new Color32(255,255,255,255), new Color32(255, 0, 0, 255), new Color32(0, 255, 0, 255), new Color32(0, 128, 255, 255),
+                                   new Color32(0,255,255,255), new Color32(255, 128, 0, 255), new Color32(255, 255, 0, 255), new Color32(255, 128, 255, 255),
+                                   new Color32(255,0,255,255), new Color32(200, 128, 255, 255), new Color32(0, 0, 0, 255), new Color32(128, 128, 128, 255) };
+            Color32[] foregroundColors = { new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255),
+                                           new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255), new Color32(0, 0, 0, 255),
+                                           new Color32(0,0,0,255), new Color32(0, 0, 0, 255), new Color32(255, 255, 255, 255), new Color32(0, 0, 0, 255) };
+
+            if (backgroundColors == null)
             {
-                EditorGUILayout.BeginHorizontal();
-                
-                 for(int x = 0; x < gridSize.vector2IntValue.x; x++)
-                 {
-                    if(x == 0)
-                    {
-                        GUILayout.Space(26);
-                    }
-                    GUILayout.Space(cellSize.x);
-                    EditorGUILayout.LabelField(colorNames[x], GUILayout.Width(32));
-
-                 }
-                EditorGUILayout.EndHorizontal();
-                for (var x = 0; x < gridSize.vector2IntValue.x; x++)
+                backgroundColors = new GUIStyle[colorNames.Length];
+                for (int i = 0; i < colorNames.Length; i++)
                 {
-                
-                    var row = GetRowAt(x);
-
-                    using (var h = new EditorGUILayout.HorizontalScope())
-                    {
-                        for (var y = 0; y < gridSize.vector2IntValue.y; y++)
-                        {
-                            
-                            
-                            EditorGUILayout.BeginHorizontal();
-
-                            if(y == 0)
-                                EditorGUILayout.LabelField(colorNames[x], GUILayout.Width(32));
-                            
-                            EditorGUILayout.PropertyField(row.GetArrayElementAtIndex(y), GUIContent.none,
-                                GUILayout.Width(cellSize.x), GUILayout.Height(cellSize.y));
-                            
-                            EditorGUILayout.EndHorizontal();
-                        }
-                    }
-                    
-                    GUILayout.Space(marginY);
+                    backgroundColors[i] = new GUIStyle();
+                    Texture2D tex = new Texture2D(2, 2);
+                    tex.SetColor(colors[i]);
+                    backgroundColors[i].normal.textColor = foregroundColors[i];
+                    backgroundColors[i].normal.background = tex;
+                    backgroundColors[i].alignment = TextAnchor.MiddleCenter;
                 }
             }
-            EditorGUILayout.EndScrollView();
+
+            float   elemHeight = 16;
+            float   initialColumn = 64;
+            float   width = startRect.width;
+            float   columnSize = (width - initialColumn) / gridSize.vector2IntValue.x;
+            float   totalHeight = elemHeight + gridSize.vector2IntValue.y * elemHeight + elemHeight;
+            float   padding = columnSize - 16;
+
+            // Top line
+            for (int x = 0; x < gridSize.vector2IntValue.x; x++)
+            {
+                Rect r = new Rect(startRect.x + initialColumn + columnSize * x, startRect.y, columnSize, elemHeight);
+                EditorGUI.LabelField(r, colorNames[x], backgroundColors[x]);
+            }
+
+            for (int y = 0; y < gridSize.vector2IntValue.y; y++)
+            {
+                Rect r = new Rect(startRect.x, startRect.y + (y + 1) * elemHeight, initialColumn, elemHeight);
+                EditorGUI.LabelField(r, colorNames[y], backgroundColors[y]);
+
+                for (int x = 0; x < gridSize.vector2IntValue.x; x++)
+                {
+                    r = new Rect(startRect.x + initialColumn + columnSize * x + padding / 2, startRect.y + (y + 1) * elemHeight, columnSize, elemHeight);
+                    var row = GetRowAt(x);
+                    EditorGUI.PropertyField(r, row.GetArrayElementAtIndex(y), GUIContent.none);
+                }
+            }
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.Space(totalHeight);
+            EditorGUILayout.EndVertical();
         }
 
         protected SerializedProperty GetRowAt(int idx)
