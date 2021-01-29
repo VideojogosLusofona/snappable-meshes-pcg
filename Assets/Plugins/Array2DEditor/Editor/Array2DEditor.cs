@@ -45,6 +45,7 @@ namespace Array2DEditor
              if (GUILayout.Button("Reset to Defaults"))
              {
                  InitNewGrid(new Vector2(12,12));
+                backgroundColors = null;
              }
         }
 
@@ -85,6 +86,8 @@ namespace Array2DEditor
             if (Event.current.type == EventType.Repaint)
             {
                 lastRect = GUILayoutUtility.GetLastRect();
+
+                Debug.Log("lastRect = " + lastRect);
             }
 
             DisplayGrid(lastRect);
@@ -116,8 +119,13 @@ namespace Array2DEditor
 
         static GUIStyle[] backgroundColors;
 
-        private void DisplayGrid(Rect startRect)
+        private void DisplayGrid(Rect inStartRect)
         {
+            Rect startRect = inStartRect;
+
+            startRect = EditorGUILayout.GetControlRect(true, 0f);
+            startRect.width -= 16;
+
             string[]    colorNames = { "WHT", "RED", "GRN", "BLU", "CYN", "RNG", "YLW", "PNK", "PRP", "BRW", "BLK", "GRY" };
             Color32[] colors = { new Color32(255,255,255,255), new Color32(255, 0, 0, 255), new Color32(0, 255, 0, 255), new Color32(0, 128, 255, 255),
                                    new Color32(0,255,255,255), new Color32(255, 128, 0, 255), new Color32(255, 255, 0, 255), new Color32(255, 128, 255, 255),
@@ -141,27 +149,29 @@ namespace Array2DEditor
             }
 
             float   elemHeight = 16;
-            float   initialColumn = 64;
+            float   initialColumn = 48;
             float   width = startRect.width;
             float   columnSize = (width - initialColumn) / gridSize.vector2IntValue.x;
             float   totalHeight = elemHeight + gridSize.vector2IntValue.y * elemHeight + elemHeight;
-            float   padding = columnSize - 16;
+            float   padding = columnSize - 24;
 
             // Top line
             for (int x = 0; x < gridSize.vector2IntValue.x; x++)
             {
                 Rect r = new Rect(startRect.x + initialColumn + columnSize * x, startRect.y, columnSize, elemHeight);
+                backgroundColors[x].fixedWidth = columnSize;
                 EditorGUI.LabelField(r, colorNames[x], backgroundColors[x]);
             }
 
             for (int y = 0; y < gridSize.vector2IntValue.y; y++)
             {
                 Rect r = new Rect(startRect.x, startRect.y + (y + 1) * elemHeight, initialColumn, elemHeight);
+                backgroundColors[y].fixedWidth = initialColumn;
                 EditorGUI.LabelField(r, colorNames[y], backgroundColors[y]);
 
                 for (int x = 0; x < gridSize.vector2IntValue.x; x++)
                 {
-                    r = new Rect(startRect.x + initialColumn + columnSize * x + padding / 2, startRect.y + (y + 1) * elemHeight, columnSize, elemHeight);
+                    r = new Rect(startRect.x + initialColumn + columnSize * x + padding / 2 + 6, startRect.y + (y + 1) * elemHeight, columnSize, elemHeight);
                     var row = GetRowAt(x);
                     EditorGUI.PropertyField(r, row.GetArrayElementAtIndex(y), GUIContent.none);
                 }
