@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -29,26 +28,45 @@ namespace TrinityGen
     {
         [Header("----- Content Settings -----")]
 
-        [SerializeField] private List<ArenaPiece> _piecesForGeneration;
+        [SerializeField]
+        private List<ArenaPiece> _piecesForGeneration;
 
         [Header("----- Starting Piece Settings -----")]
 
-        [SerializeField] private bool _setStartingPiece = false;
-        [SerializeField] private List<ArenaPiece> _possibleStartingPieces;
-        [SerializeField] private uint _connectorCountTolerance = 0;
+        [SerializeField]
+        private bool _setStartingPiece = false;
+
+        [SerializeField]
+        private List<ArenaPiece> _possibleStartingPieces;
+
+        [SerializeField]
+        private uint _connectorCountTolerance = 0;
 
         [Header("----- World Settings -----")]
 
-        [SerializeField] private bool defineSeed;
-        [SerializeField] private int seed;
-        [SerializeField] private bool _useClippingCorrection = false;
-        [SerializeField] private float _pieceDistance = 0.0001f;
+        [SerializeField]
+        private bool defineSeed;
+
+        [SerializeField]
+        private int seed;
+
+        [SerializeField]
+        private bool _useClippingCorrection = false;
+
+        [SerializeField]
+        private float _pieceDistance = 0.0001f;
 
         [Header("----- Connection Settings -----")]
 
-        [SerializeField] private ConnectorMatchingRules _matchingRules;
-        [SerializeField] private uint _pinCountTolerance = 0;
-        [SerializeField] private Array2DBool colorMatrix;
+        [SerializeField]
+        private ConnectorMatchingRules _matchingRules;
+
+        [SerializeField]
+        private uint _pinCountTolerance = 0;
+
+        [SerializeField]
+        private Array2DBool colorMatrix;
+
         /// <summary>
         ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
         ///     guide   W,
@@ -65,7 +83,8 @@ namespace TrinityGen
         ///             GREY
         /// </summary>
         /// <value></value>
-        [SerializeField] private bool[,] _colorMatchMatrix => colorMatrix.GetCells();
+        [SerializeField]
+        private bool[,] _colorMatchMatrix => colorMatrix.GetCells();
         /*{
 // tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
         {true, true, true, true, true, true, true, true, true, true, true, true},
@@ -97,10 +116,10 @@ namespace TrinityGen
         [Header("----- Generation Settings -----")]
 
         [SerializeField]
-        [Dropdown("GenMethodNames")] [OnValueChanged("OnChangeGenMethod")]
+        [Dropdown("GenMethods")] [OnValueChanged("OnChangeGMName")]
         private string _generationMethod;
 
-        [SerializeField] [Expandable]
+        [SerializeField] [Expandable] [OnValueChanged("OnChangeGMType")]
         private GMConfig _generationParams;
 
         [SerializeField]
@@ -141,67 +160,46 @@ namespace TrinityGen
 
         private GenerationMethod _chosenMethod;
 
-        private int largestGroup;
+        private int _largestGroup;
 
-        // Keys are the generation method simple names, values are the
-        // generation methods fully qualified names
-        private IDictionary<string, string> genMethodTable;
+        // Names of known generation method
+        [System.NonSerialized]
+        private string[] _genMethods;
 
         // Get generation method names
-        private ICollection<string> GenMethodNames
+        private ICollection<string> GenMethods
         {
             get
             {
-                if (genMethodTable is null)
+                // Did we initialize gen. method names already?
+                if (_genMethods is null)
                 {
-                    string[] genMethodNames =
-                        GenMethodManager.Instance.GenMethodNames;
-                    genMethodTable = new Dictionary<string, string>()
-                        {{ "<Select generation method>", null}};
-
-                    _generationMethod = null;
-
-                    foreach (string fqName in genMethodNames)
-                    {
-                        string simpleName = fqName;
-                        // Strip namespace
-                        if (simpleName.Contains("."))
-                        {
-                            simpleName = fqName.Substring(fqName.LastIndexOf(".") + 1);
-                        }
-                        // Strip "GMConfig"
-                        if (simpleName.EndsWith("GMConfig"))
-                        {
-                            simpleName = simpleName.Substring(0, simpleName.Length - "GMConfig".Length);
-                        }
-                        // Add simple name as key, fully qualified name as value
-                        genMethodTable.Add(simpleName, fqName);
-                    }
-
-                    OnChangeGenMethod();
+                    // Get gen. method names
+                    _genMethods = GenMethodManager.Instance.GenMethodNames;
+                    // Sort them
+                    System.Array.Sort(_genMethods);
                 }
+
                 // Return existing methods
-                return genMethodTable.Keys.OrderBy(s => s).ToArray();
+                return _genMethods;
             }
         }
 
-        private void OnChangeGenMethod()
+        // Callback invoked when user changes gen. method type in editor
+        private void OnChangeGMType()
         {
-            string gmFQN = _generationMethod != null ?
-                genMethodTable[_generationMethod] : null;
+            // Make sure gen. method name is updated accordingly
+            _generationMethod = GenMethodManager.Instance.GetNameFromType(
+                _generationParams.GetType());
+        }
 
-            if (gmFQN is null)
-            {
-                _generationParams = null;
-            }
-            else
-            {
-                System.Type gmConfig = GenMethodManager.Instance.GetTypeFromFQN(gmFQN);
-
-                _generationParams = GMConfig.GetInstance(gmConfig);
-            }
-
-            //Debug.Log(genMethodTable[_generationMethod]);
+        // Callback invoked when user changes gen. method name in editor
+        private void OnChangeGMName()
+        {
+            // Make sure gen. method type is updated accordingly
+            System.Type gmConfig =
+                GenMethodManager.Instance.GetTypeFromName(_generationMethod);
+            _generationParams = GMConfig.GetInstance(gmConfig);
         }
 
         // Start is called before the first frame update
@@ -209,7 +207,7 @@ namespace TrinityGen
         {
             if (_autoCreate)
             {
-                Debug.Log("ATENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
+                Debug.Log("ATTENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
                 ClearEditorGeneration();
                 Create();
             }
@@ -239,14 +237,14 @@ namespace TrinityGen
                 new List<ArenaPiece>(_piecesForGeneration);
 
             // Get chosen generation method (strategy pattern)
-            _chosenMethod = _generationParams.Method; //GetComponent<IGMConfig>().Method;
+            _chosenMethod = _generationParams.Method;
 
             // Sort list of pieces to use according to the pieces natural order
             _piecesForGenerationWorkList.Sort();
 
             // Get the number of connectors from the piece with the most
             // connectors
-            largestGroup = _piecesForGenerationWorkList[0].ConnectorsCount;
+            _largestGroup = _piecesForGenerationWorkList[0].ConnectorsCount;
 
             // Separate pieces into separate lists based on largest group
             _sortedPieces = SplitList();
@@ -349,7 +347,7 @@ namespace TrinityGen
         /// </summary>
         private List<List<ArenaPiece>> SplitList()
         {
-            int lastConsidered = largestGroup + 1;
+            int lastConsidered = _largestGroup + 1;
             List<ArenaPiece> consideredList = new List<ArenaPiece>();
             List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
@@ -400,7 +398,7 @@ namespace TrinityGen
             // mode
             EditorGenerationPiece[] editorGenerations =
                 FindObjectsOfType<EditorGenerationPiece>();
-            foreach (var obj in editorGenerations)
+            foreach (EditorGenerationPiece obj in editorGenerations)
             {
                 DestroyImmediate(obj.gameObject);
             }

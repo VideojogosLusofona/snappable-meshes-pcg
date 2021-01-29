@@ -48,31 +48,32 @@ namespace TrinityGen
         public string[] GenMethodNames => genMethCfgTable.Keys.ToArray();
 
         /// <summary>
-        /// Does the given generation method configurator FQN correspond to a
-        /// known generation method configurator class?
+        /// Get generation method configurator type from simplified name.
         /// </summary>
-        /// <param name="genMethCfgFQN">
-        /// Fully qualified name of generation method configurator class.
-        /// </param>
-        /// <returns>
-        /// `true` if the generation method configurator class exists in the
-        /// loaded assemblies, `false` otherwise.
-        /// </returns>
-        public bool IsKnown(string genMethCfgFQN) =>
-            genMethCfgTable.ContainsKey(genMethCfgFQN);
-
-        /// <summary>
-        /// Get generation method configurator type from its fully qualified
-        /// name.
-        /// </summary>
-        /// <param name="genMethCfgFQN">
-        /// Fully qualified name of generation method configurator class.
+        /// <param name="name">
+        /// Simple name of generation method configurator class.
         /// </param>
         /// <returns>
         /// The generation method configurator's type.
         /// </returns>
-        public Type GetTypeFromFQN(string genMethCfgFQN) =>
-            genMethCfgTable[genMethCfgFQN];
+        public Type GetTypeFromName(string name) => genMethCfgTable[name];
+
+        /// <summary>
+        /// Get simplified name from type.
+        /// </summary>
+        /// <param name="type">Type of generation method configurator.</param>
+        /// <returns>Simplified name of generation method configurator.</returns>
+        public string GetNameFromType(Type type)
+        {
+            foreach (KeyValuePair<string, Type> kvp in genMethCfgTable)
+            {
+                if (kvp.Value.Equals(type))
+                {
+                    return kvp.Key;
+                }
+            }
+            return null;
+        }
 
         // Private constructor
         private GenMethodManager()
@@ -85,7 +86,38 @@ namespace TrinityGen
             genMethCfgTable = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsSubclassOf(typeGMConfig) && !t.IsAbstract)
-                .ToDictionary(t => t.FullName, t => t);
+                .ToDictionary(t => SimpleName(t.FullName), t => t);
+        }
+
+        /// <summary>
+        /// Simplify the name of a generation method by removing the namespace
+        /// and the "GMConfig" substring in the end.
+        /// </summary>
+        /// <param name="fqName">
+        /// The fully qualified name of the generation method.
+        /// </param>
+        /// <returns>
+        /// The simplified name of the generation method.
+        /// </returns>
+        private string SimpleName(string fqName)
+        {
+            string simpleName = fqName;
+
+            // Strip namespace
+            if (simpleName.Contains("."))
+            {
+                simpleName = fqName.Substring(fqName.LastIndexOf(".") + 1);
+            }
+
+            // Strip "GMConfig"
+            if (simpleName.EndsWith("GMConfig"))
+            {
+                simpleName = simpleName.Substring(
+                    0, simpleName.Length - "GMConfig".Length);
+            }
+
+            // Return simple name
+            return simpleName;
         }
     }
 }
