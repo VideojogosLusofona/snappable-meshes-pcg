@@ -42,6 +42,7 @@ namespace TrinityGen
         // ////////////////// //
 
         [BoxGroup(contentParams)]
+        [ReorderableList]
         [SerializeField]
         private List<ArenaPiece> _piecesList;
 
@@ -51,6 +52,7 @@ namespace TrinityGen
         private bool _useStarter;
 
         [BoxGroup(contentParams)]
+        [ReorderableList]
         [SerializeField]
         [ShowIf(nameof(_useStarter))]
         private List<ArenaPiece> _startingPieceList;
