@@ -80,27 +80,11 @@ namespace TrinityGen
         [SerializeField]
         private uint _maxFailures = 10;
 
-
         [Header("----- Testing Settings -----")]
 
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
-
-        /*[Header("------ Vertical Level Settings --------")]
-        [SerializeField] private bool _createUpperLevel;
-
-        [Tooltip("Choose random pieces and put other pieces above them.")]
-        [SerializeField] private bool _upperLevelIslandGeneration;
-        [SerializeField] private int _upperIslandsCount = 1;
-
-        [Header("--")]
-        [SerializeField] private bool _createLowerLevel;
-
-        [Tooltip("Choose random pieces and put other pieces under them.")]
-        [SerializeField] private bool _lowerLevelIslandGeneration;
-        [SerializeField] private int _lowerIslandsCount = 1;*/
-
 
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
