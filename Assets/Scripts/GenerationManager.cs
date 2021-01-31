@@ -37,11 +37,6 @@ namespace TrinityGen
         private List<ArenaPiece> _piecesList;
 
         [BoxGroup(contentSettings)]
-        [Label("Starter connector count tolerance")]
-        [SerializeField]
-        private uint _starterConTol;
-
-        [BoxGroup(contentSettings)]
         [Label("Use starter piece list")]
         [SerializeField]
         private bool _useStarter;
@@ -97,6 +92,11 @@ namespace TrinityGen
         [BoxGroup(generationSettings)]
         [SerializeField]
         private uint _maxFailures = 10;
+
+        [BoxGroup(generationSettings)]
+        [Label("Starter connector count tolerance")]
+        [SerializeField]
+        private uint _starterConTol;
 
         [BoxGroup(testingSettings)]
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
