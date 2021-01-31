@@ -65,53 +65,8 @@ namespace TrinityGen
         private uint _pinCountTolerance = 0;
 
         [SerializeField]
-        private Array2DBool colorMatrix;
-
-        /// <summary>
-        ///     tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-        ///     guide   W,
-        ///             R,
-        ///             G,
-        ///             B,
-        ///             CYAN
-        ///             ORNG,
-        ///             YLLW,
-        ///             PINK,
-        ///             PRPL,
-        ///             BRWN,
-        ///             BLACK,
-        ///             GREY
-        /// </summary>
-        /// <value></value>
-        [SerializeField]
-        private bool[,] _colorMatchMatrix => colorMatrix.GetCells();
-        /*{
-// tentative  W, R, G, B, CYAN, ORNG, YLLW, PINK, PRPL, BRWN, BLACK, GREY
-        {true, true, true, true, true, true, true, true, true, true, true, true},
-        {true, true, false, false, false, false, false, false, false, false, false, false},
-
-        {true, false, true, false, false, false, false, false, false, false, false, false},
-
-        {true, false, false, true, false, false, false, false, false, false, false, false},
-
-        {true, false, false, false, true, false, false, false, false, false, false, false},
-
-        {true, false, false, false, false, true, false, false, false, false, false, false},
-
-        {true, false, false, false, false, false, true, false, false, false, false, false},
-
-        {true, false, false, false, false, false, false, true, false, false, false, false},
-
-        {true, false, false, false, false, false, false, false, true, false, false, false},
-
-        {true, false, false, false, false, false, false, false, false, true, false, false},
-
-        {true, false, false, false, false, false, false, false, false, false, true, false},
-
-        {true, false, false, false, false, false, false, false, false, false, false, true},
-
-
-        };*/
+        [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
+        private Array2DBool _colorMatrix;
 
         [Header("----- Generation Settings -----")]
 
@@ -304,7 +259,7 @@ namespace TrinityGen
                         _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
                         _pieceDistance,
                         _pinCountTolerance,
-                        _colorMatchMatrix);
+                        _colorMatrix.GetCells());
 
                     // If things worked out, spawn the piece in the correct
                     // position
