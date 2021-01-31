@@ -46,7 +46,7 @@ namespace TrinityGen
         private List<ArenaPiece> _piecesList;
 
         [BoxGroup(contentParams)]
-        [Label("Use starter piece list")]
+        [Label("Use Starter Piece List")]
         [SerializeField]
         private bool _useStarter;
 
@@ -115,7 +115,7 @@ namespace TrinityGen
         private uint _maxFailures = 10;
 
         [BoxGroup(generationParams)]
-        [Label("Starter connector count tolerance")]
+        [Label("Starter Connector Count Tolerance")]
         [SerializeField]
         private uint _starterConTol;
 
