@@ -34,26 +34,26 @@ namespace TrinityGen
         [Header("----- Starting Piece Settings -----")]
 
         [SerializeField]
-        private bool _setStartingPiece = false;
-
-        [SerializeField]
-        private List<ArenaPiece> _possibleStartingPieces;
-
-        [SerializeField]
         private uint _connectorCountTolerance = 0;
+
+        [SerializeField]
+        private bool _useStartingPieceList = false;
+
+        [SerializeField] [ShowIf("_useStartingPieceList")]
+        private List<ArenaPiece> _startingPieceList;
 
         [Header("----- World Settings -----")]
 
         [SerializeField]
-        private bool defineSeed;
+        private bool _defineSeed;
 
-        [SerializeField]
-        private int seed;
+        [SerializeField] [ShowIf("_defineSeed")]
+        private int _seed;
 
         [SerializeField]
         private bool _useClippingCorrection = false;
 
-        [SerializeField]
+        [SerializeField] [ShowIf("_useClippingCorrection")]
         private float _pieceDistance = 0.0001f;
 
         [Header("----- Connection Settings -----")]
@@ -162,8 +162,8 @@ namespace TrinityGen
             }
 
             // Use predefined seed if set or one based on current time
-            if (defineSeed)
-                _currentSeed = seed;
+            if (_defineSeed)
+                _currentSeed = _seed;
             else
                 _currentSeed = System.DateTime.Now.Millisecond;
 
@@ -190,10 +190,10 @@ namespace TrinityGen
 
             _placedPieces = new List<ArenaPiece>();
             ArenaPiece started;
-            if (_setStartingPiece)
+            if (_useStartingPieceList)
             {
                 started = _chosenMethod.SelectStartPiece(
-                    _possibleStartingPieces, (int)_connectorCountTolerance);
+                    _startingPieceList, (int)_connectorCountTolerance);
             }
             else
             {
