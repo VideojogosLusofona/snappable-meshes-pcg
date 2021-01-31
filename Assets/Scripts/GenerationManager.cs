@@ -37,16 +37,18 @@ namespace TrinityGen
         private List<ArenaPiece> _piecesList;
 
         [BoxGroup(contentSettings)]
+        [Label("Starter connector count tolerance")]
         [SerializeField]
-        private uint _connectorCountTolerance;
+        private uint _starterConTol;
+
+        [BoxGroup(contentSettings)]
+        [Label("Use starter piece list")]
+        [SerializeField]
+        private bool _useStarter;
 
         [BoxGroup(contentSettings)]
         [SerializeField]
-        private bool _useStartingPieceList;
-
-        [BoxGroup(contentSettings)]
-        [SerializeField]
-        [ShowIf("_useStartingPieceList")]
+        [ShowIf(nameof(_useStarter))]
         private List<ArenaPiece> _startingPieceList;
 
         [BoxGroup(worldSettings)]
@@ -55,7 +57,7 @@ namespace TrinityGen
 
         [BoxGroup(worldSettings)]
         [SerializeField]
-        [ShowIf("_useSeed")]
+        [ShowIf(nameof(_useSeed))]
         private int _seed;
 
         [BoxGroup(worldSettings)]
@@ -82,14 +84,14 @@ namespace TrinityGen
 
         [BoxGroup(generationSettings)]
         [SerializeField]
-        [Dropdown("GenMethods")]
+        [Dropdown(nameof(GenMethods))]
         [OnValueChanged("OnChangeGMName")]
         private string _generationMethod;
 
         [BoxGroup(generationSettings)]
         [SerializeField]
         [Expandable]
-        [OnValueChanged("OnChangeGMType")]
+        [OnValueChanged(nameof(OnChangeGMType))]
         private GMConfig _generationParams;
 
         [BoxGroup(generationSettings)]
@@ -184,7 +186,7 @@ namespace TrinityGen
         {
             // If we're using a starting piece, the starting piece list cannot
             // be empty
-            if (_useStartingPieceList
+            if (_useStarter
                 && (_startingPieceList is null || _startingPieceList.Count == 0))
             {
                 EditorUtility.DisplayDialog(
@@ -223,16 +225,16 @@ namespace TrinityGen
 
             _placedPieces = new List<ArenaPiece>();
             ArenaPiece started;
-            if (_useStartingPieceList)
+            if (_useStarter)
             {
                 started = _chosenMethod.SelectStartPiece(
-                    _startingPieceList, (int)_connectorCountTolerance);
+                    _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 started = _chosenMethod.SelectStartPiece(
                     _piecesForGenerationWorkList,
-                    (int)_connectorCountTolerance);
+                    (int)_starterConTol);
             }
 
             GameObject inst = started.ClonePiece(_useClippingCorrection);
@@ -338,7 +340,7 @@ namespace TrinityGen
                 }
                 // piece belongs in the already made list
                 else if (_piecesForGenerationWorkList[i].ConnectorsCount >=
-                    lastConsidered - _connectorCountTolerance)
+                    lastConsidered - _starterConTol)
                 {
                     consideredList.Add(_piecesForGenerationWorkList[i]);
                 }

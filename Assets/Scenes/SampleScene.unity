@@ -404,8 +404,8 @@ MonoBehaviour:
   - {fileID: 4550082696110050862, guid: 32b2d89e1d2927449af147bc2e3992d2, type: 3}
   - {fileID: 5580773321957475689, guid: 307c953c700f0f542a165d9aeb91e79e, type: 3}
   - {fileID: 9109512191895755785, guid: aefe349cf25bee141b6918b125e91696, type: 3}
-  _connectorCountTolerance: 0
-  _useStartingPieceList: 0
+  _starterConTol: 0
+  _useStarter: 0
   _startingPieceList: []
   _useSeed: 1
   _seed: 1234
