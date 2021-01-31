@@ -42,7 +42,6 @@ namespace TrinityGen.GenerationMethods
             {
                 if(g.ConnectorsCount >= minimumAllowed)
                     possibles.Add(g);
-
             }
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);

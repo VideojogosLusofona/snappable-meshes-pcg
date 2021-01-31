@@ -34,18 +34,19 @@ namespace TrinityGen
 
         [BoxGroup(contentSettings)]
         [SerializeField]
-        private List<ArenaPiece> _piecesForGeneration;
+        private List<ArenaPiece> _piecesList;
 
         [BoxGroup(contentSettings)]
         [SerializeField]
-        private uint _connectorCountTolerance = 0;
+        private uint _connectorCountTolerance;
 
         [BoxGroup(contentSettings)]
         [SerializeField]
-        private bool _useStartingPieceList = false;
+        private bool _useStartingPieceList;
 
         [BoxGroup(contentSettings)]
-        [SerializeField] [ShowIf("_useStartingPieceList")]
+        [SerializeField]
+        [ShowIf("_useStartingPieceList")]
         private List<ArenaPiece> _startingPieceList;
 
         [BoxGroup(worldSettings)]
@@ -53,7 +54,8 @@ namespace TrinityGen
         private bool _useSeed;
 
         [BoxGroup(worldSettings)]
-        [SerializeField] [ShowIf("_useSeed")]
+        [SerializeField]
+        [ShowIf("_useSeed")]
         private int _seed;
 
         [BoxGroup(worldSettings)]
@@ -65,7 +67,8 @@ namespace TrinityGen
         private float _pieceDistance = 0.0001f;
 
         [BoxGroup(connectionSettings)]
-        [SerializeField] [EnumFlags]
+        [SerializeField]
+        [EnumFlags]
         private SnapRules _matchingRules;
 
         [BoxGroup(connectionSettings)]
@@ -136,15 +139,27 @@ namespace TrinityGen
             }
         }
 
-        // Callback invoked when user changes gen. method type in editor
+        // Callback invoked when user changes generation method type in editor
         private void OnChangeGMType()
         {
-            // Make sure gen. method name is updated accordingly
-            _generationMethod = GenMethodManager.Instance.GetNameFromType(
-                _generationParams.GetType());
+            if (_generationParams is null)
+            {
+                // Cannot allow this field to be empty, so set it back to what
+                // is specified in the generation method name
+                Debug.Log(
+                    $"The {nameof(_generationParams)} field cannot be empty");
+                OnChangeGMName();
+            }
+            else
+            {
+                // Update generation method name accordingly to what is now set
+                // in the generation configurator fields
+                _generationMethod = GenMethodManager.Instance.GetNameFromType(
+                    _generationParams.GetType());
+            }
         }
 
-        // Callback invoked when user changes gen. method name in editor
+        // Callback invoked when user changes generation method name in editor
         private void OnChangeGMName()
         {
             // Make sure gen. method type is updated accordingly
@@ -164,12 +179,18 @@ namespace TrinityGen
             }
         }
 
+        // Create a new map
         public GameObject Create()
         {
-            if (_generationParams is null)
+            // If we're using a starting piece, the starting piece list cannot
+            // be empty
+            if (_useStartingPieceList
+                && (_startingPieceList is null || _startingPieceList.Count == 0))
             {
                 EditorUtility.DisplayDialog(
-                    "Warning", "Please select a generation method", "Ok");
+                    "Warning",
+                    "Starting piece list is empty, aborting map generation.",
+                    "Ok");
                 return null;
             }
 
@@ -185,7 +206,7 @@ namespace TrinityGen
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
             _piecesForGenerationWorkList =
-                new List<ArenaPiece>(_piecesForGeneration);
+                new List<ArenaPiece>(_piecesList);
 
             // Get chosen generation method (strategy pattern)
             _chosenMethod = _generationParams.Method;
