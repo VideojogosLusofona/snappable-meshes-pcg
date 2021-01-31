@@ -17,10 +17,12 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEditor;
 using NaughtyAttributes;
 using Array2DEditor;
 using TrinityGen.GenerationMethods;
+
 
 namespace TrinityGen
 {
@@ -98,6 +100,15 @@ namespace TrinityGen
         [SerializeField]
         private bool _autoCreate = false;
 
+        [Foldout("Events")]
+        [SerializeField] private UnityEvent OnGenerationBegin;
+
+        [Foldout("Events")]
+        [SerializeField] private UnityEvent<ArenaPiece[]> OnGenerationFinish;
+
+        [Foldout("Events")]
+        [SerializeField] private UnityEvent<ArenaPiece> OnConnectionMade;
+        
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
         private int _currentSeed;
@@ -182,6 +193,7 @@ namespace TrinityGen
             // Initialize random number generator
             Random.InitState(_currentSeed);
 
+            OnGenerationBegin.Invoke();
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
             _piecesForGenerationWorkList =
@@ -265,6 +277,7 @@ namespace TrinityGen
                         spawnedPiece.name += $" - {placement}";
                         spawnedPiece.transform.SetParent(_guidePiece.transform);
                         _placedPieces.Add(spawnedScript);
+                        OnConnectionMade.Invoke(spawnedScript);
                     }
                     else
                     {
@@ -289,7 +302,7 @@ namespace TrinityGen
             while (_guidePiece != null);
 
             Debug.Log("Generated with seed: " + _currentSeed);
-
+            OnGenerationFinish.Invoke(_placedPieces.ToArray());
             return initialPiece;
         }
 
