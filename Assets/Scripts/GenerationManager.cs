@@ -62,7 +62,6 @@ namespace TrinityGen
 
         [BoxGroup(worldSettings)]
         [SerializeField]
-        [ShowIf("_useClippingCorrection")]
         private float _pieceDistance = 0.0001f;
 
         [BoxGroup(connectionSettings)]
