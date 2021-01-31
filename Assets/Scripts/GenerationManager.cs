@@ -26,62 +26,75 @@ namespace TrinityGen
 {
     public class GenerationManager : MonoBehaviour
     {
-        [Header("----- Content Settings -----")]
+        private const string contentSettings = ":: Content settings ::";
+        private const string worldSettings = ":: World settings ::";
+        private const string connectionSettings = ":: Connection settings ::";
+        private const string generationSettings = ":: Generation settings ::";
+        private const string testingSettings = ":: Testing settings ::";
 
+        [BoxGroup(contentSettings)]
         [SerializeField]
         private List<ArenaPiece> _piecesForGeneration;
 
-        [Header("----- Starting Piece Settings -----")]
-
+        [BoxGroup(contentSettings)]
         [SerializeField]
         private uint _connectorCountTolerance = 0;
 
+        [BoxGroup(contentSettings)]
         [SerializeField]
         private bool _useStartingPieceList = false;
 
+        [BoxGroup(contentSettings)]
         [SerializeField] [ShowIf("_useStartingPieceList")]
         private List<ArenaPiece> _startingPieceList;
 
-        [Header("----- World Settings -----")]
-
+        [BoxGroup(worldSettings)]
         [SerializeField]
-        private bool _defineSeed;
+        private bool _useSeed;
 
-        [SerializeField] [ShowIf("_defineSeed")]
+        [BoxGroup(worldSettings)]
+        [SerializeField] [ShowIf("_useSeed")]
         private int _seed;
 
+        [BoxGroup(worldSettings)]
         [SerializeField]
         private bool _useClippingCorrection = false;
 
-        [SerializeField] [ShowIf("_useClippingCorrection")]
+        [BoxGroup(worldSettings)]
+        [SerializeField]
+        [ShowIf("_useClippingCorrection")]
         private float _pieceDistance = 0.0001f;
 
-        [Header("----- Connection Settings -----")]
-
+        [BoxGroup(connectionSettings)]
         [SerializeField] [EnumFlags]
         private SnapRules _matchingRules;
 
+        [BoxGroup(connectionSettings)]
         [SerializeField]
         private uint _pinCountTolerance = 0;
 
+        [BoxGroup(connectionSettings)]
         [SerializeField]
         [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
         private Array2DBool _colorMatrix;
 
-        [Header("----- Generation Settings -----")]
-
+        [BoxGroup(generationSettings)]
         [SerializeField]
-        [Dropdown("GenMethods")] [OnValueChanged("OnChangeGMName")]
+        [Dropdown("GenMethods")]
+        [OnValueChanged("OnChangeGMName")]
         private string _generationMethod;
 
-        [SerializeField] [Expandable] [OnValueChanged("OnChangeGMType")]
+        [BoxGroup(generationSettings)]
+        [SerializeField]
+        [Expandable]
+        [OnValueChanged("OnChangeGMType")]
         private GMConfig _generationParams;
 
+        [BoxGroup(generationSettings)]
         [SerializeField]
         private uint _maxFailures = 10;
 
-        [Header("----- Testing Settings -----")]
-
+        [BoxGroup(testingSettings)]
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
@@ -162,7 +175,7 @@ namespace TrinityGen
             }
 
             // Use predefined seed if set or one based on current time
-            if (_defineSeed)
+            if (_useSeed)
                 _currentSeed = _seed;
             else
                 _currentSeed = System.DateTime.Now.Millisecond;
