@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3647960201191977236}
   - component: {fileID: 7746394829660200414}
   - component: {fileID: 2018065347539046136}
+  - component: {fileID: 1413930351893734781}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -95,6 +96,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1413930351893734781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354549408583590033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.07333333
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &621868028298110381
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +297,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914299764027315207}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.405, y: -0.45, z: 1.701}
+  m_LocalPosition: {x: -2.405, y: -0.45, z: 1.707}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3041616187789032354}
@@ -285,12 +315,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 2
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &2535973599679725656
 GameObject:
@@ -412,7 +442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3832224470886111571}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.524, y: 0.503, z: 0.027}
+  m_LocalPosition: {x: 0.524, y: 0.4994, z: 0.027}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3041616187789032354}
@@ -430,12 +460,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 1
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &7424550089590689139
 GameObject:
@@ -462,7 +492,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7424550089590689139}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -2.71, y: -0.45, z: -1.597}
+  m_LocalPosition: {x: -2.71, y: -0.45, z: -1.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3041616187789032354}
@@ -480,12 +510,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 2
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &8045776446285750841
 GameObject:
@@ -512,7 +542,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8045776446285750841}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.646, y: 0.4876, z: 0.027}
+  m_LocalPosition: {x: -4.673, y: 0.4876, z: 0.027}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3041616187789032354}
@@ -530,12 +560,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 3
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &8978064720500844161
 GameObject:
@@ -562,7 +592,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8978064720500844161}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.79, y: -0.45, z: -0.174}
+  m_LocalPosition: {x: -4.723, y: -0.45, z: -0.174}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3041616187789032354}
@@ -580,10 +610,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 1
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 1
   _pinSpacing: 0.5
-  _gizmoTransparecy: 1
+  _gizmoTransparency: 1
   _gizmoLooks: 0

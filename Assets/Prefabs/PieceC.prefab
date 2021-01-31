@@ -142,7 +142,7 @@ MeshCollider:
   m_GameObject: {fileID: 1736105609559424191}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 3909640831219244965}
   - component: {fileID: 3703134125575181415}
   - component: {fileID: 5106179295743747789}
+  - component: {fileID: 5433242557748012150}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -337,6 +338,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000002, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0.000000059604645}
+--- !u!114 &5433242557748012150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471740037273388102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &2855417473950152890
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,12 +410,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 1
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 1
   _pinSpacing: 0.5
-  _gizmoTransparecy: 0.5
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &4922867932572182887
 GameObject:
@@ -430,12 +460,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 0.5
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &5189247530134762411
 GameObject:
@@ -480,12 +510,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 0.5
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &7501618392534187546
 GameObject:
@@ -530,12 +560,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 2
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 0.5
+  _gizmoTransparency: 1
   _gizmoLooks: 0
 --- !u!1 &8693739196114803964
 GameObject:
@@ -580,10 +610,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 2
-  myMatch: {fileID: 0}
+  match: {fileID: 0}
   isUsed: 0
+  connColor: 0
   pins: 4
   _pinSpacing: 0.5
-  _gizmoTransparecy: 0.5
+  _gizmoTransparency: 1
   _gizmoLooks: 0
