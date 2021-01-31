@@ -26,82 +26,111 @@ namespace TrinityGen
 {
     public class GenerationManager : MonoBehaviour
     {
-        private const string contentSettings = ":: Content settings ::";
-        private const string worldSettings = ":: World settings ::";
-        private const string connectionSettings = ":: Connection settings ::";
-        private const string generationSettings = ":: Generation settings ::";
-        private const string testingSettings = ":: Testing settings ::";
 
-        [BoxGroup(contentSettings)]
+        // ///////// //
+        // Constants //
+        // ///////// //
+
+        private const string contentParams = ":: Content parameters ::";
+        private const string worldParams = ":: World parameters ::";
+        private const string connectionParams = ":: Connection parameters ::";
+        private const string generationParams = ":: Generation parameters ::";
+        private const string testingParams = ":: Testing parameters ::";
+
+        // ////////////////// //
+        // Content parameters //
+        // ////////////////// //
+
+        [BoxGroup(contentParams)]
         [SerializeField]
         private List<ArenaPiece> _piecesList;
 
-        [BoxGroup(contentSettings)]
+        [BoxGroup(contentParams)]
         [Label("Use starter piece list")]
         [SerializeField]
         private bool _useStarter;
 
-        [BoxGroup(contentSettings)]
+        [BoxGroup(contentParams)]
         [SerializeField]
         [ShowIf(nameof(_useStarter))]
         private List<ArenaPiece> _startingPieceList;
 
-        [BoxGroup(worldSettings)]
+        // //////////////// //
+        // World parameters //
+        // //////////////// //
+
+        [BoxGroup(worldParams)]
         [SerializeField]
         private bool _useSeed;
 
-        [BoxGroup(worldSettings)]
+        [BoxGroup(worldParams)]
         [SerializeField]
         [ShowIf(nameof(_useSeed))]
         private int _seed;
 
-        [BoxGroup(worldSettings)]
+        [BoxGroup(worldParams)]
         [SerializeField]
         private bool _useClippingCorrection = false;
 
-        [BoxGroup(worldSettings)]
+        [BoxGroup(worldParams)]
         [SerializeField]
         private float _pieceDistance = 0.0001f;
 
-        [BoxGroup(connectionSettings)]
+        // ///////////////////// //
+        // Connection parameters //
+        // ///////////////////// //
+
+        [BoxGroup(connectionParams)]
         [SerializeField]
         [EnumFlags]
         private SnapRules _matchingRules;
 
-        [BoxGroup(connectionSettings)]
+        [BoxGroup(connectionParams)]
         [SerializeField]
         private uint _pinCountTolerance = 0;
 
-        [BoxGroup(connectionSettings)]
+        [BoxGroup(connectionParams)]
         [SerializeField]
         [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
         private Array2DBool _colorMatrix;
 
-        [BoxGroup(generationSettings)]
+        // ///////////////////// //
+        // Generation parameters //
+        // ///////////////////// //
+
+        [BoxGroup(generationParams)]
         [SerializeField]
         [Dropdown(nameof(GenMethods))]
         [OnValueChanged("OnChangeGMName")]
         private string _generationMethod;
 
-        [BoxGroup(generationSettings)]
+        [BoxGroup(generationParams)]
         [SerializeField]
         [Expandable]
         [OnValueChanged(nameof(OnChangeGMType))]
         private GMConfig _generationParams;
 
-        [BoxGroup(generationSettings)]
+        [BoxGroup(generationParams)]
         [SerializeField]
         private uint _maxFailures = 10;
 
-        [BoxGroup(generationSettings)]
+        [BoxGroup(generationParams)]
         [Label("Starter connector count tolerance")]
         [SerializeField]
         private uint _starterConTol;
 
-        [BoxGroup(testingSettings)]
+        // ////////////////// //
+        // Testing parameters //
+        // ////////////////// //
+
+        [BoxGroup(testingParams)]
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
+
+        // ///////////////////////////////////// //
+        // Instance variables not used in editor //
+        // ///////////////////////////////////// //
 
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
@@ -122,6 +151,10 @@ namespace TrinityGen
         [System.NonSerialized]
         private string[] _genMethods;
 
+        // ////////// //
+        // Properties //
+        // ////////// //
+
         // Get generation method names
         private ICollection<string> GenMethods
         {
@@ -140,6 +173,10 @@ namespace TrinityGen
                 return _genMethods;
             }
         }
+
+        // /////// //
+        // Methods //
+        // ////// //
 
         // Callback invoked when user changes generation method type in editor
         private void OnChangeGMType()
@@ -316,9 +353,7 @@ namespace TrinityGen
             return initialPiece;
         }
 
-        /// <summary>
-        /// Separate pieces into separate lists based on largest group
-        /// </summary>
+        // Separate pieces into separate lists based on largest group
         private List<List<ArenaPiece>> SplitList()
         {
             int lastConsidered = _largestGroup + 1;
