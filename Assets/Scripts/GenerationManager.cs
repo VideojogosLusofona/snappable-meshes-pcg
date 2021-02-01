@@ -28,11 +28,6 @@ namespace TrinityGen
 {
     public class GenerationManager : MonoBehaviour
     {
-        private const string contentSettings = ":: Content settings ::";
-        private const string worldSettings = ":: World settings ::";
-        private const string connectionSettings = ":: Connection settings ::";
-        private const string generationSettings = ":: Generation settings ::";
-        private const string testingSettings = ":: Testing settings ::";
 
 
         [Foldout(":: Events ::")]
@@ -44,72 +39,117 @@ namespace TrinityGen
         [Foldout(":: Events ::")]
         [SerializeField] private UnityEvent<ArenaPiece> OnConnectionMade;
 
-        [BoxGroup(contentSettings)]
+        // ///////// //
+        // Constants //
+        // ///////// //
+
+        private const string contentParams = ":: Content parameters ::";
+        private const string worldParams = ":: World parameters ::";
+        private const string connectionParams = ":: Connection parameters ::";
+        private const string generationParams = ":: Generation parameters ::";
+        private const string testingParams = ":: Testing parameters ::";
+
+        // ////////////////// //
+        // Content parameters //
+        // ////////////////// //
+
+        [BoxGroup(contentParams)]
         [SerializeField]
         private List<ArenaPiece> _piecesForGeneration;
-
-        [BoxGroup(contentSettings)]
+        
+        [BoxGroup(contentParams)]
+        [ReorderableList]
         [SerializeField]
-        private uint _connectorCountTolerance = 0;
+        private List<ArenaPiece> _piecesList;
 
-        [BoxGroup(contentSettings)]
+        [BoxGroup(contentParams)]
+        [Label("Use Starter Piece List")]
         [SerializeField]
-        private bool _useStartingPieceList = false;
+        private bool _useStarter;
 
-        [BoxGroup(contentSettings)]
-        [SerializeField] [ShowIf("_useStartingPieceList")]
+        [BoxGroup(contentParams)]
+        [ReorderableList]
+        [SerializeField]
+        [ShowIf(nameof(_useStarter))]
         private List<ArenaPiece> _startingPieceList;
 
-        [BoxGroup(worldSettings)]
+        // //////////////// //
+        // World parameters //
+        // //////////////// //
+
+        [BoxGroup(worldParams)]
         [SerializeField]
         private bool _useSeed;
 
-        [BoxGroup(worldSettings)]
-        [SerializeField] [ShowIf("_useSeed")]
+        [BoxGroup(worldParams)]
+        [SerializeField]
+        [ShowIf(nameof(_useSeed))]
         private int _seed;
 
-        [BoxGroup(worldSettings)]
+        [BoxGroup(worldParams)]
         [SerializeField]
         private bool _useClippingCorrection = false;
 
-        [BoxGroup(worldSettings)]
+        [BoxGroup(worldParams)]
         [SerializeField]
         private float _pieceDistance = 0.0001f;
 
-        [BoxGroup(connectionSettings)]
-        [SerializeField] [EnumFlags]
+        // ///////////////////// //
+        // Connection parameters //
+        // ///////////////////// //
+
+        [BoxGroup(connectionParams)]
+        [SerializeField]
+        [EnumFlags]
         private SnapRules _matchingRules;
 
-        [BoxGroup(connectionSettings)]
+        [BoxGroup(connectionParams)]
         [SerializeField]
         private uint _pinCountTolerance = 0;
 
-        [BoxGroup(connectionSettings)]
+        [BoxGroup(connectionParams)]
         [SerializeField]
         [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
         private Array2DBool _colorMatrix;
 
-        [BoxGroup(generationSettings)]
+        // ///////////////////// //
+        // Generation parameters //
+        // ///////////////////// //
+
+        [BoxGroup(generationParams)]
         [SerializeField]
-        [Dropdown("GenMethods")]
+        [Dropdown(nameof(GenMethods))]
         [OnValueChanged("OnChangeGMName")]
         private string _generationMethod;
 
-        [BoxGroup(generationSettings)]
+        [BoxGroup(generationParams)]
         [SerializeField]
         [Expandable]
-        [OnValueChanged("OnChangeGMType")]
+        [OnValueChanged(nameof(OnChangeGMType))]
         private GMConfig _generationParams;
 
-        [BoxGroup(generationSettings)]
+        [BoxGroup(generationParams)]
         [SerializeField]
         private uint _maxFailures = 10;
 
-        [BoxGroup(testingSettings)]
+        [BoxGroup(generationParams)]
+        [Label("Starter Connector Count Tolerance")]
+        [SerializeField]
+        private uint _starterConTol;
+
+        // ////////////////// //
+        // Testing parameters //
+        // ////////////////// //
+
+        [BoxGroup(testingParams)]
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
-        
+
+        // ///////////////////////////////////// //
+        // Instance variables not used in editor //
+        // ///////////////////////////////////// //
+
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
         private int _currentSeed;
@@ -128,6 +168,10 @@ namespace TrinityGen
         // Names of known generation method
         [System.NonSerialized]
         private string[] _genMethods;
+
+        // ////////// //
+        // Properties //
+        // ////////// //
 
         // Get generation method names
         private ICollection<string> GenMethods
@@ -148,15 +192,31 @@ namespace TrinityGen
             }
         }
 
-        // Callback invoked when user changes gen. method type in editor
+        // /////// //
+        // Methods //
+        // ////// //
+
+        // Callback invoked when user changes generation method type in editor
         private void OnChangeGMType()
         {
-            // Make sure gen. method name is updated accordingly
-            _generationMethod = GenMethodManager.Instance.GetNameFromType(
-                _generationParams.GetType());
+            if (_generationParams is null)
+            {
+                // Cannot allow this field to be empty, so set it back to what
+                // is specified in the generation method name
+                Debug.Log(
+                    $"The {nameof(_generationParams)} field cannot be empty");
+                OnChangeGMName();
+            }
+            else
+            {
+                // Update generation method name accordingly to what is now set
+                // in the generation configurator fields
+                _generationMethod = GenMethodManager.Instance.GetNameFromType(
+                    _generationParams.GetType());
+            }
         }
 
-        // Callback invoked when user changes gen. method name in editor
+        // Callback invoked when user changes generation method name in editor
         private void OnChangeGMName()
         {
             // Make sure gen. method type is updated accordingly
@@ -176,12 +236,18 @@ namespace TrinityGen
             }
         }
 
+        // Create a new map
         public GameObject Create()
         {
-            if (_generationParams is null)
+            // If we're using a starting piece, the starting piece list cannot
+            // be empty
+            if (_useStarter
+                && (_startingPieceList is null || _startingPieceList.Count == 0))
             {
                 EditorUtility.DisplayDialog(
-                    "Warning", "Please select a generation method", "Ok");
+                    "Warning",
+                    "Starting piece list is empty, aborting map generation.",
+                    "Ok");
                 return null;
             }
 
@@ -198,7 +264,7 @@ namespace TrinityGen
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
             _piecesForGenerationWorkList =
-                new List<ArenaPiece>(_piecesForGeneration);
+                new List<ArenaPiece>(_piecesList);
 
             // Get chosen generation method (strategy pattern)
             _chosenMethod = _generationParams.Method;
@@ -215,16 +281,16 @@ namespace TrinityGen
 
             _placedPieces = new List<ArenaPiece>();
             ArenaPiece started;
-            if (_useStartingPieceList)
+            if (_useStarter)
             {
                 started = _chosenMethod.SelectStartPiece(
-                    _startingPieceList, (int)_connectorCountTolerance);
+                    _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 started = _chosenMethod.SelectStartPiece(
                     _piecesForGenerationWorkList,
-                    (int)_connectorCountTolerance);
+                    (int)_starterConTol);
             }
 
             GameObject inst = started.ClonePiece(_useClippingCorrection);
@@ -307,9 +373,7 @@ namespace TrinityGen
             return initialPiece;
         }
 
-        /// <summary>
-        /// Separate pieces into separate lists based on largest group
-        /// </summary>
+        // Separate pieces into separate lists based on largest group
         private List<List<ArenaPiece>> SplitList()
         {
             int lastConsidered = _largestGroup + 1;
@@ -331,7 +395,7 @@ namespace TrinityGen
                 }
                 // piece belongs in the already made list
                 else if (_piecesForGenerationWorkList[i].ConnectorsCount >=
-                    lastConsidered - _connectorCountTolerance)
+                    lastConsidered - _starterConTol)
                 {
                     consideredList.Add(_piecesForGenerationWorkList[i]);
                 }
