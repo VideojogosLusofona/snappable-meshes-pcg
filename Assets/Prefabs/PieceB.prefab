@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   match: {fileID: 0}
   isUsed: 0
-  connColor: 0
+  connColor: 1
   pins: 1
   _pinSpacing: 0.5
   _gizmoTransparency: 1
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   match: {fileID: 0}
   isUsed: 0
-  connColor: 0
+  connColor: 2
   pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   match: {fileID: 0}
   isUsed: 0
-  connColor: 0
+  connColor: 2
   pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   match: {fileID: 0}
   isUsed: 0
-  connColor: 0
+  connColor: 1
   pins: 1
   _pinSpacing: 0.5
   _gizmoTransparency: 1

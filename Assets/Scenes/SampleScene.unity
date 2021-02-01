@@ -590,7 +590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveIntoPlaceTime: 0.5
   height: 20
-  waitBetweenPieces: 0.3
+  waitBetweenPieces: 0.1
 --- !u!114 &1975597049
 MonoBehaviour:
   m_ObjectHideFlags: 0
