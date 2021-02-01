@@ -72,7 +72,7 @@ public class GenerationAnimator : MonoBehaviour
         Vector3 diff = targetLoc - toMove.transform.position;
 
 
-        while(t < moveIntoPlaceTime)
+        while(t <= moveIntoPlaceTime)
         {
             toMove.transform.position = currentLoc +  diff * (t / moveIntoPlaceTime);
             t += Time.deltaTime;
