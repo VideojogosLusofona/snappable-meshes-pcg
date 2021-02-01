@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@ public class GenerationAnimator : MonoBehaviour
 
     public void AnimateConstruction(ArenaPiece[] pieces)
     {
-    
+
        StartCoroutine(MoveBlock(pieces));
 
-        
+
     }
 
 
@@ -78,13 +78,13 @@ public class GenerationAnimator : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
-        
+
     }
 
-    private IEnumerator WaitTime() 
+    private IEnumerator WaitTime()
     {
 
         yield return new WaitForSeconds(waitBetweenPieces);
-    } 
+    }
 
 }
