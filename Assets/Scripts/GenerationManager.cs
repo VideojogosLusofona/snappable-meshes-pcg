@@ -34,6 +34,16 @@ namespace TrinityGen
         private const string generationSettings = ":: Generation settings ::";
         private const string testingSettings = ":: Testing settings ::";
 
+
+        [Foldout(":: Events ::")]
+        [SerializeField] private UnityEvent OnGenerationBegin;
+
+        [Foldout(":: Events ::")]
+        [SerializeField] private UnityEvent<ArenaPiece[]> OnGenerationFinish;
+
+        [Foldout(":: Events ::")]
+        [SerializeField] private UnityEvent<ArenaPiece> OnConnectionMade;
+
         [BoxGroup(contentSettings)]
         [SerializeField]
         private List<ArenaPiece> _piecesForGeneration;
@@ -99,15 +109,6 @@ namespace TrinityGen
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
-
-        [Foldout("Events")]
-        [SerializeField] private UnityEvent OnGenerationBegin;
-
-        [Foldout("Events")]
-        [SerializeField] private UnityEvent<ArenaPiece[]> OnGenerationFinish;
-
-        [Foldout("Events")]
-        [SerializeField] private UnityEvent<ArenaPiece> OnConnectionMade;
         
         private List<ArenaPiece> _piecesForGenerationWorkList;
         private List<ArenaPiece> _placedPieces;
