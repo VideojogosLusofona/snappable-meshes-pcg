@@ -257,6 +257,9 @@ namespace SnapMeshPCG
             // First piece to be placed in the map
             ArenaPiece started;
 
+            // Starter piece
+            GameObject starterPiece;
+
             // If we're using a starting piece, the starting piece list cannot
             // be empty
             if (_useStarter
@@ -316,11 +319,18 @@ namespace SnapMeshPCG
                     _piecesWorkList, (int)_starterConTol);
             }
 
-            GameObject inst = started.ClonePiece(_useClippingCorrection);
-            _placedPieces.Add(inst.GetComponent<ArenaPiece>());
-            inst.name += " - START ";
+            // Get the starter piece by cloning the prototype piece selected for
+            // this purpose
+            starterPiece = started.ClonePiece(_useClippingCorrection);
 
-            GameObject initialPiece = inst;
+            // Rename piece so it's easier to determine that it's the
+            // starter piece
+            starterPiece.name += " : Starter Piece ";
+
+            // Add starter piece script component to list of placed pieces
+            _placedPieces.Add(starterPiece.GetComponent<ArenaPiece>());
+
+            // Initially, the guide piece is the starting piece
             _guidePiece = _placedPieces[0];
 
             // Make base level of Arena and add those pieces to the list
@@ -329,7 +339,7 @@ namespace SnapMeshPCG
             {
                 int failureCount = 0;
 
-                // Pick a piece to evaluate against our selected placed one
+                // Pick a tentative piece to evaluate against our guide piece
                 while (true)
                 {
                     int rng;
@@ -387,16 +397,16 @@ namespace SnapMeshPCG
                         _placedPieces, _placedPieces[_placedPieces.Count - 1]);
 
                     break;
-                } // selectPiece
+                } // select tentative piece
             }
             while (_guidePiece != null);
 
             Debug.Log("Generated with seed: " + _currentSeed);
             OnGenerationFinish.Invoke(_placedPieces.ToArray());
-            return initialPiece;
+            return starterPiece;
         }
 
-        // Separate pieces into separate lists based on largest group
+        // Separate pieces into separate lists based on number of connectors
         private IList<List<ArenaPiece>> SplitList()
         {
             int lastConsidered = _maxConnectors + 1;
