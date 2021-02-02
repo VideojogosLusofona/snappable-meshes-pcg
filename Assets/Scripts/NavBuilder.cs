@@ -22,7 +22,7 @@ using SnapMeshPCG;
 
 public class NavBuilder : MonoBehaviour
 {
-    public void BuildNavMesh(ArenaPiece[] pieces)
+    public void BuildNavMesh(MapPiece[] pieces)
     {
         GameObject topPiece = pieces[0].gameObject;
         NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();

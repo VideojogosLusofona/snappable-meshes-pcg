@@ -25,7 +25,7 @@ namespace SnapMeshPCG.GenerationMethods
         private readonly int maxPieces;
         private readonly bool pinchEnd;
         private readonly bool useEndPiece;
-        private readonly List<ArenaPiece> enderList;
+        private readonly List<MapPiece> enderList;
 
         private int _placedPieces;
 
@@ -34,8 +34,8 @@ namespace SnapMeshPCG.GenerationMethods
             this.maxPieces = maxPieces;
         }
 
-        public override ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0)
+        public override MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
@@ -43,8 +43,8 @@ namespace SnapMeshPCG.GenerationMethods
                 starterList[starterList.Count - 1].ConnectorCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
-            List<ArenaPiece> possibles = new List<ArenaPiece>();
-            foreach (ArenaPiece g in starterList)
+            List<MapPiece> possibles = new List<MapPiece>();
+            foreach (MapPiece g in starterList)
             {
                 if (g.ConnectorCount <= maximumAllowed)
                     possibles.Add(g);
@@ -52,7 +52,7 @@ namespace SnapMeshPCG.GenerationMethods
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng];
+            MapPiece chosen = possibles[rng];
             if (_firstPiece == null)
                 _firstPiece = chosen;
 
@@ -61,8 +61,8 @@ namespace SnapMeshPCG.GenerationMethods
 
         }
 
-        public override ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
             _placedPieces = worldPieceList.Count;
 
@@ -87,12 +87,12 @@ namespace SnapMeshPCG.GenerationMethods
             return lastPlaced;
         }
 
-        protected override ArenaPiece SelectEndPiece(
-            List<ArenaPiece> enderList = null)
+        protected override MapPiece SelectEndPiece(
+            List<MapPiece> enderList = null)
         {
             Random rng = new Random();
             // Upper limit is exclusive
-            ArenaPiece chosen = enderList[rng.Next(enderList.Count)];
+            MapPiece chosen = enderList[rng.Next(enderList.Count)];
             _lastGuideSelected = chosen;
             return chosen;
         }

@@ -41,8 +41,8 @@ namespace SnapMeshPCG.GenerationMethods
             this.pieceJumpSize = branchLength / maxBranches;
         }
 
-        public override ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0)
+        public override MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
@@ -50,8 +50,8 @@ namespace SnapMeshPCG.GenerationMethods
                 starterList[starterList.Count - 1].ConnectorCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
-            List<ArenaPiece> possibles = new List<ArenaPiece>();
-            foreach(ArenaPiece g in starterList)
+            List<MapPiece> possibles = new List<MapPiece>();
+            foreach(MapPiece g in starterList)
             {
                 if(g.ConnectorCount <= maximumAllowed)
                     possibles.Add(g);
@@ -59,7 +59,7 @@ namespace SnapMeshPCG.GenerationMethods
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng];
+            MapPiece chosen = possibles[rng];
             if (_firstPiece == null)
                 _firstPiece = chosen;
 
@@ -68,10 +68,10 @@ namespace SnapMeshPCG.GenerationMethods
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
-            ArenaPiece chosen;
+            MapPiece chosen;
             //Random rng = new Random();
 
             if(_branchesMade > maxBranches)

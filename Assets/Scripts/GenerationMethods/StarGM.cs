@@ -30,8 +30,8 @@ namespace SnapMeshPCG.GenerationMethods
             this.spokeLengthVariance = spokeLengthVariance;
         }
 
-        public override ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0)
+        public override MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0)
         {
 
             // Assumes that the list is sorted by number of connectors where
@@ -39,9 +39,9 @@ namespace SnapMeshPCG.GenerationMethods
             int topConnectorCount = starterList[0].ConnectorCount;
 
             int minimumAllowed = topConnectorCount - starterConTol;
-            List<ArenaPiece> possibles = new List<ArenaPiece>();
+            List<MapPiece> possibles = new List<MapPiece>();
 
-            foreach(ArenaPiece g in starterList)
+            foreach(MapPiece g in starterList)
             {
                 if(g.ConnectorCount >= minimumAllowed)
                     possibles.Add(g);
@@ -50,13 +50,13 @@ namespace SnapMeshPCG.GenerationMethods
             // Upper limit is exclusive
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng];
+            MapPiece chosen = possibles[rng];
             _lastGuideSelected = _firstPiece;
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
             int rng = UnityEngine.Random.Range(0, spokeLengthVariance + 1);
             int chosenVar = rng;

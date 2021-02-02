@@ -44,12 +44,12 @@ namespace SnapMeshPCG
 
         [BoxGroup(contentParams)]
         [SerializeField]
-        private List<ArenaPiece> _piecesForGeneration;
+        private List<MapPiece> _piecesForGeneration;
 
         [BoxGroup(contentParams)]
         [ReorderableList]
         [SerializeField]
-        private List<ArenaPiece> _piecesList;
+        private List<MapPiece> _piecesList;
 
         [BoxGroup(contentParams)]
         [Label("Use Starter Piece List")]
@@ -60,7 +60,7 @@ namespace SnapMeshPCG
         [ReorderableList]
         [SerializeField]
         [ShowIf(nameof(_useStarter))]
-        private List<ArenaPiece> _startingPieceList;
+        private List<MapPiece> _startingPieceList;
 
         // //////////////// //
         // World parameters //
@@ -145,11 +145,11 @@ namespace SnapMeshPCG
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent<ArenaPiece[]> OnGenerationFinish;
+        private UnityEvent<MapPiece[]> OnGenerationFinish;
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent<ArenaPiece> OnConnectionMade;
+        private UnityEvent<MapPiece> OnConnectionMade;
 
         // ///////////////////////////////////// //
         // Instance variables not used in editor //
@@ -160,19 +160,19 @@ namespace SnapMeshPCG
 
         // List of map pieces which will be manipulated by the generator,
         // initially copied from _piecesList
-        private List<ArenaPiece> _piecesWorkList;
+        private List<MapPiece> _piecesWorkList;
 
         // Pieces placed in the map
-        private List<ArenaPiece> _placedPieces;
+        private List<MapPiece> _placedPieces;
 
         //
-        private IList<List<ArenaPiece>> _sortedPieces;
+        private IList<List<MapPiece>> _sortedPieces;
 
         // Already placed piece being used to judge others
-        private ArenaPiece _guidePiece;
+        private MapPiece _guidePiece;
 
         // Piece being evaluated against guide piece
-        private ArenaPiece _tentativePiece;
+        private MapPiece _tentativePiece;
 
         // The generation method
         private AbstractGM _chosenMethod;
@@ -255,7 +255,7 @@ namespace SnapMeshPCG
         public GameObject Create()
         {
             // First piece to be placed in the map
-            ArenaPiece started;
+            MapPiece started;
 
             // Starter piece
             GameObject starterPiece;
@@ -286,7 +286,7 @@ namespace SnapMeshPCG
 
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
-            _piecesWorkList = new List<ArenaPiece>(_piecesList);
+            _piecesWorkList = new List<MapPiece>(_piecesList);
 
             // Get chosen generation method (strategy pattern)
             _chosenMethod = _generationParams.Method;
@@ -303,7 +303,7 @@ namespace SnapMeshPCG
             _sortedPieces = SplitList();
 
             // Initialize list of pieces already placed in the map
-            _placedPieces = new List<ArenaPiece>();
+            _placedPieces = new List<MapPiece>();
 
             // Get first piece to place in the map
             if (_useStarter)
@@ -328,7 +328,7 @@ namespace SnapMeshPCG
             starterPiece.name += " : Starter Piece ";
 
             // Add starter piece script component to list of placed pieces
-            _placedPieces.Add(starterPiece.GetComponent<ArenaPiece>());
+            _placedPieces.Add(starterPiece.GetComponent<MapPiece>());
 
             // Initially, the guide piece is the starting piece
             _guidePiece = _placedPieces[0];
@@ -360,8 +360,8 @@ namespace SnapMeshPCG
 
                     GameObject spawnedPiece =
                         _tentativePiece.ClonePiece(_useClippingCorrection);
-                    ArenaPiece spawnedScript =
-                        spawnedPiece.GetComponent<ArenaPiece>();
+                    MapPiece spawnedScript =
+                        spawnedPiece.GetComponent<MapPiece>();
 
                     (bool valid, Transform trn) evaluationResult =
                         _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
@@ -407,18 +407,18 @@ namespace SnapMeshPCG
         }
 
         // Separate pieces into separate lists based on number of connectors
-        private IList<List<ArenaPiece>> SplitList()
+        private IList<List<MapPiece>> SplitList()
         {
             int lastConsidered = _maxConnectors + 1;
-            List<ArenaPiece> consideredList = new List<ArenaPiece>();
-            IList<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
+            List<MapPiece> consideredList = new List<MapPiece>();
+            IList<List<MapPiece>> sortedList = new List<List<MapPiece>>();
 
             for (int i = 0; i < _piecesWorkList.Count; i++)
             {
                 // Piece belongs in a new list made for its size
                 if (_piecesWorkList[i].ConnectorCount < lastConsidered)
                 {
-                    consideredList = new List<ArenaPiece>();
+                    consideredList = new List<MapPiece>();
                     consideredList.Add(_piecesWorkList[i]);
                     lastConsidered = _piecesWorkList[i].ConnectorCount;
                     sortedList.Add(consideredList);

@@ -24,11 +24,11 @@ namespace SnapMeshPCG.GenerationMethods
         //TODO: Make some sort of container for all the parameters of a given
         //method
 
-        protected ArenaPiece _firstPiece;
-        protected ArenaPiece _lastGuideSelected;
+        protected MapPiece _firstPiece;
+        protected MapPiece _lastGuideSelected;
 
-        public abstract ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0);
+        public abstract MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0);
 
         /// <summary>
         /// Select piece in the world for evaluation.
@@ -38,10 +38,10 @@ namespace SnapMeshPCG.GenerationMethods
         /// </param>
         /// <param name="lastPlaced">Last successfully placed geometry</param>
         /// <returns>The guide piece or null if generation is over.</returns>
-        public abstract ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced);
+        public abstract MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced);
 
-        protected virtual ArenaPiece SelectEndPiece(
-            List<ArenaPiece> enderList = null) => null;
+        protected virtual MapPiece SelectEndPiece(
+            List<MapPiece> enderList = null) => null;
     }
 }

@@ -27,7 +27,7 @@ public class GenerationAnimator : MonoBehaviour
      [SerializeField] private float waitBetweenPieces;
 
 
-    public void AnimateConstruction(ArenaPiece[] pieces)
+    public void AnimateConstruction(MapPiece[] pieces)
     {
 
        StartCoroutine(MoveBlock(pieces));
@@ -36,7 +36,7 @@ public class GenerationAnimator : MonoBehaviour
     }
 
 
-    public IEnumerator MoveBlock(ArenaPiece[] blocks)
+    public IEnumerator MoveBlock(MapPiece[] blocks)
     {
 
         for(int i = 1; i < blocks.Length; i++)
@@ -45,7 +45,7 @@ public class GenerationAnimator : MonoBehaviour
         for(int i = 1; i < blocks.Length; i++)
         {
 
-            ArenaPiece current = blocks[i];
+            MapPiece current = blocks[i];
             Vector3 finalPosition = current.transform.position;
 
             Vector3 currentPosition = current.transform.position;
@@ -66,7 +66,7 @@ public class GenerationAnimator : MonoBehaviour
         }
 
     }
-    public IEnumerator MovePiece(ArenaPiece toMove, Vector3 currentLoc, Vector3 targetLoc)
+    public IEnumerator MovePiece(MapPiece toMove, Vector3 currentLoc, Vector3 targetLoc)
     {
         float t = 0;
         Vector3 diff = targetLoc - toMove.transform.position;

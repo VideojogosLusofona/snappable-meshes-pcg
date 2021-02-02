@@ -23,7 +23,7 @@ using UnityEngine.Assertions;
 
 namespace SnapMeshPCG
 {
-    public class ArenaPiece : MonoBehaviour, IComparable<ArenaPiece>
+    public class MapPiece : MonoBehaviour, IComparable<MapPiece>
     {
         // Never access this variable directly
         // Do so via the _Connectors property
@@ -69,7 +69,7 @@ namespace SnapMeshPCG
         /// <returns>A copy of this piece.</returns>
         public GameObject ClonePiece(bool useRigidBody)
         {
-            ArenaPiece clonedPiece = Instantiate(this);
+            MapPiece clonedPiece = Instantiate(this);
             clonedPiece.Setup(useRigidBody);
             return clonedPiece.gameObject;
         }
@@ -84,7 +84,7 @@ namespace SnapMeshPCG
         /// <param name="colorMatrix"></param>
         /// <returns></returns>
         public (bool valid, Transform positionRot) EvaluatePiece(
-            SnapRules rules, ArenaPiece other,
+            SnapRules rules, MapPiece other,
             float pieceDistance = 0.00f, uint groupTolerance = 0,
             bool[,] colorMatrix = null)
         {
@@ -152,7 +152,7 @@ namespace SnapMeshPCG
         /// <param name="otherPiece"></param>
         /// <returns></returns>
         private Transform TransformPiece(Connector myConnectorGroup,
-            Connector otherConnectorGroup, ArenaPiece otherPiece, float offset)
+            Connector otherConnectorGroup, MapPiece otherPiece, float offset)
         {
 
             Transform newPieceTrn = otherConnectorGroup.transform;
@@ -249,7 +249,7 @@ namespace SnapMeshPCG
         /// they have the same amount of connectors or 1 if this piece has less
         /// connectors than the other.
         /// </returns>
-        public int CompareTo(ArenaPiece other)
+        public int CompareTo(MapPiece other)
         {
             if (ConnectorCount > other.ConnectorCount)
                 return -1;
