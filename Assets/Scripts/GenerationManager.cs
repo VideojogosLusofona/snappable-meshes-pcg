@@ -21,10 +21,9 @@ using UnityEngine.Events;
 using UnityEditor;
 using NaughtyAttributes;
 using Array2DEditor;
-using TrinityGen.GenerationMethods;
+using SnapMeshPCG.GenerationMethods;
 
-
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     public class GenerationManager : MonoBehaviour
     {
@@ -116,7 +115,7 @@ namespace TrinityGen
         [SerializeField]
         [Expandable]
         [OnValueChanged(nameof(OnChangeGMType))]
-        private GMConfig _generationParams;
+        private AbstractGMConfig _generationParams;
 
         [BoxGroup(generationParams)]
         [SerializeField]
@@ -156,22 +155,32 @@ namespace TrinityGen
         // Instance variables not used in editor //
         // ///////////////////////////////////// //
 
-        private List<ArenaPiece> _piecesForGenerationWorkList;
-        private List<ArenaPiece> _placedPieces;
+        // Seed for random number generator
         private int _currentSeed;
+
+        // List of map pieces which will be manipulated by the generator,
+        // initially copied from _piecesList
+        private List<ArenaPiece> _piecesWorkList;
+
+        // Pieces placed in the map
+        private List<ArenaPiece> _placedPieces;
+
+        //
         private IList<List<ArenaPiece>> _sortedPieces;
 
         // Already placed piece being used to judge others
         private ArenaPiece _guidePiece;
 
-        // Piece being evaluated against selectedPiece
+        // Piece being evaluated against guide piece
         private ArenaPiece _tentativePiece;
 
-        private GenerationMethod _chosenMethod;
+        // The generation method
+        private AbstractGM _chosenMethod;
 
-        private int _largestGroup;
+        // Maximum number of connectors in existing pieces
+        private int _maxConnectors;
 
-        // Names of known generation method
+        // Names of known generation methods
         [System.NonSerialized]
         private string[] _genMethods;
 
@@ -188,7 +197,7 @@ namespace TrinityGen
                 if (_genMethods is null)
                 {
                     // Get gen. method names
-                    _genMethods = GenMethodManager.Instance.GenMethodNames;
+                    _genMethods = GMManager.Instance.GenMethodNames;
                     // Sort them
                     System.Array.Sort(_genMethods);
                 }
@@ -217,7 +226,7 @@ namespace TrinityGen
             {
                 // Update generation method name accordingly to what is now set
                 // in the generation configurator fields
-                _generationMethod = GenMethodManager.Instance.GetNameFromType(
+                _generationMethod = GMManager.Instance.GetNameFromType(
                     _generationParams.GetType());
             }
         }
@@ -227,8 +236,8 @@ namespace TrinityGen
         {
             // Make sure gen. method type is updated accordingly
             System.Type gmConfig =
-                GenMethodManager.Instance.GetTypeFromName(_generationMethod);
-            _generationParams = GMConfig.GetInstance(gmConfig);
+                GMManager.Instance.GetTypeFromName(_generationMethod);
+            _generationParams = AbstractGMConfig.GetInstance(gmConfig);
         }
 
         // Start is called before the first frame update
@@ -245,6 +254,9 @@ namespace TrinityGen
         // Create a new map
         public GameObject Create()
         {
+            // First piece to be placed in the map
+            ArenaPiece started;
+
             // If we're using a starting piece, the starting piece list cannot
             // be empty
             if (_useStarter
@@ -266,37 +278,42 @@ namespace TrinityGen
             // Initialize random number generator
             Random.InitState(_currentSeed);
 
+            // Invoke generation starting events
             OnGenerationBegin.Invoke();
+
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
-            _piecesForGenerationWorkList =
-                new List<ArenaPiece>(_piecesList);
+            _piecesWorkList = new List<ArenaPiece>(_piecesList);
 
             // Get chosen generation method (strategy pattern)
             _chosenMethod = _generationParams.Method;
 
             // Sort list of pieces to use according to the pieces natural order
-            _piecesForGenerationWorkList.Sort();
+            // (descending number of connectors)
+            _piecesWorkList.Sort();
 
             // Get the number of connectors from the piece with the most
             // connectors
-            _largestGroup = _piecesForGenerationWorkList[0].ConnectorsCount;
+            _maxConnectors = _piecesWorkList[0].ConnectorCount;
 
             // Separate pieces into separate lists based on largest group
             _sortedPieces = SplitList();
 
+            // Initialize list of pieces already placed in the map
             _placedPieces = new List<ArenaPiece>();
-            ArenaPiece started;
+
+            // Get first piece to place in the map
             if (_useStarter)
             {
+                // Get first piece from list of starting pieces
                 started = _chosenMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
+                // Get first piece from list of all pieces
                 started = _chosenMethod.SelectStartPiece(
-                    _piecesForGenerationWorkList,
-                    (int)_starterConTol);
+                    _piecesWorkList, (int)_starterConTol);
             }
 
             GameObject inst = started.ClonePiece(_useClippingCorrection);
@@ -380,30 +397,27 @@ namespace TrinityGen
         }
 
         // Separate pieces into separate lists based on largest group
-        private List<List<ArenaPiece>> SplitList()
+        private IList<List<ArenaPiece>> SplitList()
         {
-            int lastConsidered = _largestGroup + 1;
+            int lastConsidered = _maxConnectors + 1;
             List<ArenaPiece> consideredList = new List<ArenaPiece>();
-            List<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
+            IList<List<ArenaPiece>> sortedList = new List<List<ArenaPiece>>();
 
-            for (int i = 0; i < _piecesForGenerationWorkList.Count; i++)
+            for (int i = 0; i < _piecesWorkList.Count; i++)
             {
                 // Piece belongs in a new list made for its size
-                if (_piecesForGenerationWorkList[i].ConnectorsCount
-                    < lastConsidered)
+                if (_piecesWorkList[i].ConnectorCount < lastConsidered)
                 {
                     consideredList = new List<ArenaPiece>();
-                    consideredList.Add(_piecesForGenerationWorkList[i]);
-                    lastConsidered =
-                        _piecesForGenerationWorkList[i].ConnectorsCount;
+                    consideredList.Add(_piecesWorkList[i]);
+                    lastConsidered = _piecesWorkList[i].ConnectorCount;
                     sortedList.Add(consideredList);
-
                 }
-                // piece belongs in the already made list
-                else if (_piecesForGenerationWorkList[i].ConnectorsCount >=
+                // Piece belongs in the already made list
+                else if (_piecesWorkList[i].ConnectorCount >=
                     lastConsidered - _starterConTol)
                 {
-                    consideredList.Add(_piecesForGenerationWorkList[i]);
+                    consideredList.Add(_piecesWorkList[i]);
                 }
             }
 

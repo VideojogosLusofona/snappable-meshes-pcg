@@ -17,14 +17,14 @@
 
 using UnityEngine;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public class ArenaGMConfig : GMConfig
+    public class ArenaGMConfig : AbstractGMConfig
     {
         [SerializeField]
         private uint _maxPieceCount;
 
-        public override GenerationMethod Method =>
+        public override AbstractGM Method =>
             new ArenaGM((int)_maxPieceCount);
     }
 }

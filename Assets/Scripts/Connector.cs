@@ -19,7 +19,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     public class Connector : MonoBehaviour, IComparable<Connector>
     {

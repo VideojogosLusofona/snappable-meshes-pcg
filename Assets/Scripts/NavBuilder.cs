@@ -18,7 +18,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-using TrinityGen;
+using SnapMeshPCG;
 
 public class NavBuilder : MonoBehaviour
 {

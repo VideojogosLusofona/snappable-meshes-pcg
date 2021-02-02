@@ -16,7 +16,7 @@
  */
 
 using System;
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     [Flags]
     public enum SnapRules

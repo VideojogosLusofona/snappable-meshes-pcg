@@ -17,9 +17,9 @@
 
 using System.Collections.Generic;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public sealed class StarGM : GenerationMethod
+    public sealed class StarGM : AbstractGM
     {
         private readonly int spokeLength;
         private readonly int spokeLengthVariance;
@@ -36,14 +36,14 @@ namespace TrinityGen.GenerationMethods
 
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
-            int topConnectorCount = starterList[0].ConnectorsCount;
+            int topConnectorCount = starterList[0].ConnectorCount;
 
             int minimumAllowed = topConnectorCount - starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
 
             foreach(ArenaPiece g in starterList)
             {
-                if(g.ConnectorsCount >= minimumAllowed)
+                if(g.ConnectorCount >= minimumAllowed)
                     possibles.Add(g);
             }
 

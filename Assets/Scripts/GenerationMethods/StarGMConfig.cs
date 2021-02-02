@@ -17,9 +17,9 @@
 
 using UnityEngine;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public class StarGMConfig : GMConfig
+    public class StarGMConfig : AbstractGMConfig
     {
         [SerializeField]
         private uint _spokePieceCount;
@@ -27,7 +27,7 @@ namespace TrinityGen.GenerationMethods
         [SerializeField]
         private int _spokeSizeVariance = 0;
 
-        public override GenerationMethod Method =>
+        public override AbstractGM Method =>
             new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
     }
 }

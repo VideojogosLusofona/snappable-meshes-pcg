@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     public enum ConnectorColor
     {

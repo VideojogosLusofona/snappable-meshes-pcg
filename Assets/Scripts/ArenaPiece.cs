@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     public class ArenaPiece : MonoBehaviour, IComparable<ArenaPiece>
     {
@@ -48,7 +48,7 @@ namespace TrinityGen
         /// <summary>
         /// Number of connectors in this piece.
         /// </summary>
-        public int ConnectorsCount => _Connectors.Count;
+        public int ConnectorCount => _Connectors.Count;
 
         /// <summary>
         /// Checks all connectors to see if they're already connected to
@@ -251,9 +251,9 @@ namespace TrinityGen
         /// </returns>
         public int CompareTo(ArenaPiece other)
         {
-            if (ConnectorsCount > other.ConnectorsCount)
+            if (ConnectorCount > other.ConnectorCount)
                 return -1;
-            else if (ConnectorsCount < other.ConnectorsCount)
+            else if (ConnectorCount < other.ConnectorCount)
                 return 1;
             else
                 return 0;

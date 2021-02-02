@@ -18,19 +18,19 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using TrinityGen.GenerationMethods;
+using SnapMeshPCG.GenerationMethods;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     /// <summary>
     /// Singleton class used for finding and keeping a record of existing
-    /// generation methods.
+    /// generation methods (GMs).
     /// </summary>
-    public class GenMethodManager
+    public class GMManager
     {
         // Unique instance of this class, instantiated lazily
-        private static readonly Lazy<GenMethodManager> instance =
-            new Lazy<GenMethodManager>(() => new GenMethodManager());
+        private static readonly Lazy<GMManager> instance =
+            new Lazy<GMManager>(() => new GMManager());
 
         // Known generation methods
         private readonly IDictionary<string, Type> genMethCfgTable;
@@ -39,7 +39,7 @@ namespace TrinityGen
         /// Returns the singleton instance of this class.
         /// </summary>
         /// <value>The singleton instance of this class.</value>
-        public static GenMethodManager Instance => instance.Value;
+        public static GMManager Instance => instance.Value;
 
         /// <summary>
         /// Array of generation method names.
@@ -76,10 +76,10 @@ namespace TrinityGen
         }
 
         // Private constructor
-        private GenMethodManager()
+        private GMManager()
         {
             // Get a reference to the generation method configurator type
-            Type typeGMConfig = typeof(GMConfig);
+            Type typeGMConfig = typeof(AbstractGMConfig);
 
             // Get known methods, i.e. classes which extends GMConfig,
             // and are not abstract

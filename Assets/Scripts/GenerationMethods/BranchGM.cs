@@ -17,9 +17,9 @@
 
 using System.Collections.Generic;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public sealed class BranchGM : GenerationMethod
+    public sealed class BranchGM : AbstractGM
     {
         private readonly int maxBranches;
         private readonly int branchLength;
@@ -47,13 +47,13 @@ namespace TrinityGen.GenerationMethods
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
             int botConnectorCount =
-                starterList[starterList.Count - 1].ConnectorsCount;
+                starterList[starterList.Count - 1].ConnectorCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
             List<ArenaPiece> possibles = new List<ArenaPiece>();
             foreach(ArenaPiece g in starterList)
             {
-                if(g.ConnectorsCount <= maximumAllowed)
+                if(g.ConnectorCount <= maximumAllowed)
                     possibles.Add(g);
             }
 

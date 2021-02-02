@@ -17,7 +17,7 @@
 
 using UnityEngine;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
 
     public class ConnectorTransformTest : MonoBehaviour

@@ -17,9 +17,9 @@
 
 using System.Collections.Generic;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public abstract class GenerationMethod
+    public abstract class AbstractGM
     {
         //TODO: Make some sort of container for all the parameters of a given
         //method

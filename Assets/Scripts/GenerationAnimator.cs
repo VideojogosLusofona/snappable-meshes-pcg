@@ -17,7 +17,7 @@
 
 using System.Collections;
 using UnityEngine;
-using TrinityGen;
+using SnapMeshPCG;
 
 public class GenerationAnimator : MonoBehaviour
 {
