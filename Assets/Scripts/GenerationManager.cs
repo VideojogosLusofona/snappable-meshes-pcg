@@ -28,17 +28,6 @@ namespace TrinityGen
 {
     public class GenerationManager : MonoBehaviour
     {
-
-
-        [Foldout(":: Events ::")]
-        [SerializeField] private UnityEvent OnGenerationBegin;
-
-        [Foldout(":: Events ::")]
-        [SerializeField] private UnityEvent<ArenaPiece[]> OnGenerationFinish;
-
-        [Foldout(":: Events ::")]
-        [SerializeField] private UnityEvent<ArenaPiece> OnConnectionMade;
-
         // ///////// //
         // Constants //
         // ///////// //
@@ -48,6 +37,7 @@ namespace TrinityGen
         private const string connectionParams = ":: Connection parameters ::";
         private const string generationParams = ":: Generation parameters ::";
         private const string testingParams = ":: Testing parameters ::";
+        private const string events = ":: Events ::";
 
         // ////////////////// //
         // Content parameters //
@@ -145,6 +135,22 @@ namespace TrinityGen
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
+
+        // ////// //
+        // Events //
+        // ////// //
+
+        [Foldout(events)]
+        [SerializeField]
+        private UnityEvent OnGenerationBegin;
+
+        [Foldout(events)]
+        [SerializeField]
+        private UnityEvent<ArenaPiece[]> OnGenerationFinish;
+
+        [Foldout(events)]
+        [SerializeField]
+        private UnityEvent<ArenaPiece> OnConnectionMade;
 
         // ///////////////////////////////////// //
         // Instance variables not used in editor //
