@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 
 using UnityEngine;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public class StarGMConfig : GMConfig
+    public class StarGMConfig : AbstractGMConfig
     {
         [SerializeField]
         private uint _spokePieceCount;
@@ -27,7 +27,7 @@ namespace TrinityGen.GenerationMethods
         [SerializeField]
         private int _spokeSizeVariance = 0;
 
-        public override GenerationMethod Method =>
+        public override AbstractGM Method =>
             new StarGM((int)_spokePieceCount, (int)_spokeSizeVariance);
     }
 }

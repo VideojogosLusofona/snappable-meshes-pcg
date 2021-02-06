@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 
 using UnityEngine;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public class BranchGMConfig : GMConfig
+    public class BranchGMConfig : AbstractGMConfig
     {
         [SerializeField]
         private uint _branchCount;
@@ -36,7 +36,7 @@ namespace TrinityGen.GenerationMethods
         // Don't expose this to have branch calculate the jumping
         private uint _branchGenPieceSkipping = 0;
 
-        public override GenerationMethod Method =>
+        public override AbstractGM Method =>
             new BranchGM((int)_branchCount, (int)_branchPieceCount,
                 _branchSizeVariance, (int)_branchGenPieceSkipping);
 

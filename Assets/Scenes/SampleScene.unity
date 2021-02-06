@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fc937f04f710b4995ae0294abdb68d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _piecesForGeneration: []
   _piecesList:
   - {fileID: 1250729121890872323, guid: f0266bf901b0a604b837b204d09c9d38, type: 3}
   - {fileID: 4550082696110050862, guid: 32b2d89e1d2927449af147bc2e3992d2, type: 3}
@@ -406,15 +407,15 @@ MonoBehaviour:
   - {fileID: 9109512191895755785, guid: aefe349cf25bee141b6918b125e91696, type: 3}
   _useStarter: 0
   _startingPieceList: []
-  _useSeed: 0
+  _useSeed: 1
   _seed: 1234
   _useClippingCorrection: 0
   _pieceDistance: 0.0001
   _matchingRules: -1
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _generationMethod: Corridor
-  _generationParams: {fileID: 11400000, guid: 7bf6cf47ee2296ec6b691e82a2ac9b99, type: 2}
+  _generationMethod: Arena
+  _generationParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
   _maxFailures: 10
   _starterConTol: 0
   _autoCreate: 1

@@ -1,6 +1,6 @@
-# Trinity Generator
+# Snappable Meshes PCG
 
-Procedural level generator example for Unity. Work in progress.
+Procedural map generator example for Unity. Work in progress.
 
 ## Third-party plugins
 

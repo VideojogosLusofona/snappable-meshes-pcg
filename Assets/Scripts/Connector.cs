@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
     public class Connector : MonoBehaviour, IComparable<Connector>
     {

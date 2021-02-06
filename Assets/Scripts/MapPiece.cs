@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TrinityGen
+namespace SnapMeshPCG
 {
-    public class ArenaPiece : MonoBehaviour, IComparable<ArenaPiece>
+    public class MapPiece : MonoBehaviour, IComparable<MapPiece>
     {
         // Never access this variable directly
         // Do so via the _Connectors property
@@ -48,7 +48,7 @@ namespace TrinityGen
         /// <summary>
         /// Number of connectors in this piece.
         /// </summary>
-        public int ConnectorsCount => _Connectors.Count;
+        public int ConnectorCount => _Connectors.Count;
 
         /// <summary>
         /// Checks all connectors to see if they're already connected to
@@ -69,7 +69,7 @@ namespace TrinityGen
         /// <returns>A copy of this piece.</returns>
         public GameObject ClonePiece(bool useRigidBody)
         {
-            ArenaPiece clonedPiece = Instantiate(this);
+            MapPiece clonedPiece = Instantiate(this);
             clonedPiece.Setup(useRigidBody);
             return clonedPiece.gameObject;
         }
@@ -84,7 +84,7 @@ namespace TrinityGen
         /// <param name="colorMatrix"></param>
         /// <returns></returns>
         public (bool valid, Transform positionRot) EvaluatePiece(
-            SnapRules rules, ArenaPiece other,
+            SnapRules rules, MapPiece other,
             float pieceDistance = 0.00f, uint groupTolerance = 0,
             bool[,] colorMatrix = null)
         {
@@ -152,7 +152,7 @@ namespace TrinityGen
         /// <param name="otherPiece"></param>
         /// <returns></returns>
         private Transform TransformPiece(Connector myConnectorGroup,
-            Connector otherConnectorGroup, ArenaPiece otherPiece, float offset)
+            Connector otherConnectorGroup, MapPiece otherPiece, float offset)
         {
 
             Transform newPieceTrn = otherConnectorGroup.transform;
@@ -249,11 +249,11 @@ namespace TrinityGen
         /// they have the same amount of connectors or 1 if this piece has less
         /// connectors than the other.
         /// </returns>
-        public int CompareTo(ArenaPiece other)
+        public int CompareTo(MapPiece other)
         {
-            if (ConnectorsCount > other.ConnectorsCount)
+            if (ConnectorCount > other.ConnectorCount)
                 return -1;
-            else if (ConnectorsCount < other.ConnectorsCount)
+            else if (ConnectorCount < other.ConnectorCount)
                 return 1;
             else
                 return 0;

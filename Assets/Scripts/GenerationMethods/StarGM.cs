@@ -1,6 +1,6 @@
 /*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 
 using System.Collections.Generic;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public sealed class StarGM : GenerationMethod
+    public sealed class StarGM : AbstractGM
     {
         private readonly int spokeLength;
         private readonly int spokeLengthVariance;
@@ -30,33 +30,33 @@ namespace TrinityGen.GenerationMethods
             this.spokeLengthVariance = spokeLengthVariance;
         }
 
-        public override ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0)
+        public override MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0)
         {
 
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
-            int topConnectorCount = starterList[0].ConnectorsCount;
+            int topConnectorCount = starterList[0].ConnectorCount;
 
             int minimumAllowed = topConnectorCount - starterConTol;
-            List<ArenaPiece> possibles = new List<ArenaPiece>();
+            List<MapPiece> possibles = new List<MapPiece>();
 
-            foreach(ArenaPiece g in starterList)
+            foreach(MapPiece g in starterList)
             {
-                if(g.ConnectorsCount >= minimumAllowed)
+                if(g.ConnectorCount >= minimumAllowed)
                     possibles.Add(g);
             }
 
             // Upper limit is exclusive
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng];
+            MapPiece chosen = possibles[rng];
             _lastGuideSelected = _firstPiece;
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
             int rng = UnityEngine.Random.Range(0, spokeLengthVariance + 1);
             int chosenVar = rng;

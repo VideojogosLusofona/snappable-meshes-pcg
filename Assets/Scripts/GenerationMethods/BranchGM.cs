@@ -1,6 +1,6 @@
 /*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 
 using System.Collections.Generic;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public sealed class BranchGM : GenerationMethod
+    public sealed class BranchGM : AbstractGM
     {
         private readonly int maxBranches;
         private readonly int branchLength;
@@ -41,25 +41,25 @@ namespace TrinityGen.GenerationMethods
             this.pieceJumpSize = branchLength / maxBranches;
         }
 
-        public override ArenaPiece SelectStartPiece(
-            List<ArenaPiece> starterList, int starterConTol = 0)
+        public override MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where
             // [0] is the index with most connectors
             int botConnectorCount =
-                starterList[starterList.Count - 1].ConnectorsCount;
+                starterList[starterList.Count - 1].ConnectorCount;
 
             int maximumAllowed = botConnectorCount + starterConTol;
-            List<ArenaPiece> possibles = new List<ArenaPiece>();
-            foreach(ArenaPiece g in starterList)
+            List<MapPiece> possibles = new List<MapPiece>();
+            foreach(MapPiece g in starterList)
             {
-                if(g.ConnectorsCount <= maximumAllowed)
+                if(g.ConnectorCount <= maximumAllowed)
                     possibles.Add(g);
             }
 
             int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
             // Upper limit is exclusive
-            ArenaPiece chosen = possibles[rng];
+            MapPiece chosen = possibles[rng];
             if (_firstPiece == null)
                 _firstPiece = chosen;
 
@@ -68,10 +68,10 @@ namespace TrinityGen.GenerationMethods
             return chosen;
         }
 
-        public override ArenaPiece SelectGuidePiece(
-            List<ArenaPiece> worldPieceList, ArenaPiece lastPlaced)
+        public override MapPiece SelectGuidePiece(
+            List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
-            ArenaPiece chosen;
+            MapPiece chosen;
             //Random rng = new Random();
 
             if(_branchesMade > maxBranches)

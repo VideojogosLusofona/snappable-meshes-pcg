@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 
 using UnityEngine;
 
-namespace TrinityGen.GenerationMethods
+namespace SnapMeshPCG.GenerationMethods
 {
-    public class CorridorGMConfig : GMConfig
+    public class CorridorGMConfig : AbstractGMConfig
     {
         [SerializeField]
         private uint _maxPieceCount;
 
-        public override GenerationMethod Method =>
+        public override AbstractGM Method =>
             new CorridorGM((int)_maxPieceCount);
     }
 }

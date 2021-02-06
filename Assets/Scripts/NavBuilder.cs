@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright 2021 TrinityGenerator_Standalone contributors
- * (https://github.com/RafaelCS-Aula/TrinityGenerator_Standalone)
+ * Copyright 2021 Snappable Meshes PCG contributors
+ * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-using TrinityGen;
+using SnapMeshPCG;
 
 public class NavBuilder : MonoBehaviour
 {
-    public void BuildNavMesh(ArenaPiece[] pieces)
+    public void BuildNavMesh(MapPiece[] pieces)
     {
         GameObject topPiece = pieces[0].gameObject;
         NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
