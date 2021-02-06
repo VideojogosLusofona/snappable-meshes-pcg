@@ -109,9 +109,9 @@ NavMeshSettings:
     agentRadius: 0.5
     agentHeight: 2
     agentSlope: 45
-    agentClimb: 0.4
-    ledgeDropHeight: 0
-    maxJumpAcrossDistance: 0
+    agentClimb: 1.04
+    ledgeDropHeight: 40
+    maxJumpAcrossDistance: 40
     minRegionArea: 2
     manualCellSize: 0
     cellSize: 0.16666667
@@ -407,7 +407,7 @@ MonoBehaviour:
   - {fileID: 9109512191895755785, guid: aefe349cf25bee141b6918b125e91696, type: 3}
   _useStarter: 0
   _startingPieceList: []
-  _useSeed: 1
+  _useSeed: 0
   _seed: 1234
   _useClippingCorrection: 0
   _pieceDistance: 0.0001
@@ -427,7 +427,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1975597049}
         m_TargetAssemblyTypeName: NavBuilder, Assembly-CSharp
-        m_MethodName: BakeNavMesh
+        m_MethodName: BuildNavMesh
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -437,18 +437,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-      - m_Target: {fileID: 1975597048}
-        m_TargetAssemblyTypeName: GenerationAnimator, Assembly-CSharp
-        m_MethodName: AnimateConstruction
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   OnConnectionMade:
     m_PersistentCalls:
       m_Calls: []
@@ -604,6 +592,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bodyRadius: 9
+  bodyHeight: 1
+  maxSlope: 0
+  maxStepHeight: 1
 --- !u!4 &1975597050
 Transform:
   m_ObjectHideFlags: 0

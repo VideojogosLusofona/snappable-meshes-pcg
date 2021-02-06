@@ -22,10 +22,34 @@ using SnapMeshPCG;
 
 public class NavBuilder : MonoBehaviour
 {
+    // Give some nice defaults
+    [SerializeField] private float bodyRadius = 0.5f;
+    [SerializeField] private float bodyHeight = 2;
+
+    [Range(0,60)]
+    [SerializeField] private float maxSlope = 30;
+    [SerializeField] private float maxStepHeight = 1;
+
+
+    
     public void BuildNavMesh(MapPiece[] pieces)
     {
         GameObject topPiece = pieces[0].gameObject;
         NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
+        NavMeshBuildSettings navSettings = nav.GetBuildSettings();
+        
+        // Doesn't actually work, find out how to access baked agent settings
+        navSettings.agentRadius = bodyRadius;
+        navSettings.agentHeight = bodyHeight;
+
+        navSettings.agentSlope = maxSlope;
+        navSettings.agentClimb = maxStepHeight;
+
+        
+        
+
+
+        print($"Building NavMesh at parent piece: {nav.gameObject.name}");
         nav.BuildNavMesh();
     }
 }
