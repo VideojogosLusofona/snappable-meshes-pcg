@@ -17,11 +17,14 @@
 
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor.AI;
 
 using SnapMeshPCG;
 
+[RequireComponent(typeof(NavMeshSurface))]
 public class NavBuilder : MonoBehaviour
 {
+    /*
     // Give some nice defaults
     [SerializeField] private float bodyRadius = 0.5f;
     [SerializeField] private float bodyHeight = 2;
@@ -29,27 +32,30 @@ public class NavBuilder : MonoBehaviour
     [Range(0,60)]
     [SerializeField] private float maxSlope = 30;
     [SerializeField] private float maxStepHeight = 1;
+    */
+
+   //s [SerializeField] private NavWalker demoCharacter;
 
 
     
     public void BuildNavMesh(MapPiece[] pieces)
     {
+        NavMeshSurface dummyNav = GetComponent<NavMeshSurface>();
+        if(dummyNav == null)
+            dummyNav = gameObject.AddComponent<NavMeshSurface>();
+
         GameObject topPiece = pieces[0].gameObject;
         NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
-        NavMeshBuildSettings navSettings = nav.GetBuildSettings();
-        
-        // Doesn't actually work, find out how to access baked agent settings
-        navSettings.agentRadius = bodyRadius;
-        navSettings.agentHeight = bodyHeight;
-
-        navSettings.agentSlope = maxSlope;
-        navSettings.agentClimb = maxStepHeight;
-
-        
-        
-
 
         print($"Building NavMesh at parent piece: {nav.gameObject.name}");
         nav.BuildNavMesh();
+
+       // demoCharacter.mapPieces = pieces;
+       // Instantiate(demoCharacter.gameObject, new Vector3(0,10,0),Quaternion.identity);
+
+
     }
+
+    
+
 }
