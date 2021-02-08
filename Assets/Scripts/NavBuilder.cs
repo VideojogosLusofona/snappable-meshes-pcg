@@ -17,24 +17,16 @@
 
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor.AI;
+
 
 using SnapMeshPCG;
 
 [RequireComponent(typeof(NavMeshSurface))]
 public class NavBuilder : MonoBehaviour
 {
-    /*
-    // Give some nice defaults
-    [SerializeField] private float bodyRadius = 0.5f;
-    [SerializeField] private float bodyHeight = 2;
+    
 
-    [Range(0,60)]
-    [SerializeField] private float maxSlope = 30;
-    [SerializeField] private float maxStepHeight = 1;
-    */
-
-   //s [SerializeField] private NavWalker demoCharacter;
+    [SerializeField] private NavWalker demoCharacter;
 
 
     
@@ -50,8 +42,8 @@ public class NavBuilder : MonoBehaviour
         print($"Building NavMesh at parent piece: {nav.gameObject.name}");
         nav.BuildNavMesh();
 
-       // demoCharacter.mapPieces = pieces;
-       // Instantiate(demoCharacter.gameObject, new Vector3(0,10,0),Quaternion.identity);
+        demoCharacter.mapPieces = pieces;
+        Instantiate(demoCharacter.gameObject, new Vector3(0,10,0),Quaternion.identity);
 
 
     }
