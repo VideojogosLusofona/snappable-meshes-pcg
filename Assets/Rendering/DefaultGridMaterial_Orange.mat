@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DefaultGridMaterial_Cyan
+  m_Name: DefaultGridMaterial_Orange
   m_Shader: {fileID: -6465566751694194690, guid: 3f394e8084c9708458dcd30f17014f0b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 2
@@ -64,7 +64,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_507764AD: 25.24
+    - Vector1_507764AD: 264.51
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -97,8 +97,8 @@ Material:
     - _BaseColor: {r: 0.10234957, g: 0.8679245, b: 0.8679245, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GridColor: {r: 0.2, g: 2, b: 2.5, a: 1}
-    - _GridColor_1: {r: 0, g: 1, b: 0.99030876, a: 1}
+    - _GridColor: {r: 0.019308502, g: 0.04508043, b: 0.31487697, a: 1}
+    - _GridColor_1: {r: 1, g: 0.50518686, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &3925048043806768437
