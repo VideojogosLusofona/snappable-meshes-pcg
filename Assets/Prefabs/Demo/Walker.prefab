@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 9071114304783017491}
   - component: {fileID: 9071114304783017516}
   - component: {fileID: 3366272454587344551}
+  - component: {fileID: 3205771333373210039}
   m_Layer: 0
   m_Name: Walker
   m_TagString: Untagged
@@ -289,3 +290,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapPieces: []
+--- !u!114 &3205771333373210039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9071114304783017517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b519974f4b696499215ace0ee48404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
