@@ -103,12 +103,12 @@ namespace SnapMeshPCG.Demo
             if(foundSpot)
             {
                 Debug.DrawLine(transform.position, hit.position, Color.green, 10);
-                print($"Found point on NavMesh at {hit.position}");
+            //    print($"Found point on NavMesh at {hit.position}");
                 return hit.position;
             }
             else
             {
-                print($"No point on NavMesh found.");
+             //   print($"No point on NavMesh found.");
                 return transform.position;
             }
 
