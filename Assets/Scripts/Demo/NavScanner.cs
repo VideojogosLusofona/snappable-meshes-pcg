@@ -84,8 +84,8 @@ namespace SnapMeshPCG.Demo
                 }
             }
 
-            float percentPassable = _goodPaths.Count/(_goodPaths.Count + _badPaths.Count) * 100;
-            print($"Scanner: Found {_goodPaths.Count} / {_goodPaths.Count + _badPaths.Count} good Paths. -> {percentPassable}%");
+            float percentPassable = 100 * _goodPaths.Count/(_goodPaths.Count + _badPaths.Count);
+            print($"Scanner: Found {_goodPaths.Count} / {_goodPaths.Count + _badPaths.Count} good Paths. -> {percentPassable.ToString("n1")}%");
 
         }
         private Vector3 FindPointInNavMesh(Vector3 origin)
