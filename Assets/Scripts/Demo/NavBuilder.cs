@@ -17,19 +17,33 @@
 
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using NaughtyAttributes;
+using UnityEngine.Events;
 
 namespace SnapMeshPCG.Demo
 {
-    
+
     [RequireComponent(typeof(NavMeshSurface))]
     public class NavBuilder : MonoBehaviour
     {
         [SerializeField] private NavWalker demoCharacter;
+        [Foldout(":: Events ::")]
+        [SerializeField]
+        private UnityEvent<MapPiece[]> OnNavMeshReady;
+
         public void BuildNavMesh(MapPiece[] pieces)
         {
             NavMeshSurface dummyNav = GetComponent<NavMeshSurface>();
-            if(dummyNav == null)
+            if (dummyNav == null)
                 dummyNav = gameObject.AddComponent<NavMeshSurface>();
+
+            StartCoroutine(BuildNavMeshCR(pieces));
+        }
+
+        IEnumerator BuildNavMeshCR(MapPiece[] pieces)
+        {
+            yield return null;
 
             GameObject topPiece = pieces[0].gameObject;
             NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
@@ -38,11 +52,10 @@ namespace SnapMeshPCG.Demo
             nav.BuildNavMesh();
 
             demoCharacter.mapPieces = pieces;
-            Instantiate(demoCharacter.gameObject, new Vector3(0,10,0),Quaternion.identity);
+            Instantiate(demoCharacter.gameObject, new Vector3(0, 10, 0), Quaternion.identity);
 
-
+            OnNavMeshReady.Invoke(pieces);
         }
     }
-
 }
 
