@@ -195,21 +195,25 @@ namespace SnapMeshPCG
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
 
+            if(rb == null)
+                rb = GetComponentInChildren<Rigidbody>();
+            if(mc == null)
+                mc = GetComponentInChildren<MeshCollider>();
+
             _useRigidBody = spawnRigid;
 
             // Make sure connector collection is initialized
             if (_connectors is null) InitConnectors();
 
-            if (rb == null)
-                rb = gameObject.AddComponent<Rigidbody>();
-            if (mc == null)
-                mc = gameObject.AddComponent<MeshCollider>();
+            if (rb == null && mc != null)
+                rb = mc.gameObject.AddComponent<Rigidbody>();
+            if (mc == null && rb != null)
+                mc = rb.gameObject.AddComponent<MeshCollider>();
 
             if (_useRigidBody)
             {
                 rb.isKinematic = false;
                 mc.convex = true;
-                rb = GetComponent<Rigidbody>();
                 rb.useGravity = false;
                 rb.mass = 0;
                 rb.drag = 900;
