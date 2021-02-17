@@ -1,5 +1,4 @@
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -23,12 +22,12 @@ namespace SnapMeshPCG.Demo
         [SerializeField]
         private float _maxIncrements;
 
-        private List<NavMeshPath> _goodPaths;
-        private List<NavMeshPath> _badPaths;
+        private List<Vector3> _goodPoints;
+        private List<Vector3> _badPoints;
         public void ScanMesh(MapPiece[] map)
         {
-            _goodPaths = new List<NavMeshPath>();
-            _badPaths = new List<NavMeshPath>();
+            _goodPoints = new List<Vector3>();
+            _badPoints = new List<Vector3>();
             print("Scanning NavMesh for paths...");
             MapPiece start = map[0];
             Vector3 startPoint = FindPointInNavMesh(start.transform.position);
@@ -37,18 +36,16 @@ namespace SnapMeshPCG.Demo
             {
                 Vector3 point = FindPointInNavMesh(map[Random.Range(0, map.Length)].transform.position);
                 NavMeshPath storedPath = new NavMeshPath();
-                bool path =NavMesh.CalculatePath(start.transform.position, point, NavMesh.AllAreas, storedPath);
+                bool path =NavMesh.CalculatePath(startPoint, point, NavMesh.AllAreas, storedPath);
 
-                
-                NavMeshPath dummyPath = storedPath;
                 bool repeatPath = false;
                 if(!path ||  storedPath.status != NavMeshPathStatus.PathComplete)
                 {
-                    //print($"Found bad path on NavMesh at {point}");
+
                     //Debug.DrawLine(transform.position, point, Color.red, 10);
-                    foreach(NavMeshPath bp in _badPaths)
+                    foreach(Vector3 bp in _badPoints)
                     {
-                        if(bp.corners[bp.corners.Length - 1] == dummyPath.corners[dummyPath.corners.Length - 1])
+                        if(bp == point)
                         {
                             repeatPath = true;
                             break;
@@ -59,7 +56,7 @@ namespace SnapMeshPCG.Demo
 
                      if(!repeatPath)
                     {
-                        _badPaths.Add(dummyPath);
+                        _badPoints.Add(point);
                             
                     }
                 }
@@ -67,9 +64,9 @@ namespace SnapMeshPCG.Demo
                 {
                     //print($"Found good path on NavMesh at {point} - last corner: {dummyPath.corners[dummyPath.corners.Length - 1]}");
                     //Debug.DrawLine(transform.position, point, Color.green, 10);
-                    foreach(NavMeshPath gp in _goodPaths)
+                    foreach(Vector3 gp in _goodPoints)
                     {
-                        if(gp.corners[gp.corners.Length - 1] == dummyPath.corners[dummyPath.corners.Length - 1])
+                        if(gp == point)
                         {
                             repeatPath = true;
                             break;
@@ -77,7 +74,7 @@ namespace SnapMeshPCG.Demo
                     }
                     if(!repeatPath)
                     {
-                        _goodPaths.Add(dummyPath);
+                        _goodPoints.Add(point);
                             
                     }
                 
@@ -85,8 +82,8 @@ namespace SnapMeshPCG.Demo
                 }
             }
 
-            float percentPassable = 100 * _goodPaths.Count/(_goodPaths.Count + _badPaths.Count);
-            print($"Scanner: Found {_goodPaths.Count} / {_goodPaths.Count + _badPaths.Count} good Paths. -> {percentPassable.ToString("n1")}%");
+            float percentPassable = 100 * _goodPoints.Count/(_goodPoints.Count + _badPoints.Count);
+            print($"Scanner: Found {_goodPoints.Count} / {_goodPoints.Count + _badPoints.Count} good Paths. -> {percentPassable.ToString("n1")}%");
 
         }
         private Vector3 FindPointInNavMesh(Vector3 origin)
@@ -122,20 +119,21 @@ namespace SnapMeshPCG.Demo
         private void OnDrawGizmos() 
         {
             // GIZMOS stay on after pressing clear on generator
-            if(_goodPaths == null && _badPaths == null)
+            if(_goodPoints == null && _badPoints == null)
             {
                 return;
             }
-           foreach(NavMeshPath gp in _goodPaths)
+
+           foreach(Vector3 gp in _goodPoints)
            {
                Gizmos.color = Color.green;
-               Gizmos.DrawSphere(gp.corners[gp.corners.Length - 1], 0.5f);
+               Gizmos.DrawSphere(gp, 0.3f);
                //print(gp.corners[gp.corners.Length - 1]);
            }
-           foreach(NavMeshPath bp in _badPaths)
+           foreach(Vector3 bp in _badPoints)
            {
                Gizmos.color = Color.red;
-               Gizmos.DrawSphere(bp.corners[bp.corners.Length - 1], 0.5f);
+               Gizmos.DrawSphere(bp, 0.3f);
            }
 
         }
