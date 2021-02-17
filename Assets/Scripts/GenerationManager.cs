@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -247,12 +248,12 @@ namespace SnapMeshPCG
             {
                 Debug.Log("ATTENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
                 ClearEditorGeneration();
-                Create();
+                StartCoroutine(Create());
             }
         }
 
         // Create a new map
-        public GameObject Create()
+        public IEnumerator Create()
         {
             // First piece to be placed in the map
             MapPiece started;
@@ -269,7 +270,7 @@ namespace SnapMeshPCG
                     "Warning",
                     "Starting piece list is empty, aborting map generation.",
                     "Ok");
-                return null;
+                yield break;
             }
 
             // Use predefined seed if set or one based on current time
@@ -402,10 +403,22 @@ namespace SnapMeshPCG
             while (_guidePiece != null);
 
             Debug.Log($"Generated with Seed: {_currentSeed}.");
-            if(_useClippingCorrection)
-                SimulatePhysics();
-            OnGenerationFinish.Invoke(_placedPieces.ToArray());
-            return starterPiece;
+        
+            
+            if(Application.isPlaying)
+            {
+                if(_useClippingCorrection)
+                    yield return StartCoroutine(WaitForPhysicsCorrection());
+
+                OnGenerationFinish.Invoke(_placedPieces.ToArray());
+            }
+            else
+            {
+                if(!_useClippingCorrection)
+                    OnGenerationFinish.Invoke(_placedPieces.ToArray());
+            }
+            
+            //return starterPiece;
         }
 
         // Separate pieces into separate lists based on number of connectors
@@ -440,8 +453,8 @@ namespace SnapMeshPCG
         private void EditorGenerate()
         {
             ClearEditorGeneration();
-
-            GameObject initialPiece = Create();
+            StartCoroutine(Create());
+            GameObject initialPiece = _placedPieces[0].gameObject;
 
             // Add a component to identify this case, so we can delete it on a
             // new generation
@@ -465,39 +478,90 @@ namespace SnapMeshPCG
             }
         }
 
-        [Button]
+        /// <summary>
+        /// Simulate a physics step in the editor
+        /// </summary>
+        [Button("(Clipping Correction) Simulate Physics Step", enabledMode: EButtonEnableMode.Editor)]
         private void SimulatePhysics()
         {
-            Physics.autoSimulation = false;
-            bool settled = false;
+            if(!_useClippingCorrection)
+                Debug.LogWarning("This should only be used when clipping" +
+                "correction was ON at time of generation.");
 
-/*            do
+            Physics.autoSimulation = false;
+            Physics.Simulate(Time.fixedDeltaTime);
+            Physics.autoSimulation = true;
+        }
+
+        /// <summary>
+        /// Halt the generator until all the pieces are done being pushed
+        /// by the clipping correction
+        /// </summary>
+        private IEnumerator WaitForPhysicsCorrection()
+        {
+            bool settled = false;
+            do
             {
                 settled = true;
                 foreach(MapPiece mP in _placedPieces)
                 {
                     Rigidbody pieceBody = 
-                        mP.gameObject.GetComponent<Rigidbody>();
-                    if(pieceBody = null)
+                            mP.gameObject.GetComponent<Rigidbody>();
+                    if(pieceBody == null)
                     {
-                        pieceBody = mP.GetComponentInChildren<Rigidbody>();
+                        pieceBody = mP.gameObject.GetComponentInChildren<Rigidbody>();
                     }
                     if(pieceBody != null)
                     {
                         if(pieceBody.velocity.sqrMagnitude >= 0.001f)
                         {
                             settled = false;
+                            
                         }
                         
                     }
-                    
+                        
                 }
-                
-            }while(!settled);*/
-
-            Physics.Simulate(Time.fixedDeltaTime);
-            Physics.autoSimulation = true;
-                
+                print("Waiting for phisics");
+                yield return new WaitForFixedUpdate();
+            }while(!settled);
         }
+
+
+        /// <summary>
+        /// Manually call the OnGenerationFinish event.
+        /// </summary>
+        [Button("(Clipping Correction) Call Generation End Events", enabledMode: EButtonEnableMode.Editor)]
+        private void CallFinishGenerationEvents()
+        {
+            if(!_useClippingCorrection)
+            {
+                Debug.LogWarning("This should only be used when clipping" +
+                "correction was ON at time of generation.");
+                return;
+            }
+                
+            if(_placedPieces == null || _placedPieces.Count == 0)
+            {
+                Debug.LogWarning("No generated pieces found. Generate a map first!");
+            }
+            OnGenerationFinish.Invoke(_placedPieces.ToArray());
+        }
+       /* private IEnumerator WaitForEditorPhysicsCorrection(float timeToSettle)
+        {
+            float counter = 0;
+            Physics.autoSimulation = false;
+            print(timeToSettle);
+            while(counter < timeToSettle)
+            {
+                Physics.Simulate(Time.fixedDeltaTime);
+                counter++;
+                print("Waiting for editor to settle");
+                yield return null;
+        
+
+            }
+            Physics.autoSimulation = true;
+        }*/
     }
 }
