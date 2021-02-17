@@ -401,7 +401,9 @@ namespace SnapMeshPCG
             }
             while (_guidePiece != null);
 
-            Debug.Log("Generated with seed: " + _currentSeed);
+            Debug.Log($"Generated with Seed: {_currentSeed}.");
+            if(_useClippingCorrection)
+                SimulatePhysics();
             OnGenerationFinish.Invoke(_placedPieces.ToArray());
             return starterPiece;
         }
@@ -461,6 +463,41 @@ namespace SnapMeshPCG
             {
                 DestroyImmediate(obj.gameObject);
             }
+        }
+
+        [Button]
+        private void SimulatePhysics()
+        {
+            Physics.autoSimulation = false;
+            bool settled = false;
+
+/*            do
+            {
+                settled = true;
+                foreach(MapPiece mP in _placedPieces)
+                {
+                    Rigidbody pieceBody = 
+                        mP.gameObject.GetComponent<Rigidbody>();
+                    if(pieceBody = null)
+                    {
+                        pieceBody = mP.GetComponentInChildren<Rigidbody>();
+                    }
+                    if(pieceBody != null)
+                    {
+                        if(pieceBody.velocity.sqrMagnitude >= 0.001f)
+                        {
+                            settled = false;
+                        }
+                        
+                    }
+                    
+                }
+                
+            }while(!settled);*/
+
+            Physics.Simulate(Time.fixedDeltaTime);
+            Physics.autoSimulation = true;
+                
         }
     }
 }
