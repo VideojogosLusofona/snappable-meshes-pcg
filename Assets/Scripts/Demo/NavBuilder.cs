@@ -46,6 +46,10 @@ namespace SnapMeshPCG.Demo
             yield return null;
 
             GameObject topPiece = pieces[0].gameObject;
+            NavMeshSurface unWantedNav = 
+                topPiece.GetComponent<NavMeshSurface>();
+            if(unWantedNav != null)
+                Destroy(unWantedNav);
             NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
 
             print($"Building NavMesh at parent piece: {nav.gameObject.name}");
