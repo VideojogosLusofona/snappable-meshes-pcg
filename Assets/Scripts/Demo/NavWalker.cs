@@ -116,7 +116,7 @@ namespace SnapMeshPCG.Demo
 
         private void GetNewPath()
         {
-            print($"Possible locations: {_possibleSpots.Length}");
+            //print($"Possible locations: {_possibleSpots.Length}");
             _agent.ResetPath();
             Vector3 newCenter = _possibleSpots[Random.Range(0, _possibleSpots.Length)];
             Vector3 newPoint = newCenter + Random.insideUnitSphere * _initialRadius;
