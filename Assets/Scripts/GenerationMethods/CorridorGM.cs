@@ -22,10 +22,10 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class CorridorGM : AbstractGM
     {
-        private readonly int maxPieces;
-        private readonly bool pinchEnd;
-        private readonly bool useEndPiece;
-        private readonly List<MapPiece> enderList;
+        private readonly int maxPieces = 0;
+        private readonly bool pinchEnd = false;
+        private readonly bool useEndPiece = false;
+        private readonly List<MapPiece> enderList = null;
 
         private int _placedPieces;
 

@@ -27,16 +27,13 @@ namespace SnapMeshPCG.Demo
     {
 
         [SerializeField]
-        private int maxScans;
+        private int maxScans = 0;
 
         [SerializeField]
-        private float _initialSearchRadius;
+        private float _initialSearchRadius = 0.0f;
 
         [SerializeField]
-        private float _radiusIncrement;
-
-        [SerializeField]
-        private float _maxIncrements;
+        private float _radiusIncrement = 0.0f;
 
         private List<Vector3> _goodPoints;
         private List<Vector3> _badPoints;

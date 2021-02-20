@@ -22,7 +22,7 @@ namespace SnapMeshPCG.GenerationMethods
     public class StarGMConfig : AbstractGMConfig
     {
         [SerializeField]
-        private uint _spokePieceCount;
+        private uint _spokePieceCount = 0;
 
         [SerializeField]
         private int _spokeSizeVariance = 0;

@@ -22,16 +22,13 @@ namespace SnapMeshPCG.GenerationMethods
     public class BranchGMConfig : AbstractGMConfig
     {
         [SerializeField]
-        private uint _branchCount;
+        private uint _branchCount = 0;
 
         [SerializeField]
-        private uint _branchPieceCount;
+        private uint _branchPieceCount = 0;
 
         [SerializeField]
         private int _branchSizeVariance = 0;
-
-        [SerializeField]
-        private uint PieceSkippingVariance = 0;
 
         // Don't expose this to have branch calculate the jumping
         private uint _branchGenPieceSkipping = 0;

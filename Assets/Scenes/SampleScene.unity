@@ -399,7 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fc937f04f710b4995ae0294abdb68d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _piecesForGeneration: []
   _piecesList:
   - {fileID: 1250729121890872323, guid: f0266bf901b0a604b837b204d09c9d38, type: 3}
   - {fileID: 4550082696110050862, guid: 32b2d89e1d2927449af147bc2e3992d2, type: 3}
@@ -408,7 +407,7 @@ MonoBehaviour:
   - {fileID: 5159214311195075065, guid: 70f2ddc65f4aba247aa26369016e8fed, type: 3}
   _useStarter: 0
   _startingPieceList: []
-  _useSeed: 0
+  _useSeed: 1
   _seed: 1234
   _useClippingCorrection: 0
   _pieceDistance: 0.0001
@@ -420,6 +419,8 @@ MonoBehaviour:
   _maxFailures: 10
   _starterConTol: 0
   _autoCreate: 1
+  maxDropHeight: 40
+  maxJumpDistance: 40
   OnGenerationBegin:
     m_PersistentCalls:
       m_Calls: []
@@ -669,4 +670,3 @@ MonoBehaviour:
   maxScans: 400
   _initialSearchRadius: 10
   _radiusIncrement: 5
-  _maxIncrements: 6

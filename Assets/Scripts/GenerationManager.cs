@@ -37,6 +37,7 @@ namespace SnapMeshPCG
         private const string connectionParams = ":: Connection parameters ::";
         private const string generationParams = ":: Generation parameters ::";
         private const string testingParams = ":: Testing parameters ::";
+        private const string navMeshParams = ":: NavMesh parameters ::";
         private const string events = ":: Events ::";
 
         // ////////////////// //
@@ -44,24 +45,20 @@ namespace SnapMeshPCG
         // ////////////////// //
 
         [BoxGroup(contentParams)]
-        [SerializeField]
-        private List<MapPiece> _piecesForGeneration;
-
-        [BoxGroup(contentParams)]
         [ReorderableList]
         [SerializeField]
-        private List<MapPiece> _piecesList;
+        private List<MapPiece> _piecesList = null;
 
         [BoxGroup(contentParams)]
         [Label("Use Starter Piece List")]
         [SerializeField]
-        private bool _useStarter;
+        private bool _useStarter = false;
 
         [BoxGroup(contentParams)]
         [ReorderableList]
         [SerializeField]
         [ShowIf(nameof(_useStarter))]
-        private List<MapPiece> _startingPieceList;
+        private List<MapPiece> _startingPieceList = null;
 
         // //////////////// //
         // World parameters //
@@ -69,12 +66,12 @@ namespace SnapMeshPCG
 
         [BoxGroup(worldParams)]
         [SerializeField]
-        private bool _useSeed;
+        private bool _useSeed = false;
 
         [BoxGroup(worldParams)]
         [SerializeField]
         [ShowIf(nameof(_useSeed))]
-        private int _seed;
+        private int _seed = 0;
 
         [BoxGroup(worldParams)]
         [SerializeField]
@@ -91,7 +88,7 @@ namespace SnapMeshPCG
         [BoxGroup(connectionParams)]
         [SerializeField]
         [EnumFlags]
-        private SnapRules _matchingRules;
+        private SnapRules _matchingRules = SnapRules.None;
 
         [BoxGroup(connectionParams)]
         [SerializeField]
@@ -100,7 +97,7 @@ namespace SnapMeshPCG
         [BoxGroup(connectionParams)]
         [SerializeField]
         [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
-        private Array2DBool _colorMatrix;
+        private Array2DBool _colorMatrix = null;
 
         // ///////////////////// //
         // Generation parameters //
@@ -125,7 +122,7 @@ namespace SnapMeshPCG
         [BoxGroup(generationParams)]
         [Label("Starter Connector Count Tolerance")]
         [SerializeField]
-        private uint _starterConTol;
+        private uint _starterConTol = 0;
 
         // ////////////////// //
         // Testing parameters //
@@ -135,6 +132,10 @@ namespace SnapMeshPCG
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
+        [SerializeField, BoxGroup(navMeshParams)]
+        private float   maxDropHeight = 40.0f;
+        [SerializeField, BoxGroup(navMeshParams)]
+        private float   maxJumpDistance = 40.0f;
 
         // ////// //
         // Events //
@@ -142,15 +143,15 @@ namespace SnapMeshPCG
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent OnGenerationBegin;
+        private UnityEvent OnGenerationBegin = null;
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent<MapPiece[]> OnGenerationFinish;
+        private UnityEvent<MapPiece[]> OnGenerationFinish = null;
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent<MapPiece> OnConnectionMade;
+        private UnityEvent<MapPiece> OnConnectionMade = null;
 
         // ///////////////////////////////////// //
         // Instance variables not used in editor //

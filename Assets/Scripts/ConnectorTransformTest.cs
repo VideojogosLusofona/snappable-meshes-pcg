@@ -23,15 +23,13 @@ namespace SnapMeshPCG
     public class ConnectorTransformTest : MonoBehaviour
     {
         //This is the Transform of the second GameObject
-        private Transform otherPiece;
+        private Transform otherPiece = null;
 
-        private Transform otherConnector;
+        private Transform otherConnector = null;
 
         private Quaternion _myQuaternion;
 
-        private float _speed = 1.0f;
-
-        private GameObject myConnector;
+        private GameObject myConnector = null;
 
         private void Start()
         {

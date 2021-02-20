@@ -27,10 +27,10 @@ namespace SnapMeshPCG.Demo
     [RequireComponent(typeof(NavMeshSurface))]
     public class NavBuilder : MonoBehaviour
     {
-        [SerializeField] private NavWalker demoCharacter;
+        [SerializeField] private NavWalker demoCharacter = null;
         [Foldout(":: Events ::")]
         [SerializeField]
-        private UnityEvent<MapPiece[]> OnNavMeshReady;
+        private UnityEvent<MapPiece[]> OnNavMeshReady = null;
 
         public void BuildNavMesh(MapPiece[] pieces)
         {

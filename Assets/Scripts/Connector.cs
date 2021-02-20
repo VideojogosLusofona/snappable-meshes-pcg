@@ -36,7 +36,7 @@ namespace SnapMeshPCG
         private bool isUsed;
 
         [SerializeField]
-        private ConnectorColor connColor;
+        private ConnectorColor connColor = ConnectorColor.WHITE;
 
         // Number of pins in this connector
         [SerializeField]
@@ -49,7 +49,7 @@ namespace SnapMeshPCG
         private float _gizmoTransparency = 1;
 
         [OnValueChanged("OnLooksChanged")] [SerializeField]
-        private ConnectorVisual _gizmoLooks;
+        private ConnectorVisual _gizmoLooks = ConnectorVisual.WIREFRAME;
 
         /// <summary>
         /// Number of pins in this connector.

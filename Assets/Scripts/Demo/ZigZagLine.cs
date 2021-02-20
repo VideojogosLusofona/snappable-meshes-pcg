@@ -6,15 +6,14 @@ namespace SnapMeshPCG.Demo
     [RequireComponent(typeof(LineRenderer))]
     public class ZigZagLine : MonoBehaviour
     {
-        [SerializeField] private int points;
+        [SerializeField] private int points = 0;
 
-        [SerializeField] private float pointVariation;
-        [SerializeField] private float  lineLength;
-        [SerializeField] private float  duration;
+        [SerializeField] private float pointVariation = 0.0f;
+        [SerializeField] private float  lineLength = 0.0f;
 
-        private float widthFactor;
-        private float widthCurrentVal;
-        [SerializeField] private float witdthMaxVal;
+        private float widthFactor = 0.0f;
+        private float widthCurrentVal = 0.0f;
+        [SerializeField] private float witdthMaxVal = 0.0f;
         private Vector3 _start;
         private Vector3 _end;
         LineRenderer lineRenderer;

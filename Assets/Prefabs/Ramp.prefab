@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3041616187789032354}
   - component: {fileID: 9109512191895755785}
-  - component: {fileID: 3179357731346123568}
-  - component: {fileID: 7214728298954276549}
   m_Layer: 0
   m_Name: Ramp
   m_TagString: Untagged
@@ -51,46 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577b0b5e3d196aa49944d107d4bbcc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3179357731346123568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621868028298110381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -2.5392141, y: 5.6009407, z: -1.6908737}
-  m_EndPoint: {x: -2.5021245, y: -4.2315154, z: -4.144704}
-  m_Width: 1.7214063
-  m_CostModifier: -1
-  m_Bidirectional: 0
-  m_AutoUpdatePosition: 1
-  m_Area: 2
---- !u!114 &7214728298954276549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621868028298110381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -2.5392141, y: 5.6009407, z: 1.5717552}
-  m_EndPoint: {x: -2.5021245, y: -4.2315154, z: 5.01}
-  m_Width: 1.7214063
-  m_CostModifier: -1
-  m_Bidirectional: 0
-  m_AutoUpdatePosition: 1
-  m_Area: 2
 --- !u!1 &914299764027315207
 GameObject:
   m_ObjectHideFlags: 0

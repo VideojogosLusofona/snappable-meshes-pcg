@@ -22,9 +22,9 @@ using SnapMeshPCG;
 public class GenerationAnimator : MonoBehaviour
 {
 
-    [SerializeField] private float moveIntoPlaceTime;
-    [SerializeField] private float height;
-     [SerializeField] private float waitBetweenPieces;
+    [SerializeField] private float moveIntoPlaceTime = 0.0f;
+    [SerializeField] private float height = 0.0f;
+     [SerializeField] private float waitBetweenPieces = 0.0f;
 
 
     public void AnimateConstruction(MapPiece[] pieces)
