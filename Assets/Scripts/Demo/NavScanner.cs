@@ -37,6 +37,7 @@ namespace SnapMeshPCG.Demo
 
         private List<Vector3> _goodPoints;
         private List<Vector3> _badPoints;
+
         public void ScanMesh(MapPiece[] map)
         {
             _goodPoints = new List<Vector3>();

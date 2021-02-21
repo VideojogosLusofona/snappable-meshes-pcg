@@ -175,9 +175,6 @@ namespace SnapMeshPCG
         // Pieces placed in the map
         private List<MapPiece> _placedPieces;
 
-        //
-        private IList<List<MapPiece>> _sortedPieces;
-
         // Already placed piece being used to judge others
         private MapPiece _guidePiece;
 
@@ -309,9 +306,6 @@ namespace SnapMeshPCG
             // connectors
             _maxConnectors = _piecesWorkList[0].ConnectorCount;
 
-            // Separate pieces into separate lists based on largest group
-            _sortedPieces = SplitList();
-
             // Initialize list of pieces already placed in the map
             _placedPieces = new List<MapPiece>();
 
@@ -355,19 +349,7 @@ namespace SnapMeshPCG
                     int rng;
 
                     rng = Random.Range(0, _piecesWorkList.Count);
-/*                    // Check what list of the sorted list the selected belongs to
-                    int myPieceList = Random.Range(0, _sortedPieces.Count);
 
-                    if (_sortedPieces[myPieceList].Count != 0)
-                    {
-                        rng = Random.Range(0, _sortedPieces[myPieceList].Count);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    _tentativePiece = _sortedPieces[myPieceList][rng];*/
                     _tentativePiece = _piecesWorkList[rng];
 
                     GameObject spawnedPiece =
