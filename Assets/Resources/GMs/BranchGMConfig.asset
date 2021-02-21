@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _branchCount: 4
   _branchPieceCount: 12
-  _branchSizeVariance: 0
+  _branchSizeVariance: 4

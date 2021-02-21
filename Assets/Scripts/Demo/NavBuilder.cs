@@ -51,6 +51,7 @@ namespace SnapMeshPCG.Demo
             if(unWantedNav != null)
                 Destroy(unWantedNav);
             NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
+            nav.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
 
             print($"Building NavMesh at parent piece: {nav.gameObject.name}");
             nav.BuildNavMesh();

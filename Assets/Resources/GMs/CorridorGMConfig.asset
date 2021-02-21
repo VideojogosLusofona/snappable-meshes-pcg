@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71daa17b3bc3926a09ad5a62df9785b4, type: 3}
   m_Name: CorridorGMConfig
   m_EditorClassIdentifier: 
-  _maxPieceCount: 20
+  _maxPieceCount: 24
