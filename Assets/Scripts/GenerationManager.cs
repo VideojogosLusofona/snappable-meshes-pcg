@@ -283,7 +283,7 @@ namespace SnapMeshPCG
             if (_useSeed)
                 _currentSeed = _seed;
             else
-                _currentSeed = System.DateTime.Now.Millisecond;
+                _currentSeed = (int)System.DateTime.Now.Ticks;
 
             // Initialize random number generator
             Random.InitState(_currentSeed);
@@ -346,9 +346,7 @@ namespace SnapMeshPCG
                 // Pick a tentative piece to evaluate against our guide piece
                 while (true)
                 {
-                    int rng;
-
-                    rng = Random.Range(0, _piecesWorkList.Count);
+                    int rng = Random.Range(0, _piecesWorkList.Count);
 
                     _tentativePiece = _piecesWorkList[rng];
 
