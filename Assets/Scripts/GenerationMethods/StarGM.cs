@@ -21,13 +21,13 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class StarGM : AbstractGM
     {
-        private readonly int spokeLength;
-        private readonly int spokeLengthVariance;
+        private readonly int armLength;
+        private readonly int armLengthVariance;
 
-        public StarGM(int spokeLength, int spokeLengthVariance)
+        public StarGM(int armLength, int armLengthVariance)
         {
-            this.spokeLength = spokeLength;
-            this.spokeLengthVariance = spokeLengthVariance;
+            this.armLength = armLength;
+            this.armLengthVariance = armLengthVariance;
         }
 
         public override MapPiece SelectStartPiece(
@@ -58,20 +58,20 @@ namespace SnapMeshPCG.GenerationMethods
         public override MapPiece SelectGuidePiece(
             List<MapPiece> worldPieceList, MapPiece lastPlaced)
         {
-            int rng = UnityEngine.Random.Range(0, spokeLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, armLengthVariance + 1);
             int chosenVar = rng;
             int[] mults = { -1, 1 };
             rng = UnityEngine.Random.Range(0, mults.Length);
             int chosenMult = mults[rng];
-            int currentSpokeLength = spokeLength + (chosenVar * chosenMult);
+            int currentArmLength = armLength + (chosenVar * chosenMult);
 
             // Check if its time to jump back to the starter piece.
             // -1 takes out the starter piece from the equation.
-            if ((worldPieceList.Count - 1) % currentSpokeLength == 0)
+            if ((worldPieceList.Count - 1) % currentArmLength == 0)
             {
-                // A number of pieces equal to the spokeLength have been placed
+                // A number of pieces equal to the armLength have been placed
                 // Return the first piece if it still has unused connectors
-                return (worldPieceList[0].IsFull()) ? null : worldPieceList[0];
+                return worldPieceList[0].IsFull() ? null : worldPieceList[0];
             }
 
          _lastGuideSelected = lastPlaced;

@@ -419,8 +419,6 @@ MonoBehaviour:
   _maxFailures: 10
   _starterConTol: 0
   _autoCreate: 1
-  maxDropHeight: 40
-  maxJumpDistance: 40
   OnGenerationBegin:
     m_PersistentCalls:
       m_Calls: []
