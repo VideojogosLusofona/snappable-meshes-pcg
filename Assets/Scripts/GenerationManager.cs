@@ -81,6 +81,14 @@ namespace SnapMeshPCG
         [SerializeField]
         private float _pieceDistance = 0.0001f;
 
+        [BoxGroup(worldParams)]
+        [SerializeField]
+        private bool _intersectionTests;
+
+        [BoxGroup(worldParams), ShowIf("_intersectionTests")]
+        [SerializeField]
+        private LayerMask _collidersLayer;
+
         // ///////////////////// //
         // Connection parameters //
         // ///////////////////// //
@@ -346,7 +354,8 @@ namespace SnapMeshPCG
                 {
                     int rng;
 
-                    // Check what list of the sorted list the selected belongs to
+                    rng = Random.Range(0, _piecesWorkList.Count);
+/*                    // Check what list of the sorted list the selected belongs to
                     int myPieceList = Random.Range(0, _sortedPieces.Count);
 
                     if (_sortedPieces[myPieceList].Count != 0)
@@ -358,7 +367,8 @@ namespace SnapMeshPCG
                         continue;
                     }
 
-                    _tentativePiece = _sortedPieces[myPieceList][rng];
+                    _tentativePiece = _sortedPieces[myPieceList][rng];*/
+                    _tentativePiece = _piecesWorkList[rng];
 
                     GameObject spawnedPiece =
                         _tentativePiece.ClonePiece(_useClippingCorrection);
@@ -367,6 +377,8 @@ namespace SnapMeshPCG
 
                     (bool valid, Transform trn) evaluationResult =
                         _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
+                        _intersectionTests,
+                        _collidersLayer,
                         _pieceDistance,
                         _pinCountTolerance,
                         _colorMatrix.GetCells());
@@ -388,7 +400,9 @@ namespace SnapMeshPCG
                         if (Application.isPlaying)
                             Destroy(spawnedPiece);
                         else
+                        {
                             DestroyImmediate(spawnedPiece);
+                        }
                         failureCount++;
                         if (failureCount > _maxFailures)
                             break;
@@ -404,7 +418,7 @@ namespace SnapMeshPCG
                 // Trying to find a piece failed, just quit the algorithm in this case
                 if (failureCount > _maxFailures)
                 {
-                    Debug.Log("Couldn't find a valid piece to connect to the guide piece.");
+                    Debug.Log("Couldn't find a valid piece to connect to the guide piece (" + _guidePiece.name + ")");
                     Debug.Log("Exiting early...");
                     break;
                 }
@@ -412,7 +426,35 @@ namespace SnapMeshPCG
             while (_guidePiece != null);
 
             Debug.Log($"Generated with Seed: {_currentSeed}.");
-        
+
+            if (_intersectionTests)
+            {
+                // Remove all colliders used for the generation process
+                BoxCollider[] boxColliders = FindObjectsOfType<BoxCollider>();
+                foreach (var boxCollider in boxColliders)
+                {
+                    if (boxCollider == null) continue;
+
+                    if (((1 << boxCollider.gameObject.layer) & (_collidersLayer.value)) != 0)
+                    {
+                        GameObject go = boxCollider.gameObject;
+
+                        if (Application.isPlaying)
+                            Destroy(boxCollider);
+                        else
+                            DestroyImmediate(boxCollider);
+
+                        if (go.GetComponents<Component>().Length == 1)
+                        {
+                            // Object was just a container for the box colliders, delete it
+                            if (Application.isPlaying)
+                                Destroy(go);
+                            else
+                                DestroyImmediate(go);
+                        }
+                    }
+                }
+            }
             
             if(Application.isPlaying)
             {

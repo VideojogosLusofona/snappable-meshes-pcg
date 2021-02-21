@@ -74,6 +74,8 @@ namespace SnapMeshPCG
             return clonedPiece.gameObject;
         }
 
+        static int interError = 0;
+
         /// <summary>
         ///
         /// </summary>
@@ -85,16 +87,13 @@ namespace SnapMeshPCG
         /// <returns></returns>
         public (bool valid, Transform positionRot) EvaluatePiece(
             SnapRules rules, MapPiece other,
+            bool intersectionTest, LayerMask intersectionLayer,
             float pieceDistance = 0.00f, uint groupTolerance = 0,
             bool[,] colorMatrix = null)
         {
 
             List<(Connector mine, Connector oth)> possibleCombos =
                 new List<(Connector mine, Connector oth)>();
-
-            // Check for intersecting geometry?
-            // Spawn the piece and have it tell if the trigger collider
-            // reports back? ...but what if the piece is not all in one mesh?
 
             foreach (Connector co in other._Connectors)
             {
@@ -127,40 +126,82 @@ namespace SnapMeshPCG
                 }
             }
 
-            if (possibleCombos.Count > 0)
+            while (possibleCombos.Count > 0)
             {
-                (Connector chosenMine, Connector chosenOther) chosenCombo =
-                    possibleCombos[UnityEngine.Random.Range(0, possibleCombos.Count)];
+                int chosenIndex = UnityEngine.Random.Range(0, possibleCombos.Count);
 
-                Connector.Match(chosenCombo.chosenMine, chosenCombo.chosenOther);
+                (Connector chosenMine, Connector chosenOther) chosenCombo =
+                    possibleCombos[chosenIndex];
+
+                var prevPos = other.transform.position;
+                var prevRot = other.transform.rotation;
+                var prevScale = other.transform.localScale;
 
                 Transform trn = TransformPiece(
                     chosenCombo.chosenMine, chosenCombo.chosenOther,
                     other, pieceDistance);
 
-                // Check if there is an intersection with the existing geometry, 
-                // using this transform
-                Bounds candidatePieceBound = GetBoundsFromMeshRenderers(other);
-                if (candidatePieceBound.size.magnitude > 0.1f)
+                Physics.SyncTransforms();
+
+                if (intersectionTest)
                 {
-                    // Valid bound, check with all the other existing map pieces
-                    MapPiece[] pieces = GameObject.FindObjectsOfType<MapPiece>();
-                    foreach (var piece in pieces)
+                    // Check if there is an intersection with the existing geometry, 
+                    // using this transform
+                    bool    intersection = false;
+                    var     candidateBoxColliders = GetBoxColliders(other, intersectionLayer);
+
+                    foreach (var boxCollider in candidateBoxColliders)
                     {
-                        // If it's the part itself, ignore it
-                        if (piece.gameObject == other.gameObject) continue;
-                        // If it's the piece we're connecting to, ignore it
-                        if (piece.gameObject == gameObject) continue;
+                        Vector3 center = boxCollider.center + boxCollider.transform.position;
+                        Vector3 extents = new Vector3(0.5f * boxCollider.size.x * boxCollider.transform.lossyScale.x,
+                                                      0.5f * boxCollider.size.y * boxCollider.transform.lossyScale.y,
+                                                      0.5f * boxCollider.size.z * boxCollider.transform.lossyScale.z);
 
-                        Bounds otherBound = GetBoundsFromMeshRenderers(piece);
-
-                        if (otherBound.Intersects(candidatePieceBound))
+                        var hits = Physics.OverlapBox(center, extents, boxCollider.transform.rotation, intersectionLayer);
+                        
+                        foreach (var hit in hits)
                         {
-                            // Bounds are intersecting, return invalid piece
-                            return (false, null);
+                            // Check for self intersection, or intersection with the connected piece
+                            // Ignore the collision in those cases
+                            MapPiece parentMapPiece = hit.GetComponentInParent<MapPiece>();
+                            if ((parentMapPiece == other) ||
+                                (parentMapPiece == this)) continue;
+
+#if DEBUG_INTERSECTION
+                            Debug.Log("Can't connect " + name + " with " + other.name);
+                            Debug.Log("Connector " + chosenCombo.chosenMine.name + " / " + chosenCombo.chosenOther.name);
+                            Debug.Log("Intersection detected with " + parentMapPiece.name);
+
+                            // Create a copy for later debug
+                            MapPiece newObject = Instantiate(other);
+                            newObject.name = "IntersectionError " + (interError++);
+                            newObject.transform.position += Vector3.up * 20;
+                            newObject.transform.SetParent(null);
+                            newObject.gameObject.SetActive(false);
+                            Debug.Log("New object = " + newObject.name);
+#endif
+
+                            // It auto-intersects, so remove this possibility and retry
+                            possibleCombos.Remove(chosenCombo);
+
+                            intersection = true;
+                            break;
                         }
+
+                        if (intersection) break;
+                    }
+
+                    if (intersection)
+                    {
+                        // Undo transform, so we can do it again...
+                        other.transform.position = prevPos;
+                        other.transform.rotation = prevRot;
+                        other.transform.localScale = prevScale;
+                        continue;
                     }
                 }
+
+                Connector.Match(chosenCombo.chosenMine, chosenCombo.chosenOther);
 
                 return (true, trn);
             }
@@ -250,24 +291,26 @@ namespace SnapMeshPCG
         }
 
         /// <summary>
-        /// Retrieves the bounds of the given piece
+        /// Retrieves the box colliders of the appropriate layer
+        /// for the given piece
         /// </summary>
-        private static Bounds GetBoundsFromMeshRenderers(MapPiece piece)
+        static List<BoxCollider> GetBoxColliders(MapPiece go, LayerMask mask)
         {
-            MeshRenderer[] meshRenderers = piece.GetComponentsInChildren<MeshRenderer>();
-            if (meshRenderers.Length == 0) return new Bounds();
+            List<BoxCollider> ret = new List<BoxCollider>();
 
-            Bounds bounds = meshRenderers[0].bounds;
-            foreach (var meshRenderer in meshRenderers)
+            BoxCollider[] colliders = go.GetComponentsInChildren<BoxCollider>();
+
+            foreach (var collider in colliders)
             {
-                Bounds otherBound = meshRenderer.bounds;
-                bounds.Encapsulate(otherBound.min);
-                bounds.Encapsulate(otherBound.max);
+                if ((mask.value & (1 << collider.gameObject.layer)) != 0)
+                {
+                    ret.Add(collider);
+                }
             }
 
-            return bounds;
+            return ret;
         }
-
+        
         /// <summary>
         /// Initializes the connectors.
         /// </summary>
