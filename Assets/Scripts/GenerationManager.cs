@@ -132,10 +132,6 @@ namespace SnapMeshPCG
         [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
         [SerializeField]
         private bool _autoCreate = false;
-        [SerializeField, BoxGroup(navMeshParams)]
-        private float   maxDropHeight = 40.0f;
-        [SerializeField, BoxGroup(navMeshParams)]
-        private float   maxJumpDistance = 40.0f;
 
         // ////// //
         // Events //
