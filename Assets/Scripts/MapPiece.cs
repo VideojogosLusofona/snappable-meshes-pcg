@@ -138,6 +138,30 @@ namespace SnapMeshPCG
                     chosenCombo.chosenMine, chosenCombo.chosenOther,
                     other, pieceDistance);
 
+                // Check if there is an intersection with the existing geometry, 
+                // using this transform
+                Bounds candidatePieceBound = GetBoundsFromMeshRenderers(other);
+                if (candidatePieceBound.size.magnitude > 0.1f)
+                {
+                    // Valid bound, check with all the other existing map pieces
+                    MapPiece[] pieces = GameObject.FindObjectsOfType<MapPiece>();
+                    foreach (var piece in pieces)
+                    {
+                        // If it's the part itself, ignore it
+                        if (piece.gameObject == other.gameObject) continue;
+                        // If it's the piece we're connecting to, ignore it
+                        if (piece.gameObject == gameObject) continue;
+
+                        Bounds otherBound = GetBoundsFromMeshRenderers(piece);
+
+                        if (otherBound.Intersects(candidatePieceBound))
+                        {
+                            // Bounds are intersecting, return invalid piece
+                            return (false, null);
+                        }
+                    }
+                }
+
                 return (true, trn);
             }
             return (false, null);
@@ -223,6 +247,25 @@ namespace SnapMeshPCG
             {
                 rb.isKinematic = true;
             }
+        }
+
+        /// <summary>
+        /// Retrieves the bounds of the given piece
+        /// </summary>
+        private static Bounds GetBoundsFromMeshRenderers(MapPiece piece)
+        {
+            MeshRenderer[] meshRenderers = piece.GetComponentsInChildren<MeshRenderer>();
+            if (meshRenderers.Length == 0) return new Bounds();
+
+            Bounds bounds = meshRenderers[0].bounds;
+            foreach (var meshRenderer in meshRenderers)
+            {
+                Bounds otherBound = meshRenderer.bounds;
+                bounds.Encapsulate(otherBound.min);
+                bounds.Encapsulate(otherBound.max);
+            }
+
+            return bounds;
         }
 
         /// <summary>

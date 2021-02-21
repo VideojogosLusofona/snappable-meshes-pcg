@@ -129,6 +129,12 @@ namespace SnapMeshPCG.Demo
 
         }
 
+        public void ClearScanner()
+        {
+            _goodPoints = null;
+            _badPoints = null;
+        }
+
         private void OnDrawGizmos() 
         {
             // GIZMOS stay on after pressing clear on generator

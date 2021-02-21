@@ -149,6 +149,10 @@ namespace SnapMeshPCG
         [SerializeField]
         private UnityEvent<MapPiece> OnConnectionMade = null;
 
+        [Foldout(events)]
+        [SerializeField]
+        private UnityEvent OnGenerationClear = null;
+
         // ///////////////////////////////////// //
         // Instance variables not used in editor //
         // ///////////////////////////////////// //
@@ -396,6 +400,14 @@ namespace SnapMeshPCG
 
                     break;
                 } // select tentative piece
+
+                // Trying to find a piece failed, just quit the algorithm in this case
+                if (failureCount > _maxFailures)
+                {
+                    Debug.Log("Couldn't find a valid piece to connect to the guide piece.");
+                    Debug.Log("Exiting early...");
+                    break;
+                }
             }
             while (_guidePiece != null);
 
@@ -473,6 +485,7 @@ namespace SnapMeshPCG
             {
                 DestroyImmediate(obj.gameObject);
             }
+            OnGenerationClear.Invoke();
         }
 
         /// <summary>
