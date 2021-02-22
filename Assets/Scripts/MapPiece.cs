@@ -74,10 +74,12 @@ namespace SnapMeshPCG
             return clonedPiece.gameObject;
         }
 
-        static int interError = 0;
+#if DEBUG_INTERSECTION
+        private static int interError = 0;
+#endif
 
         /// <summary>
-        ///
+        /// Evaluate piece.
         /// </summary>
         /// <param name="rules"></param>
         /// <param name="other"></param>
@@ -145,7 +147,7 @@ namespace SnapMeshPCG
 
                 if (intersectionTest)
                 {
-                    // Check if there is an intersection with the existing geometry, 
+                    // Check if there is an intersection with the existing geometry,
                     // using this transform
                     bool    intersection = false;
                     var     candidateBoxColliders = GetBoxColliders(other, intersectionLayer);
@@ -158,7 +160,7 @@ namespace SnapMeshPCG
                                                       0.5f * boxCollider.size.z * boxCollider.transform.lossyScale.z);
 
                         var hits = Physics.OverlapBox(center, extents, boxCollider.transform.rotation, intersectionLayer);
-                        
+
                         foreach (var hit in hits)
                         {
                             // Check for self intersection, or intersection with the connected piece
@@ -310,7 +312,7 @@ namespace SnapMeshPCG
 
             return ret;
         }
-        
+
         /// <summary>
         /// Initializes the connectors.
         /// </summary>
