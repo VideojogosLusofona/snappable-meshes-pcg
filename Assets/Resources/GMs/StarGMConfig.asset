@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 549561f7f0a4036b59b26ad501f5062a, type: 3}
   m_Name: StarGMConfig
   m_EditorClassIdentifier: 
-  _armPieceCount: 5
-  armSizeVariance: 2
+  _armPieceCount: 8
+  armSizeVariance: 0

@@ -399,7 +399,7 @@ namespace SnapMeshPCG
                 if (failureCount > _maxFailures)
                 {
                     Debug.Log("Couldn't find a valid piece to connect to the guide piece (" + _guidePiece.name + ")");
-                    Debug.Log("Exiting early...");
+                    Debug.Log($"Exiting early with {_placedPieces.Count} placed pieces... ");
                     break;
                 }
             }
