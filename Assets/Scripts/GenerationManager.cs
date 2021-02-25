@@ -343,7 +343,7 @@ namespace SnapMeshPCG
             {
                 int failCount = 0;
 
-                (bool valid, Transform trn) evaluationResult;
+                bool evaluationResult;
 
                 // Pick a tentative piece to evaluate against our guide piece
                 do
@@ -368,7 +368,7 @@ namespace SnapMeshPCG
 
                     // If things worked out, spawn the piece in the correct
                     // position
-                    if (evaluationResult.valid)
+                    if (evaluationResult)
                     {
                         placement++;
                         spawnedPiece.name += $" - {placement}";
@@ -393,7 +393,7 @@ namespace SnapMeshPCG
                         failCount++;
                     }
                 }
-                while (failCount < _maxFailures && !evaluationResult.valid);
+                while (failCount < _maxFailures && !evaluationResult);
 
                 // Trying to find a piece failed, just quit the algorithm in this case
                 if (failCount >= _maxFailures)

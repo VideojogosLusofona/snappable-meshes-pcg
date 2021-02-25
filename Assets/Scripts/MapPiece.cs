@@ -79,68 +79,94 @@ namespace SnapMeshPCG
 #endif
 
         /// <summary>
-        /// Evaluate piece.
+        /// Evaluate a piece for possible connection with the current piece.
         /// </summary>
-        /// <param name="rules"></param>
-        /// <param name="other"></param>
-        /// <param name="pieceDistance"></param>
-        /// <param name="groupTolerance"></param>
-        /// <param name="colorMatrix"></param>
+        /// <param name="rules">Current matching rules.</param>
+        /// <param name="other">
+        /// The piece to check for possible connection with.
+        /// </param>
+        /// <param name="intersectionTest">Perform an intersection test?</param>
+        /// <param name="intersectionLayer">
+        /// Intersection layer to use if <paramref name="intersectionTest"/> is
+        /// true.
+        /// </param>
+        /// <param name="pieceDistance">
+        /// Distance between two connected connectors.
+        /// </param>
+        /// <param name="pinTolerance">
+        /// Maximum allowed difference between pin counts in two connectors to
+        /// allow them to be paired up.
+        /// </param>
+        /// <param name="colorMatrix">
+        /// Valid color combinations for matching connectors.
+        /// </param>
         /// <returns></returns>
-        public (bool valid, Transform positionRot) EvaluatePiece(
+        public bool EvaluatePiece(
             SnapRules rules, MapPiece other,
             bool intersectionTest, LayerMask intersectionLayer,
-            float pieceDistance = 0.00f, uint groupTolerance = 0,
+            float pieceDistance = 0.00f, uint pinTolerance = 0,
             bool[,] colorMatrix = null)
         {
 
-            List<(Connector mine, Connector oth)> possibleCombos =
-                new List<(Connector mine, Connector oth)>();
+            // List of valid connector combinations
+            List<(Connector curr, Connector other)> validCombos =
+                new List<(Connector curr, Connector other)>();
 
+            // Check compatibility between connectors of current piece and of
+            // the other piece
             foreach (Connector co in other._Connectors)
             {
-                foreach (Connector ct in _Connectors)
+                foreach (Connector cc in _Connectors)
                 {
-                    // Match criteria
-                    if (!co.IsUsed && !ct.IsUsed)
+                    // Only check for matching if both connectors are unused
+                    if (!co.IsUsed && !cc.IsUsed)
                     {
+                        // By default we assume there's a pin match and a color
+                        // match
                         bool pinMatch = true;
                         bool colorMatch = true;
 
                         // If we're using pins count as criteria, check pins
                         if (rules.UsePins())
                         {
-                            pinMatch = Mathf.Abs(co.Pins - ct.Pins) <= groupTolerance;
+                            // Pin match is verified if the pin difference
+                            // between connectors is below the pin tolerance
+                            pinMatch = Mathf.Abs(co.Pins - cc.Pins) <= pinTolerance;
                         }
 
                         // If we're using colour as criteria, check colour matrix
                         if (rules.UseColours())
                         {
+                            // Get the validity of the connectors color
+                            // combination from the color matrix
                             colorMatch =
-                                colorMatrix?[(int)ct.ConnColor, (int)co.ConnColor]
+                                colorMatrix?[(int)cc.ConnColor, (int)co.ConnColor]
                                 ?? true;
                         }
 
-                        // If we have a match, then this is a possible connection
-                        if (pinMatch && colorMatch)
-                            possibleCombos.Add((ct, co));
+                        // If we have a match, then this is a valid connection
+                        if (pinMatch && colorMatch) validCombos.Add((cc, co));
                     }
                 }
             }
 
-            while (possibleCombos.Count > 0)
+            // Try and find a TODO
+            while (validCombos.Count > 0)
             {
-                int chosenIndex = UnityEngine.Random.Range(0, possibleCombos.Count);
+                // Get a random connection from the valid connections list
+                int chosenIndex = UnityEngine.Random.Range(0, validCombos.Count);
 
-                (Connector chosenMine, Connector chosenOther) chosenCombo =
-                    possibleCombos[chosenIndex];
+                // Get connectors from the randomly selected connection
+                (Connector curr, Connector other) chosenCombo =
+                    validCombos[chosenIndex];
 
-                var prevPos = other.transform.position;
-                var prevRot = other.transform.rotation;
-                var prevScale = other.transform.localScale;
+                // Get PRS components from the other piece
+                Vector3 prevPos = other.transform.position;
+                Quaternion prevRot = other.transform.rotation;
+                Vector3 prevScale = other.transform.localScale;
 
-                Transform trn = TransformPiece(
-                    chosenCombo.chosenMine, chosenCombo.chosenOther,
+                TransformPiece(
+                    chosenCombo.curr, chosenCombo.other,
                     other, pieceDistance);
 
                 Physics.SyncTransforms();
@@ -184,7 +210,7 @@ namespace SnapMeshPCG
 #endif
 
                             // It auto-intersects, so remove this possibility and retry
-                            possibleCombos.Remove(chosenCombo);
+                            validCombos.Remove(chosenCombo);
 
                             intersection = true;
                             break;
@@ -203,54 +229,49 @@ namespace SnapMeshPCG
                     }
                 }
 
-                Connector.Match(chosenCombo.chosenMine, chosenCombo.chosenOther);
+                Connector.Match(chosenCombo.curr, chosenCombo.other);
 
-                return (true, trn);
+                return true;
             }
-            return (false, null);
+            return false;
         }
 
         /// <summary>
-        /// Gets the correct position and rotation of the other piece so its
-        /// connector group matches this piece's.
+        /// Determine the correct position and rotation of the other piece so
+        /// its connector matches this piece's connector.
         /// </summary>
-        /// <param name="myConnectorGroup"></param>
-        /// <param name="otherConnectorGroup"></param>
-        /// <param name="otherPiece"></param>
-        /// <returns></returns>
-        private Transform TransformPiece(Connector myConnectorGroup,
-            Connector otherConnectorGroup, MapPiece otherPiece, float offset)
+        /// <param name="currConn">This piece's connector.</param>
+        /// <param name="otherConn">The other piece's connector.</param>
+        /// <param name="otherPiece">The other piece.</param>
+        /// <param name="pieceDistance">
+        /// Distance between two connected connectors.
+        /// </param>
+        private void TransformPiece(Connector currConn,
+            Connector otherConn, MapPiece otherPiece, float pieceDistance)
         {
+            // Get the transform of the other piece's connector
+            Transform otherConnTrnsf = otherConn.transform;
 
-            Transform newPieceTrn = otherConnectorGroup.transform;
-            Quaternion connectorPointRotation = new Quaternion();
+            // Temporarily revert parenting so we can move the connector
+            // and have the geometry follow
+            otherConn.transform.SetParent(null, true);
+            otherPiece.transform.SetParent(otherConn.transform, true);
 
-            // temporarily revert parenting so we can move the connector
-            // group and have the geometry follow.
+            // Put the other piece on the current piece's connector
+            otherConnTrnsf.position = currConn.transform.position;
 
-            otherConnectorGroup.transform.SetParent(null, true);
-            otherPiece.transform.SetParent(otherConnectorGroup.transform, true);
+            // Have the other connector look towards the current piece's connector
+            otherConnTrnsf.rotation =
+                Quaternion.LookRotation(-currConn.Heading, transform.up);
 
-            // Put the other piece on my connector
-            newPieceTrn.position = myConnectorGroup.transform.position;
-
-            // Have the other connector group look towards my connector group
-            connectorPointRotation.SetLookRotation(
-                -myConnectorGroup.Heading,
-                transform.up);
-
-            // Apply the rotation acquired above
-            newPieceTrn.rotation = connectorPointRotation;
-
-            // Move the pieces away from each other based on an offset
-            newPieceTrn.position -= otherConnectorGroup.Heading * offset;
+            // Move the pieces away from each other based on the specified
+            // piece distance
+            otherConnTrnsf.position -= otherConn.Heading * pieceDistance;
 
             // Get the parenting back to normal to safeguard future
             // transformations
             otherPiece.transform.SetParent(null, true);
-            otherConnectorGroup.transform.SetParent(otherPiece.transform, true);
-
-            return newPieceTrn;
+            otherConn.transform.SetParent(otherPiece.transform, true);
         }
 
         /// <summary>
