@@ -79,7 +79,7 @@ namespace SnapMeshPCG
 #endif
 
         /// <summary>
-        /// Evaluate a piece for possible connection with the current piece.
+        /// Try and snap a piece with the current piece.
         /// </summary>
         /// <param name="rules">Current matching rules.</param>
         /// <param name="other">
@@ -100,14 +100,13 @@ namespace SnapMeshPCG
         /// <param name="colorMatrix">
         /// Valid color combinations for matching connectors.
         /// </param>
-        /// <returns></returns>
-        public bool EvaluatePiece(
+        /// <returns>True if snap was successful, false otherwise.</returns>
+        public bool TrySnapWith(
             SnapRules rules, MapPiece other,
             bool intersectionTest, LayerMask intersectionLayer,
             float pieceDistance = 0.00f, uint pinTolerance = 0,
             bool[,] colorMatrix = null)
         {
-
             // List of valid connector combinations
             List<(Connector curr, Connector other)> validCombos =
                 new List<(Connector curr, Connector other)>();
@@ -150,7 +149,8 @@ namespace SnapMeshPCG
                 }
             }
 
-            // Try and find a TODO
+            // If there are valid connections, try and make one of the happen
+            // This might fail if the intersection tests are enabled
             while (validCombos.Count > 0)
             {
                 // Get a random connection from the valid connections list
@@ -160,34 +160,44 @@ namespace SnapMeshPCG
                 (Connector curr, Connector other) chosenCombo =
                     validCombos[chosenIndex];
 
-                // Get PRS components from the other piece
+                // Get current PRS components from the other piece, since it
+                // may be necessary to undo the transformation if the
+                // intersection tests are enabled
                 Vector3 prevPos = other.transform.position;
                 Quaternion prevRot = other.transform.rotation;
                 Vector3 prevScale = other.transform.localScale;
 
-                TransformPiece(
-                    chosenCombo.curr, chosenCombo.other,
-                    other, pieceDistance);
+                // Set the correct position and rotation of the other piece so
+                // its connector matches this piece's connector
+                SetOtherPiecePosRot(
+                    chosenCombo.curr, chosenCombo.other, other, pieceDistance);
 
+                // Apply Transform changes to the physics engine
                 Physics.SyncTransforms();
 
+                // If the intersection tests are enabled, check if there is an
+                // intersection with the existing geometry, using this transform
                 if (intersectionTest)
                 {
-                    // Check if there is an intersection with the existing geometry,
-                    // using this transform
-                    bool    intersection = false;
-                    var     candidateBoxColliders = GetBoxColliders(other, intersectionLayer);
+                    // Assume no intersection
+                    bool intersection = false;
 
-                    foreach (var boxCollider in candidateBoxColliders)
+                    // Get box colliders in layer and loop through them
+                    foreach (BoxCollider boxCollider in GetBoxColliders(other, intersectionLayer))
                     {
+                        // Get the center and extents of the current box collider
                         Vector3 center = boxCollider.center + boxCollider.transform.position;
                         Vector3 extents = new Vector3(0.5f * boxCollider.size.x * boxCollider.transform.lossyScale.x,
                                                       0.5f * boxCollider.size.y * boxCollider.transform.lossyScale.y,
                                                       0.5f * boxCollider.size.z * boxCollider.transform.lossyScale.z);
 
-                        var hits = Physics.OverlapBox(center, extents, boxCollider.transform.rotation, intersectionLayer);
+                        // Get colliders that overlap with the current box
+                        Collider[] hits = Physics.OverlapBox(
+                            center, extents, boxCollider.transform.rotation, intersectionLayer);
 
-                        foreach (var hit in hits)
+                        // Loop through the colliders that overlap with the
+                        // current box
+                        foreach (Collider hit in hits)
                         {
                             // Check for self intersection, or intersection with the connected piece
                             // Ignore the collision in those cases
@@ -213,11 +223,13 @@ namespace SnapMeshPCG
                             validCombos.Remove(chosenCombo);
 
                             intersection = true;
-                            break;
-                        }
+                            break; // hit found, not need to check more hits
 
-                        if (intersection) break;
-                    }
+                        } // for each hit/collision
+
+                        if (intersection) break; // hit found, not need to check more box colliders
+
+                    } // for each box collider
 
                     if (intersection)
                     {
@@ -225,19 +237,27 @@ namespace SnapMeshPCG
                         other.transform.position = prevPos;
                         other.transform.rotation = prevRot;
                         other.transform.localScale = prevScale;
-                        continue;
+                        continue; // to next valid combo, if any
                     }
-                }
 
+                } // if (intersectionTest)
+
+                // If we get here, there the connector match is definitively
+                // validated, and we can carry on with it
                 Connector.Match(chosenCombo.curr, chosenCombo.other);
 
+                // Return true, indicating that a match was found and piece
+                // snapping was successful
                 return true;
-            }
+
+            } // while (validCombos.Count > 0)
+
+            // Return false, indicating the piece snapping was not successful
             return false;
         }
 
         /// <summary>
-        /// Determine the correct position and rotation of the other piece so
+        /// Set the correct position and rotation of the other piece so
         /// its connector matches this piece's connector.
         /// </summary>
         /// <param name="currConn">This piece's connector.</param>
@@ -246,7 +266,7 @@ namespace SnapMeshPCG
         /// <param name="pieceDistance">
         /// Distance between two connected connectors.
         /// </param>
-        private void TransformPiece(Connector currConn,
+        private void SetOtherPiecePosRot(Connector currConn,
             Connector otherConn, MapPiece otherPiece, float pieceDistance)
         {
             // Get the transform of the other piece's connector
@@ -314,24 +334,22 @@ namespace SnapMeshPCG
         }
 
         /// <summary>
-        /// Retrieves the box colliders of the appropriate layer
-        /// for the given piece
+        /// Retrieves the box colliders of the appropriate layer for the given piece
         /// </summary>
-        static List<BoxCollider> GetBoxColliders(MapPiece go, LayerMask mask)
+        /// <param name="go">The map piece.</param>
+        /// <param name="mask">The layer containing the colliders.</param>
+        /// <returns>
+        /// The box colliders of the appropriate layer for the given piece.
+        /// </returns>
+        private static IEnumerable<BoxCollider> GetBoxColliders(MapPiece go, LayerMask mask)
         {
-            List<BoxCollider> ret = new List<BoxCollider>();
-
-            BoxCollider[] colliders = go.GetComponentsInChildren<BoxCollider>();
-
-            foreach (var collider in colliders)
+            foreach (BoxCollider collider in go.GetComponentsInChildren<BoxCollider>())
             {
                 if ((mask.value & (1 << collider.gameObject.layer)) != 0)
                 {
-                    ret.Add(collider);
+                    yield return collider;
                 }
             }
-
-            return ret;
         }
 
         /// <summary>

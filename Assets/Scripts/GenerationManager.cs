@@ -179,7 +179,7 @@ namespace SnapMeshPCG
         private MapPiece _guidePiece;
 
         // Piece being evaluated against guide piece
-        private MapPiece _tentativePiece;
+        private MapPiece _tentPiecePrototype;
 
         // The generation method
         private AbstractGM _chosenMethod;
@@ -341,40 +341,43 @@ namespace SnapMeshPCG
             int placement = 0;
             do
             {
+                // Number of failed attempts
                 int failCount = 0;
 
-                bool evaluationResult;
+                // Result of trying two snap two pieces together
+                bool snapResult;
 
                 // Pick a tentative piece to evaluate against our guide piece
                 do
                 {
+                    // Randomly get a tentative piece prototype
                     int rng = Random.Range(0, _piecesWorkList.Count);
+                    _tentPiecePrototype = _piecesWorkList[rng];
 
-                    _tentativePiece = _piecesWorkList[rng];
+                    // Get a tentative piece by cloning the tentative piece prototype
+                    GameObject tentPiece = _tentPiecePrototype.ClonePiece(_useClippingCorrection);
 
-                    GameObject spawnedPiece =
-                        _tentativePiece.ClonePiece(_useClippingCorrection);
-                    MapPiece spawnedScript =
-                        spawnedPiece.GetComponent<MapPiece>();
+                    // Get the script associated with the tentative piece
+                    MapPiece tentScript = tentPiece.GetComponent<MapPiece>();
 
-                    evaluationResult = _guidePiece.EvaluatePiece(
+                    // Try and snap the tentative piece with the current guide piece
+                    snapResult = _guidePiece.TrySnapWith(
                         _matchingRules,
-                        spawnedScript,
+                        tentScript,
                         _intersectionTests,
                         _collidersLayer,
                         _pieceDistance,
                         _pinCountTolerance,
                         _colorMatrix.GetCells());
 
-                    // If things worked out, spawn the piece in the correct
-                    // position
-                    if (evaluationResult)
+                    // Was the snap successful?
+                    if (snapResult)
                     {
                         placement++;
-                        spawnedPiece.name += $" - {placement}";
-                        spawnedPiece.transform.SetParent(_guidePiece.transform);
-                        _placedPieces.Add(spawnedScript);
-                        OnConnectionMade.Invoke(spawnedScript);
+                        tentPiece.name += $" - {placement}";
+                        tentPiece.transform.SetParent(_guidePiece.transform);
+                        _placedPieces.Add(tentScript);
+                        OnConnectionMade.Invoke(tentScript);
 
                         _guidePiece = _chosenMethod.SelectGuidePiece(
                             _placedPieces,
@@ -385,15 +388,17 @@ namespace SnapMeshPCG
                         print("No valid found");
                         // No valid connectors in the given piece
                         if (Application.isPlaying)
-                            Destroy(spawnedPiece);
+                            Destroy(tentPiece);
                         else
                         {
-                            DestroyImmediate(spawnedPiece);
+                            DestroyImmediate(tentPiece);
                         }
+
+                        // Increase count of failed attempts
                         failCount++;
                     }
                 }
-                while (failCount < _maxFailures && !evaluationResult);
+                while (failCount < _maxFailures && !snapResult);
 
                 // Trying to find a piece failed, just quit the algorithm in this case
                 if (failCount >= _maxFailures)
