@@ -341,10 +341,12 @@ namespace SnapMeshPCG
             int placement = 0;
             do
             {
-                int failureCount = 0;
+                int failCount = 0;
+
+                (bool valid, Transform trn) evaluationResult;
 
                 // Pick a tentative piece to evaluate against our guide piece
-                while (true)
+                do
                 {
                     int rng = Random.Range(0, _piecesWorkList.Count);
 
@@ -355,8 +357,9 @@ namespace SnapMeshPCG
                     MapPiece spawnedScript =
                         spawnedPiece.GetComponent<MapPiece>();
 
-                    (bool valid, Transform trn) evaluationResult =
-                        _guidePiece.EvaluatePiece(_matchingRules, spawnedScript,
+                    evaluationResult = _guidePiece.EvaluatePiece(
+                        _matchingRules,
+                        spawnedScript,
                         _intersectionTests,
                         _collidersLayer,
                         _pieceDistance,
@@ -372,6 +375,10 @@ namespace SnapMeshPCG
                         spawnedPiece.transform.SetParent(_guidePiece.transform);
                         _placedPieces.Add(spawnedScript);
                         OnConnectionMade.Invoke(spawnedScript);
+
+                        _guidePiece = _chosenMethod.SelectGuidePiece(
+                            _placedPieces,
+                            _placedPieces[_placedPieces.Count - 1]);
                     }
                     else
                     {
@@ -383,20 +390,13 @@ namespace SnapMeshPCG
                         {
                             DestroyImmediate(spawnedPiece);
                         }
-                        failureCount++;
-                        if (failureCount > _maxFailures)
-                            break;
-                        continue;
+                        failCount++;
                     }
-
-                    _guidePiece = _chosenMethod.SelectGuidePiece(
-                        _placedPieces, _placedPieces[_placedPieces.Count - 1]);
-
-                    break;
-                } // select tentative piece
+                }
+                while (failCount < _maxFailures && !evaluationResult.valid);
 
                 // Trying to find a piece failed, just quit the algorithm in this case
-                if (failureCount > _maxFailures)
+                if (failCount >= _maxFailures)
                 {
                     Debug.Log("Couldn't find a valid piece to connect to the guide piece (" + _guidePiece.name + ")");
                     Debug.Log($"Exiting early with {_placedPieces.Count} placed pieces... ");
@@ -435,7 +435,7 @@ namespace SnapMeshPCG
                     }
                 }
             }
-            
+
             if(Application.isPlaying)
             {
                 if(_useClippingCorrection)
@@ -448,7 +448,7 @@ namespace SnapMeshPCG
                 if(!_useClippingCorrection)
                     OnGenerationFinish.Invoke(_placedPieces.ToArray());
             }
-            
+
             //return starterPiece;
         }
 
@@ -537,7 +537,7 @@ namespace SnapMeshPCG
                 settled = true;
                 foreach(MapPiece mP in _placedPieces)
                 {
-                    Rigidbody pieceBody = 
+                    Rigidbody pieceBody =
                             mP.gameObject.GetComponent<Rigidbody>();
                     if(pieceBody == null)
                     {
@@ -548,11 +548,11 @@ namespace SnapMeshPCG
                         if(pieceBody.velocity.sqrMagnitude >= 0.001f)
                         {
                             settled = false;
-                            
+
                         }
-                        
+
                     }
-                        
+
                 }
                 print("Waiting for phisics");
                 yield return new WaitForFixedUpdate();
@@ -572,7 +572,7 @@ namespace SnapMeshPCG
                 "correction was ON at time of generation.");
                 return;
             }
-                
+
             if(_placedPieces == null || _placedPieces.Count == 0)
             {
                 Debug.LogWarning("No generated pieces found. Generate a map first!");
@@ -590,7 +590,7 @@ namespace SnapMeshPCG
                 counter++;
                 print("Waiting for editor to settle");
                 yield return null;
-        
+
 
             }
             Physics.autoSimulation = true;
