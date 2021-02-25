@@ -452,34 +452,6 @@ namespace SnapMeshPCG
             //return starterPiece;
         }
 
-        // Separate pieces into separate lists based on number of connectors
-        private IList<List<MapPiece>> SplitList()
-        {
-            int lastConsidered = _maxConnectors + 1;
-            List<MapPiece> consideredList = new List<MapPiece>();
-            IList<List<MapPiece>> sortedList = new List<List<MapPiece>>();
-
-            for (int i = 0; i < _piecesWorkList.Count; i++)
-            {
-                // Piece belongs in a new list made for its size
-                if (_piecesWorkList[i].ConnectorCount < lastConsidered)
-                {
-                    consideredList = new List<MapPiece>();
-                    consideredList.Add(_piecesWorkList[i]);
-                    lastConsidered = _piecesWorkList[i].ConnectorCount;
-                    sortedList.Add(consideredList);
-                }
-                // Piece belongs in the already made list
-                else if (_piecesWorkList[i].ConnectorCount >=
-                    lastConsidered - _starterConTol)
-                {
-                    consideredList.Add(_piecesWorkList[i]);
-                }
-            }
-
-            return sortedList;
-        }
-
         [Button("Generate")]
         private void EditorGenerate()
         {
