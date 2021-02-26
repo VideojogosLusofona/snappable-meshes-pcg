@@ -132,15 +132,6 @@ namespace SnapMeshPCG
         [SerializeField]
         private uint _starterConTol = 0;
 
-        // ////////////////// //
-        // Testing parameters //
-        // ////////////////// //
-
-        [BoxGroup(testingParams)]
-        [Tooltip("Generate Arena on scene start automatically. (DANGEROUS)")]
-        [SerializeField]
-        private bool _autoCreate = false;
-
         // ////// //
         // Events //
         // ////// //
@@ -247,22 +238,13 @@ namespace SnapMeshPCG
             _generationParams = AbstractGMConfig.GetInstance(gmConfig);
         }
 
-        // Start is called before the first frame update
-        private void Start()
-        {
-            if (_autoCreate)
-            {
-                Debug.Log("ATTENTION: AUTO CREATE IS ON. TURN OFF FOR GAMEPLAY");
-                ClearEditorGeneration();
-                StartCoroutine(Create());
-            }
-        }
-
-        // Create a new map
-        public IEnumerator Create()
+        /// <summary>
+        /// Create a new map.
+        /// </summary>
+        private void Create()
         {
             // First piece to be placed in the map
-            MapPiece started;
+            MapPiece starterPrototypeScript;
 
             // Starter piece
             GameObject starterPiece;
@@ -276,7 +258,7 @@ namespace SnapMeshPCG
                     "Warning",
                     "Starting piece list is empty, aborting map generation.",
                     "Ok");
-                yield break;
+                return;
             }
 
             // Use predefined seed if set or one based on current time
@@ -313,19 +295,20 @@ namespace SnapMeshPCG
             if (_useStarter)
             {
                 // Get first piece from list of starting pieces
-                started = _chosenMethod.SelectStartPiece(
+                starterPrototypeScript = _chosenMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 // Get first piece from list of all pieces
-                started = _chosenMethod.SelectStartPiece(
+                starterPrototypeScript = _chosenMethod.SelectStartPiece(
                     _piecesWorkList, (int)_starterConTol);
             }
 
             // Get the starter piece by cloning the prototype piece selected for
             // this purpose
-            starterPiece = started.ClonePiece(_useClippingCorrection);
+            starterPiece =
+                starterPrototypeScript.ClonePiece(_useClippingCorrection);
 
             // Rename piece so it's easier to determine that it's the
             // starter piece
@@ -387,12 +370,7 @@ namespace SnapMeshPCG
                     {
                         print("No valid found");
                         // No valid connectors in the given piece
-                        if (Application.isPlaying)
-                            Destroy(tentPiece);
-                        else
-                        {
-                            DestroyImmediate(tentPiece);
-                        }
+                        DestroyImmediate(tentPiece);
 
                         // Increase count of failed attempts
                         failCount++;
@@ -415,8 +393,7 @@ namespace SnapMeshPCG
             if (_intersectionTests)
             {
                 // Remove all colliders used for the generation process
-                BoxCollider[] boxColliders = FindObjectsOfType<BoxCollider>();
-                foreach (var boxCollider in boxColliders)
+                foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())
                 {
                     if (boxCollider == null) continue;
 
@@ -424,44 +401,26 @@ namespace SnapMeshPCG
                     {
                         GameObject go = boxCollider.gameObject;
 
-                        if (Application.isPlaying)
-                            Destroy(boxCollider);
-                        else
-                            DestroyImmediate(boxCollider);
+                        DestroyImmediate(boxCollider);
 
                         if (go.GetComponents<Component>().Length == 1)
                         {
                             // Object was just a container for the box colliders, delete it
-                            if (Application.isPlaying)
-                                Destroy(go);
-                            else
-                                DestroyImmediate(go);
+                            DestroyImmediate(go);
                         }
                     }
                 }
             }
 
-            if(Application.isPlaying)
-            {
-                if(_useClippingCorrection)
-                    yield return StartCoroutine(WaitForPhysicsCorrection());
-
+            if(!_useClippingCorrection)
                 OnGenerationFinish.Invoke(_placedPieces.ToArray());
-            }
-            else
-            {
-                if(!_useClippingCorrection)
-                    OnGenerationFinish.Invoke(_placedPieces.ToArray());
-            }
-
-            //return starterPiece;
         }
 
-        [Button("Generate")]
+        [Button("Generate", enabledMode: EButtonEnableMode.Editor)]
         private void EditorGenerate()
         {
             ClearEditorGeneration();
-            StartCoroutine(Create());
+            Create();
             GameObject initialPiece = _placedPieces[0].gameObject;
 
             // Add a component to identify this case, so we can delete it on a
@@ -469,7 +428,7 @@ namespace SnapMeshPCG
             initialPiece?.AddComponent<EditorGenerationPiece>();
         }
 
-        [Button("Clear")]
+        [Button("Clear", enabledMode: EButtonEnableMode.Editor)]
         private void ClearEditorGeneration()
         {
             // Find any pieces with the EditorGenerationPiece component
@@ -503,41 +462,6 @@ namespace SnapMeshPCG
         }
 
         /// <summary>
-        /// Halt the generator until all the pieces are done being pushed
-        /// by the clipping correction
-        /// </summary>
-        private IEnumerator WaitForPhysicsCorrection()
-        {
-            bool settled = false;
-            do
-            {
-                settled = true;
-                foreach(MapPiece mP in _placedPieces)
-                {
-                    Rigidbody pieceBody =
-                            mP.gameObject.GetComponent<Rigidbody>();
-                    if(pieceBody == null)
-                    {
-                        pieceBody = mP.gameObject.GetComponentInChildren<Rigidbody>();
-                    }
-                    if(pieceBody != null)
-                    {
-                        if(pieceBody.velocity.sqrMagnitude >= 0.001f)
-                        {
-                            settled = false;
-
-                        }
-
-                    }
-
-                }
-                print("Waiting for phisics");
-                yield return new WaitForFixedUpdate();
-            }while(!settled);
-        }
-
-
-        /// <summary>
         /// Manually call the OnGenerationFinish event.
         /// </summary>
         [Button("(Clipping Correction) Call Generation End Events", enabledMode: EButtonEnableMode.Editor)]
@@ -556,21 +480,6 @@ namespace SnapMeshPCG
             }
             OnGenerationFinish.Invoke(_placedPieces.ToArray());
         }
-       /* private IEnumerator WaitForEditorPhysicsCorrection(float timeToSettle)
-        {
-            float counter = 0;
-            Physics.autoSimulation = false;
-            print(timeToSettle);
-            while(counter < timeToSettle)
-            {
-                Physics.Simulate(Time.fixedDeltaTime);
-                counter++;
-                print("Waiting for editor to settle");
-                yield return null;
 
-
-            }
-            Physics.autoSimulation = true;
-        }*/
     }
 }
