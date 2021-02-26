@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -42,35 +42,35 @@ namespace SnapMeshPCG.Demo
                     spots[i] = mapPieces[i].transform.position;
                 return spots;
             }
-            
+
         }
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
-            
+
             if(_agent == null)
                 _agent = gameObject.AddComponent<NavMeshAgent>();
-            
+
             Vector3 point = FindPointInNavMesh(transform.position);
             bool warp = _agent.Warp(point);
             if(warp)
             {
                 _agent.enabled = false;
                 transform.position =  point;
-            } 
-                
+            }
+
             _agent.enabled = true;
             print($"Agent Warped? -> {warp}");
             _agent.updateRotation = true;
             _agent.updateUpAxis = true;
             GetNewPath();
-            
+
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             NavMeshPathStatus pathStatus = _agent.pathStatus;
 
@@ -78,7 +78,7 @@ namespace SnapMeshPCG.Demo
             // get a new one
             if(pathStatus != NavMeshPathStatus.PathComplete)
                 GetNewPath();
-            
+
             // If walker has reached destiantion, get a new path
             if(Mathf.RoundToInt(_agent.remainingDistance) == 0)
                 GetNewPath();
@@ -90,7 +90,7 @@ namespace SnapMeshPCG.Demo
         {
             NavMeshHit hit;
             float searchRadius;
-            bool foundSpot; 
+            bool foundSpot;
             int counter = 0;
             do
             {
@@ -122,7 +122,7 @@ namespace SnapMeshPCG.Demo
             Vector3 newPoint = newCenter + Random.insideUnitSphere * _initialRadius;
             Vector3 newTarget = FindPointInNavMesh(newPoint);
             _agent.SetDestination(newTarget);
-            
+
 
         }
     }

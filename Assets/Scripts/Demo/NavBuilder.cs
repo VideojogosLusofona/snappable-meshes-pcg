@@ -41,12 +41,12 @@ namespace SnapMeshPCG.Demo
             StartCoroutine(BuildNavMeshCR(pieces));
         }
 
-        IEnumerator BuildNavMeshCR(MapPiece[] pieces)
+        private IEnumerator BuildNavMeshCR(MapPiece[] pieces)
         {
             yield return null;
 
             GameObject topPiece = pieces[0].gameObject;
-            NavMeshSurface unWantedNav = 
+            NavMeshSurface unWantedNav =
                 topPiece.GetComponent<NavMeshSurface>();
             if(unWantedNav != null)
                 Destroy(unWantedNav);
