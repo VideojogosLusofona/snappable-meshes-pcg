@@ -111,8 +111,8 @@ namespace SnapMeshPCG
             List<(Connector curr, Connector other)> validCombos =
                 new List<(Connector curr, Connector other)>();
 
-            // Check compatibility between connectors of current piece and of
-            // the other piece
+            // Create a list of valid connections between this piece and the
+            // other piece
             foreach (Connector co in other._Connectors)
             {
                 foreach (Connector cc in _Connectors)
@@ -149,7 +149,7 @@ namespace SnapMeshPCG
                 }
             }
 
-            // If there are valid connections, try and make one of the happen
+            // If there are valid connections, try to enable one of them
             // This might fail if the intersection tests are enabled
             while (validCombos.Count > 0)
             {

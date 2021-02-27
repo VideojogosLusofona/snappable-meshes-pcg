@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -166,12 +165,6 @@ namespace SnapMeshPCG
         // Pieces placed in the map
         private List<MapPiece> _placedPieces;
 
-        // Already placed piece being used to judge others
-        private MapPiece _guidePiece;
-
-        // Piece being evaluated against guide piece
-        private MapPiece _tentPiecePrototype;
-
         // The generation method
         private AbstractGM _chosenMethod;
 
@@ -243,11 +236,17 @@ namespace SnapMeshPCG
         /// </summary>
         private void Create()
         {
-            // First piece to be placed in the map
-            MapPiece starterPrototypeScript;
+            // Stater piece prototype
+            MapPiece starterPiecePrototype;
 
-            // Starter piece
-            GameObject starterPiece;
+            // Starter piece game object
+            GameObject starterPieceGObj;
+
+            // Current guide piece
+            MapPiece guidePiece;
+
+            // Tentative piece prototype
+            MapPiece tentPiecePrototype;
 
             // If we're using a starting piece, the starting piece list cannot
             // be empty
@@ -266,6 +265,9 @@ namespace SnapMeshPCG
                 _currentSeed = _seed;
             else
                 _currentSeed = (int)System.DateTime.Now.Ticks;
+
+            // Notify user of seed used for generating this map
+            Debug.Log($"Generating with seed = {_currentSeed}.");
 
             // Initialize random number generator
             Random.InitState(_currentSeed);
@@ -295,30 +297,30 @@ namespace SnapMeshPCG
             if (_useStarter)
             {
                 // Get first piece from list of starting pieces
-                starterPrototypeScript = _chosenMethod.SelectStartPiece(
+                starterPiecePrototype = _chosenMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 // Get first piece from list of all pieces
-                starterPrototypeScript = _chosenMethod.SelectStartPiece(
+                starterPiecePrototype = _chosenMethod.SelectStartPiece(
                     _piecesWorkList, (int)_starterConTol);
             }
 
             // Get the starter piece by cloning the prototype piece selected for
             // this purpose
-            starterPiece =
-                starterPrototypeScript.ClonePiece(_useClippingCorrection);
+            starterPieceGObj =
+                starterPiecePrototype.ClonePiece(_useClippingCorrection);
 
             // Rename piece so it's easier to determine that it's the
             // starter piece
-            starterPiece.name += " : Starter Piece ";
+            starterPieceGObj.name += " : Starter Piece";
 
             // Add starter piece script component to list of placed pieces
-            _placedPieces.Add(starterPiece.GetComponent<MapPiece>());
+            _placedPieces.Add(starterPieceGObj.GetComponent<MapPiece>());
 
             // Initially, the guide piece is the starting piece
-            _guidePiece = _placedPieces[0];
+            guidePiece = _placedPieces[0];
 
             // Make base level of Arena and add those pieces to the list
             int placement = 0;
@@ -335,18 +337,18 @@ namespace SnapMeshPCG
                 {
                     // Randomly get a tentative piece prototype
                     int rng = Random.Range(0, _piecesWorkList.Count);
-                    _tentPiecePrototype = _piecesWorkList[rng];
+                    tentPiecePrototype = _piecesWorkList[rng];
 
                     // Get a tentative piece by cloning the tentative piece prototype
-                    GameObject tentPiece = _tentPiecePrototype.ClonePiece(_useClippingCorrection);
+                    GameObject tentPieceGObj = tentPiecePrototype.ClonePiece(_useClippingCorrection);
 
                     // Get the script associated with the tentative piece
-                    MapPiece tentScript = tentPiece.GetComponent<MapPiece>();
+                    MapPiece tentPiece = tentPieceGObj.GetComponent<MapPiece>();
 
                     // Try and snap the tentative piece with the current guide piece
-                    snapResult = _guidePiece.TrySnapWith(
+                    snapResult = guidePiece.TrySnapWith(
                         _matchingRules,
-                        tentScript,
+                        tentPiece,
                         _intersectionTests,
                         _collidersLayer,
                         _pieceDistance,
@@ -357,42 +359,46 @@ namespace SnapMeshPCG
                     if (snapResult)
                     {
                         placement++;
-                        tentPiece.name += $" - {placement}";
-                        tentPiece.transform.SetParent(_guidePiece.transform);
-                        _placedPieces.Add(tentScript);
-                        OnConnectionMade.Invoke(tentScript);
-
-                        _guidePiece = _chosenMethod.SelectGuidePiece(
-                            _placedPieces,
-                            _placedPieces[_placedPieces.Count - 1]);
+                        tentPieceGObj.name += $" - {placement}";
+                        tentPieceGObj.transform.SetParent(guidePiece.transform);
+                        _placedPieces.Add(tentPiece);
+                        OnConnectionMade.Invoke(tentPiece);
                     }
                     else
                     {
-                        print("No valid found");
-                        // No valid connectors in the given piece
-                        DestroyImmediate(tentPiece);
+                        // No valid connections
+                        Debug.Log(string.Format(
+                            "With {0} placed pieces: no valid connections between '{1}' (guide) and '{2}' (tentative)",
+                            _placedPieces.Count, guidePiece.name, tentPieceGObj.name));
+
+                        // Destroy tentative piece game object
+                        DestroyImmediate(tentPieceGObj);
 
                         // Increase count of failed attempts
                         failCount++;
+
+                        // Notify user if max failures is reached
+                        if (failCount >= _maxFailures)
+                        {
+                            Debug.Log(string.Format(
+                                "Couldn't find a valid piece to connect with guide piece '{0}'",
+                                guidePiece.name));
+                        }
                     }
                 }
-                while (failCount < _maxFailures && !snapResult);
+                while (!snapResult && failCount < _maxFailures);
 
-                // Trying to find a piece failed, just quit the algorithm in this case
-                if (failCount >= _maxFailures)
-                {
-                    Debug.Log("Couldn't find a valid piece to connect to the guide piece (" + _guidePiece.name + ")");
-                    Debug.Log($"Exiting early with {_placedPieces.Count} placed pieces... ");
-                    break;
-                }
+                // Select next guide piece
+                guidePiece = _chosenMethod.SelectGuidePiece(
+                    _placedPieces, _placedPieces[_placedPieces.Count - 1]);
+
             }
-            while (_guidePiece != null);
+            while (guidePiece != null);
 
-            Debug.Log($"Generated with Seed: {_currentSeed}.");
-
+            // If we performed intersection tests...
             if (_intersectionTests)
             {
-                // Remove all colliders used for the generation process
+                // ...remove all colliders used for the generation process
                 foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())
                 {
                     if (boxCollider == null) continue;
@@ -412,7 +418,7 @@ namespace SnapMeshPCG
                 }
             }
 
-            if(!_useClippingCorrection)
+            if (!_useClippingCorrection)
                 OnGenerationFinish.Invoke(_placedPieces.ToArray());
         }
 
@@ -452,7 +458,7 @@ namespace SnapMeshPCG
         [Button("(Clipping Correction) Simulate Physics Step", enabledMode: EButtonEnableMode.Editor)]
         private void SimulatePhysics()
         {
-            if(!_useClippingCorrection)
+            if (!_useClippingCorrection)
                 Debug.LogWarning("This should only be used when clipping" +
                 "correction was ON at time of generation.");
 
@@ -467,14 +473,14 @@ namespace SnapMeshPCG
         [Button("(Clipping Correction) Call Generation End Events", enabledMode: EButtonEnableMode.Editor)]
         private void CallFinishGenerationEvents()
         {
-            if(!_useClippingCorrection)
+            if (!_useClippingCorrection)
             {
                 Debug.LogWarning("This should only be used when clipping" +
                 "correction was ON at time of generation.");
                 return;
             }
 
-            if(_placedPieces == null || _placedPieces.Count == 0)
+            if (_placedPieces == null || _placedPieces.Count == 0)
             {
                 Debug.LogWarning("No generated pieces found. Generate a map first!");
             }
