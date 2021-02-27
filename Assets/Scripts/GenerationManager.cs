@@ -318,10 +318,9 @@ namespace SnapMeshPCG
             StringBuilder log = new StringBuilder("=== Piece snapping log ===");
 
             // Make base level of Arena and add those pieces to the list
-            int placement = 0;
             do
             {
-                // Number of failed attempts
+                // Number of failed attempts for current guide piece
                 int failCount = 0;
 
                 // Result of trying two snap two pieces together
@@ -338,7 +337,8 @@ namespace SnapMeshPCG
                     tentPiecePrototype = piecesWorkList[rng];
 
                     // Get a tentative piece by cloning the tentative piece prototype
-                    GameObject tentPieceGObj = tentPiecePrototype.ClonePiece(_useClippingCorrection);
+                    GameObject tentPieceGObj =
+                        tentPiecePrototype.ClonePiece(_useClippingCorrection);
 
                     // Get the script associated with the tentative piece
                     MapPiece tentPiece = tentPieceGObj.GetComponent<MapPiece>();
@@ -356,8 +356,7 @@ namespace SnapMeshPCG
                     // Was the snap successful?
                     if (snapResult)
                     {
-                        placement++;
-                        tentPieceGObj.name += $" - {placement}";
+                        tentPieceGObj.name += $" - {_placedPieces.Count}";
                         tentPieceGObj.transform.SetParent(guidePiece.transform);
                         _placedPieces.Add(tentPiece);
                         OnConnectionMade.Invoke(tentPiece);
