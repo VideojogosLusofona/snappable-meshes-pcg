@@ -48,6 +48,9 @@ namespace SnapMeshPCG.Demo
         // Start is called before the first frame update
         private void Start()
         {
+            // Disable main camera, since we want to use the walker cam for the demo
+            Camera.main.gameObject.SetActive(false);
+
             _agent = GetComponent<NavMeshAgent>();
 
             if(_agent == null)
