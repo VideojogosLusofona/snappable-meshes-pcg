@@ -206,17 +206,17 @@ namespace SnapMeshPCG
                                 (parentMapPiece == this)) continue;
 
 #if DEBUG_INTERSECTION
-                            Debug.Log("Can't connect " + name + " with " + other.name);
-                            Debug.Log("Connector " + chosenCombo.chosenMine.name + " / " + chosenCombo.chosenOther.name);
-                            Debug.Log("Intersection detected with " + parentMapPiece.name);
+                            Debug.Log($"Can't connect {name} with {other.name}");
+                            Debug.Log($"Connector {chosenCombo.chosenMine.name} / {chosenCombo.chosenOther.name}");
+                            Debug.Log($"Intersection detected with {parentMapPiece.name}");
 
                             // Create a copy for later debug
                             MapPiece newObject = Instantiate(other);
-                            newObject.name = "IntersectionError " + (interError++);
+                            newObject.name = $"IntersectionError {interError++}";
                             newObject.transform.position += Vector3.up * 20;
                             newObject.transform.SetParent(null);
                             newObject.gameObject.SetActive(false);
-                            Debug.Log("New object = " + newObject.name);
+                            Debug.Log($"New object = {newObject.name}");
 #endif
 
                             // It auto-intersects, so remove this possibility and retry

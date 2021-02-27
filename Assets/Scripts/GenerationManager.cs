@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -322,6 +323,9 @@ namespace SnapMeshPCG
             // Initially, the guide piece is the starting piece
             guidePiece = _placedPieces[0];
 
+            // Log for connection attempts between guide and tentative pieces
+            StringBuilder log = new StringBuilder("=== Piece placing log ===");
+
             // Make base level of Arena and add those pieces to the list
             int placement = 0;
             do
@@ -331,6 +335,9 @@ namespace SnapMeshPCG
 
                 // Result of trying two snap two pieces together
                 bool snapResult;
+
+                // Log for current guide piece
+                StringBuilder logCurrGuide = new StringBuilder();
 
                 // Pick a tentative piece to evaluate against our guide piece
                 do
@@ -367,9 +374,11 @@ namespace SnapMeshPCG
                     else
                     {
                         // No valid connections
-                        Debug.Log(string.Format(
-                            "With {0} placed pieces: no valid connections between '{1}' (guide) and '{2}' (tentative)",
-                            _placedPieces.Count, guidePiece.name, tentPieceGObj.name));
+
+                        // Log occurrence
+                        if (logCurrGuide.Length > 0) logCurrGuide.Append(", ");
+                        logCurrGuide.AppendFormat(
+                            "'{0}'", tentPieceGObj.name);
 
                         // Destroy tentative piece game object
                         DestroyImmediate(tentPieceGObj);
@@ -377,16 +386,29 @@ namespace SnapMeshPCG
                         // Increase count of failed attempts
                         failCount++;
 
-                        // Notify user if max failures is reached
+                        // If max failures is reached, log occurrence
                         if (failCount >= _maxFailures)
                         {
-                            Debug.Log(string.Format(
-                                "Couldn't find a valid piece to connect with guide piece '{0}'",
-                                guidePiece.name));
+                            logCurrGuide.AppendFormat(
+                                " and gave up after {0} attempts",
+                                failCount);
                         }
                     }
                 }
                 while (!snapResult && failCount < _maxFailures);
+
+                if (logCurrGuide.Length > 0)
+                {
+                    log.AppendFormat(
+                            "\n\tNo valid connections between guide piece '{0}' ",
+                            guidePiece.name)
+                        .AppendFormat(
+                            "with the following tentatives ({0} ",
+                            _placedPieces.Count)
+                        .AppendFormat(
+                            "pieces placed so far): {0}",
+                            logCurrGuide);
+                }
 
                 // Select next guide piece
                 guidePiece = _chosenMethod.SelectGuidePiece(
@@ -394,6 +416,9 @@ namespace SnapMeshPCG
 
             }
             while (guidePiece != null);
+
+            // Show piece placing log
+            Debug.Log(log);
 
             // If we performed intersection tests...
             if (_intersectionTests)
