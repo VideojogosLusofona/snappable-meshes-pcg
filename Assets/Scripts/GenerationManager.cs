@@ -36,8 +36,6 @@ namespace SnapMeshPCG
         private const string worldParams = ":: World parameters ::";
         private const string connectionParams = ":: Connection parameters ::";
         private const string generationParams = ":: Generation parameters ::";
-        private const string testingParams = ":: Testing parameters ::";
-        private const string navMeshParams = ":: NavMesh parameters ::";
         private const string events = ":: Events ::";
 
         // ////////////////// //
@@ -156,21 +154,11 @@ namespace SnapMeshPCG
         // Instance variables not used in editor //
         // ///////////////////////////////////// //
 
-        // Seed for random number generator
-        private int _currentSeed;
-
-        // List of map pieces which will be manipulated by the generator,
-        // initially copied from _piecesList
-        private List<MapPiece> _piecesWorkList;
-
         // Pieces placed in the map
         private List<MapPiece> _placedPieces;
 
-        // The generation method
-        private AbstractGM _chosenMethod;
-
-        // Maximum number of connectors in existing pieces
-        private int _maxConnectors;
+        // The selected generation method
+        private AbstractGM _genMethod;
 
         // Names of known generation methods
         [System.NonSerialized]
@@ -249,6 +237,13 @@ namespace SnapMeshPCG
             // Tentative piece prototype
             MapPiece tentPiecePrototype;
 
+            // Seed for random number generator
+            int currentSeed;
+
+            // List of map pieces which will be manipulated by the generator,
+            // initially copied from _piecesList
+            List<MapPiece> piecesWorkList;
+
             // If we're using a starting piece, the starting piece list cannot
             // be empty
             if (_useStarter
@@ -263,33 +258,29 @@ namespace SnapMeshPCG
 
             // Use predefined seed if set or one based on current time
             if (_useSeed)
-                _currentSeed = _seed;
+                currentSeed = _seed;
             else
-                _currentSeed = (int)System.DateTime.Now.Ticks;
+                currentSeed = (int)System.DateTime.Now.Ticks;
 
             // Notify user of seed used for generating this map
-            Debug.Log($"Generating with seed = {_currentSeed}.");
+            Debug.Log($"Generating with seed = {currentSeed}.");
 
             // Initialize random number generator
-            Random.InitState(_currentSeed);
+            Random.InitState(currentSeed);
 
             // Invoke generation starting events
             OnGenerationBegin.Invoke();
 
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
-            _piecesWorkList = new List<MapPiece>(_piecesList);
+            piecesWorkList = new List<MapPiece>(_piecesList);
 
             // Get chosen generation method (strategy pattern)
-            _chosenMethod = _generationParams.Method;
+            _genMethod = _generationParams.Method;
 
             // Sort list of pieces to use according to the pieces natural order
             // (descending number of connectors)
-            _piecesWorkList.Sort();
-
-            // Get the number of connectors from the piece with the most
-            // connectors
-            _maxConnectors = _piecesWorkList[0].ConnectorCount;
+            piecesWorkList.Sort();
 
             // Initialize list of pieces already placed in the map
             _placedPieces = new List<MapPiece>();
@@ -298,14 +289,14 @@ namespace SnapMeshPCG
             if (_useStarter)
             {
                 // Get first piece from list of starting pieces
-                starterPiecePrototype = _chosenMethod.SelectStartPiece(
+                starterPiecePrototype = _genMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 // Get first piece from list of all pieces
-                starterPiecePrototype = _chosenMethod.SelectStartPiece(
-                    _piecesWorkList, (int)_starterConTol);
+                starterPiecePrototype = _genMethod.SelectStartPiece(
+                    piecesWorkList, (int)_starterConTol);
             }
 
             // Get the starter piece by cloning the prototype piece selected for
@@ -324,7 +315,7 @@ namespace SnapMeshPCG
             guidePiece = _placedPieces[0];
 
             // Log for connection attempts between guide and tentative pieces
-            StringBuilder log = new StringBuilder("=== Piece placing log ===");
+            StringBuilder log = new StringBuilder("=== Piece snapping log ===");
 
             // Make base level of Arena and add those pieces to the list
             int placement = 0;
@@ -343,8 +334,8 @@ namespace SnapMeshPCG
                 do
                 {
                     // Randomly get a tentative piece prototype
-                    int rng = Random.Range(0, _piecesWorkList.Count);
-                    tentPiecePrototype = _piecesWorkList[rng];
+                    int rng = Random.Range(0, piecesWorkList.Count);
+                    tentPiecePrototype = piecesWorkList[rng];
 
                     // Get a tentative piece by cloning the tentative piece prototype
                     GameObject tentPieceGObj = tentPiecePrototype.ClonePiece(_useClippingCorrection);
@@ -400,7 +391,7 @@ namespace SnapMeshPCG
                 if (logCurrGuide.Length > 0)
                 {
                     log.AppendFormat(
-                            "\n\tNo valid connections between guide piece '{0}' ",
+                            "\n  No valid connections between guide piece '{0}' ",
                             guidePiece.name)
                         .AppendFormat(
                             "with the following tentatives ({0} ",
@@ -411,7 +402,7 @@ namespace SnapMeshPCG
                 }
 
                 // Select next guide piece
-                guidePiece = _chosenMethod.SelectGuidePiece(
+                guidePiece = _genMethod.SelectGuidePiece(
                     _placedPieces, _placedPieces[_placedPieces.Count - 1]);
 
             }
