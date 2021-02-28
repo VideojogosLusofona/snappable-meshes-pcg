@@ -111,7 +111,6 @@ namespace SnapMeshPCG.GenerationMethods
             _lastGuideSelected = lastPlaced;
             _currentBranchPlaced++;
             return _lastGuideSelected;
-
         }
 
         public void StartBranch()
@@ -123,7 +122,7 @@ namespace SnapMeshPCG.GenerationMethods
             int chosenMult = mults[rng];
             _currentBranchLength = _branchLength + (chosenVar * chosenMult);
             _currentBranchPlaced = 0;
-            _branchesMade ++;
+            _branchesMade++;
         }
     }
 }
