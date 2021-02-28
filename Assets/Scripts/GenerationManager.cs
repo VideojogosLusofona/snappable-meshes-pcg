@@ -33,7 +33,7 @@ namespace SnapMeshPCG
         // ///////// //
 
         private const string contentParams = ":: Content parameters ::";
-        private const string worldParams = ":: World parameters ::";
+        private const string generalParams = ":: General parameters ::";
         private const string connectionParams = ":: Connection parameters ::";
         private const string generationParams = ":: Generation parameters ::";
         private const string events = ":: Events ::";
@@ -58,28 +58,32 @@ namespace SnapMeshPCG
         [ShowIf(nameof(_useStarter))]
         private List<MapPiece> _startingPieceList = null;
 
-        // //////////////// //
-        // World parameters //
-        // //////////////// //
+        // ////////////////// //
+        // General parameters //
+        // ////////////////// //
 
-        [BoxGroup(worldParams)]
+        [BoxGroup(generalParams)]
         [SerializeField]
         private bool _useSeed = false;
 
-        [BoxGroup(worldParams)]
+        [BoxGroup(generalParams)]
         [SerializeField]
         [ShowIf(nameof(_useSeed))]
         private int _seed = 0;
 
-        [BoxGroup(worldParams)]
+        [BoxGroup(generalParams)]
         [SerializeField]
         private float _pieceDistance = 0.0001f;
 
-        [BoxGroup(worldParams)]
+        [BoxGroup(generalParams)]
+        [SerializeField]
+        private uint _maxFailures = 10;
+
+        [BoxGroup(generalParams)]
         [SerializeField]
         private bool _checkOverlaps;
 
-        [BoxGroup(worldParams), ShowIf("_checkOverlaps")]
+        [BoxGroup(generalParams), ShowIf("_checkOverlaps")]
         [SerializeField]
         private LayerMask _collidersLayer;
 
@@ -116,10 +120,6 @@ namespace SnapMeshPCG
         [Expandable]
         [OnValueChanged(nameof(OnChangeGMType))]
         private AbstractGMConfig _generationParams;
-
-        [BoxGroup(generationParams)]
-        [SerializeField]
-        private uint _maxFailures = 10;
 
         [BoxGroup(generationParams)]
         [Label("Starter Connector Count Tolerance")]

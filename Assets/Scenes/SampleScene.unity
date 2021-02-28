@@ -407,9 +407,10 @@ MonoBehaviour:
   - {fileID: 5159214311195075065, guid: 70f2ddc65f4aba247aa26369016e8fed, type: 3}
   _useStarter: 0
   _startingPieceList: []
-  _useSeed: 0
+  _useSeed: 1
   _seed: 681
   _pieceDistance: 0.0001
+  _maxFailures: 10
   _checkOverlaps: 1
   _collidersLayer:
     serializedVersion: 2
@@ -419,7 +420,6 @@ MonoBehaviour:
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
   _generationMethod: Star
   _generationParams: {fileID: 11400000, guid: f0db8b8279e4c96a99c494a4dc12bea0, type: 2}
-  _maxFailures: 10
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
