@@ -21,10 +21,10 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class BranchGM : AbstractGM
     {
-        private readonly int maxBranches;
-        private readonly int branchLength;
-        private readonly int branchLengthVariance;
-        private readonly int pieceJumpSize;
+        private readonly int _maxBranches;
+        private readonly int _branchLength;
+        private readonly int _branchLengthVariance;
+        private readonly int _pieceJumpSize;
 
         private int _branchesMade;
         private int _currentBranchLength;
@@ -33,12 +33,12 @@ namespace SnapMeshPCG.GenerationMethods
         public BranchGM(int maxBranches, int branchLength,
             int branchLengthVariance, int pieceJumpSize)
         {
-            this.maxBranches = maxBranches;
-            this.branchLength = branchLength;
-            this.branchLengthVariance = branchLengthVariance;
-            this.pieceJumpSize = pieceJumpSize;
+            _maxBranches = maxBranches;
+            _branchLength = branchLength;
+            _branchLengthVariance = branchLengthVariance;
+            _pieceJumpSize = pieceJumpSize;
 
-            this.pieceJumpSize = branchLength / maxBranches;
+            _pieceJumpSize = branchLength / maxBranches;
         }
 
         public override MapPiece SelectStartPiece(
@@ -74,12 +74,12 @@ namespace SnapMeshPCG.GenerationMethods
             MapPiece chosen;
             //Random rng = new Random();
 
-            if(_branchesMade > maxBranches)
+            if(_branchesMade > _maxBranches)
                 return null;
 
             if(_currentBranchPlaced > _currentBranchLength)
             {
-                int boundJump = pieceJumpSize * _branchesMade;
+                int boundJump = _pieceJumpSize * _branchesMade;
 
                 // clamp the jump size to within list size
                 boundJump = (boundJump > piecesInMap.Count - 1)?
@@ -93,7 +93,7 @@ namespace SnapMeshPCG.GenerationMethods
                     int index =
                         piecesInMap.FindIndex(
                             a => a.gameObject.name == chosen.gameObject.name)
-                        + pieceJumpSize;
+                        + _pieceJumpSize;
                     if (index < piecesInMap.Count)
                         chosen = piecesInMap[index];
                     else
@@ -116,12 +116,12 @@ namespace SnapMeshPCG.GenerationMethods
 
         public void StartBranch()
         {
-            int rng = UnityEngine.Random.Range(0, branchLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, _branchLengthVariance + 1);
             int chosenVar = rng;
             int[] mults = {-1, 1};
             rng = UnityEngine.Random.Range(0, mults.Length);
             int chosenMult = mults[rng];
-            _currentBranchLength = branchLength + (chosenVar * chosenMult);
+            _currentBranchLength = _branchLength + (chosenVar * chosenMult);
             _currentBranchPlaced = 0;
             _branchesMade ++;
         }

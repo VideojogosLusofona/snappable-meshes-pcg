@@ -21,12 +21,11 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class ArenaGM : AbstractGM
     {
-        private readonly int maxPieces;
-        private int _placedPieces;
+        private readonly int _maxPieces;
 
         public ArenaGM(int maxPieces)
         {
-            this.maxPieces = maxPieces;
+            _maxPieces = maxPieces;
         }
 
         public override MapPiece SelectStartPiece(
@@ -57,9 +56,8 @@ namespace SnapMeshPCG.GenerationMethods
         {
             if (_lastGuideSelected == null)
                 _lastGuideSelected = piecesInMap[0];
-            _placedPieces = piecesInMap.Count;
 
-            if(_placedPieces > maxPieces)
+            if(piecesInMap.Count > _maxPieces)
                 return null;
 
             if(_lastGuideSelected.IsFull())

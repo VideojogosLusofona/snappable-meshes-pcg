@@ -21,13 +21,13 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class StarGM : AbstractGM
     {
-        private readonly int armLength;
-        private readonly int armLengthVariance;
+        private readonly int _armLength;
+        private readonly int _armLengthVariance;
 
         public StarGM(int armLength, int armLengthVariance)
         {
-            this.armLength = armLength;
-            this.armLengthVariance = armLengthVariance;
+            _armLength = armLength;
+            _armLengthVariance = armLengthVariance;
         }
 
         public override MapPiece SelectStartPiece(
@@ -58,12 +58,12 @@ namespace SnapMeshPCG.GenerationMethods
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            int rng = UnityEngine.Random.Range(0, armLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, _armLengthVariance + 1);
             int chosenVar = rng;
             int[] mults = { -1, 1 };
             rng = UnityEngine.Random.Range(0, mults.Length);
             int chosenMult = mults[rng];
-            int currentArmLength = armLength + (chosenVar * chosenMult);
+            int currentArmLength = _armLength + (chosenVar * chosenMult);
 
             // Check if its time to jump back to the starter piece.
             // -1 takes out the starter piece from the equation.
