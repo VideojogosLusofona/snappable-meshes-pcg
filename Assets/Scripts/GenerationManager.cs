@@ -157,9 +157,6 @@ namespace SnapMeshPCG
         // Pieces placed in the map
         private List<MapPiece> _placedPieces;
 
-        // The selected generation method
-        private AbstractGM _genMethod;
-
         // Names of known generation methods
         [System.NonSerialized]
         private string[] _genMethods;
@@ -237,6 +234,9 @@ namespace SnapMeshPCG
             // Tentative piece prototype
             MapPiece tentPiecePrototype;
 
+            // Get chosen generation method (strategy pattern)
+            AbstractGM genMethod = _generationParams.Method;
+
             // Seed for random number generator
             int currentSeed;
 
@@ -275,9 +275,6 @@ namespace SnapMeshPCG
             // this list and we don't want this to be reflected in the editor
             piecesWorkList = new List<MapPiece>(_piecesList);
 
-            // Get chosen generation method (strategy pattern)
-            _genMethod = _generationParams.Method;
-
             // Sort list of pieces to use according to the pieces natural order
             // (descending number of connectors)
             piecesWorkList.Sort();
@@ -289,13 +286,13 @@ namespace SnapMeshPCG
             if (_useStarter)
             {
                 // Get first piece from list of starting pieces
-                starterPiecePrototype = _genMethod.SelectStartPiece(
+                starterPiecePrototype = genMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 // Get first piece from list of all pieces
-                starterPiecePrototype = _genMethod.SelectStartPiece(
+                starterPiecePrototype = genMethod.SelectStartPiece(
                     piecesWorkList, (int)_starterConTol);
             }
 
@@ -401,7 +398,7 @@ namespace SnapMeshPCG
                 }
 
                 // Select next guide piece
-                guidePiece = _genMethod.SelectGuidePiece(
+                guidePiece = genMethod.SelectGuidePiece(
                     _placedPieces, _placedPieces[_placedPieces.Count - 1]);
 
             }
