@@ -81,7 +81,7 @@ namespace SnapMeshPCG.Demo
             }
 
             float percentPassable = 100 * success / tries;
-            print($"Scanner: Evaluated {tries} paths, found {success} good paths. -> {percentPassable.ToString("n1")}%");
+            print($"Scanner: Evaluated {tries} paths from {maxScans} points, found {success} good paths. -> {percentPassable.ToString("n1")}%");
         }
 
         private Vector3 FindPointInNavMesh(Vector3 origin)
