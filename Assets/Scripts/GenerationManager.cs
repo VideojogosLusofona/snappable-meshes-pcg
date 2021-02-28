@@ -81,9 +81,9 @@ namespace SnapMeshPCG
 
         [BoxGroup(worldParams)]
         [SerializeField]
-        private bool _intersectionTests;
+        private bool _checkOverlaps;
 
-        [BoxGroup(worldParams), ShowIf("_intersectionTests")]
+        [BoxGroup(worldParams), ShowIf("_checkOverlaps")]
         [SerializeField]
         private LayerMask _collidersLayer;
 
@@ -347,7 +347,7 @@ namespace SnapMeshPCG
                     snapResult = guidePiece.TrySnapWith(
                         _matchingRules,
                         tentPiece,
-                        _intersectionTests,
+                        _checkOverlaps,
                         _collidersLayer,
                         _pieceDistance,
                         _pinCountTolerance,
@@ -410,8 +410,8 @@ namespace SnapMeshPCG
             // Show piece placing log
             Debug.Log(log);
 
-            // If we performed intersection tests...
-            if (_intersectionTests)
+            // Check for overlaps?
+            if (_checkOverlaps)
             {
                 // ...remove all colliders used for the generation process
                 foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())

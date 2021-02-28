@@ -88,7 +88,7 @@ namespace SnapMeshPCG
             return clonedPiece.gameObject;
         }
 
-#if DEBUG_INTERSECTION
+#if DEBUG_OVERLAPS
         private static int interError = 0;
 #endif
 
@@ -99,9 +99,9 @@ namespace SnapMeshPCG
         /// <param name="other">
         /// The piece to check for possible connection with.
         /// </param>
-        /// <param name="intersectionTest">Perform an intersection test?</param>
-        /// <param name="intersectionLayer">
-        /// Intersection layer to use if <paramref name="intersectionTest"/> is
+        /// <param name="checkOverlaps">Check for overlaps?</param>
+        /// <param name="collidersLayer">
+        /// Overlap layer to use if <paramref name="checkOverlaps"/> is
         /// true.
         /// </param>
         /// <param name="pieceDistance">
@@ -117,7 +117,7 @@ namespace SnapMeshPCG
         /// <returns>True if snap was successful, false otherwise.</returns>
         public bool TrySnapWith(
             SnapRules rules, MapPiece other,
-            bool intersectionTest, LayerMask intersectionLayer,
+            bool checkOverlaps, LayerMask collidersLayer,
             float pieceDistance = 0.00f, uint pinTolerance = 0,
             bool[,] colorMatrix = null)
         {
@@ -164,7 +164,7 @@ namespace SnapMeshPCG
             }
 
             // If there are valid connections, try to enable one of them
-            // This might fail if the intersection tests are enabled
+            // This might fail we're checking for overlaps
             while (validCombos.Count > 0)
             {
                 // Get a random connection from the valid connections list
@@ -175,8 +175,8 @@ namespace SnapMeshPCG
                     validCombos[chosenIndex];
 
                 // Get current PRS components from the other piece, since it
-                // may be necessary to undo the transformation if the
-                // intersection tests are enabled
+                // may be necessary to undo the transformation if we're checking
+                // for overlaps
                 Vector3 prevPos = other.transform.position;
                 Quaternion prevRot = other.transform.rotation;
                 Vector3 prevScale = other.transform.localScale;
@@ -189,15 +189,15 @@ namespace SnapMeshPCG
                 // Apply Transform changes to the physics engine
                 Physics.SyncTransforms();
 
-                // If the intersection tests are enabled, check if there is an
-                // intersection with the existing geometry, using this transform
-                if (intersectionTest)
+                // If checking for overlaps, verify if there are any with the
+                // existing geometry, using this transform
+                if (checkOverlaps)
                 {
-                    // Assume no intersection
-                    bool intersection = false;
+                    // Assume there are no overlaps
+                    bool overlaps = false;
 
                     // Get box colliders in layer and loop through them
-                    foreach (BoxCollider boxCollider in GetBoxColliders(other, intersectionLayer))
+                    foreach (BoxCollider boxCollider in GetBoxColliders(other, collidersLayer))
                     {
                         // Get the center and extents of the current box collider
                         Vector3 center = boxCollider.center + boxCollider.transform.position;
@@ -207,45 +207,45 @@ namespace SnapMeshPCG
 
                         // Get colliders that overlap with the current box
                         Collider[] hits = Physics.OverlapBox(
-                            center, extents, boxCollider.transform.rotation, intersectionLayer);
+                            center, extents, boxCollider.transform.rotation, collidersLayer);
 
                         // Loop through the colliders that overlap with the
                         // current box
                         foreach (Collider hit in hits)
                         {
-                            // Check for self intersection, or intersection with the connected piece
+                            // Check for self overlap, or overlaps with the connected piece
                             // Ignore the collision in those cases
                             MapPiece parentMapPiece = hit.GetComponentInParent<MapPiece>();
                             if ((parentMapPiece == other) ||
                                 (parentMapPiece == this)) continue;
 
-#if DEBUG_INTERSECTION
+#if DEBUG_OVERLAPS
                             Debug.Log($"Can't connect {name} with {other.name}");
                             Debug.Log($"Connector {chosenCombo.chosenMine.name} / {chosenCombo.chosenOther.name}");
-                            Debug.Log($"Intersection detected with {parentMapPiece.name}");
+                            Debug.Log($"Overlap detected with {parentMapPiece.name}");
 
                             // Create a copy for later debug
                             MapPiece newObject = Instantiate(other);
-                            newObject.name = $"IntersectionError {interError++}";
+                            newObject.name = $"OverlapError {interError++}";
                             newObject.transform.position += Vector3.up * 20;
                             newObject.transform.SetParent(null);
                             newObject.gameObject.SetActive(false);
                             Debug.Log($"New object = {newObject.name}");
 #endif
 
-                            // It auto-intersects, so remove this possibility and retry
+                            // It auto-overlaps, so remove this possibility and retry
                             validCombos.Remove(chosenCombo);
 
-                            intersection = true;
+                            overlaps = true;
                             break; // hit found, not need to check more hits
 
                         } // for each hit/collision
 
-                        if (intersection) break; // hit found, not need to check more box colliders
+                        if (overlaps) break; // hit found, not need to check more box colliders
 
                     } // for each box collider
 
-                    if (intersection)
+                    if (overlaps)
                     {
                         // Undo transform, so we can do it again...
                         other.transform.position = prevPos;
@@ -254,7 +254,7 @@ namespace SnapMeshPCG
                         continue; // to next valid combo, if any
                     }
 
-                } // if (intersectionTest)
+                } // if (checkOverlaps)
 
                 // If we get here, there the connector match is definitively
                 // validated, and we can carry on with it

@@ -411,7 +411,7 @@ MonoBehaviour:
   _seed: 681
   _useClippingCorrection: 0
   _pieceDistance: 0.0001
-  _intersectionTests: 1
+  _checkOverlaps: 1
   _collidersLayer:
     serializedVersion: 2
     m_Bits: 1073741824
