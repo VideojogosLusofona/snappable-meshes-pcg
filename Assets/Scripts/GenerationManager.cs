@@ -73,10 +73,6 @@ namespace SnapMeshPCG
 
         [BoxGroup(worldParams)]
         [SerializeField]
-        private bool _useClippingCorrection = false;
-
-        [BoxGroup(worldParams)]
-        [SerializeField]
         private float _pieceDistance = 0.0001f;
 
         [BoxGroup(worldParams)]
@@ -299,7 +295,7 @@ namespace SnapMeshPCG
             // Get the starter piece by cloning the prototype piece selected for
             // this purpose
             starterPieceGObj =
-                starterPiecePrototype.ClonePiece(_useClippingCorrection);
+                starterPiecePrototype.ClonePiece();
 
             // Rename piece so it's easier to determine that it's the
             // starter piece
@@ -335,7 +331,7 @@ namespace SnapMeshPCG
 
                     // Get a tentative piece by cloning the tentative piece prototype
                     GameObject tentPieceGObj =
-                        tentPiecePrototype.ClonePiece(_useClippingCorrection);
+                        tentPiecePrototype.ClonePiece();
 
                     // Get the script associated with the tentative piece
                     MapPiece tentPiece = tentPieceGObj.GetComponent<MapPiece>();
@@ -430,8 +426,8 @@ namespace SnapMeshPCG
                 }
             }
 
-            if (!_useClippingCorrection)
-                OnGenerationFinish.Invoke(_placedPieces.ToArray());
+
+            OnGenerationFinish.Invoke(_placedPieces.ToArray());
         }
 
         [Button("Generate", enabledMode: EButtonEnableMode.Editor)]
@@ -462,41 +458,6 @@ namespace SnapMeshPCG
                 DestroyImmediate(obj.gameObject);
             }
             OnGenerationClear.Invoke();
-        }
-
-        /// <summary>
-        /// Simulate a physics step in the editor
-        /// </summary>
-        [Button("(Clipping Correction) Simulate Physics Step", enabledMode: EButtonEnableMode.Editor)]
-        private void SimulatePhysics()
-        {
-            if (!_useClippingCorrection)
-                Debug.LogWarning("This should only be used when clipping" +
-                "correction was ON at time of generation.");
-
-            Physics.autoSimulation = false;
-            Physics.Simulate(Time.fixedDeltaTime);
-            Physics.autoSimulation = true;
-        }
-
-        /// <summary>
-        /// Manually call the OnGenerationFinish event.
-        /// </summary>
-        [Button("(Clipping Correction) Call Generation End Events", enabledMode: EButtonEnableMode.Editor)]
-        private void CallFinishGenerationEvents()
-        {
-            if (!_useClippingCorrection)
-            {
-                Debug.LogWarning("This should only be used when clipping" +
-                "correction was ON at time of generation.");
-                return;
-            }
-
-            if (_placedPieces == null || _placedPieces.Count == 0)
-            {
-                Debug.LogWarning("No generated pieces found. Generate a map first!");
-            }
-            OnGenerationFinish.Invoke(_placedPieces.ToArray());
         }
 
     }

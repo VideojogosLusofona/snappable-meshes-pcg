@@ -42,9 +42,6 @@ namespace SnapMeshPCG
             }
         }
 
-        // Use clipping correction?
-        private bool _useRigidBody;
-
         /// <summary>
         /// Number of connectors in this piece.
         /// </summary>
@@ -79,12 +76,11 @@ namespace SnapMeshPCG
         /// <summary>
         /// Create a copy of this piece.
         /// </summary>
-        /// <param name="useRigidBody">Use clipping correction?</param>
         /// <returns>A copy of this piece.</returns>
-        public GameObject ClonePiece(bool useRigidBody)
+        public GameObject ClonePiece()
         {
             MapPiece clonedPiece = Instantiate(this);
-            clonedPiece.Setup(useRigidBody);
+            clonedPiece.Setup();
             return clonedPiece.gameObject;
         }
 
@@ -311,8 +307,7 @@ namespace SnapMeshPCG
         /// <summary>
         /// Initializes the connectors and activates the rigidbodies.
         /// </summary>
-        /// <param name="spawnRigid">Use clipping correction?</param>
-        private void Setup(bool spawnRigid)
+        private void Setup()
         {
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
@@ -322,8 +317,6 @@ namespace SnapMeshPCG
             if(mc == null)
                 mc = GetComponentInChildren<MeshCollider>();
 
-            _useRigidBody = spawnRigid;
-
             // Make sure connector collection is initialized
             if (_connectors is null) InitConnectors();
 
@@ -332,19 +325,8 @@ namespace SnapMeshPCG
             if (mc == null && rb != null)
                 mc = rb.gameObject.AddComponent<MeshCollider>();
 
-            if (_useRigidBody)
-            {
-                rb.isKinematic = false;
-                mc.convex = true;
-                rb.useGravity = false;
-                rb.mass = 0;
-                rb.drag = 900;
-                rb.constraints = RigidbodyConstraints.FreezeRotation;
-            }
-            else
-            {
                 rb.isKinematic = true;
-            }
+            
         }
 
         /// <summary>
