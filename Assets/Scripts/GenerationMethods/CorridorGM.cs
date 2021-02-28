@@ -16,22 +16,16 @@
  */
 
 using System.Collections.Generic;
-using System;
 
 namespace SnapMeshPCG.GenerationMethods
 {
     public sealed class CorridorGM : AbstractGM
     {
-        private readonly int maxPieces = 0;
-        private readonly bool pinchEnd = false;
-        private readonly bool useEndPiece = false;
-        private readonly List<MapPiece> enderList = null;
-
-        private int _placedPieces;
+        private readonly int _maxPieces;
 
         public CorridorGM(int maxPieces)
         {
-            this.maxPieces = maxPieces;
+            _maxPieces = maxPieces;
         }
 
         public override MapPiece SelectStartPiece(
@@ -58,43 +52,18 @@ namespace SnapMeshPCG.GenerationMethods
 
             _lastGuideSelected = chosen;
             return chosen;
-
         }
 
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            _placedPieces = piecesInMap.Count;
-
-            if (_placedPieces >= maxPieces)
+            if (piecesInMap.Count >= _maxPieces)
             {
                 return null;
             }
-            // Select a special piece for the final piece
-            else if (_placedPieces == maxPieces - 1)
-            {
-                if (useEndPiece && enderList.Count > 0)
-                {
-                    if (pinchEnd)
-                        return SelectStartPiece(enderList);
-                    else
-                        return SelectEndPiece(enderList);
 
-                }
-
-            }
             _lastGuideSelected = lastPlaced;
             return lastPlaced;
-        }
-
-        protected override MapPiece SelectEndPiece(
-            List<MapPiece> enderList = null)
-        {
-            Random rng = new Random();
-            // Upper limit is exclusive
-            MapPiece chosen = enderList[rng.Next(enderList.Count)];
-            _lastGuideSelected = chosen;
-            return chosen;
         }
     }
 }

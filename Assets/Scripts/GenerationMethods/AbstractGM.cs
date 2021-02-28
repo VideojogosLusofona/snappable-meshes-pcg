@@ -85,10 +85,5 @@ namespace SnapMeshPCG.GenerationMethods
 
             return newGuide;
         }
-
-
-
-        protected virtual MapPiece SelectEndPiece(
-            List<MapPiece> enderList = null) => null;
     }
 }
