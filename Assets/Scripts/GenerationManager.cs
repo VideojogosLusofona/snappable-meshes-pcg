@@ -317,7 +317,7 @@ namespace SnapMeshPCG
             // Log for connection attempts between guide and tentative pieces
             StringBuilder log = new StringBuilder("=== Piece snapping log ===");
 
-            // Make base level of Arena and add those pieces to the list
+            // Enter main generation loop
             do
             {
                 // Number of failed attempts for current guide piece

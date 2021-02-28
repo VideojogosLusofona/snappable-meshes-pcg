@@ -51,6 +51,20 @@ namespace SnapMeshPCG
         public int ConnectorCount => _Connectors.Count;
 
         /// <summary>
+        /// Number of free connectors in this piece.
+        /// </summary>
+        public int FreeConnectorCount
+        {
+            get
+            {
+                int n = 0;
+                foreach (Connector c in _Connectors)
+                    if (!c.IsUsed) n++;
+                return n;
+            }
+        }
+
+        /// <summary>
         /// Checks all connectors to see if they're already connected to
         /// another.
         /// </summary>

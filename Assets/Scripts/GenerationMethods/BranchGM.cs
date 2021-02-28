@@ -68,8 +68,8 @@ namespace SnapMeshPCG.GenerationMethods
             return chosen;
         }
 
-        public override MapPiece SelectGuidePiece(
-            List<MapPiece> worldPieceList, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(
+            List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
             MapPiece chosen;
             //Random rng = new Random();
@@ -82,20 +82,20 @@ namespace SnapMeshPCG.GenerationMethods
                 int boundJump = pieceJumpSize * _branchesMade;
 
                 // clamp the jump size to within list size
-                boundJump = (boundJump > worldPieceList.Count - 1)?
-                    worldPieceList.Count - 1 : boundJump;
+                boundJump = (boundJump > piecesInMap.Count - 1)?
+                    piecesInMap.Count - 1 : boundJump;
 
                 // Select what piece to jump to
-                chosen = worldPieceList[boundJump];
+                chosen = piecesInMap[boundJump];
 
                 if(chosen.IsFull())
                 {
                     int index =
-                        worldPieceList.FindIndex(
+                        piecesInMap.FindIndex(
                             a => a.gameObject.name == chosen.gameObject.name)
                         + pieceJumpSize;
-                    if (index < worldPieceList.Count)
-                        chosen = worldPieceList[index];
+                    if (index < piecesInMap.Count)
+                        chosen = piecesInMap[index];
                     else
                         return null;
                 }

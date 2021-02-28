@@ -61,10 +61,10 @@ namespace SnapMeshPCG.GenerationMethods
 
         }
 
-        public override MapPiece SelectGuidePiece(
-            List<MapPiece> worldPieceList, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(
+            List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            _placedPieces = worldPieceList.Count;
+            _placedPieces = piecesInMap.Count;
 
             if (_placedPieces >= maxPieces)
             {

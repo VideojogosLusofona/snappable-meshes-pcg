@@ -52,12 +52,12 @@ namespace SnapMeshPCG.GenerationMethods
             return chosen;
         }
 
-        public override MapPiece SelectGuidePiece(
-            List<MapPiece> worldPieceList, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(
+            List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
             if (_lastGuideSelected == null)
-                _lastGuideSelected = worldPieceList[0];
-            _placedPieces = worldPieceList.Count;
+                _lastGuideSelected = piecesInMap[0];
+            _placedPieces = piecesInMap.Count;
 
             if(_placedPieces > maxPieces)
                 return null;
@@ -65,9 +65,9 @@ namespace SnapMeshPCG.GenerationMethods
             if(_lastGuideSelected.IsFull())
             {
                 //_lastGuideSelected = lastPlaced;
-                int i = worldPieceList.FindIndex(
+                int i = piecesInMap.FindIndex(
                     a => a.gameObject.name == _lastGuideSelected.gameObject.name);
-                _lastGuideSelected = worldPieceList[i + 1];
+                _lastGuideSelected = piecesInMap[i + 1];
                 return _lastGuideSelected;
             }
 
