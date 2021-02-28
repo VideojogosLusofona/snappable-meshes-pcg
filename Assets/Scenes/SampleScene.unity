@@ -407,9 +407,8 @@ MonoBehaviour:
   - {fileID: 5159214311195075065, guid: 70f2ddc65f4aba247aa26369016e8fed, type: 3}
   _useStarter: 0
   _startingPieceList: []
-  _useSeed: 1
+  _useSeed: 0
   _seed: 681
-  _useClippingCorrection: 0
   _pieceDistance: 0.0001
   _checkOverlaps: 1
   _collidersLayer:
