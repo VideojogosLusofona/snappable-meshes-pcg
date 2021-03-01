@@ -28,8 +28,8 @@ namespace SnapMeshPCG.GenerationMethods
         // Maximum number of pieces the method will use to create an arena
         private readonly int _maxPieces;
 
-        // Piece placed in the map after the last returned guide piece
-        private MapPiece _placedAfterLastGuide;
+        // Index of current guide piece in placed pieces array
+        private int _guideIndex;
 
         /// <summary>
         /// Creates a new arena generation method.
@@ -97,21 +97,15 @@ namespace SnapMeshPCG.GenerationMethods
         /// </returns>
         /// <remarks>
         /// For the arena generation method, if the current guide piece has
-        /// free it remains the guide piece. Otherwise, the piece placed
-        /// immediately after the current guide piece is selected as the next
-        /// guide piece.
+        /// free connectors it remains the guide piece. Otherwise, the piece
+        /// placed immediately after the current guide piece was placed in the
+        /// map is selected as the next guide piece.
         /// </remarks>
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
             // The guide piece to return
             MapPiece guidePiece;
-
-            // If _placedAfterLastGuide is null it means that we don't yet
-            // have a reference to the piece placed after the current guide
-            // piece, so get that reference
-            if (_placedAfterLastGuide is null)
-                _placedAfterLastGuide = lastPlaced;
 
             // Select the guide piece to return
             if (piecesInMap.Count > _maxPieces)
@@ -124,12 +118,8 @@ namespace SnapMeshPCG.GenerationMethods
             {
                 // If the current guide piece has no connectors left, select a
                 // new guide piece which will be the piece placed after the
-                // last returned guide piece
-                guidePiece = _placedAfterLastGuide;
-
-                // Since we're returning a new guide piece, the piece placed
-                // after it doesn't yet exist, so set that reference to null
-                _placedAfterLastGuide = null;
+                // current guide piece was placed
+                guidePiece = piecesInMap[++_guideIndex];
             }
             else
             {
