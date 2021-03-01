@@ -112,7 +112,7 @@ namespace SnapMeshPCG.GenerationMethods
             // we can assume the last placed piece is the current guide piece
             if (LastGuide is null)
             {
-                LastGuide = lastPlaced;
+                LastGuide = piecesInMap[0];
             }
 
             // Invoke the concrete method for selecting the next guide piece
