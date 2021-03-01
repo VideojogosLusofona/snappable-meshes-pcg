@@ -252,7 +252,7 @@ namespace SnapMeshPCG
 
                 } // if (checkOverlaps)
 
-                // If we get here, there the connector match is definitively
+                // If we get here, then the connector match is definitively
                 // validated, and we can carry on with it
                 Connector.Match(chosenCombo.curr, chosenCombo.other);
 
@@ -326,7 +326,7 @@ namespace SnapMeshPCG
                 mc = rb.gameObject.AddComponent<MeshCollider>();
 
                 rb.isKinematic = true;
-            
+
         }
 
         /// <summary>

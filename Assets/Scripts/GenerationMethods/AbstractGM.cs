@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace SnapMeshPCG.GenerationMethods
@@ -24,11 +25,25 @@ namespace SnapMeshPCG.GenerationMethods
         protected MapPiece _firstPiece;
         protected MapPiece _lastGuideSelected;
 
-        private MapPiece _lastGuide;
+        // Free connectors in the last guide piece returned
         private int _lastGuideFreeConnectors;
 
-        public abstract MapPiece SelectStartPiece(
-            List<MapPiece> starterList, int starterConTol = 0);
+        // Last guide piece returned by the generation method
+        protected MapPiece LastGuide { get; private set; }
+
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        /// <remarks>
+        /// Concrete generation methods must override this method in order to
+        /// define how to select the starting piece.
+        /// </remarks>
+        protected abstract MapPiece DoSelectStartPiece(
+            List<MapPiece> starterList, int starterConTol);
 
         /// <summary>
         /// Selects the next guide piece according to the generation method.
@@ -46,6 +61,34 @@ namespace SnapMeshPCG.GenerationMethods
         protected abstract MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced);
 
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        public MapPiece SelectStartPiece(
+            List<MapPiece> starterList, int starterConTol)
+        {
+            // The starting piece to return
+            MapPiece startingPiece;
+
+            // If the starter list does not contain any pieces, throw an
+            // exception
+            if ((starterList?.Count ?? 0) == 0)
+                throw new ArgumentException("starterList is empty or null");
+
+            // Get the starting piece from the concrete generation method
+            startingPiece = DoSelectStartPiece(starterList, starterConTol);
+
+            // Keep the number of free connectors
+            _lastGuideFreeConnectors = startingPiece?.FreeConnectorCount ?? 0;
+
+            // Return the starting piece
+            return startingPiece;
+        }
+
         /// <summary>
         /// Selects the next guide piece according to the generation method.
         /// </summary>
@@ -57,15 +100,30 @@ namespace SnapMeshPCG.GenerationMethods
         public MapPiece SelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            // Invoke the concrete method for selecting the next guide piece.
-            MapPiece newGuide = DoSelectGuidePiece(piecesInMap, lastPlaced);
+            // The guide piece to return
+            MapPiece newGuide;
+
+            // If the piecesInMap list does not contain any pieces, throw an
+            // exception
+            if ((piecesInMap?.Count ?? 0) == 0)
+                throw new ArgumentException("piecesInMap is empty or null");
+
+            // If there's no last guide piece, we're in the first iteration, so
+            // we can assume the last placed piece is the current guide piece
+            if (LastGuide is null)
+            {
+                LastGuide = lastPlaced;
+            }
+
+            // Invoke the concrete method for selecting the next guide piece
+            newGuide = DoSelectGuidePiece(piecesInMap, lastPlaced);
 
             // Check the guide piece returned by the concrete generation method
-            if (newGuide != _lastGuide)
+            if (newGuide != LastGuide)
             {
                 // If it's a different piece, update our cached information
                 // accordingly
-                _lastGuide = newGuide;
+                LastGuide = newGuide;
                 _lastGuideFreeConnectors = newGuide?.FreeConnectorCount ?? 0;
             }
             else if (newGuide.FreeConnectorCount < _lastGuideFreeConnectors)
@@ -83,6 +141,7 @@ namespace SnapMeshPCG.GenerationMethods
                 newGuide = null;
             }
 
+            // Return the guide piece
             return newGuide;
         }
     }

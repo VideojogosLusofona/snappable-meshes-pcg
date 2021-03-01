@@ -16,60 +16,129 @@
  */
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// The arena generation method.
+    /// </summary>
     public sealed class ArenaGM : AbstractGM
     {
+        // Maximum number of pieces the method will use to create an arena
         private readonly int _maxPieces;
 
+        // Piece placed in the map after the last returned guide piece
+        private MapPiece _placedAfterLastGuide;
+
+        /// <summary>
+        /// Creates a new arena generation method.
+        /// </summary>
+        /// <param name="maxPieces">
+        /// Maximum number of pieces the method will use to create an arena.
+        /// </param>
         public ArenaGM(int maxPieces)
         {
             _maxPieces = maxPieces;
         }
 
-        public override MapPiece SelectStartPiece(
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        /// <remarks>
+        /// For the arena generation method, the piece with most connectors is
+        /// selected. If there are multiple pieces with the same highest number
+        /// of connectors, one of them is selected at random.
+        /// </remarks>
+        protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol = 0)
         {
-            // Assumes that the list is sorted by number of connectors where
-            // [0] is the index with most connectors
-            int topConnectorCount = starterList[0].ConnectorCount;
+            // Index of selected starting piece in starting piece list
+            int startingPieceIndex;
 
-            int minimumAllowed = topConnectorCount - starterConTol;
-            List<MapPiece> possibles = new List<MapPiece>();
-            foreach(MapPiece g in starterList)
+            // Get the number of connectors in the piece with the most
+            // connectors
+            int maxConnectorCount = starterList[0].ConnectorCount;
+
+            // Determine the minimum amount of connectors a piece must have in
+            // order to be selected as the starting piece
+            int minAllowed = maxConnectorCount - starterConTol;
+
+            // Determine index of piece with the minimum allowed number of
+            // connectors
+            int minAllowedIndex = 0;
+            for (int i = 1; i < starterList.Count; i++)
             {
-                if(g.ConnectorCount >= minimumAllowed)
-                    possibles.Add(g);
+                if (starterList[i].ConnectorCount >= minAllowed)
+                    minAllowedIndex = i;
+                else
+                    break;
             }
 
-            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
-            // Upper limit is exclusive
-            MapPiece chosen = possibles[rng];
-            _firstPiece = chosen;
-            //_lastGuideSelected = _firstPiece;
-            return chosen;
+            // Get the index of the starting piece
+            startingPieceIndex = Random.Range(0, minAllowedIndex + 1);
+
+            // Return the starting piece
+            return starterList[startingPieceIndex];
         }
 
+        /// <summary>
+        /// Selects the next guide piece according to the generation method.
+        /// </summary>
+        /// <param name="piecesInMap">Placed Geometry to select Guide from
+        /// </param>
+        /// <param name="lastPlaced">Last successfully placed geometry</param>
+        /// <returns>
+        /// The next guide piece or null if the generation is finished.
+        /// </returns>
+        /// <remarks>
+        /// For the arena generation method, if the current guide piece has
+        /// free it remains the guide piece. Otherwise, the piece placed
+        /// immediately after the current guide piece is selected as the next
+        /// guide piece.
+        /// </remarks>
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            if (_lastGuideSelected == null)
-                _lastGuideSelected = piecesInMap[0];
+            // The guide piece to return
+            MapPiece guidePiece;
 
-            if(piecesInMap.Count > _maxPieces)
-                return null;
+            // If _placedAfterLastGuide is null it means that we don't yet
+            // have a reference to the piece placed after the current guide
+            // piece, so get that reference
+            if (_placedAfterLastGuide is null)
+                _placedAfterLastGuide = lastPlaced;
 
-            if(_lastGuideSelected.IsFull())
+            // Select the guide piece to return
+            if (piecesInMap.Count > _maxPieces)
             {
-                //_lastGuideSelected = lastPlaced;
-                int i = piecesInMap.FindIndex(
-                    a => a.gameObject.name == _lastGuideSelected.gameObject.name);
-                _lastGuideSelected = piecesInMap[i + 1];
-                return _lastGuideSelected;
+                // If we're over the maximum number of pieces, return null to
+                // signal the end of the map generation
+                guidePiece = null;
+            }
+            else if (LastGuide.IsFull())
+            {
+                // If the current guide piece has no connectors left, select a
+                // new guide piece which will be the piece placed after the
+                // last returned guide piece
+                guidePiece = _placedAfterLastGuide;
+
+                // Since we're returning a new guide piece, the piece placed
+                // after it doesn't yet exist, so set that reference to null
+                _placedAfterLastGuide = null;
+            }
+            else
+            {
+                // Otherwise, return the last returned guide piece
+                guidePiece = LastGuide;
             }
 
-            return _lastGuideSelected;
+            // Return the selected guide piece
+            return guidePiece;
         }
     }
 }

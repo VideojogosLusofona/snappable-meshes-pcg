@@ -28,7 +28,7 @@ namespace SnapMeshPCG.GenerationMethods
             _maxPieces = maxPieces;
         }
 
-        public override MapPiece SelectStartPiece(
+        protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol = 0)
         {
             // Assumes that the list is sorted by number of connectors where

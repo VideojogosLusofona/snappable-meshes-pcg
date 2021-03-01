@@ -30,7 +30,7 @@ namespace SnapMeshPCG.GenerationMethods
             _armLengthVariance = armLengthVariance;
         }
 
-        public override MapPiece SelectStartPiece(
+        protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol = 0)
         {
 

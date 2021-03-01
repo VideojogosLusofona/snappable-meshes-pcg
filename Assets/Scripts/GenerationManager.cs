@@ -426,7 +426,6 @@ namespace SnapMeshPCG
                 }
             }
 
-
             OnGenerationFinish.Invoke(_placedPieces.ToArray());
         }
 
