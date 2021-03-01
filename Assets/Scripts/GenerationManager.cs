@@ -240,6 +240,9 @@ namespace SnapMeshPCG
             // initially copied from _piecesList
             List<MapPiece> piecesWorkList;
 
+            // Create a map generation log
+            StringBuilder log = new StringBuilder("=== Map generation log ===");
+
             // If we're using a starting piece, the starting piece list cannot
             // be empty
             if (_useStarter
@@ -258,8 +261,8 @@ namespace SnapMeshPCG
             else
                 currentSeed = (int)System.DateTime.Now.Ticks;
 
-            // Notify user of seed used for generating this map
-            Debug.Log($"Generating with seed = {currentSeed}.");
+            // Log seed used for generating this map
+            log.AppendFormat("\n\tGenerating with seed = {0}", currentSeed);
 
             // Initialize random number generator
             Random.InitState(currentSeed);
@@ -307,8 +310,11 @@ namespace SnapMeshPCG
             // Initially, the guide piece is the starting piece
             guidePiece = _placedPieces[0];
 
-            // Log for connection attempts between guide and tentative pieces
-            StringBuilder log = new StringBuilder("=== Piece snapping log ===");
+            // Log starting piece
+            log.AppendFormat(
+                "\n\tStarting piece is '{0}' with {1} free connectors",
+                starterPieceGObj.name,
+                starterPieceGObj.GetComponent<MapPiece>().FreeConnectorCount);
 
             // Enter main generation loop
             do
@@ -353,6 +359,11 @@ namespace SnapMeshPCG
                         tentPieceGObj.transform.SetParent(guidePiece.transform);
                         _placedPieces.Add(tentPiece);
                         OnConnectionMade.Invoke(tentPiece);
+
+                        log.AppendFormat(
+                            "\n\t\tSnap successful with '{0}' (piece no. {1} in the map)",
+                            tentPieceGObj.name,
+                            _placedPieces.Count);
                     }
                     else
                     {
@@ -383,13 +394,10 @@ namespace SnapMeshPCG
                 if (logCurrGuide.Length > 0)
                 {
                     log.AppendFormat(
-                            "\n  No valid connections between guide piece '{0}' ",
+                            "\n\t\tNo valid connections between guide piece '{0}'",
                             guidePiece.name)
                         .AppendFormat(
-                            "with the following tentatives ({0} ",
-                            _placedPieces.Count)
-                        .AppendFormat(
-                            "pieces placed so far): {0}",
+                            " with the following tentatives: {0}",
                             logCurrGuide);
                 }
 
@@ -397,13 +405,25 @@ namespace SnapMeshPCG
                 guidePiece = genMethod.SelectGuidePiece(
                     _placedPieces, _placedPieces[_placedPieces.Count - 1]);
 
+                // Log new guide piece
+                if (guidePiece is null)
+                {
+                    log.Append("\n\tGuide piece is null, generation over");
+                }
+                else
+                {
+                    log.AppendFormat(
+                        "\n\tGuide piece is '{0}' with {1} free connectors",
+                        guidePiece.name,
+                        guidePiece.FreeConnectorCount);
+                }
             }
             while (guidePiece != null);
 
             // Show piece placing log
             Debug.Log(log);
 
-            // Check for overlaps?
+            // If we checked for overlaps...
             if (_checkOverlaps)
             {
                 // ...remove all colliders used for the generation process
