@@ -48,9 +48,8 @@ namespace SnapMeshPCG.GenerationMethods
         /// <summary>
         /// Selects the next guide piece according to the generation method.
         /// </summary>
-        /// <param name="piecesInMap">Placed Geometry to select Guide from
-        /// </param>
-        /// <param name="lastPlaced">Last successfully placed geometry</param>
+        /// <param name="piecesInMap">Pieces already place in the map.</param>
+        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
