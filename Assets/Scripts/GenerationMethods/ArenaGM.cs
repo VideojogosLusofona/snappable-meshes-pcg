@@ -21,7 +21,7 @@ using UnityEngine;
 namespace SnapMeshPCG.GenerationMethods
 {
     /// <summary>
-    /// The arena generation method, which aims to create maps that sprawl in
+    /// The arena generation method aims to create maps that sprawl in
     /// all directions, covering a large area with geometry.
     /// </summary>
     public sealed class ArenaGM : AbstractGM
@@ -33,7 +33,7 @@ namespace SnapMeshPCG.GenerationMethods
         private int _guideIndex;
 
         /// <summary>
-        /// Creates a new arena generation method.
+        /// Creates a new arena generation method instance.
         /// </summary>
         /// <param name="maxPieces">
         /// Maximum number of pieces the method will use to create an arena.

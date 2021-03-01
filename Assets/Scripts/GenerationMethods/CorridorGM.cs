@@ -21,7 +21,7 @@ using UnityEngine;
 namespace SnapMeshPCG.GenerationMethods
 {
     /// <summary>
-    /// The corridor generation method, which aims to create long, narrow maps
+    /// The corridor generation method aims to create long, narrow maps
     /// where the geometry seemingly follows a line.
     /// </summary>
     public sealed class CorridorGM : AbstractGM
@@ -31,7 +31,7 @@ namespace SnapMeshPCG.GenerationMethods
         private readonly int _maxPieces;
 
         /// <summary>
-        /// Creates a new corridor generation method.
+        /// Creates a new corridor generation method instance.
         /// </summary>
         /// <param name="maxPieces">
         /// Maximum number of pieces the method will use to create a map.
