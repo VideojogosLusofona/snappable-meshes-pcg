@@ -21,7 +21,8 @@ using UnityEngine;
 namespace SnapMeshPCG.GenerationMethods
 {
     /// <summary>
-    /// The arena generation method.
+    /// The arena generation method, which aims to create maps that sprawl in
+    /// all directions, covering a large area with geometry.
     /// </summary>
     public sealed class ArenaGM : AbstractGM
     {
@@ -64,7 +65,7 @@ namespace SnapMeshPCG.GenerationMethods
             // connectors
             int maxConnectorCount = starterList[0].ConnectorCount;
 
-            // Determine the minimum amount of connectors a piece must have in
+            // Determine the minimum amount of connectors a piece may have in
             // order to be selected as the starting piece
             int minAllowed = maxConnectorCount - starterConTol;
 
@@ -89,9 +90,8 @@ namespace SnapMeshPCG.GenerationMethods
         /// <summary>
         /// Selects the next guide piece according to the generation method.
         /// </summary>
-        /// <param name="piecesInMap">Placed Geometry to select Guide from
-        /// </param>
-        /// <param name="lastPlaced">Last successfully placed geometry</param>
+        /// <param name="piecesInMap">Pieces already place in the map.</param>
+        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
@@ -99,36 +99,31 @@ namespace SnapMeshPCG.GenerationMethods
         /// For the arena generation method, if the current guide piece has
         /// free connectors it remains the guide piece. Otherwise, the piece
         /// placed immediately after the current guide piece was placed in the
-        /// map is selected as the next guide piece.
+        /// map is selected as the next guide piece. This process continues
+        /// until a maximum number of pieces has been placed in the map.
         /// </remarks>
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            // The guide piece to return
-            MapPiece guidePiece;
-
             // Select the guide piece to return
             if (piecesInMap.Count > _maxPieces)
             {
                 // If we're over the maximum number of pieces, return null to
                 // signal the end of the map generation
-                guidePiece = null;
+                return null;
             }
             else if (LastGuide.IsFull())
             {
                 // If the current guide piece has no connectors left, select a
                 // new guide piece which will be the piece placed after the
                 // current guide piece was placed
-                guidePiece = piecesInMap[++_guideIndex];
+                return piecesInMap[++_guideIndex];
             }
             else
             {
                 // Otherwise, return the last returned guide piece
-                guidePiece = LastGuide;
+                return LastGuide;
             }
-
-            // Return the selected guide piece
-            return guidePiece;
         }
     }
 }
