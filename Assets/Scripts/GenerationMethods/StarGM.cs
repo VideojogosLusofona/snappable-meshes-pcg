@@ -19,15 +19,31 @@ using System.Collections.Generic;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// The star generation method is a mix of the arena and corridor generation
+    /// methods, creating corridors sprawling from the starting piece and ending
+    /// when that piece has no empty connectors.
+    /// </summary>
     public sealed class StarGM : AbstractGM
     {
+        // The base amount of pieces an arm of the star will have
         private readonly int _armLength;
-        private readonly int _armLengthVariance;
+        // The maximum variation from _armLength in each arm
+        private readonly int _armLengthVar;
 
-        public StarGM(int armLength, int armLengthVariance)
+        /// <summary>
+        /// Creates a new star generation method instance.
+        /// </summary>
+        /// <param name="armLength">
+        /// The base amount of pieces an arm of the star will have.
+        /// </param>
+        /// <param name="armLengthVar">
+        /// The maximum variation from <paramref name="_armLength"/> in each arm.
+        /// </param>
+        public StarGM(int armLength, int armLengthVar)
         {
             _armLength = armLength;
-            _armLengthVariance = armLengthVariance;
+            _armLengthVar = armLengthVar;
         }
 
         protected override MapPiece DoSelectStartPiece(
@@ -58,7 +74,7 @@ namespace SnapMeshPCG.GenerationMethods
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            int rng = UnityEngine.Random.Range(0, _armLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, _armLengthVar + 1);
             int chosenVar = rng;
             int[] mults = { -1, 1 };
             rng = UnityEngine.Random.Range(0, mults.Length);

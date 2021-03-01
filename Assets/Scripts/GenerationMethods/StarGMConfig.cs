@@ -22,12 +22,12 @@ namespace SnapMeshPCG.GenerationMethods
     public class StarGMConfig : AbstractGMConfig
     {
         [SerializeField]
-        private uint _armPieceCount = 0;
+        private uint _armLength = 0;
 
         [SerializeField]
-        private int armSizeVariance = 0;
+        private int armLengthVar = 0;
 
         public override AbstractGM Method =>
-            new StarGM((int)_armPieceCount, armSizeVariance);
+            new StarGM((int)_armLength, armLengthVar);
     }
 }
