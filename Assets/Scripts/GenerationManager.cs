@@ -326,7 +326,10 @@ namespace SnapMeshPCG
                 bool snapResult;
 
                 // Log for current guide piece
-                StringBuilder logCurrGuide = new StringBuilder();
+                StringBuilder logFailures = new StringBuilder();
+
+                // Log successful snap, if any
+                string logSuccess = "";
 
                 // Pick a tentative piece to evaluate against our guide piece
                 do
@@ -360,7 +363,7 @@ namespace SnapMeshPCG
                         _placedPieces.Add(tentPiece);
                         OnConnectionMade.Invoke(tentPiece);
 
-                        log.AppendFormat(
+                        logSuccess = string.Format(
                             "\n\t\tSnap successful with '{0}' (piece no. {1} in the map)",
                             tentPieceGObj.name,
                             _placedPieces.Count);
@@ -370,8 +373,8 @@ namespace SnapMeshPCG
                         // No valid connections
 
                         // Log occurrence
-                        if (logCurrGuide.Length > 0) logCurrGuide.Append(", ");
-                        logCurrGuide.AppendFormat(
+                        if (logFailures.Length > 0) logFailures.Append(", ");
+                        logFailures.AppendFormat(
                             "'{0}'", tentPieceGObj.name);
 
                         // Destroy tentative piece game object
@@ -383,7 +386,7 @@ namespace SnapMeshPCG
                         // If max failures is reached, log occurrence
                         if (failCount >= _maxFailures)
                         {
-                            logCurrGuide.AppendFormat(
+                            logFailures.AppendFormat(
                                 " and gave up after {0} attempts",
                                 failCount);
                         }
@@ -391,15 +394,16 @@ namespace SnapMeshPCG
                 }
                 while (!snapResult && failCount < _maxFailures);
 
-                if (logCurrGuide.Length > 0)
+                // Add failures log to main log
+                if (logFailures.Length > 0)
                 {
                     log.AppendFormat(
-                            "\n\t\tNo valid connections between guide piece '{0}'",
-                            guidePiece.name)
-                        .AppendFormat(
-                            " with the following tentatives: {0}",
-                            logCurrGuide);
+                            "\n\t\tNo valid connections with the following tentatives: {0}",
+                            logFailures);
                 }
+
+                // Add success log to main log
+                log.Append(logSuccess);
 
                 // Select next guide piece
                 guidePiece = genMethod.SelectGuidePiece(
