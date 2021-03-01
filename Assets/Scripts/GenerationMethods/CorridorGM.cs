@@ -54,7 +54,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// number of connectors, one of them is selected at random.
         /// </remarks>
         protected override MapPiece DoSelectStartPiece(
-            List<MapPiece> starterList, int starterConTol = 0)
+            List<MapPiece> starterList, int starterConTol)
         {
             // Index of selected starting piece in starting piece list
             int startingPieceIndex;

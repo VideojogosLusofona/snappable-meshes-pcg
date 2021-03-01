@@ -47,7 +47,7 @@ namespace SnapMeshPCG.GenerationMethods
         }
 
         protected override MapPiece DoSelectStartPiece(
-            List<MapPiece> starterList, int starterConTol = 0)
+            List<MapPiece> starterList, int starterConTol)
         {
 
             // Assumes that the list is sorted by number of connectors where
