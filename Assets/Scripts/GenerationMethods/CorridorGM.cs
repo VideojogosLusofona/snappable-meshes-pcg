@@ -16,54 +16,93 @@
  */
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// The corridor generation method, which aims to create long, narrow maps
+    /// where the geometry seemingly follows a line.
+    /// </summary>
     public sealed class CorridorGM : AbstractGM
     {
+        // Maximum number of pieces the method will use to create a
+        // corridor-like map
         private readonly int _maxPieces;
 
+        /// <summary>
+        /// Creates a new corridor generation method.
+        /// </summary>
+        /// <param name="maxPieces">
+        /// Maximum number of pieces the method will use to create a map.
+        /// </param>
         public CorridorGM(int maxPieces)
         {
             _maxPieces = maxPieces;
         }
 
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        /// <remarks>
+        /// For the corridor generation method, the piece with less connectors
+        /// is selected. If there are multiple pieces with the same lowest
+        /// number of connectors, one of them is selected at random.
+        /// </remarks>
         protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol = 0)
         {
-            // Assumes that the list is sorted by number of connectors where
-            // [0] is the index with most connectors
-            int botConnectorCount =
+            // Index of selected starting piece in starting piece list
+            int startingPieceIndex;
+
+            // Get the number of connectors in the piece with the least
+            // connectors
+            int minConnectorCount =
                 starterList[starterList.Count - 1].ConnectorCount;
 
-            int maximumAllowed = botConnectorCount + starterConTol;
-            List<MapPiece> possibles = new List<MapPiece>();
-            foreach (MapPiece g in starterList)
+            // Determine the maximum amount of connectors a piece may have in
+            // order to be selected as the starting piece
+            int maxAllowed = minConnectorCount + starterConTol;
+
+            // Determine index of piece with the maximum allowed number of
+            // connectors
+            int maxAllowedIndex = starterList.Count - 1;
+            for (int i = maxAllowedIndex - 1; i >= 0; i--)
             {
-                if (g.ConnectorCount <= maximumAllowed)
-                    possibles.Add(g);
+                if (starterList[i].ConnectorCount <= maxAllowed)
+                    maxAllowedIndex = i;
+                else
+                    break;
             }
 
-            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
-            // Upper limit is exclusive
-            MapPiece chosen = possibles[rng];
-            if (_firstPiece == null)
-                _firstPiece = chosen;
+            // Get the index of the starting piece
+            startingPieceIndex = Random.Range(maxAllowedIndex, starterList.Count);
 
-            _lastGuideSelected = chosen;
-            return chosen;
+            // Return the starting piece
+            return starterList[startingPieceIndex];
         }
 
+        /// <summary>
+        /// Selects the next guide piece according to the generation method.
+        /// </summary>
+        /// <param name="piecesInMap">Pieces already place in the map.</param>
+        /// <param name="lastPlaced">Last piece placed in the map.</param>
+        /// <returns>
+        /// The next guide piece or null if the generation is finished.
+        /// </returns>
+        /// <remarks>
+        /// For the arena generation method, the last placed piece is always
+        /// returned as the guide piece. This process continues until a maximum
+        /// number of pieces has been placed in the map.
+        /// </remarks>
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            if (piecesInMap.Count >= _maxPieces)
-            {
-                return null;
-            }
-
-            _lastGuideSelected = lastPlaced;
-            return lastPlaced;
+            return piecesInMap.Count < _maxPieces ? lastPlaced : null;
         }
     }
 }
