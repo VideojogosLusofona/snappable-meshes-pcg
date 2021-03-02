@@ -78,16 +78,6 @@ namespace SnapMeshPCG
         private void OnLooksChanged() =>
             GizmoVisuals = _gizmoLooks;
 
-        //[SerializeField] private Color _gizmoColor;
-
-        private void Awake()
-        {
-            //GetUnionPoint();
-            /*foreach (Connector c in _connectors)
-                c.groupColor = gizmoColor;
-            */
-        }
-
         /// <summary>
         /// Snap this connector with another connector.
         /// </summary>
