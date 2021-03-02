@@ -118,6 +118,10 @@ namespace SnapMeshPCG.GenerationMethods
                 // If we've reached the maximum size for the current branch,
                 // let's create a new branch
 
+                // Did we reach the branch count limit? If so return null and
+                // end the generation process
+                if (_branchesCreated >= _branchCount) return null;
+
                 // Determine the next jump size
                 int jump = _baseJumpSize * _branchesCreated;
 
@@ -160,10 +164,6 @@ namespace SnapMeshPCG.GenerationMethods
 
                 // Start a new branch from there
                 NewBranch();
-
-                // Did we reach the branch count limit? If so return null and
-                // end the generation process
-                if (_branchesCreated > _branchCount) return null;
 
                 // Return the selected map piece after the jump; if it's full
                 // even after our attempts to find a non-full piece, then
