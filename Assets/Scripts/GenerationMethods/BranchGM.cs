@@ -19,60 +19,56 @@ using System.Collections.Generic;
 
 namespace SnapMeshPCG.GenerationMethods
 {
-    public sealed class BranchGM : AbstractGM
+     /// <summary>
+    /// The branch generation method creates branches in the same manner as the
+    /// star method. However it does not return to the starting piece, choosing
+    /// instead a previously placed piece to start a new branch, repeating this
+    /// until there are no more available pieces or branchLength as been
+    /// reached.
+    /// </summary>
+   public sealed class BranchGM : AbstractGM
     {
         private readonly int _maxBranches;
         private readonly int _branchLength;
-        private readonly int _branchLengthVariance;
+        private readonly int _branchLengthVar;
         private readonly int _pieceJumpSize;
 
         private int _branchesMade;
         private int _currentBranchLength;
         private int _currentBranchPlaced;
 
-        public BranchGM(int maxBranches, int branchLength,
-            int branchLengthVariance, int pieceJumpSize)
+        public BranchGM(uint maxBranches, uint branchLength, uint branchLengthVar)
         {
-            _maxBranches = maxBranches;
-            _branchLength = branchLength;
-            _branchLengthVariance = branchLengthVariance;
-            _pieceJumpSize = pieceJumpSize;
+            _maxBranches = (int)maxBranches;
+            _branchLength = (int)branchLength;
+            _branchLengthVar = (int)branchLengthVar;
 
-            _pieceJumpSize = branchLength / maxBranches;
+            _pieceJumpSize = _branchLength / _maxBranches;
         }
 
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        /// <remarks>
+        /// For the branch generation method, the piece with less connectors
+        /// is selected. If there are multiple pieces with the same lowest
+        /// number of connectors, one of them is selected at random.
+        /// </remarks>
         protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol)
         {
-            // Assumes that the list is sorted by number of connectors where
-            // [0] is the index with most connectors
-            int botConnectorCount =
-                starterList[starterList.Count - 1].ConnectorCount;
-
-            int maximumAllowed = botConnectorCount + starterConTol;
-            List<MapPiece> possibles = new List<MapPiece>();
-            foreach(MapPiece g in starterList)
-            {
-                if(g.ConnectorCount <= maximumAllowed)
-                    possibles.Add(g);
-            }
-
-            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
-            // Upper limit is exclusive
-            MapPiece chosen = possibles[rng];
-            if (_firstPiece == null)
-                _firstPiece = chosen;
-
-            StartBranch();
-            _lastGuideSelected = chosen;
-            return chosen;
+            return Helpers.GetPieceWithLessConnectors(starterList, starterConTol);
         }
+
 
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
             MapPiece chosen;
-            //Random rng = new Random();
 
             if(_branchesMade > _maxBranches)
                 return null;
@@ -103,19 +99,16 @@ namespace SnapMeshPCG.GenerationMethods
                 // Start a new branch from there
                 StartBranch();
 
-                _lastGuideSelected = chosen;
                 return chosen;
-
             }
 
-            _lastGuideSelected = lastPlaced;
             _currentBranchPlaced++;
-            return _lastGuideSelected;
+            return lastPlaced;
         }
 
         public void StartBranch()
         {
-            int rng = UnityEngine.Random.Range(0, _branchLengthVariance + 1);
+            int rng = UnityEngine.Random.Range(0, _branchLengthVar + 1);
             int chosenVar = rng;
             int[] mults = {-1, 1};
             rng = UnityEngine.Random.Range(0, mults.Length);

@@ -28,14 +28,9 @@ namespace SnapMeshPCG.GenerationMethods
         private uint _branchPieceCount = 0;
 
         [SerializeField]
-        private int _branchSizeVariance = 0;
-
-        // Don't expose this to have branch calculate the jumping
-        private uint _branchGenPieceSkipping = 0;
+        private uint _branchSizeVar = 0;
 
         public override AbstractGM Method =>
-            new BranchGM((int)_branchCount, (int)_branchPieceCount,
-                _branchSizeVariance, (int)_branchGenPieceSkipping);
-
+            new BranchGM(_branchCount, _branchPieceCount, _branchSizeVar);
     }
 }

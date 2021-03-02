@@ -22,9 +22,6 @@ namespace SnapMeshPCG.GenerationMethods
 {
     public abstract class AbstractGM
     {
-        protected MapPiece _firstPiece;
-        protected MapPiece _lastGuideSelected;
-
         // Free connectors in the last guide piece returned
         private int _lastGuideFreeConnectors;
 
