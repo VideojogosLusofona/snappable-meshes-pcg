@@ -42,10 +42,10 @@ namespace SnapMeshPCG.GenerationMethods
         /// Creates a new star generation method instance.
         /// </summary>
         /// <param name="armLength">
-        /// The base amount of pieces an arm of the star will have.
+        /// Average number of pieces an arm of the star will have.
         /// </param>
         /// <param name="armLengthVar">
-        /// The maximum variation from <paramref name="_armLength"/> in each arm.
+        /// The maximum variation from <paramref name="armLength"/> in each arm.
         /// </param>
         public StarGM(uint armLength, uint armLengthVar)
         {
