@@ -255,7 +255,7 @@ namespace SnapMeshPCG
 
                 // If we get here, then the connector match is definitively
                 // validated, and we can carry on with it
-                Connector.Match(chosenCombo.curr, chosenCombo.other);
+                chosenCombo.curr.SnapWith(chosenCombo.other);
 
                 // Return true, indicating that a match was found and piece
                 // snapping was successful

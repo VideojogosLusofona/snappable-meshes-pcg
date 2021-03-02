@@ -89,16 +89,15 @@ namespace SnapMeshPCG
         }
 
         /// <summary>
-        /// Match two connectors.
+        /// Snap this connector with another connector.
         /// </summary>
-        /// <param name="conn1">First connector to match.</param>
-        /// <param name="conn2">Second connector to match.</param>
-        public static void Match(Connector conn1, Connector conn2)
+        /// <param name="other">Connector to snap this one with.</param>
+        public void SnapWith(Connector other)
         {
-            conn1.match = conn2;
-            conn1.isUsed = true;
-            conn2.match = conn1;
-            conn2.isUsed = true;
+            match = other;
+            isUsed = true;
+            other.match = this;
+            other.isUsed = true;
         }
 
         public int CompareTo(Connector other)
