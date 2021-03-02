@@ -113,10 +113,10 @@ namespace SnapMeshPCG.GenerationMethods
         protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMap)
         {
             // Select the next guide piece based on the current scenario
-            if (_currBranchLength >= _maxBranchLength)
+            if (_currBranchLength >= _maxBranchLength || piecesInMap.Last().Full)
             {
-                // If we've reached the maximum size for the current branch,
-                // let's create a new branch
+                // If we've reached the maximum size for the current branch or
+                // the last placed piece is full, let's create a new branch
 
                 // Did we reach the branch count limit? If so return null and
                 // end the generation process
