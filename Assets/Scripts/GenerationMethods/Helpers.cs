@@ -36,7 +36,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// The piece with most connectors, apart from a tolerance given by the
         /// <paramref name="conTol"/> parameter.</returns>
         public static MapPiece GetPieceWithMostConnectors(
-            List<MapPiece> pieceList, int conTol)
+            IList<MapPiece> pieceList, int conTol)
         {
             // Index of selected starting piece in starting piece list
             int startingPieceIndex;
@@ -77,7 +77,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// The piece with less connectors, apart from a tolerance given by the
         /// <paramref name="conTol"/> parameter.</returns>
         public static MapPiece GetPieceWithLessConnectors(
-            List<MapPiece> pieceList, int conTol)
+            IList<MapPiece> pieceList, int conTol)
         {
             // Index of selected starting piece in starting piece list
             int startingPieceIndex;

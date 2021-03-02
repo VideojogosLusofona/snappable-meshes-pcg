@@ -40,7 +40,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// define how to select the starting piece.
         /// </remarks>
         protected abstract MapPiece DoSelectStartPiece(
-            List<MapPiece> starterList, int starterConTol);
+            IList<MapPiece> starterList, int starterConTol);
 
         /// <summary>
         /// Selects the next guide piece according to the generation method.
@@ -53,7 +53,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// Concrete generation methods must override this method in order to
         /// define how to select the next guide piece.
         /// </remarks>
-        protected abstract MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap);
+        protected abstract MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMap);
 
         /// <summary>Select the starting piece.</summary>
         /// <param name="starterList">
@@ -63,7 +63,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// <param name="starterConTol">Connector count tolerance.</param>
         /// <returns>The starting piece.</returns>
         public MapPiece SelectStartPiece(
-            List<MapPiece> starterList, int starterConTol)
+            IList<MapPiece> starterList, int starterConTol)
         {
             // The starting piece to return
             MapPiece startingPiece;
@@ -90,7 +90,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
-        public MapPiece SelectGuidePiece(List<MapPiece> piecesInMap)
+        public MapPiece SelectGuidePiece(IList<MapPiece> piecesInMap)
         {
             // The guide piece to return
             MapPiece newGuide;

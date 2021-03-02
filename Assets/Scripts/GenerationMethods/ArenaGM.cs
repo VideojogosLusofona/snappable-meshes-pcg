@@ -55,7 +55,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// of connectors, one of them is selected at random.
         /// </remarks>
         protected override MapPiece DoSelectStartPiece(
-            List<MapPiece> starterList, int starterConTol)
+            IList<MapPiece> starterList, int starterConTol)
         {
             return Helpers.GetPieceWithMostConnectors(starterList, starterConTol);
         }
@@ -74,7 +74,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// map is selected as the next guide piece. This process continues
         /// until a maximum number of pieces has been placed in the map.
         /// </remarks>
-        protected override MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap)
+        protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMap)
         {
             // Select the guide piece to return
             if (piecesInMap.Count > _maxPieces)

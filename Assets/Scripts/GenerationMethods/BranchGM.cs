@@ -60,15 +60,17 @@ namespace SnapMeshPCG.GenerationMethods
         /// number of connectors, one of them is selected at random.
         /// </remarks>
         protected override MapPiece DoSelectStartPiece(
-            List<MapPiece> starterList, int starterConTol)
+            IList<MapPiece> starterList, int starterConTol)
         {
             return Helpers.GetPieceWithLessConnectors(starterList, starterConTol);
         }
 
 
-        protected override MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap)
+        protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMapz)
         {
             MapPiece chosen;
+
+            List<MapPiece> piecesInMap = (List<MapPiece>)piecesInMapz; // TODO: Delete afterwards
 
             if(_branchesMade > _maxBranches)
                 return null;
