@@ -331,7 +331,7 @@ namespace SnapMeshPCG
                 // Log successful snap, if any
                 string logSuccess = "";
 
-                // Pick a tentative piece to evaluate against our guide piece
+                // Tentative piece selection and placement loop
                 do
                 {
                     // Randomly get a tentative piece prototype
