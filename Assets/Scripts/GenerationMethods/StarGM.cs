@@ -16,6 +16,7 @@
  */
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
@@ -31,6 +32,11 @@ namespace SnapMeshPCG.GenerationMethods
         // The maximum variation from _armLength in each arm
         private readonly int _armLengthVar;
 
+        // Length of current arm
+        private int _currArmLength;
+        // Maximum length for current arm
+        private int _maxArmLength;
+
         /// <summary>
         /// Creates a new star generation method instance.
         /// </summary>
@@ -40,60 +46,83 @@ namespace SnapMeshPCG.GenerationMethods
         /// <param name="armLengthVar">
         /// The maximum variation from <paramref name="_armLength"/> in each arm.
         /// </param>
-        public StarGM(int armLength, int armLengthVar)
+        public StarGM(uint armLength, uint armLengthVar)
         {
-            _armLength = armLength;
-            _armLengthVar = armLengthVar;
+            _armLength = (int)armLength;
+            _armLengthVar = (int)armLengthVar;
         }
 
+        /// <summary>Select the starting piece.</summary>
+        /// <param name="starterList">
+        /// List where to get the starting piece from. This list is assumed to
+        /// be sorted in descending order by number of connectors.
+        /// </param>
+        /// <param name="starterConTol">Connector count tolerance.</param>
+        /// <returns>The starting piece.</returns>
+        /// <remarks>
+        /// For the star generation method, the piece with most connectors is
+        /// selected. If there are multiple pieces with the same highest number
+        /// of connectors, one of them is selected at random.
+        /// </remarks>
         protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol)
         {
-
-            // Assumes that the list is sorted by number of connectors where
-            // [0] is the index with most connectors
-            int topConnectorCount = starterList[0].ConnectorCount;
-
-            int minimumAllowed = topConnectorCount - starterConTol;
-            List<MapPiece> possibles = new List<MapPiece>();
-
-            foreach (MapPiece g in starterList)
-            {
-                if (g.ConnectorCount >= minimumAllowed)
-                    possibles.Add(g);
-            }
-
-            // Upper limit is exclusive
-            int rng = UnityEngine.Random.Range(0, possibles.Count - 1);
-            // Upper limit is exclusive
-            MapPiece chosen = possibles[rng];
-            _lastGuideSelected = _firstPiece;
-            return chosen;
+            NewArm();
+            return Helpers.GetPieceWithMostConnectors(starterList, starterConTol);
         }
 
+        /// <summary>
+        /// Selects the next guide piece according to the generation method.
+        /// </summary>
+        /// <param name="piecesInMap">Pieces already place in the map.</param>
+        /// <param name="lastPlaced">Last piece placed in the map.</param>
+        /// <returns>
+        /// The next guide piece or null if the generation is finished.
+        /// </returns>
+        /// <remarks>
+        /// For the star generation method the starting piece acts as the
+        /// central star hub. For each connector it has, an arm is grown, with
+        /// a minimum of one and a maximum of maxArmLength pieces. Therefore,
+        /// when a new arm begins to form, the value of maxArmLength is
+        /// randomly obtained from the interval armLength±armLengthVar. If the
+        /// length of the current arm is less than maxArmLength, the last placed
+        /// piece is returned as the guide piece in order to keep growing the
+        /// arm. Otherwise, the starting piece is returned as the guide piece,
+        /// in order to start a new arm in one of the remaining free connectors.
+        /// </remarks>
         protected override MapPiece DoSelectGuidePiece(
             List<MapPiece> piecesInMap, MapPiece lastPlaced)
         {
-            int rng = UnityEngine.Random.Range(0, _armLengthVar + 1);
-            int chosenVar = rng;
-            int[] mults = { -1, 1 };
-            rng = UnityEngine.Random.Range(0, mults.Length);
-            int chosenMult = mults[rng];
-            int currentArmLength = _armLength + (chosenVar * chosenMult);
+            // Assume the last piece was placed successfully (that may not have
+            // been the case) and grow the size of the arm
+            _currArmLength++;
 
-            // Check if its time to jump back to the starter piece.
-            // -1 takes out the starter piece from the equation.
-            if ((piecesInMap.Count - 1) % currentArmLength == 0)
+            // Determine the guide piece to return
+            if (_currArmLength >= _maxArmLength || lastPlaced.IsFull())
             {
-                // A number of pieces equal to the armLength have been placed
-                // Return the first piece if it still has unused connectors
+                // If we reached the maximum arm size or the last placed piece
+                // is full, start a new arm and return the starting piece
+                NewArm();
                 return piecesInMap[0].IsFull() ? null : piecesInMap[0];
             }
+            else
+            {
+                // The arm can still grow, return the last placed piece
+                return lastPlaced;
+            }
+        }
 
-            _lastGuideSelected = lastPlaced;
-            if (_lastGuideSelected.IsFull())
-                return null;
-            return _lastGuideSelected;
+        // Helper method for starting a new arm
+        private void NewArm()
+        {
+            // Set new arm length to zero
+           _currArmLength = 0;
+
+           // Set the maximum arm length; although this value can be zero or
+           // negative, arms will in practice have a minimum size of 1, due to
+           // the way the algorithm works
+           _maxArmLength = Random.Range(
+               _armLength - _armLengthVar, _armLength + _armLengthVar + 1);
         }
     }
 }
