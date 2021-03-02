@@ -83,7 +83,7 @@ namespace SnapMeshPCG.GenerationMethods
                 // signal the end of the map generation
                 return null;
             }
-            else if (LastGuide.IsFull())
+            else if (LastGuide.Full)
             {
                 // If the current guide piece has no connectors left, select a
                 // new guide piece which will be the piece placed after the

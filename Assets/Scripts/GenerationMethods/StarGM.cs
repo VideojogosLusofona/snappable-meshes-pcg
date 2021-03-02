@@ -100,12 +100,12 @@ namespace SnapMeshPCG.GenerationMethods
             _currArmLength++;
 
             // Determine the guide piece to return
-            if (_currArmLength >= _maxArmLength || lastPlaced.IsFull())
+            if (_currArmLength >= _maxArmLength || lastPlaced.Full)
             {
                 // If we reached the maximum arm size or the last placed piece
                 // is full, start a new arm and return the starting piece
                 NewArm();
-                return piecesInMap[0].IsFull() ? null : piecesInMap[0];
+                return piecesInMap[0].Full ? null : piecesInMap[0];
             }
             else
             {

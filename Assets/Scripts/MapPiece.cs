@@ -62,15 +62,16 @@ namespace SnapMeshPCG
         }
 
         /// <summary>
-        /// Checks all connectors to see if they're already connected to
-        /// another.
+        /// Are all the connectors in this piece used?
         /// </summary>
-        /// <returns> Are all the connectors in this piece used?</returns>
-        public bool IsFull()
+        public bool Full
         {
-            foreach (Connector c in _Connectors)
-                if (!c.IsUsed) return false;
-            return true;
+            get
+            {
+                foreach (Connector c in _Connectors)
+                    if (!c.IsUsed) return false;
+                return true;
+            }
         }
 
         /// <summary>

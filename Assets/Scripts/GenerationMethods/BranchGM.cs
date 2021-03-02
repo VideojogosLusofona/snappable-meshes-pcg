@@ -86,7 +86,7 @@ namespace SnapMeshPCG.GenerationMethods
                 // Select what piece to jump to
                 chosen = piecesInMap[boundJump];
 
-                if(chosen.IsFull())
+                if(chosen.Full)
                 {
                     int index =
                         piecesInMap.FindIndex(
