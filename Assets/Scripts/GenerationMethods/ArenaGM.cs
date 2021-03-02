@@ -16,7 +16,6 @@
  */
 
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
@@ -58,33 +57,7 @@ namespace SnapMeshPCG.GenerationMethods
         protected override MapPiece DoSelectStartPiece(
             List<MapPiece> starterList, int starterConTol)
         {
-            // Index of selected starting piece in starting piece list
-            int startingPieceIndex;
-
-            // Get the number of connectors in the piece with the most
-            // connectors
-            int maxConnectorCount = starterList[0].ConnectorCount;
-
-            // Determine the minimum amount of connectors a piece may have in
-            // order to be selected as the starting piece
-            int minAllowed = maxConnectorCount - starterConTol;
-
-            // Determine index of piece with the minimum allowed number of
-            // connectors
-            int minAllowedIndex = 0;
-            for (int i = 1; i < starterList.Count; i++)
-            {
-                if (starterList[i].ConnectorCount >= minAllowed)
-                    minAllowedIndex = i;
-                else
-                    break;
-            }
-
-            // Get the index of the starting piece
-            startingPieceIndex = Random.Range(0, minAllowedIndex + 1);
-
-            // Return the starting piece
-            return starterList[startingPieceIndex];
+            return Helpers.GetPieceWithMostConnectors(starterList, starterConTol);
         }
 
         /// <summary>
