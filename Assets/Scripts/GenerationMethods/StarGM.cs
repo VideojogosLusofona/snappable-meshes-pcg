@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,7 +76,6 @@ namespace SnapMeshPCG.GenerationMethods
         /// Selects the next guide piece according to the generation method.
         /// </summary>
         /// <param name="piecesInMap">Pieces already place in the map.</param>
-        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
@@ -90,9 +90,11 @@ namespace SnapMeshPCG.GenerationMethods
         /// arm. Otherwise, the starting piece is returned as the guide piece,
         /// in order to start a new arm in one of the remaining free connectors.
         /// </remarks>
-        protected override MapPiece DoSelectGuidePiece(
-            List<MapPiece> piecesInMap, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap)
         {
+            // Last piece placed in the map
+            MapPiece lastPlaced = piecesInMap.Last();
+
             // Assume the last piece was placed successfully (that may not have
             // been the case) and grow the size of the arm
             _currArmLength++;

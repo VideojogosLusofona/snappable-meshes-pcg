@@ -46,7 +46,6 @@ namespace SnapMeshPCG.GenerationMethods
         /// Selects the next guide piece according to the generation method.
         /// </summary>
         /// <param name="piecesInMap">Pieces already place in the map.</param>
-        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
@@ -54,8 +53,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// Concrete generation methods must override this method in order to
         /// define how to select the next guide piece.
         /// </remarks>
-        protected abstract MapPiece DoSelectGuidePiece(
-            List<MapPiece> piecesInMap, MapPiece lastPlaced);
+        protected abstract MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap);
 
         /// <summary>Select the starting piece.</summary>
         /// <param name="starterList">
@@ -89,12 +87,10 @@ namespace SnapMeshPCG.GenerationMethods
         /// Selects the next guide piece according to the generation method.
         /// </summary>
         /// <param name="piecesInMap">Pieces already place in the map.</param>
-        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
-        public MapPiece SelectGuidePiece(
-            List<MapPiece> piecesInMap, MapPiece lastPlaced)
+        public MapPiece SelectGuidePiece(List<MapPiece> piecesInMap)
         {
             // The guide piece to return
             MapPiece newGuide;
@@ -112,7 +108,7 @@ namespace SnapMeshPCG.GenerationMethods
             }
 
             // Invoke the concrete method for selecting the next guide piece
-            newGuide = DoSelectGuidePiece(piecesInMap, lastPlaced);
+            newGuide = DoSelectGuidePiece(piecesInMap);
 
             // Check the guide piece returned by the concrete generation method
             if (newGuide != LastGuide)

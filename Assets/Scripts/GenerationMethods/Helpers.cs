@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -83,8 +84,7 @@ namespace SnapMeshPCG.GenerationMethods
 
             // Get the number of connectors in the piece with the least
             // connectors
-            int minConnectorCount =
-                pieceList[pieceList.Count - 1].ConnectorCount;
+            int minConnectorCount = pieceList.Last().ConnectorCount;
 
             // Determine the maximum amount of connectors a piece may have in
             // order to be selected as the starting piece

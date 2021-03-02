@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Linq;
 using System.Collections.Generic;
 
 namespace SnapMeshPCG.GenerationMethods
@@ -65,8 +66,7 @@ namespace SnapMeshPCG.GenerationMethods
         }
 
 
-        protected override MapPiece DoSelectGuidePiece(
-            List<MapPiece> piecesInMap, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap)
         {
             MapPiece chosen;
 
@@ -103,7 +103,7 @@ namespace SnapMeshPCG.GenerationMethods
             }
 
             _currentBranchPlaced++;
-            return lastPlaced;
+            return piecesInMap.Last();
         }
 
         public void StartBranch()

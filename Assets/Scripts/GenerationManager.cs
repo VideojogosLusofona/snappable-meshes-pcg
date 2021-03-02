@@ -406,8 +406,7 @@ namespace SnapMeshPCG
                 log.Append(logSuccess);
 
                 // Select next guide piece
-                guidePiece = genMethod.SelectGuidePiece(
-                    _placedPieces, _placedPieces[_placedPieces.Count - 1]);
+                guidePiece = genMethod.SelectGuidePiece(_placedPieces);
 
                 // Log new guide piece
                 if (guidePiece is null)

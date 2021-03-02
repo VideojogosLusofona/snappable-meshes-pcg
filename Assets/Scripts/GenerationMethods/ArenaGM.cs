@@ -64,7 +64,6 @@ namespace SnapMeshPCG.GenerationMethods
         /// Selects the next guide piece according to the generation method.
         /// </summary>
         /// <param name="piecesInMap">Pieces already place in the map.</param>
-        /// <param name="lastPlaced">Last piece placed in the map.</param>
         /// <returns>
         /// The next guide piece or null if the generation is finished.
         /// </returns>
@@ -75,8 +74,7 @@ namespace SnapMeshPCG.GenerationMethods
         /// map is selected as the next guide piece. This process continues
         /// until a maximum number of pieces has been placed in the map.
         /// </remarks>
-        protected override MapPiece DoSelectGuidePiece(
-            List<MapPiece> piecesInMap, MapPiece lastPlaced)
+        protected override MapPiece DoSelectGuidePiece(List<MapPiece> piecesInMap)
         {
             // Select the guide piece to return
             if (piecesInMap.Count > _maxPieces)
