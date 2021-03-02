@@ -17,34 +17,65 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
-     /// <summary>
+    /// <summary>
     /// The branch generation method creates branches in the same manner as the
     /// star method. However it does not return to the starting piece, choosing
     /// instead a previously placed piece to start a new branch, repeating this
     /// until there are no more available pieces or branchLength as been
     /// reached.
     /// </summary>
-   public sealed class BranchGM : AbstractGM
+    public sealed class BranchGM : AbstractGM
     {
-        private readonly int _maxBranches;
+        // Number of branches to be created
+        private readonly int _branchCount;
+
+        // The average amount of pieces a branch will have
         private readonly int _branchLength;
+
+        // The maximum variation from branchLength in each branch
         private readonly int _branchLengthVar;
-        private readonly int _pieceJumpSize;
 
-        private int _branchesMade;
-        private int _currentBranchLength;
-        private int _currentBranchPlaced;
+        // Base jump size from starting piece when creating new branches
+        private readonly int _baseJumpSize;
 
-        public BranchGM(uint maxBranches, uint branchLength, uint branchLengthVar)
+        // Maximum length (e.g. number of pieces) for current branch
+        private int _maxBranchLength;
+
+        // How many branches have been created so far
+        private int _branchesCreated;
+
+        // Length (e.g. number of pieces) of current branch
+        private int _currBranchLength;
+
+        /// <summary>
+        /// Creates a new branch generation method instance.
+        /// </summary>
+        /// <param name="branchCount">Number of branches to create.</param>
+        /// <param name="branchLength">
+        /// Average number of pieces a branch will have.
+        /// </param>
+        /// <param name="branchLengthVar">
+        /// The maximum variation from <paramref name="branchLength"/> in each
+        /// branch.
+        /// </param>
+        public BranchGM(uint branchCount, uint branchLength, uint branchLengthVar)
         {
-            _maxBranches = (int)maxBranches;
+            // Keep parameters in instance variables
+            _branchCount = (int)branchCount;
             _branchLength = (int)branchLength;
             _branchLengthVar = (int)branchLengthVar;
 
-            _pieceJumpSize = _branchLength / _maxBranches;
+            // Determine base jump size from the starting piece
+            _baseJumpSize = _branchLength / _branchCount;
+
+            // If branch count is higher than branch length, jump size will be
+            // zero, which makes little sense; thus, we set the minimum jump to
+            // one piece
+            if (_baseJumpSize == 0) _baseJumpSize = 1;
         }
 
         /// <summary>Select the starting piece.</summary>
@@ -62,62 +93,110 @@ namespace SnapMeshPCG.GenerationMethods
         protected override MapPiece DoSelectStartPiece(
             IList<MapPiece> starterList, int starterConTol)
         {
+            NewBranch();
             return Helpers.GetPieceWithLessConnectors(starterList, starterConTol);
         }
 
-
-        protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMapz)
+        /// <summary>
+        /// Selects the next guide piece according to the generation method.
+        /// </summary>
+        /// <param name="piecesInMap">Pieces already place in the map.</param>
+        /// <returns>
+        /// The next guide piece or null if the generation is finished.
+        /// </returns>
+        /// <remarks>
+        /// For the branch generation method, the next guide piece is returned
+        /// as the guide piece if the current branch is still growing.
+        /// Otherwise, another piece in the map is returned as the guide piece,
+        /// effectively creating another branch,
+        /// </remarks>
+        protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMap)
         {
-            MapPiece chosen;
-
-            List<MapPiece> piecesInMap = (List<MapPiece>)piecesInMapz; // TODO: Delete afterwards
-
-            if(_branchesMade > _maxBranches)
-                return null;
-
-            if(_currentBranchPlaced > _currentBranchLength)
+            // Select the next guide piece based on the current scenario
+            if (_currBranchLength >= _maxBranchLength)
             {
-                int boundJump = _pieceJumpSize * _branchesMade;
+                // If we've reached the maximum size for the current branch,
+                // let's create a new branch
 
-                // clamp the jump size to within list size
-                boundJump = (boundJump > piecesInMap.Count - 1)?
-                    piecesInMap.Count - 1 : boundJump;
+                // Determine the next jump size
+                int jump = _baseJumpSize * _branchesCreated;
 
-                // Select what piece to jump to
-                chosen = piecesInMap[boundJump];
+                // This variable will contain the final jump size after a number
+                // of checks
+                int finalJump;
 
-                if(chosen.Full)
+                // If the jump takes us out of the placed pieces list, chose a
+                // random location within the last section of the list
+                if (jump >= piecesInMap.Count)
                 {
-                    int index =
-                        piecesInMap.FindIndex(
-                            a => a.gameObject.name == chosen.gameObject.name)
-                        + _pieceJumpSize;
-                    if (index < piecesInMap.Count)
-                        chosen = piecesInMap[index];
-                    else
-                        return null;
+                    jump = Random.Range(
+                        piecesInMap.Count - _baseJumpSize, piecesInMap.Count);
+
+                    // This should not happen but make sure we don't have a
+                    // negative index
+                    if (jump < 0) jump = 0;
+                }
+
+                // Set the final jump value equal to jump
+                finalJump = jump;
+
+                // If the piece at the jump position is full, search for a
+                // nearby piece that has available connectors
+                // We search at most a number pieces equal to the base jump size
+                for (int i = 2, j = 1;
+                    i < _baseJumpSize + 2 && piecesInMap[finalJump].Full;
+                    i++, j *= -1)
+                {
+                    // We search upwards and backwards, advancing one piece at
+                    // a time on either side of the piece list
+                    finalJump = jump + (i / 2 * j);
+
+                    // Clamp the final jump value to valid values
+                    if (finalJump < 0)
+                        finalJump = 0;
+                    if (finalJump >= piecesInMap.Count)
+                        finalJump = piecesInMap.Count - 1;
                 }
 
                 // Start a new branch from there
-                StartBranch();
+                NewBranch();
 
-                return chosen;
+                // Did we reach the branch count limit? If so return null and
+                // end the generation process
+                if (_branchesCreated > _branchCount) return null;
+
+                // Return the selected map piece after the jump; if it's full
+                // even after our attempts to find a non-full piece, then
+                // return null and end map generation
+                return piecesInMap[finalJump].Full
+                    ? null
+                    : piecesInMap[finalJump];
             }
-
-            _currentBranchPlaced++;
-            return piecesInMap.Last();
+            else
+            {
+                // If we get here it means our branch is still growing, so
+                // we'll increment the current branch length and return the
+                // last placed piece as the guide piece
+                _currBranchLength++;
+                return piecesInMap.Last();
+            }
         }
 
-        public void StartBranch()
+        // Helper method for starting a new branch
+        private void NewBranch()
         {
-            int rng = UnityEngine.Random.Range(0, _branchLengthVar + 1);
-            int chosenVar = rng;
-            int[] mults = {-1, 1};
-            rng = UnityEngine.Random.Range(0, mults.Length);
-            int chosenMult = mults[rng];
-            _currentBranchLength = _branchLength + (chosenVar * chosenMult);
-            _currentBranchPlaced = 0;
-            _branchesMade++;
+            // Set new branch length to zero
+            _currBranchLength = 0;
+
+            // Set the maximum branch length; although this value can be zero or
+            // negative, branches will in practice have a minimum size of 1, due
+            // to the way the algorithm works
+            _maxBranchLength = Random.Range(
+                _branchLength - _branchLengthVar,
+                _branchLength + _branchLengthVar + 1);
+
+            // Increment number of created branches
+            _branchesCreated++;
         }
     }
 }
