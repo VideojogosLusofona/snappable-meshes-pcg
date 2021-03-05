@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 namespace SnapMeshPCG.Demo
 {
     public class NavScanner : MonoBehaviour
@@ -33,43 +32,52 @@ namespace SnapMeshPCG.Demo
         [SerializeField]
         private float _radiusIncrement = 0.0f;
 
-        class NavPoints
+        // Represents a navigation point
+        private class NavPoints
         {
             public Vector3 point;
-            public int     connections;
+            public int connections;
         }
 
+        // List of navigation points
         private List<NavPoints> _navPoints;
 
         public void ScanMesh(IReadOnlyList<MapPiece> map)
         {
-            _navPoints = new List<NavPoints>();
-
-            //print("Scanning NavMesh for paths...");
-
-            for (int i = 0; i < maxScans; i++)
-            {
-                Vector3 point1 = FindPointInNavMesh(map[Random.Range(0, map.Count)].transform.position);
-                _navPoints.Add(new NavPoints() { point = point1, connections = 0 });
-            }
-
+            // Number of successful paths and attempts to find them
             int success = 0;
             int tries = 0;
+            float percentPassable;
 
+            // Initialize list of navigation points
+            _navPoints = new List<NavPoints>();
+
+            // Find random points in the navmesh and add them to the list
+            for (int i = 0; i < maxScans; i++)
+            {
+                Vector3 point1 = FindPointInNavMesh(
+                    map[Random.Range(0, map.Count)].transform.position);
+                _navPoints.Add(
+                    new NavPoints() { point = point1, connections = 0 });
+            }
+
+            // Compare each navigation point to all others and check for a
+            // valid connection
             for (int i = 0; i < _navPoints.Count; i++)
             {
-                for (int j = i + 1; j <_navPoints.Count; j++)
+                for (int j = i + 1; j < _navPoints.Count; j++)
                 {
+                    NavMeshPath storedPath = new NavMeshPath();
+                    bool path = NavMesh.CalculatePath(
+                        _navPoints[i].point,
+                        _navPoints[j].point,
+                        NavMesh.AllAreas,
+                        storedPath);
+
+                    // Increment number of tries
                     tries++;
 
-                    NavMeshPath storedPath = new NavMeshPath();
-                    bool path = NavMesh.CalculatePath(_navPoints[i].point, _navPoints[j].point, NavMesh.AllAreas, storedPath);
-
-                    if (!path || storedPath.status != NavMeshPathStatus.PathComplete)
-                    {
-
-                    }
-                    else
+                    if (path && storedPath.status == NavMeshPathStatus.PathComplete)
                     {
                         _navPoints[i].connections += 1;
                         _navPoints[j].connections += 1;
@@ -78,10 +86,17 @@ namespace SnapMeshPCG.Demo
                 }
             }
 
-            float percentPassable = 100 * success / tries;
-            print($"Scanner: Evaluated {tries} paths from {maxScans} points, found {success} good paths. -> {percentPassable.ToString("n1")}%");
+            // Determine percentage of passable/valid paths
+            percentPassable = (float)success / tries;
+
+            Debug.Log($"Scanner: Evaluated {tries} paths from {maxScans} points, found {success} good paths. -> {percentPassable:p2}");
         }
 
+        /// <summary>
+        /// Find a navigation point in the navmesh.
+        /// </summary>
+        /// <param name="origin">Origin position of a map piece.</param>
+        /// <returns>A navigation point the given map piece.</returns>
         private Vector3 FindPointInNavMesh(Vector3 origin)
         {
             NavMeshHit hit;
@@ -90,43 +105,39 @@ namespace SnapMeshPCG.Demo
             int counter = 0;
             do
             {
-
                 searchRadius = _initialSearchRadius + _radiusIncrement * counter;
-                foundSpot = NavMesh.SamplePosition(origin + Random.insideUnitSphere * _initialSearchRadius, out hit, searchRadius, NavMesh.AllAreas);
+                foundSpot = NavMesh.SamplePosition(
+                    origin + Random.insideUnitSphere * _initialSearchRadius,
+                    out hit,
+                    searchRadius,
+                    NavMesh.AllAreas);
 
                 counter++;
 
-            }while(!foundSpot );
+            } while (!foundSpot);
 
-            if(foundSpot)
+            if (foundSpot)
             {
-
-
                 return hit.position;
             }
             else
             {
-                print($"No point on NavMesh found.");
+                print("No point on NavMesh found.");
                 return transform.position;
             }
 
         }
 
-        public void ClearScanner()
-        {
-            _navPoints = null;
-        }
-
         private void OnDrawGizmos()
         {
             // GIZMOS stay on after pressing clear on generator
-            if(_navPoints== null)
+            if (_navPoints == null)
             {
                 return;
             }
 
-           foreach (var np in _navPoints)
-           {
+            foreach (var np in _navPoints)
+            {
                 Gizmos.color = (np.connections > 0) ? (Color.green) : (Color.red);
                 Gizmos.DrawSphere(np.point, 0.3f);
             }
