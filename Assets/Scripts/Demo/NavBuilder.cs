@@ -17,7 +17,6 @@
 
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine.Events;
@@ -51,48 +50,30 @@ namespace SnapMeshPCG.Demo
             // game object
             // If it's not there, add it
             NavMeshSurface dummyNav = GetComponent<NavMeshSurface>();
-
             if (dummyNav == null) gameObject.AddComponent<NavMeshSurface>();
 
-            // Invoke co-routine to perform the actual navmesh creation
-            StartCoroutine(BuildNavMeshCR(pieces));
-        }
-
-        /// <summary>
-        /// Co-routine to perform the actual navmesh creation.
-        /// </summary>
-        /// <param name="pieces">
-        /// The map pieces to create the navmesh on.
-        /// </param>
-        /// <returns>The co-routine's IEnumerator.</returns>
-        /// <remarks>
-        /// This does not technically need to be a co-routine since we're
-        /// creating the navmesh in editor mode. However, if this code gets
-        /// used for runtime navmesh creation, we need to skip one frame before
-        /// navmesh creation can begin, and one way to do this is with a
-        /// co-routine.
-        /// </remarks>
-        private IEnumerator BuildNavMeshCR(IReadOnlyList<MapPiece> pieces)
-        {
-            // Skip first frame (only needed if this is used in play mode)
-            yield return null;
-
-            // Get starting piece
+            // Get starting piece which is also the parent (top) piece of all
+            // the others
             GameObject topPiece = pieces[0].gameObject;
 
+            // If the top piece has the navmesh surface component, remove it
             NavMeshSurface unWantedNav = topPiece.GetComponent<NavMeshSurface>();
-            if(unWantedNav != null)
-                Destroy(unWantedNav);
+            if(unWantedNav != null) DestroyImmediate(unWantedNav);
+
+            // Add a navmesh component to the top piece and use the geometry
+            // from the physics colliders
             NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
             nav.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
 
-            print($"Building NavMesh at parent piece: {nav.gameObject.name}");
+            // Build navmesh at top piece and consequently to all the child
+            // pieces
+            Debug.Log($"Building NavMesh at parent piece: {nav.gameObject.name}");
             nav.BuildNavMesh();
 
-            //demoCharacter.mapPieces = pieces.ToArray();
+            // Create a walker character to walk around in our map
             Instantiate(demoCharacter.gameObject, new Vector3(0, 10, 0), Quaternion.identity);
-            //go.GetComponent<NavWalker>().mapPieces = pieces;
 
+            // Notify listeners that the navmesh has been baked
             OnNavMeshReady.Invoke(pieces);
         }
     }
