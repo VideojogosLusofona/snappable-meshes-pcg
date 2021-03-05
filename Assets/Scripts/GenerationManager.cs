@@ -136,7 +136,7 @@ namespace SnapMeshPCG
 
         [Foldout(events)]
         [SerializeField]
-        private UnityEvent<MapPiece[]> OnGenerationFinish = null;
+        private UnityEvent<IReadOnlyList<MapPiece>> OnGenerationFinish = null;
 
         [Foldout(events)]
         [SerializeField]
@@ -151,6 +151,7 @@ namespace SnapMeshPCG
         // ///////////////////////////////////// //
 
         // Pieces placed in the map
+        [SerializeField] [HideInInspector]
         private List<MapPiece> _placedPieces;
 
         // Names of known generation methods
@@ -179,6 +180,11 @@ namespace SnapMeshPCG
                 return _genMethods;
             }
         }
+
+        /// <summary>
+        /// Get map piece placed in the map, in the order they were placed.
+        /// </summary>
+        public IReadOnlyList<MapPiece> PlacedPieces => _placedPieces;
 
         // /////// //
         // Methods //
@@ -449,7 +455,8 @@ namespace SnapMeshPCG
                 }
             }
 
-            OnGenerationFinish.Invoke(_placedPieces.ToArray());
+            // Notify listeners that map generations is finished
+            OnGenerationFinish.Invoke(PlacedPieces);
         }
 
         [Button("Generate", enabledMode: EButtonEnableMode.Editor)]

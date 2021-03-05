@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,16 +31,32 @@ namespace SnapMeshPCG.Demo
 
         private float _maxIncrements = 3;
 
-        [HideInInspector]
-        public MapPiece[] mapPieces;
+        private IReadOnlyList<MapPiece> _mapPieces;
+
+        private IReadOnlyList<MapPiece> MapPieces
+        {
+            get
+            {
+                if (_mapPieces == null)
+                {
+                    // Get the generation manager instance
+                    GenerationManager gm = GameObject
+                        .Find("GenerationManager")
+                        .GetComponent<GenerationManager>();
+                    // Get the placed map pieces
+                    _mapPieces = gm.PlacedPieces;
+                }
+                return _mapPieces;
+            }
+        }
 
         private Vector3[] _possibleSpots
         {
             get
             {
-                Vector3[] spots = new Vector3[mapPieces.Length];
-                for(int i = 0; i < mapPieces.Length; i++)
-                    spots[i] = mapPieces[i].transform.position;
+                Vector3[] spots = new Vector3[MapPieces.Count];
+                for(int i = 0; i < MapPieces.Count; i++)
+                    spots[i] = MapPieces[i].transform.position;
                 return spots;
             }
 
@@ -69,7 +86,6 @@ namespace SnapMeshPCG.Demo
             _agent.updateRotation = true;
             _agent.updateUpAxis = true;
             GetNewPath();
-
         }
 
         // Update is called once per frame
@@ -85,8 +101,6 @@ namespace SnapMeshPCG.Demo
             // If walker has reached destiantion, get a new path
             if(Mathf.RoundToInt(_agent.remainingDistance) == 0)
                 GetNewPath();
-
-
         }
 
         private Vector3 FindPointInNavMesh(Vector3 origin)

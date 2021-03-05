@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -22,10 +22,8 @@ using UnityEngine.AI;
 
 namespace SnapMeshPCG.Demo
 {
-
     public class NavScanner : MonoBehaviour
     {
-
         [SerializeField]
         private int maxScans = 400;
 
@@ -43,15 +41,15 @@ namespace SnapMeshPCG.Demo
 
         private List<NavPoints> _navPoints;
 
-        public void ScanMesh(MapPiece[] map)
+        public void ScanMesh(IReadOnlyList<MapPiece> map)
         {
             _navPoints = new List<NavPoints>();
 
-            print("Scanning NavMesh for paths...");
+            //print("Scanning NavMesh for paths...");
 
             for (int i = 0; i < maxScans; i++)
             {
-                Vector3 point1 = FindPointInNavMesh(map[Random.Range(0, map.Length)].transform.position);
+                Vector3 point1 = FindPointInNavMesh(map[Random.Range(0, map.Count)].transform.position);
                 _navPoints.Add(new NavPoints() { point = point1, connections = 0 });
             }
 
@@ -69,7 +67,7 @@ namespace SnapMeshPCG.Demo
 
                     if (!path || storedPath.status != NavMeshPathStatus.PathComplete)
                     {
-                        
+
                     }
                     else
                     {
@@ -92,18 +90,18 @@ namespace SnapMeshPCG.Demo
             int counter = 0;
             do
             {
-                
+
                 searchRadius = _initialSearchRadius + _radiusIncrement * counter;
                 foundSpot = NavMesh.SamplePosition(origin + Random.insideUnitSphere * _initialSearchRadius, out hit, searchRadius, NavMesh.AllAreas);
-                        
+
                 counter++;
 
             }while(!foundSpot );
 
             if(foundSpot)
             {
-                
-                
+
+
                 return hit.position;
             }
             else
@@ -119,7 +117,7 @@ namespace SnapMeshPCG.Demo
             _navPoints = null;
         }
 
-        private void OnDrawGizmos() 
+        private void OnDrawGizmos()
         {
             // GIZMOS stay on after pressing clear on generator
             if(_navPoints== null)
