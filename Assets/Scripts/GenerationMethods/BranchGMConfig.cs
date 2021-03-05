@@ -25,12 +25,12 @@ namespace SnapMeshPCG.GenerationMethods
         private uint _branchCount = 0;
 
         [SerializeField]
-        private uint _branchPieceCount = 0;
+        private uint _branchLength = 0;
 
         [SerializeField]
-        private uint _branchSizeVar = 0;
+        private uint _branchLengthVar = 0;
 
         public override AbstractGM Method =>
-            new BranchGM(_branchCount, _branchPieceCount, _branchSizeVar);
+            new BranchGM(_branchCount, _branchLength, _branchLengthVar);
     }
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BranchGMConfig
   m_EditorClassIdentifier: 
   _branchCount: 4
-  _branchPieceCount: 12
-  _branchSizeVariance: 4
+  _branchLength: 12
+  _branchLengthVar: 4

@@ -420,7 +420,7 @@ MonoBehaviour:
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
   _generationMethod: Star
   _generationParams: {fileID: 11400000, guid: f0db8b8279e4c96a99c494a4dc12bea0, type: 2}
-  _starterConTol: 2
+  _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
       m_Calls: []
@@ -457,6 +457,65 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+  _placedPieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1724673651
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +725,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd606d33f27484bbdb246e323876b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxScans: 400
+  _navPointCount: 400
   _initialSearchRadius: 10
   _radiusIncrement: 5

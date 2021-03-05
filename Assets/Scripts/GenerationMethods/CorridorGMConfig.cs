@@ -22,9 +22,9 @@ namespace SnapMeshPCG.GenerationMethods
     public class CorridorGMConfig : AbstractGMConfig
     {
         [SerializeField]
-        private uint _maxPieceCount = 0;
+        private uint _maxPieces = 0;
 
         public override AbstractGM Method =>
-            new CorridorGM((int)_maxPieceCount);
+            new CorridorGM((int)_maxPieces);
     }
 }
