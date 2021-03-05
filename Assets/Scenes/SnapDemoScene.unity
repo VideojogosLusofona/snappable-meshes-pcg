@@ -418,8 +418,8 @@ MonoBehaviour:
   _matchingRules: -1
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _generationMethod: Star
-  _generationParams: {fileID: 11400000, guid: f0db8b8279e4c96a99c494a4dc12bea0, type: 2}
+  _generationMethod: Branch
+  _generationParams: {fileID: 11400000, guid: f001c3772f53d445aad1d7f80d7b54e2, type: 2}
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
@@ -458,22 +458,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _placedPieces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
