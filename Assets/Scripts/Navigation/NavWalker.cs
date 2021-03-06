@@ -39,41 +39,11 @@ namespace SnapMeshPCG.Navigation
         // Reference to the navmesh agent component
         private NavMeshAgent _agent;
 
+        // Reference to the placed map pieces, sorted by placing order
         private IReadOnlyList<MapPiece> _mapPieces;
-        private IReadOnlyList<NavPoint> _navPoints;
 
-        private IReadOnlyList<MapPiece> MapPieces
-        {
-            get
-            {
-                if (_mapPieces == null)
-                {
-                    // Get the generation manager instance
-                    GenerationManager gm = GameObject
-                        .Find("GenerationManager")
-                        .GetComponent<GenerationManager>();
-                    // Get the placed map pieces
-                    _mapPieces = gm.PlacedPieces;
-                }
-                return _mapPieces;
-            }
-        }
-        private IReadOnlyList<NavPoint> NavPoints
-        {
-            get
-            {
-                if (_navPoints == null)
-                {
-                    // Get the navigation scanner instance
-                    NavScanner ns = GameObject
-                        .Find("NavController")
-                        .GetComponent<NavScanner>();
-                    // Get the placed map pieces
-                    _navPoints = ns.NavPoints;
-                }
-                return _navPoints;
-            }
-        }
+        // Reference to the NavScanner component
+        private NavScanner _navScanner;
 
         // Possible spots where the agent can move
         private Vector3[] _possibleSpots;
@@ -84,10 +54,21 @@ namespace SnapMeshPCG.Navigation
             // Disable main camera, since we want to use the walker cam for the demo
             Camera.main.gameObject.SetActive(false);
 
+            // Get a reference to the placed map pieces, sorted by placing order
+            _mapPieces = GameObject
+                .Find("GenerationManager")
+                .GetComponent<GenerationManager>()
+                .PlacedPieces;
+
+            // Get a reference to the NavScanner
+            _navScanner = GameObject
+                .Find("NavController")
+                .GetComponent<NavScanner>();
+
             // Initialize possible spots
-            _possibleSpots = new Vector3[MapPieces.Count];
-            for (int i = 0; i < MapPieces.Count; i++)
-                _possibleSpots[i] = MapPieces[i].transform.position;
+            _possibleSpots = new Vector3[_mapPieces.Count];
+            for (int i = 0; i < _mapPieces.Count; i++)
+                _possibleSpots[i] = _mapPieces[i].transform.position;
 
             // Get the NavMeshAgent component, and if we don't find it, add
             // a new one
@@ -97,8 +78,8 @@ namespace SnapMeshPCG.Navigation
 
             // TODO We should use the most valid point when building the nav
             // mesh
-            Vector3 point = NavPoints[0].Point;
-            // Vector3 point = NavScanner.FindPointInNavMesh(
+            Vector3 point = _navScanner.NavPoints[0].Point;
+            // Vector3 point = _navScanner.FindPointInNavMesh(
             //     transform.position, _initRadius, _radiusInc, _maxIncs)
             //     .Value;
 
@@ -125,7 +106,7 @@ namespace SnapMeshPCG.Navigation
             if (pathStatus != NavMeshPathStatus.PathComplete)
                 GetNewPath();
 
-            // If walker has reached destiantion, get a new path
+            // If walker has reached destination, get a new path
             if (Mathf.RoundToInt(_agent.remainingDistance) == 0)
                 GetNewPath();
         }
@@ -138,7 +119,7 @@ namespace SnapMeshPCG.Navigation
             _agent.ResetPath();
             Vector3 newCenter = _possibleSpots[Random.Range(0, _possibleSpots.Length)];
             Vector3 newPoint = newCenter + Random.insideUnitSphere * _initRadius;
-            Vector3 newTarget = NavScanner.FindPointInNavMesh(
+            Vector3 newTarget = _navScanner.FindPointInNavMesh(
                 newPoint, _initRadius, _radiusInc, _maxIncs)
                 .Value;
 

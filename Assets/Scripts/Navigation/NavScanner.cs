@@ -43,6 +43,11 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private List<NavPoint> _navPoints;
 
+        // Navmesh data, useful for finding locations within the navmesh
+        [SerializeField]
+        [HideInInspector]
+        private NavMeshData _navMeshData;
+
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
         /// number of connections.
@@ -64,6 +69,9 @@ namespace SnapMeshPCG.Navigation
             // Where to store the calculated paths
             NavMeshPath storedPath = new NavMeshPath();
 
+            // Get the navmesh data instance
+            _navMeshData = map[0].GetComponent<NavMeshSurface>().navMeshData;
+
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>();
 
@@ -76,7 +84,8 @@ namespace SnapMeshPCG.Navigation
                 // Find nearest point in navmesh from the position of the
                 // map piece
                 Vector3? point1 = FindPointInNavMesh(
-                    piece.transform.position + Random.insideUnitSphere * _initialSearchRadius,
+                    piece.transform.position
+                        + Random.insideUnitSphere * _initialSearchRadius,
                     _initialSearchRadius,
                     _radiusIncrement,
                     100);
@@ -136,7 +145,7 @@ namespace SnapMeshPCG.Navigation
         /// <returns>
         /// A navigation point in the navmesh or null if no point is found.
         /// </returns>
-        public static Vector3? FindPointInNavMesh(
+        public Vector3? FindPointInNavMesh(
              Vector3 origin, float initRadius, float radiusInc, int maxTries)
         {
             NavMeshHit hit;
