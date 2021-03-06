@@ -62,7 +62,10 @@ namespace SnapMeshPCG.Navigation
             // Where to store the calculated paths
             NavMeshPath storedPath = new NavMeshPath();
 
-            IReadOnlyList<(float sumVol, Bounds bounds)> locations =
+            // Obtain list of map piece bounds with running sum box volume
+            // This will be required to evenly distribute nav points through
+            // the map
+            IReadOnlyList<(float sumVol, Bounds bounds)> pieceBounds =
                 CalculateLocations(mapPieces);
 
             // Initialize list of navigation points
@@ -73,11 +76,11 @@ namespace SnapMeshPCG.Navigation
             {
                 // Find nearest point in navmesh from the position of the
                 // map piece
-                Vector3? point1 = FindPointInNavMesh(locations);
+                Vector3? point = FindPointInNavMesh(pieceBounds);
 
                 // Add found navigation point to list
-                if (point1.HasValue)
-                    _navPoints.Add(new NavPoint(point1.Value));
+                if (point.HasValue)
+                    _navPoints.Add(new NavPoint(point.Value));
                 else
                     Debug.Log($"No navmesh point found");
             }
@@ -115,37 +118,91 @@ namespace SnapMeshPCG.Navigation
                 "Scanner: Evaluated {0} paths from {1} points, found {2} good paths. -> {3:p2}",
                 tries, _navPointCount, success, percentPassable));
 
-            // Sort nav point list by number of connections before exiting
+            // Sort nav point list by number of connections before returning
             _navPoints.Sort();
         }
 
         /// <summary>
-        /// Find a navigation point in the navmesh near the given origin
-        /// position by searching increasingly larger radiuses.
+        /// Get list of map piece bounds with running sum box volume.
         /// </summary>
+        /// <param name="mapPieces">List of map pieces.</param>
         /// <returns>
-        /// A navigation point in the navmesh or null if no point is found.
+        /// A list of map piece bounds with running sum box volume.
         /// </returns>
-        private Vector3? FindPointInNavMesh(
-            IReadOnlyList<(float sumVol, Bounds bounds)> locations)
+        private IReadOnlyList<(float sumVol, Bounds bounds)> CalculateLocations(
+            IReadOnlyCollection<MapPiece> mapPieces)
         {
-            NavMeshHit hit;
-            float searchRadius;
-            bool foundSpot;
-            int counter = 0;
-            Vector3? pointInMesh = null;
-            Bounds bounds;
-            float totalVol = locations[locations.Count - 1].sumVol;
+            // Instantiate the list
+            List<(float sumVol, Bounds bounds)> pieceBounds =
+                new List<(float sumVol, Bounds bounds)>(mapPieces.Count);
 
+            // Initialize running volume sum
+            float runningVol = 0;
+
+            foreach (MapPiece piece in mapPieces)
+            {
+                // Get the bounding box for the current map piece
+                Bounds bounds = piece.GetComponentInChildren<MeshRenderer>().bounds;
+
+                // Add the running volume
+                runningVol += bounds.size.magnitude;
+
+                // Keep bounds and running volume for the current map piece
+                pieceBounds.Add((runningVol, bounds));
+            }
+
+            return pieceBounds;
+        }
+
+        /// <summary>
+        /// Find a random navigation point in the navmesh.
+        /// </summary>
+        /// <param name="pieceBounds">
+        /// List of map piece bounds with running sum box volume.
+        /// </param>
+        /// <returns>A random navigation point in the navmesh.</returns>
+        private Vector3? FindPointInNavMesh(
+            IReadOnlyList<(float sumVol, Bounds bounds)> pieceBounds)
+        {
+            // Location of the nav point in the nav mesh
+            NavMeshHit hit;
+
+            // Was a nav point found?
+            bool pointFound;
+
+            // Counter for quitting the nav point search loop
+            int counter = 0;
+
+            // Nullable where to return the nav point, if found
+            Vector3? pointInMesh = null;
+
+            // Bounds of the map piece where to search for a nav point
+            Bounds bounds;
+
+            // Random location in the map piece bounding box where to start
+            // searching for the nav point
+            Vector3 origin;
+
+            // Initial nav point search radius from origin
+            float radius;
+
+            // Total "volume" of all map pieces bounding boxes
+            float totalVol = pieceBounds[pieceBounds.Count - 1].sumVol;
+
+            // Get a random "volume" between zero and the total "volume"
+            // Pieces with more "volume" will have higher probability of having
+            // nav points
             float randomVol = Random.Range(0, totalVol);
 
-            int lowerIdx = 0, upperIdx = locations.Count - 1;
+            // Perform a binary search for the map piece bounds with the
+            // corresponding running sum volume
+            int lowerIdx = 0, upperIdx = pieceBounds.Count - 1;
 
             while (lowerIdx < upperIdx)
             {
                 int midIdx = (lowerIdx + upperIdx) / 2;
 
-                if (locations[midIdx].sumVol < randomVol)
+                if (pieceBounds[midIdx].sumVol < randomVol)
                 {
                     lowerIdx = midIdx + 1;
                 }
@@ -155,19 +212,24 @@ namespace SnapMeshPCG.Navigation
                 }
             }
 
-            bounds = locations[upperIdx].bounds;
+            // Get bounds for the map piece
+            bounds = pieceBounds[upperIdx].bounds;
 
-            Vector3 origin = new Vector3(
+            // Get a random location within the map piece bounds
+            origin = new Vector3(
                 Random.Range(bounds.min.x, bounds.max.x),
                 Random.Range(bounds.min.y, bounds.max.y),
                 Random.Range(bounds.min.z, bounds.max.z));
 
-            float radius = bounds.size.magnitude / _DivideVol;
+            // Determine initial radius for nav point search based on origin
+            radius = bounds.size.magnitude / _DivideVol;
 
+            // Search for nav point with increasing radius until a nav point is
+            // found or the counter reaches the limit
             do
             {
-                searchRadius = (1 + counter) * radius;
-                foundSpot = NavMesh.SamplePosition(
+                float searchRadius = (1 + counter) * radius;
+                pointFound = NavMesh.SamplePosition(
                     origin,
                     out hit,
                     searchRadius,
@@ -175,34 +237,12 @@ namespace SnapMeshPCG.Navigation
 
                 counter++;
 
-            } while (!foundSpot && counter < _DivideVol);
+            } while (!pointFound && counter < _DivideVol);
 
-            if (foundSpot) pointInMesh = hit.position;
+            // If a point is found, save it in the nullable
+            if (pointFound) pointInMesh = hit.position;
 
             return pointInMesh;
-        }
-
-        private IReadOnlyList<(float sumVol, Bounds bounds)> CalculateLocations(
-            IReadOnlyCollection<MapPiece> mapPieces)
-        {
-            List<(float sumVol, Bounds bounds)> locations =
-                new List<(float sumVol, Bounds bounds)>(mapPieces.Count);
-
-            float runningVol = 0;
-
-            foreach (MapPiece piece in mapPieces)
-            {
-                // Get the bounding box of the map piece
-                Bounds bounds = piece.GetComponentInChildren<MeshRenderer>().bounds;
-
-                // Running volume
-                runningVol += bounds.size.magnitude;
-
-                // Add location
-                locations.Add((runningVol, bounds));
-            }
-
-            return locations;
         }
 
         /// <summary>

@@ -615,7 +615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  demoCharacter: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
+  walker: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
   OnNavMeshReady:
     m_PersistentCalls:
       m_Calls:
