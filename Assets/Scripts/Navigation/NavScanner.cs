@@ -30,23 +30,19 @@ namespace SnapMeshPCG.Navigation
         [SerializeField]
         private int _navPointCount = 400;
 
-        // Initial search radius from map piece origin to nav point in navmesh
+        // Reference to the placed map pieces, sorted by placing order
         [SerializeField]
-        private float _initialSearchRadius = 0.1f;
-
-        // Search radius increment when no nav point is found
-        [SerializeField]
-        private float _radiusIncrement = 0.1f;
+        [HideInInspector]
+        private IReadOnlyList<MapPiece> _mapPieces;
 
         // List of navigation points
         [SerializeField]
         [HideInInspector]
         private List<NavPoint> _navPoints;
 
-        // Navmesh data, useful for finding locations within the navmesh
-        [SerializeField]
-        [HideInInspector]
-        private NavMeshData _navMeshData;
+        // In how many volumes should we divide a map piece bounding box in
+        // order to search for near navmesh points?
+        private const int _DivideVol = 20;
 
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
@@ -69,8 +65,8 @@ namespace SnapMeshPCG.Navigation
             // Where to store the calculated paths
             NavMeshPath storedPath = new NavMeshPath();
 
-            // Get the navmesh data instance
-            _navMeshData = map[0].GetComponent<NavMeshSurface>().navMeshData;
+            // Keep a reference to the map pieces
+            _mapPieces = map;
 
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>();
@@ -78,23 +74,15 @@ namespace SnapMeshPCG.Navigation
             // Find random points in the navmesh and add them to the list
             for (int i = 0; i < _navPointCount; i++)
             {
-                // Get a random map piece
-                MapPiece piece = map[Random.Range(0, map.Count)];
-
                 // Find nearest point in navmesh from the position of the
                 // map piece
-                Vector3? point1 = FindPointInNavMesh(
-                    piece.transform.position
-                        + Random.insideUnitSphere * _initialSearchRadius,
-                    _initialSearchRadius,
-                    _radiusIncrement,
-                    100);
+                Vector3? point1 = FindPointInNavMesh();
 
                 // Add found navigation point to list
                 if (point1.HasValue)
                     _navPoints.Add(new NavPoint(point1.Value));
                 else
-                    Debug.Log($"No navmesh point found near {piece.transform.position}");
+                    Debug.Log($"No navmesh point found");
             }
 
             // Compare each navigation point to all others and check for a
@@ -138,15 +126,10 @@ namespace SnapMeshPCG.Navigation
         /// Find a navigation point in the navmesh near the given origin
         /// position by searching increasingly larger radiuses.
         /// </summary>
-        /// <param name="origin">Origin position.</param>
-        /// <param name="initRadius">Initial search radius.</param>
-        /// <param name="radiusInc">Radius increments.</param>
-        /// <param name="maxTries">Max tries until giving up.</param>
         /// <returns>
         /// A navigation point in the navmesh or null if no point is found.
         /// </returns>
-        public Vector3? FindPointInNavMesh(
-             Vector3 origin, float initRadius, float radiusInc, int maxTries)
+        public Vector3? FindPointInNavMesh()
         {
             NavMeshHit hit;
             float searchRadius;
@@ -154,11 +137,22 @@ namespace SnapMeshPCG.Navigation
             int counter = 0;
             Vector3? pointInMesh = null;
 
-            // From the origin position of the map piece, search for a point in
-            // the navmesh by iteratively increasing the search radius
+            // Get a random map piece
+            MapPiece piece = _mapPieces[Random.Range(0, _mapPieces.Count)];
+
+            // Get the bounding box of the map piece
+            Bounds bounds = piece.GetComponentInChildren<MeshRenderer>().bounds;
+
+            Vector3 origin = new Vector3(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y, bounds.max.y),
+                Random.Range(bounds.min.z, bounds.max.z));
+
+            float radius = bounds.size.magnitude / _DivideVol;
+
             do
             {
-                searchRadius = initRadius + radiusInc * counter;
+                searchRadius = (1 + counter) * radius;
                 foundSpot = NavMesh.SamplePosition(
                     origin,
                     out hit,
@@ -167,7 +161,7 @@ namespace SnapMeshPCG.Navigation
 
                 counter++;
 
-            } while (!foundSpot && counter < maxTries);
+            } while (!foundSpot && counter < _DivideVol);
 
             if (foundSpot) pointInMesh = hit.position;
 

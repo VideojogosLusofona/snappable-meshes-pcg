@@ -27,26 +27,11 @@ namespace SnapMeshPCG.Navigation
     [RequireComponent(typeof(NavMeshAgent))]
     public class NavWalker : MonoBehaviour
     {
-        [SerializeField]
-        private float _initRadius = 30;
-
-        [SerializeField]
-        private float _radiusInc = 5;
-
-        [SerializeField]
-        private int _maxIncs = 3;
-
         // Reference to the navmesh agent component
         private NavMeshAgent _agent;
 
-        // Reference to the placed map pieces, sorted by placing order
-        private IReadOnlyList<MapPiece> _mapPieces;
-
         // Reference to the NavScanner component
         private NavScanner _navScanner;
-
-        // Possible spots where the agent can move
-        private Vector3[] _possibleSpots;
 
         // Start is called before the first frame update
         private void Start()
@@ -54,21 +39,10 @@ namespace SnapMeshPCG.Navigation
             // Disable main camera, since we want to use the walker cam for the demo
             Camera.main.gameObject.SetActive(false);
 
-            // Get a reference to the placed map pieces, sorted by placing order
-            _mapPieces = GameObject
-                .Find("GenerationManager")
-                .GetComponent<GenerationManager>()
-                .PlacedPieces;
-
             // Get a reference to the NavScanner
             _navScanner = GameObject
                 .Find("NavController")
                 .GetComponent<NavScanner>();
-
-            // Initialize possible spots
-            _possibleSpots = new Vector3[_mapPieces.Count];
-            for (int i = 0; i < _mapPieces.Count; i++)
-                _possibleSpots[i] = _mapPieces[i].transform.position;
 
             // Get the NavMeshAgent component, and if we don't find it, add
             // a new one
@@ -76,12 +50,8 @@ namespace SnapMeshPCG.Navigation
             if (_agent == null)
                 _agent = gameObject.AddComponent<NavMeshAgent>();
 
-            // TODO We should use the most valid point when building the nav
-            // mesh
+            // Use the most connect nav point for placing the agent
             Vector3 point = _navScanner.NavPoints[0].Point;
-            // Vector3 point = _navScanner.FindPointInNavMesh(
-            //     transform.position, _initRadius, _radiusInc, _maxIncs)
-            //     .Value;
 
             bool warp = _agent.Warp(point);
             if (warp)
@@ -111,17 +81,10 @@ namespace SnapMeshPCG.Navigation
                 GetNewPath();
         }
 
-
-
         private void GetNewPath()
         {
-            //print($"Possible locations: {_possibleSpots.Length}");
             _agent.ResetPath();
-            Vector3 newCenter = _possibleSpots[Random.Range(0, _possibleSpots.Length)];
-            Vector3 newPoint = newCenter + Random.insideUnitSphere * _initRadius;
-            Vector3 newTarget = _navScanner.FindPointInNavMesh(
-                newPoint, _initRadius, _radiusInc, _maxIncs)
-                .Value;
+            Vector3 newTarget = _navScanner.FindPointInNavMesh().Value;
 
             Debug.DrawLine(transform.position, newTarget, Color.green, 10);
             _agent.SetDestination(newTarget);
