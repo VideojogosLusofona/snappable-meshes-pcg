@@ -24,7 +24,7 @@ namespace SnapMeshPCG.Navigation
     /// This class represents a random navigation point in the navmesh.
     /// </summary>
     [Serializable]
-    public class NavPoint
+    public class NavPoint : IComparable<NavPoint>
     {
         /// <summary>The location of the navigation point.</summary>
         public Vector3 Point { get; }
@@ -49,5 +49,21 @@ namespace SnapMeshPCG.Navigation
         {
             Connections++;
         }
+
+        /// <summary>
+        /// Implementation of the IComparable{T} interface. Orders points by
+        /// descending number of connections.
+        /// </summary>
+        /// <param name="other">
+        /// The other point to compare with this one.
+        /// </param>
+        /// <returns>
+        /// Less than zero if this point has more connections than
+        /// <paramref name="other"/>, zero if both points have the same number
+        /// of connections or more than zero if this point has less connections
+        /// than <paramref name="other"/>.
+        /// </returns>
+        public int CompareTo(NavPoint other) =>
+            other.Connections.CompareTo(Connections);
     }
 }

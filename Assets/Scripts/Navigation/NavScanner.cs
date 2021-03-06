@@ -39,7 +39,15 @@ namespace SnapMeshPCG.Navigation
         private float _radiusIncrement = 0.1f;
 
         // List of navigation points
+        [SerializeField]
+        [HideInInspector]
         private List<NavPoint> _navPoints;
+
+        /// <summary>
+        /// Read-only accessor to the list of navigation points, ordered by
+        /// number of connections.
+        /// </summary>
+        public IReadOnlyList<NavPoint> NavPoints => _navPoints;
 
         /// <summary>
         /// Scan the navmesh for paths between randomized navigation points and
@@ -105,6 +113,9 @@ namespace SnapMeshPCG.Navigation
             Debug.Log(string.Format(
                 "Scanner: Evaluated {0} paths from {1} points, found {2} good paths. -> {3:p2}",
                 tries, _navPointCount, success, percentPassable));
+
+            // Sort nav point list by number of connections before exiting
+            _navPoints.Sort();
         }
 
         /// <summary>
