@@ -76,7 +76,7 @@ namespace SnapMeshPCG.Navigation
                 // Find nearest point in navmesh from the position of the
                 // map piece
                 Vector3? point1 = FindPointInNavMesh(
-                    piece.transform.position,
+                    piece.transform.position + Random.insideUnitSphere * _initialSearchRadius,
                     _initialSearchRadius,
                     _radiusIncrement,
                     100);
