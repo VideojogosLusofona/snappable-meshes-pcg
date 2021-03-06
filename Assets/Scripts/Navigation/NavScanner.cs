@@ -38,13 +38,6 @@ namespace SnapMeshPCG.Navigation
         [SerializeField]
         private float _radiusIncrement = 0.1f;
 
-        // Internal class for representing a navigation point
-        private class NavPoint
-        {
-            public Vector3 point;
-            public int connections;
-        }
-
         // List of navigation points
         private List<NavPoint> _navPoints;
 
@@ -77,8 +70,7 @@ namespace SnapMeshPCG.Navigation
                 Vector3 point1 = FindPointInNavMesh(piece.transform.position);
 
                 // Add found navigation point to list
-                _navPoints.Add(
-                    new NavPoint() { point = point1, connections = 0 });
+                _navPoints.Add(new NavPoint(point1));
             }
 
             // Compare each navigation point to all others and check for a
@@ -89,8 +81,8 @@ namespace SnapMeshPCG.Navigation
                 {
                     // Try and calculate a path between the two current points
                     bool path = NavMesh.CalculatePath(
-                        _navPoints[i].point,
-                        _navPoints[j].point,
+                        _navPoints[i].Point,
+                        _navPoints[j].Point,
                         NavMesh.AllAreas,
                         storedPath);
 
@@ -100,8 +92,8 @@ namespace SnapMeshPCG.Navigation
                     // Has a complete path been found?
                     if (path && storedPath.status == NavMeshPathStatus.PathComplete)
                     {
-                        _navPoints[i].connections += 1;
-                        _navPoints[j].connections += 1;
+                        _navPoints[i].IncConnections();
+                        _navPoints[j].IncConnections();
                         success++;
                     }
                 }
@@ -172,8 +164,8 @@ namespace SnapMeshPCG.Navigation
             {
                 // If nav points have connections, show them in green
                 // Otherwise show them in red
-                Gizmos.color = (np.connections > 0) ? Color.green : Color.red;
-                Gizmos.DrawSphere(np.point, 0.3f);
+                Gizmos.color = (np.Connections > 0) ? Color.green : Color.red;
+                Gizmos.DrawSphere(np.Point, 0.3f);
             }
         }
     }
