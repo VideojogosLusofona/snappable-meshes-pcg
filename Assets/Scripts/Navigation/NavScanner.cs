@@ -75,10 +75,17 @@ namespace SnapMeshPCG.Navigation
 
                 // Find nearest point in navmesh from the position of the
                 // map piece
-                Vector3 point1 = FindPointInNavMesh(piece.transform.position);
+                Vector3? point1 = FindPointInNavMesh(
+                    piece.transform.position,
+                    _initialSearchRadius,
+                    _radiusIncrement,
+                    100);
 
                 // Add found navigation point to list
-                _navPoints.Add(new NavPoint(point1));
+                if (point1.HasValue)
+                    _navPoints.Add(new NavPoint(point1.Value));
+                else
+                    Debug.Log($"No navmesh point found near {piece.transform.position}");
             }
 
             // Compare each navigation point to all others and check for a
@@ -119,35 +126,43 @@ namespace SnapMeshPCG.Navigation
         }
 
         /// <summary>
-        /// Find a navigation point in the navmesh near the given position.
+        /// Find a navigation point in the navmesh near the given origin
+        /// position by searching increasingly larger radiuses.
         /// </summary>
-        /// <param name="origin">Origin position of a map piece.</param>
+        /// <param name="origin">Origin position.</param>
+        /// <param name="initRadius">Initial search radius.</param>
+        /// <param name="radiusInc">Radius increments.</param>
+        /// <param name="maxTries">Max tries until giving up.</param>
         /// <returns>
-        /// A navigation point near the origin position of the map piece.
+        /// A navigation point in the navmesh or null if no point is found.
         /// </returns>
-        private Vector3 FindPointInNavMesh(Vector3 origin)
+        public static Vector3? FindPointInNavMesh(
+             Vector3 origin, float initRadius, float radiusInc, int maxTries)
         {
             NavMeshHit hit;
             float searchRadius;
             bool foundSpot;
             int counter = 0;
+            Vector3? pointInMesh = null;
 
             // From the origin position of the map piece, search for a point in
             // the navmesh by iteratively increasing the search radius
             do
             {
-                searchRadius = _initialSearchRadius + _radiusIncrement * counter;
+                searchRadius = initRadius + radiusInc * counter;
                 foundSpot = NavMesh.SamplePosition(
-                    origin + Random.insideUnitSphere * _initialSearchRadius,
+                    origin,
                     out hit,
                     searchRadius,
                     NavMesh.AllAreas);
 
                 counter++;
 
-            } while (!foundSpot);
+            } while (!foundSpot && counter < maxTries);
 
-            return hit.position;
+            if (foundSpot) pointInMesh = hit.position;
+
+            return pointInMesh;
         }
 
         /// <summary>
