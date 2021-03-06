@@ -27,14 +27,20 @@ namespace SnapMeshPCG.Navigation
     [RequireComponent(typeof(NavMeshAgent))]
     public class NavWalker : MonoBehaviour
     {
+        [SerializeField]
+        private float _initRadius = 30;
+
+        [SerializeField]
+        private float _radiusInc = 5;
+
+        [SerializeField]
+        private int _maxIncs = 3;
+
+        // Reference to the navmesh agent component
         private NavMeshAgent _agent;
 
-        private float _initialRadius = 30;
-        private float _radiusIncrement = 5;
-
-        private int _maxIncrements = 3;
-
         private IReadOnlyList<MapPiece> _mapPieces;
+        private IReadOnlyList<NavPoint> _navPoints;
 
         private IReadOnlyList<MapPiece> MapPieces
         {
@@ -50,6 +56,22 @@ namespace SnapMeshPCG.Navigation
                     _mapPieces = gm.PlacedPieces;
                 }
                 return _mapPieces;
+            }
+        }
+        private IReadOnlyList<NavPoint> NavPoints
+        {
+            get
+            {
+                if (_navPoints == null)
+                {
+                    // Get the navigation scanner instance
+                    NavScanner ns = GameObject
+                        .Find("NavController")
+                        .GetComponent<NavScanner>();
+                    // Get the placed map pieces
+                    _navPoints = ns.NavPoints;
+                }
+                return _navPoints;
             }
         }
 
@@ -75,9 +97,10 @@ namespace SnapMeshPCG.Navigation
 
             // TODO We should use the most valid point when building the nav
             // mesh
-            Vector3 point = NavScanner.FindPointInNavMesh(
-                transform.position, _initialRadius, _radiusIncrement, _maxIncrements)
-                .Value;
+            Vector3 point = NavPoints[0].Point;
+            // Vector3 point = NavScanner.FindPointInNavMesh(
+            //     transform.position, _initRadius, _radiusInc, _maxIncs)
+            //     .Value;
 
             bool warp = _agent.Warp(point);
             if (warp)
@@ -114,9 +137,9 @@ namespace SnapMeshPCG.Navigation
             //print($"Possible locations: {_possibleSpots.Length}");
             _agent.ResetPath();
             Vector3 newCenter = _possibleSpots[Random.Range(0, _possibleSpots.Length)];
-            Vector3 newPoint = newCenter + Random.insideUnitSphere * _initialRadius;
+            Vector3 newPoint = newCenter + Random.insideUnitSphere * _initRadius;
             Vector3 newTarget = NavScanner.FindPointInNavMesh(
-                newPoint, _initialRadius, _radiusIncrement, _maxIncrements)
+                newPoint, _initRadius, _radiusInc, _maxIncs)
                 .Value;
 
             Debug.DrawLine(transform.position, newTarget, Color.green, 10);
