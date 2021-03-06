@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine.Events;
 
-namespace SnapMeshPCG.Demo
+namespace SnapMeshPCG.Navigation
 {
     /// <summary>
     /// Build a navigation mesh on the generated map.

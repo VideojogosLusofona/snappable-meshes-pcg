@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SnapMeshPCG.Demo
+namespace SnapMeshPCG.Navigation
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public class NavWalker : MonoBehaviour
@@ -73,6 +73,8 @@ namespace SnapMeshPCG.Demo
             if(_agent == null)
                 _agent = gameObject.AddComponent<NavMeshAgent>();
 
+            // TODO We should use the most valid point when building the nav
+            // mesh
             Vector3 point = FindPointInNavMesh(transform.position);
             bool warp = _agent.Warp(point);
             if(warp)

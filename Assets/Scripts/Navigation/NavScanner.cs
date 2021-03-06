@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SnapMeshPCG.Demo
+namespace SnapMeshPCG.Navigation
 {
     /// <summary>
     /// Determine valid percentage of paths in the generated map.
