@@ -26,11 +26,19 @@ namespace SnapMeshPCG.Navigation
     [Serializable]
     public class NavPoint : IComparable<NavPoint>
     {
+        // The location of the navigation point.
+        [SerializeField]
+        private Vector3 _point;
+
+        // Number of connections with other navigation points
+        [SerializeField]
+        private int _connections;
+
         /// <summary>The location of the navigation point.</summary>
-        public Vector3 Point { get; }
+        public Vector3 Point => _point;
 
         /// <summary>Number of connections with other navigation points.</summary>
-        public int Connections { get; private set; }
+        public int Connections => _connections;
 
         /// <summary>
         /// Create a new navigation point with zero connections.
@@ -38,8 +46,8 @@ namespace SnapMeshPCG.Navigation
         /// <param name="point">Location of the navigation point.</param>
         public NavPoint(Vector3 point)
         {
-            Point = point;
-            Connections = 0;
+            _point = point;
+            _connections = 0;
         }
 
         /// <summary>
@@ -47,7 +55,7 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public void IncConnections()
         {
-            Connections++;
+            _connections++;
         }
 
         /// <summary>
@@ -64,6 +72,6 @@ namespace SnapMeshPCG.Navigation
         /// than <paramref name="other"/>.
         /// </returns>
         public int CompareTo(NavPoint other) =>
-            other.Connections.CompareTo(Connections);
+            other._connections.CompareTo(_connections);
     }
 }

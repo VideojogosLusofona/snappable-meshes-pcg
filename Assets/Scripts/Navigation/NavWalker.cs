@@ -30,8 +30,8 @@ namespace SnapMeshPCG.Navigation
         // Reference to the navmesh agent component
         private NavMeshAgent _agent;
 
-        // Reference to the NavScanner component
-        private NavScanner _navScanner;
+        // Reference to the nav point list
+        private IReadOnlyList<NavPoint> _navPoints;
 
         // Start is called before the first frame update
         private void Start()
@@ -39,10 +39,11 @@ namespace SnapMeshPCG.Navigation
             // Disable main camera, since we want to use the walker cam for the demo
             Camera.main.gameObject.SetActive(false);
 
-            // Get a reference to the NavScanner
-            _navScanner = GameObject
+            // Get a reference to the nav points list
+            _navPoints = GameObject
                 .Find("NavController")
-                .GetComponent<NavScanner>();
+                .GetComponent<NavScanner>()
+                .NavPoints;
 
             // Get the NavMeshAgent component, and if we don't find it, add
             // a new one
@@ -51,7 +52,7 @@ namespace SnapMeshPCG.Navigation
                 _agent = gameObject.AddComponent<NavMeshAgent>();
 
             // Use the most connect nav point for placing the agent
-            Vector3 point = _navScanner.NavPoints[0].Point;
+            Vector3 point = _navPoints[0].Point;
 
             bool warp = _agent.Warp(point);
             if (warp)
@@ -84,7 +85,9 @@ namespace SnapMeshPCG.Navigation
         private void GetNewPath()
         {
             _agent.ResetPath();
-            Vector3 newTarget = _navScanner.FindPointInNavMesh().Value;
+
+            Vector3 newTarget =
+                _navPoints[Random.Range(0, _navPoints.Count)].Point;
 
             Debug.DrawLine(transform.position, newTarget, Color.green, 10);
             _agent.SetDestination(newTarget);

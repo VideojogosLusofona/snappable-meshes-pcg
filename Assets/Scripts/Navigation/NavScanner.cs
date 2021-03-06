@@ -129,7 +129,7 @@ namespace SnapMeshPCG.Navigation
         /// <returns>
         /// A navigation point in the navmesh or null if no point is found.
         /// </returns>
-        public Vector3? FindPointInNavMesh()
+        private Vector3? FindPointInNavMesh()
         {
             NavMeshHit hit;
             float searchRadius;
