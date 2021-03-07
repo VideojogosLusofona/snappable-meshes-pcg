@@ -29,6 +29,10 @@ namespace SnapMeshPCG.Navigation
         // Number of navigation points to use for validating navmesh
         [SerializeField]
         private int _navPointCount = 400;
+        
+        [Range(0.1f,1.0f)]
+        [SerializeField]
+        private float _pointToPointLineLength = 0.4f;
 
         // List of navigation points
         [SerializeField]
@@ -298,7 +302,8 @@ namespace SnapMeshPCG.Navigation
                 foreach(Vector3 goodDir in np.GoodDirections)
                 {
                     
-                    Gizmos.DrawLine(np.Point, np.Point + goodDir * 0.4f);
+                    Gizmos.DrawLine(np.Point, 
+                    np.Point + goodDir * _pointToPointLineLength);
                 }
 
               // Draws red lines to waypoints the current one cant access,
