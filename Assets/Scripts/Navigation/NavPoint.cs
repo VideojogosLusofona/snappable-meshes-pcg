@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SnapMeshPCG.Navigation
@@ -29,6 +30,14 @@ namespace SnapMeshPCG.Navigation
         /// <summary>The location of the navigation point.</summary>
         public Vector3 Point { get; }
 
+        /// <summary>Directions pointing to navigation points this one has
+        /// successful connections with.</summary>
+        public List<Vector3> GoodDirections { get; private set; }
+
+        /// <summary>Directions pointing to navigation points this one has
+        /// unsuccessful connections with.</summary>
+        public List<Vector3> BadDirections { get; private set; }
+
         /// <summary>Number of connections with other navigation points.</summary>
         public int Connections { get; private set; }
 
@@ -40,6 +49,9 @@ namespace SnapMeshPCG.Navigation
         {
             Point = point;
             Connections = 0;
+
+            GoodDirections = new List<Vector3>();
+            BadDirections = new List<Vector3>();
         }
 
         /// <summary>
@@ -48,6 +60,24 @@ namespace SnapMeshPCG.Navigation
         public void IncConnections()
         {
             Connections++;
+        }
+
+        /// <summary>
+        /// Add the direction between this navigation point and another
+        /// </summary>
+        /// <param name="successful">
+        /// The 2 points form a successful connection and can be navigated to
+        /// and from one another.
+        /// </param>
+        /// /// <param name="direction">
+        /// The direction from this point to the other.
+        /// </param>
+        public void AddConnectionDirection(bool successful, Vector3 direction)
+        {
+            if(successful)
+                GoodDirections.Add(direction.normalized);
+            else
+                BadDirections.Add(direction.normalized);
         }
 
         /// <summary>
