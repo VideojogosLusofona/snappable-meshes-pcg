@@ -31,7 +31,7 @@ namespace SnapMeshPCG.Navigation
     {
         // The character that will move around the map when we enter play mode
         [SerializeField]
-        private NavWalker demoCharacter = null;
+        private NavWalker walker = null;
 
         // Event raised after the navigation mesh has been built
         [Foldout(":: Events ::")]
@@ -46,6 +46,12 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void BuildNavMesh(IReadOnlyList<MapPiece> pieces)
         {
+            // Vertical offset required for when we place the walker
+            float up;
+
+            // Start position for the walker
+            Vector3 start;
+
             // Check for the existence of the NavMeshSurface component on the
             // game object
             // If it's not there, add it
@@ -55,6 +61,9 @@ namespace SnapMeshPCG.Navigation
             // Get starting piece which is also the parent (top) piece of all
             // the others
             GameObject topPiece = pieces[0].gameObject;
+
+            // Get the bounds of the top piece
+            Bounds startBounds = topPiece.GetComponentInChildren<MeshRenderer>().bounds;
 
             // If the top piece has the navmesh surface component, remove it
             NavMeshSurface unWantedNav = topPiece.GetComponent<NavMeshSurface>();
@@ -70,8 +79,11 @@ namespace SnapMeshPCG.Navigation
             Debug.Log($"Building NavMesh at parent piece: {nav.gameObject.name}");
             nav.BuildNavMesh();
 
-            // Create a walker character to walk around in our map
-            Instantiate(demoCharacter.gameObject, new Vector3(0, 10, 0), Quaternion.identity);
+            // Create a walker character to walk around in our map and initially
+            // place it on top of the starting piece
+            up = walker.gameObject.GetComponent<MeshRenderer>().bounds.extents.y;
+            start = startBounds.center + Vector3.up * (startBounds.extents.y + up);
+            Instantiate(walker.gameObject, start, Quaternion.identity);
 
             // Notify listeners that the navmesh has been baked
             OnNavMeshReady.Invoke(pieces);

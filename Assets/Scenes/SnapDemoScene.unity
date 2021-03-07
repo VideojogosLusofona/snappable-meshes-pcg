@@ -418,8 +418,8 @@ MonoBehaviour:
   _matchingRules: -1
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _generationMethod: Branch
-  _generationParams: {fileID: 11400000, guid: f001c3772f53d445aad1d7f80d7b54e2, type: 2}
+  _generationMethod: Arena
+  _generationParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
@@ -458,29 +458,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _placedPieces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -638,7 +615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  demoCharacter: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
+  walker: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
   OnNavMeshReady:
     m_PersistentCalls:
       m_Calls:
@@ -710,5 +687,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _navPointCount: 400
-  _initialSearchRadius: 10
-  _radiusIncrement: 5
+  _navPoints: []
