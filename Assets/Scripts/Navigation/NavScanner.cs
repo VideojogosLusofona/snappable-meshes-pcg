@@ -108,8 +108,26 @@ namespace SnapMeshPCG.Navigation
                     if (path && storedPath.status == NavMeshPathStatus.PathComplete)
                     {
                         _navPoints[i].IncConnections();
+                        
                         _navPoints[j].IncConnections();
+
+                        _navPoints[i].AddConnectionDirection(
+                            true, 
+                            (_navPoints[j].Point - _navPoints[i].Point) );
+                        _navPoints[j].AddConnectionDirection(
+                            true, 
+                            (_navPoints[i].Point - _navPoints[j].Point) );
+
                         success++;
+                    }
+                    else
+                    {
+                        _navPoints[i].AddConnectionDirection(
+                            false, 
+                            (_navPoints[j].Point - _navPoints[i].Point) );
+                        _navPoints[j].AddConnectionDirection(
+                            false, 
+                            (_navPoints[i].Point - _navPoints[j].Point) );
                     }
                 }
             }
@@ -188,10 +206,28 @@ namespace SnapMeshPCG.Navigation
             // Draw gizmos on navigation points
             foreach (NavPoint np in _navPoints)
             {
-                // If nav points have connections, show them in green
+                // If nav points have more good connections than bad,
+                // show them in green
                 // Otherwise show them in red
-                Gizmos.color = (np.Connections > 0) ? Color.green : Color.red;
-                Gizmos.DrawSphere(np.Point, 0.3f);
+                Gizmos.color = 
+                    (np.GoodDirections.Count > np.BadDirections.Count)
+                        ? Color.green : Color.red;
+                Gizmos.DrawSphere(np.Point, 0.1f);
+
+                // Draw lines towards navigation points that can be traveled to from // the current
+                foreach(Vector3 goodDir in np.GoodDirections)
+                {
+                    
+                    Gizmos.DrawLine(np.Point, np.Point + goodDir * 0.4f);
+                }
+
+              // Draws red lines to waypoints the current one cant access,
+              // ugly visual but better debuging of navigation.
+              /*Gizmos.color = Color.red;
+                foreach(Vector3 badDir in np.BadDirections)
+                {
+                    Gizmos.DrawRay(np.Point,badDir);
+                }*/
             }
         }
     }
