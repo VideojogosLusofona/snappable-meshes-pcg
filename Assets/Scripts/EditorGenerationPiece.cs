@@ -17,6 +17,9 @@
 
 using UnityEngine;
 
-public class EditorGenerationPiece : MonoBehaviour
-{
-}
+/// <summary>
+/// This component indicates that a piece was placed in the map during the
+/// generation process and has to be deleted (and all its children) when a
+/// map clear operation occurs.
+/// </summary>
+public class EditorGenerationPiece : MonoBehaviour { }

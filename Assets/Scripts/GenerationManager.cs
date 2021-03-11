@@ -459,35 +459,43 @@ namespace SnapMeshPCG
             OnGenerationFinish.Invoke(PlacedPieces);
         }
 
+        /// <summary>
+        /// Generates a new map in editor mode. Method invoked when user presses
+        /// the "Generate" button in the editor.
+        /// </summary>
         [Button("Generate", enabledMode: EButtonEnableMode.Editor)]
         private void EditorGenerate()
         {
+            // Clear any previously generated map
             ClearEditorGeneration();
+
+            // Generate a new map
             Create();
+
+            // Get the initial piece, which is also the parent piece of all
+            // others
             GameObject initialPiece = _placedPieces[0].gameObject;
 
-            // Add a component to identify this case, so we can delete it on a
-            // new generation
+            // Add a component to identify the initial piece so we can delete
+            // it when a clear map operation is requested
             initialPiece?.AddComponent<EditorGenerationPiece>();
         }
 
+        /// <summary>
+        /// Clears a map generated in editor mode.
+        /// </summary>
         [Button("Clear", enabledMode: EButtonEnableMode.Editor)]
         private void ClearEditorGeneration()
         {
-            // Find any pieces with the EditorGenerationPiece component
-            // This component is indicative of a piece that was generated in the
-            // editor and has to be deleted (and all it's children) when we
-            // regenerate from the editor
-            // The script also deletes on Start, so it doesn't "survive" play
-            // mode
-            EditorGenerationPiece[] editorGenerations =
-                FindObjectsOfType<EditorGenerationPiece>();
-            foreach (EditorGenerationPiece obj in editorGenerations)
+            // Find any pieces with the EditorGenerationPiece component and
+            // deletes them (and all of its children)
+            foreach (var obj in FindObjectsOfType<EditorGenerationPiece>())
             {
                 DestroyImmediate(obj.gameObject);
             }
+
+            // Raise clear map event
             OnGenerationClear.Invoke();
         }
-
     }
 }
