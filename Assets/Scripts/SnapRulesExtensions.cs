@@ -17,13 +17,24 @@
 
 namespace SnapMeshPCG
 {
+    /// <summary>
+    /// Useful extension methods for the SnapRules enumeration.
+    /// </summary>
     public static class SnapRulesExtensions
     {
-        // Is the use of colours specified in this rule?
+        /// <summary>
+        /// Is the use of colours specified in this ruleset?
+        /// </summary>
+        /// <param name="rules">The ruleset to check for color usage.</param>
+        /// <returns>True if this ruleset uses colors, false otherwise.</returns>
         public static bool UseColours(this SnapRules rules)
             => (rules & SnapRules.Colours) == SnapRules.Colours;
 
-        // Is the use of pins specified in this rule?
+        /// <summary>
+        /// Is the use of pins specified in this ruleset?
+        /// </summary>
+        /// <param name="rules">The ruleset to check for pin usage.</param>
+        /// <returns>True if this ruleset uses pins, false otherwise.</returns>
         public static bool UsePins(this SnapRules rules)
             => (rules & SnapRules.Pins) == SnapRules.Pins;
     }

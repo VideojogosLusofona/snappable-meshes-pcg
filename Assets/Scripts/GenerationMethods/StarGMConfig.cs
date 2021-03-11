@@ -19,14 +19,22 @@ using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// Configures the star generation method.
+    /// </summary>
     public class StarGMConfig : AbstractGMConfig
     {
+        // The base amount of pieces an arm of the star will have
         [SerializeField]
         private uint _armLength = 0;
 
+        // The maximum variation from _armLength in each arm
         [SerializeField]
         private uint armLengthVar = 0;
 
+        /// <summary>
+        /// Returns the configured star generation method.
+        /// </summary>
         public override AbstractGM Method =>
             new StarGM(_armLength, armLengthVar);
     }

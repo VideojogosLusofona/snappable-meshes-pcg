@@ -18,6 +18,9 @@
 using System;
 namespace SnapMeshPCG
 {
+    /// <summary>
+    /// An enumeration of the existing snap rules.
+    /// </summary>
     [Flags]
     public enum SnapRules
     {

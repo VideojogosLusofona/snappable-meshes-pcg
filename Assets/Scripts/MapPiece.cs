@@ -23,6 +23,9 @@ using UnityEngine.Assertions;
 
 namespace SnapMeshPCG
 {
+    /// <summary>
+    /// Represents the behavior of a map piece.
+    /// </summary>
     public class MapPiece : MonoBehaviour, IComparable<MapPiece>
     {
         // Never access this variable directly
@@ -313,9 +316,9 @@ namespace SnapMeshPCG
             Rigidbody rb = GetComponent<Rigidbody>();
             MeshCollider mc = GetComponent<MeshCollider>();
 
-            if(rb == null)
+            if (rb == null)
                 rb = GetComponentInChildren<Rigidbody>();
-            if(mc == null)
+            if (mc == null)
                 mc = GetComponentInChildren<MeshCollider>();
 
             // Make sure connector collection is initialized
@@ -326,8 +329,7 @@ namespace SnapMeshPCG
             if (mc == null && rb != null)
                 mc = rb.gameObject.AddComponent<MeshCollider>();
 
-                rb.isKinematic = true;
-
+            rb.isKinematic = true;
         }
 
         /// <summary>

@@ -26,6 +26,10 @@ using SnapMeshPCG.GenerationMethods;
 
 namespace SnapMeshPCG
 {
+    /// <summary>
+    /// Manages the map generation process and keeps track of all the
+    /// generation parameters.
+    /// </summary>
     public class GenerationManager : MonoBehaviour
     {
         // ///////// //

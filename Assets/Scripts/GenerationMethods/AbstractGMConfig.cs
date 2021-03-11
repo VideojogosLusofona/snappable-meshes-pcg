@@ -21,22 +21,43 @@ using UnityEditor;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// The base class for all generation method configurators.
+    /// </summary>
     public abstract class AbstractGMConfig : ScriptableObject
     {
+        // Location of the generation method configurators (i.e., of the
+        // serialized scriptable objects representing the configurators)
         private const string gmFolder = "GMs";
 
+        /// <summary>
+        /// Returns the configured generation method.
+        /// </summary>
         public abstract AbstractGM Method { get; }
 
+        /// <summary>
+        /// Returns an instance of the generation method configurator.
+        /// </summary>
+        /// <param name="type">The concrete type of the configurator.</param>
+        /// <returns>An instance of the generation method configurator.</returns>
         public static AbstractGMConfig GetInstance(Type type)
         {
+            // Try to load a saved configurator of this type
             AbstractGMConfig gmConfig =
                 Resources.Load<AbstractGMConfig>($"{gmFolder}/{type.Name}");
+
+            // If there's no saved configurator of this type, create a new one
             if (gmConfig is null)
             {
+                // Create an instance of the configurator
                 gmConfig = CreateInstance(type) as AbstractGMConfig;
+
+                // Set this configurator as an asset for later loading
                 AssetDatabase.CreateAsset(
                     gmConfig, $"Assets/Resources/{gmFolder}/{type.Name}.asset");
             }
+
+            // Return the instance of the generation method configurator
             return gmConfig;
         }
     }

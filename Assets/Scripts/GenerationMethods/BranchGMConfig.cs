@@ -19,17 +19,26 @@ using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// Configures the branch generation method.
+    /// </summary>
     public class BranchGMConfig : AbstractGMConfig
     {
+        // Number of branches to be created
         [SerializeField]
         private uint _branchCount = 0;
 
+        // The average amount of pieces a branch will have
         [SerializeField]
         private uint _branchLength = 0;
 
+        // The maximum variation from branchLength in each branch
         [SerializeField]
         private uint _branchLengthVar = 0;
 
+        /// <summary>
+        /// Returns the configured branch generation method.
+        /// </summary>
         public override AbstractGM Method =>
             new BranchGM(_branchCount, _branchLength, _branchLengthVar);
     }

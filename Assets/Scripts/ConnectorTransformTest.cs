@@ -19,7 +19,10 @@ using UnityEngine;
 
 namespace SnapMeshPCG
 {
-
+    /// <summary>
+    /// A class for debugging connector transforms. Does not do anything in the
+    /// generation process.
+    /// </summary>
     public class ConnectorTransformTest : MonoBehaviour
     {
         //This is the Transform of the second GameObject

@@ -19,12 +19,19 @@ using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// Configures the corridor generation method.
+    /// </summary>
     public class CorridorGMConfig : AbstractGMConfig
     {
+        // Maximum number of pieces the method will use to create a
+        // corridor-like map
         [SerializeField]
         private uint _maxPieces = 0;
 
-        public override AbstractGM Method =>
-            new CorridorGM((int)_maxPieces);
+        /// <summary>
+        /// Returns the configured corridor generation method.
+        /// </summary>
+        public override AbstractGM Method => new CorridorGM((int)_maxPieces);
     }
 }

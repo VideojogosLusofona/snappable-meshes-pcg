@@ -19,12 +19,18 @@ using UnityEngine;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// Configures the arena generation method.
+    /// </summary>
     public class ArenaGMConfig : AbstractGMConfig
     {
+        // Maximum number of pieces the method will use to create an arena
         [SerializeField]
         private uint _maxPieces = 0;
 
-        public override AbstractGM Method =>
-            new ArenaGM((int)_maxPieces);
+        /// <summary>
+        /// Returns the configured arena generation method.
+        /// </summary>
+        public override AbstractGM Method => new ArenaGM((int)_maxPieces);
     }
 }

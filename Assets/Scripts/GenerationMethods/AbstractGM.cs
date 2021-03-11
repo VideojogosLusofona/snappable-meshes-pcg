@@ -20,12 +20,17 @@ using System.Collections.Generic;
 
 namespace SnapMeshPCG.GenerationMethods
 {
+    /// <summary>
+    /// The base class for all generation methods.
+    /// </summary>
     public abstract class AbstractGM
     {
         // Free connectors in the last guide piece returned
         private int _lastGuideFreeConnectors;
 
-        // Last guide piece returned by the generation method
+        /// <summary>
+        /// Last guide piece returned by the generation method.
+        /// </summary>
         protected MapPiece LastGuide { get; private set; }
 
         /// <summary>Select the starting piece.</summary>

@@ -51,19 +51,21 @@ namespace SnapMeshPCG.Navigation
             if (_agent == null)
                 _agent = gameObject.AddComponent<NavMeshAgent>();
 
-            // Use the most connect nav point for placing the agent
+            // Use the most connected nav point for placing the agent
             Vector3 point = _navPoints[0].Point;
 
+            // Place the agent on the obtained point and configure it
             bool warp = _agent.Warp(point);
             if (warp)
             {
                 _agent.enabled = false;
                 transform.position = point;
             }
-
             _agent.enabled = true;
             _agent.updateRotation = true;
             _agent.updateUpAxis = true;
+
+            // Get a new path for the agent
             GetNewPath();
         }
 
@@ -72,8 +74,7 @@ namespace SnapMeshPCG.Navigation
         {
             NavMeshPathStatus pathStatus = _agent.pathStatus;
 
-            // If Path is anything but being able to reach destination
-            // get a new one
+            // If current path is unable to be complete, get a new one
             if (pathStatus != NavMeshPathStatus.PathComplete)
                 GetNewPath();
 
@@ -82,14 +83,20 @@ namespace SnapMeshPCG.Navigation
                 GetNewPath();
         }
 
+        // Determines a new path for the agent
         private void GetNewPath()
         {
+            // Clear the current path
             _agent.ResetPath();
 
+            // Get a new point from the list of navigation points
             Vector3 newTarget =
                 _navPoints[Random.Range(0, _navPoints.Count)].Point;
 
+            // Draw a debug line
             Debug.DrawLine(transform.position, newTarget, Color.green, 10);
+
+            // Set the agent's destination to it's new target
             _agent.SetDestination(newTarget);
         }
     }
