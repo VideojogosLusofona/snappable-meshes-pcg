@@ -70,7 +70,7 @@ namespace SnapMeshPCG
         // Connector color, which can influence what other connectors this
         // connector can snap with
         [SerializeField]
-        private ConnectorColor connColor = ConnectorColor.WHITE;
+        private ConnectorColor connColor = ConnectorColor.White;
 
         // Number of pins in this connector, which can influence what other
         // connectors this connector can snap with
@@ -142,40 +142,40 @@ namespace SnapMeshPCG
             Color col;
             switch (connColor)
             {
-                case ConnectorColor.WHITE:
+                case ConnectorColor.White:
                     col = Color.white;
                     break;
-                case ConnectorColor.RED:
+                case ConnectorColor.Red:
                     col = Color.red;
                     break;
-                case ConnectorColor.GREEN:
+                case ConnectorColor.Green:
                     col = new Color(0.25f, 0.9f, 0.25f);
                     break;
-                case ConnectorColor.BLUE:
+                case ConnectorColor.Blue:
                     col = new Color(0.25f, 0.5f, 0.9f);
                     break;
-                case ConnectorColor.CYAN:
+                case ConnectorColor.Cyan:
                     col = new Color(0.25f, 0.9f, 1.0f);
                     break;
-                case ConnectorColor.ORANGE:
+                case ConnectorColor.Orange:
                     col = new Color(1.0f, 0.6f, 0);
                     break;
-                case ConnectorColor.YELLOW:
+                case ConnectorColor.Yellow:
                     col = Color.yellow;
                     break;
-                case ConnectorColor.PINK:
+                case ConnectorColor.Pink:
                     col = new Color(0.9f, 0.6f, 0.9f);
                     break;
-                case ConnectorColor.PURPLE:
+                case ConnectorColor.Purple:
                     col = Color.magenta;
                     break;
-                case ConnectorColor.BROWN:
+                case ConnectorColor.Brown:
                     col = new Color(0.6f, 0.2f, 0.2f);
                     break;
-                case ConnectorColor.BLACK:
+                case ConnectorColor.Black:
                     col = Color.black;
                     break;
-                case ConnectorColor.GREY:
+                case ConnectorColor.Grey:
                     col = Color.grey;
                     break;
                 default:

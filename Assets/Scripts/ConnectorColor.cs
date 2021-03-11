@@ -17,20 +17,24 @@
 
 namespace SnapMeshPCG
 {
+    /// <summary>
+    /// Represents the color of a connector, which can determine which other
+    /// connectors a connector can snap with.
+    /// </summary>
     public enum ConnectorColor
     {
-        WHITE = 0,
-        RED,
-        GREEN,
-        BLUE,
-        CYAN,
-        ORANGE,
-        YELLOW,
-        PINK,
-        PURPLE,
-        BROWN,
-        BLACK,
-        GREY,
+        White,
+        Red,
+        Green,
+        Blue,
+        Cyan,
+        Orange,
+        Yellow,
+        Pink,
+        Purple,
+        Brown,
+        Black,
+        Grey,
     }
 }
 
