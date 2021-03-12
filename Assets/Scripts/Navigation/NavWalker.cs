@@ -36,14 +36,17 @@ namespace SnapMeshPCG.Navigation
         // Start is called before the first frame update
         private void Start()
         {
+            // Point in map where agent will spawn
+            Vector3 spawnPoint;
+
             // Disable main camera, since we want to use the walker cam for the demo
             Camera.main.gameObject.SetActive(false);
 
-            // Get a reference to the nav points list
+            // Get a reference to the cluster of nav points with most points
             _navPoints = GameObject
                 .Find("NavController")
                 .GetComponent<NavScanner>()
-                .NavPoints;
+                .Clusters[0].Points;
 
             // Get the NavMeshAgent component, and if we don't find it, add
             // a new one
@@ -51,15 +54,15 @@ namespace SnapMeshPCG.Navigation
             if (_agent == null)
                 _agent = gameObject.AddComponent<NavMeshAgent>();
 
-            // Use the most connected nav point for placing the agent
-            Vector3 point = _navPoints[0].Point;
+            // Select a random point from the nav point cluster
+            spawnPoint = _navPoints[Random.Range(0, _navPoints.Count)].Point;
 
             // Place the agent on the obtained point and configure it
-            bool warp = _agent.Warp(point);
+            bool warp = _agent.Warp(spawnPoint);
             if (warp)
             {
                 _agent.enabled = false;
-                transform.position = point;
+                transform.position = spawnPoint;
             }
             _agent.enabled = true;
             _agent.updateRotation = true;

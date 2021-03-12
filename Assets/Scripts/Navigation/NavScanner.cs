@@ -40,7 +40,7 @@ namespace SnapMeshPCG.Navigation
         // List of navigation point clusters
         [SerializeField]
         [HideInInspector]
-        private List<List<NavPoint>> _navPointClusters;
+        private List<Cluster> _clusters;
 
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
@@ -52,8 +52,7 @@ namespace SnapMeshPCG.Navigation
         /// Read-only accessor to the list of nav point clusters, ordered by
         /// cluster size (descending).
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<NavPoint>> NavPointClusters =>
-            _navPointClusters;
+        public IReadOnlyList<Cluster> Clusters => _clusters;
 
         // In how many volumes should we divide a map piece bounding box in
         // order to search for near navmesh points?
@@ -185,22 +184,22 @@ namespace SnapMeshPCG.Navigation
             // Get distinct clusters (sets), convert them to lists, sort them
             // by size (descending) and convert the resulting enumerable to a
             // list
-            _navPointClusters = navPointClusters.Values
+            _clusters = navPointClusters.Values
                 .Distinct()
-                .Select(set => new List<NavPoint>(set))
-                .OrderByDescending(clust => clust.Count)
+                .Select(set => new Cluster(set))
+                .OrderByDescending(clust => clust.Points.Count)
                 .ToList();
 
             // Log nav point clusters found
             log.AppendFormat(
                 "A total of {0} navigation clusters were found:\n",
-                _navPointClusters.Count);
-            for (int i = 0; i < _navPointClusters.Count; i++)
+                _clusters.Count);
+            for (int i = 0; i < _clusters.Count; i++)
             {
                 log.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
                     i,
-                    _navPointClusters[i].Count,
-                    _navPointClusters[i].Count / (float)_navPoints.Count);
+                    _clusters[i].Points.Count,
+                    _clusters[i].Points.Count / (float)_navPoints.Count);
             }
 
             // Show log
@@ -338,8 +337,9 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public void ClearScanner()
         {
-            // Discard the previously found navigation points, if any
+            // Discard the previously found navigation points and clusters
             _navPoints = null;
+            _clusters = null;
         }
 
         /// <summary>
