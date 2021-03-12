@@ -68,6 +68,10 @@ namespace SnapMeshPCG.Navigation
             IReadOnlyList<(float sumVol, Bounds bounds)> pieceBounds =
                 CalculateLocations(mapPieces);
 
+            // Dictionary of nav points and their clusters
+            IDictionary<NavPoint, ISet<NavPoint>> navPointClusters =
+                new Dictionary<NavPoint, ISet<NavPoint>>();
+
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>();
 
@@ -91,12 +95,13 @@ namespace SnapMeshPCG.Navigation
             {
                 for (int j = i + 1; j < _navPoints.Count; j++)
                 {
+                    // Put nav points in locals vars, easier to work with
+                    NavPoint p1 = _navPoints[i];
+                    NavPoint p2 = _navPoints[j];
+
                     // Try and calculate a path between the two current points
                     bool path = NavMesh.CalculatePath(
-                        _navPoints[i].Point,
-                        _navPoints[j].Point,
-                        NavMesh.AllAreas,
-                        storedPath);
+                        p1.Point, p2.Point, NavMesh.AllAreas, storedPath);
 
                     // Increment number of tries
                     tries++;
@@ -104,8 +109,43 @@ namespace SnapMeshPCG.Navigation
                     // Has a complete path been found?
                     if (path && storedPath.status == NavMeshPathStatus.PathComplete)
                     {
-                        _navPoints[i].IncConnections();
-                        _navPoints[j].IncConnections();
+                        // Cluster generation
+                        if (p1.Isolated && p2.Isolated)
+                        {
+                            // If both points are isolated, create a new cluster
+                            // for containing them
+                            ISet<NavPoint> newCluster =
+                                new HashSet<NavPoint>() { p1, p2 };
+
+                            // Connect cluster to each point
+                            navPointClusters.Add(p1, newCluster);
+                            navPointClusters.Add(p2, newCluster);
+                        }
+                        else if (!p1.Isolated && p2.Isolated)
+                        {
+                            // If first point has cluster and the second does
+                            // not, add second point to the first's cluster
+                            navPointClusters[p1].Add(p2);
+                            navPointClusters.Add(p2, navPointClusters[p1]);
+                        }
+                        else if (p1.Isolated && !p2.Isolated)
+                        {
+                            // If second point has cluster and the first does
+                            // not, add first point to the seconds's cluster
+                            navPointClusters[p2].Add(p1);
+                            navPointClusters.Add(p1, navPointClusters[p2]);
+                        }
+                        else if (navPointClusters[p1] != navPointClusters[p2])
+                        {
+                            // If points are in different clusters, merge
+                            // clusters
+                            navPointClusters[p1].UnionWith(navPointClusters[p2]);
+                            navPointClusters[p2] = navPointClusters[p1];
+                        }
+
+                        // Update points
+                        p1.IncConnections();
+                        p2.IncConnections();
                         success++;
                     }
                 }
@@ -117,6 +157,16 @@ namespace SnapMeshPCG.Navigation
             Debug.Log(string.Format(
                 "Scanner: Evaluated {0} paths from {1} points, found {2} good paths. -> {3:p2}",
                 tries, _navPointCount, success, percentPassable));
+
+            List<ISet<NavPoint>> clusters = new List<ISet<NavPoint>>(new HashSet<ISet<NavPoint>>(navPointClusters.Values));
+            clusters.Sort((clust1, clust2) => clust2.Count - clust1.Count);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder($"There are {clusters.Count} clusters\n");
+            for (int i = 0; i < clusters.Count; i++)
+            {
+                sb.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2})\n",
+                    i, clusters[i].Count, clusters[i].Count / (float)_navPoints.Count);
+            }
+            Debug.Log(sb.ToString());
 
             // Sort nav point list by number of connections before returning
             _navPoints.Sort();

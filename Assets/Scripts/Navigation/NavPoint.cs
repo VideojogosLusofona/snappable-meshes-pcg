@@ -41,6 +41,11 @@ namespace SnapMeshPCG.Navigation
         public int Connections => _connections;
 
         /// <summary>
+        /// Is this point isolated (i.e., not connected with any other)?
+        /// </summary>
+        public bool Isolated => _connections == 0;
+
+        /// <summary>
         /// Create a new navigation point with zero connections.
         /// </summary>
         /// <param name="point">Location of the navigation point.</param>
