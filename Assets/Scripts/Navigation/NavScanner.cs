@@ -16,6 +16,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
@@ -36,11 +37,23 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private List<NavPoint> _navPoints;
 
+        // List of navigation point clusters
+        [SerializeField]
+        [HideInInspector]
+        private List<List<NavPoint>> _navPointClusters;
+
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
-        /// number of connections.
+        /// number of connections (descending).
         /// </summary>
         public IReadOnlyList<NavPoint> NavPoints => _navPoints;
+
+        /// <summary>
+        /// Read-only accessor to the list of nav point clusters, ordered by
+        /// cluster size (descending).
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<NavPoint>> NavPointClusters =>
+            _navPointClusters;
 
         // In how many volumes should we divide a map piece bounding box in
         // order to search for near navmesh points?
@@ -169,23 +182,25 @@ namespace SnapMeshPCG.Navigation
                 "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average)\n",
                 tries, _navPointCount, success, (float)success / tries);
 
-            // Create a set of different clusters and convert it to a list
-            List<ISet<NavPoint>> clusters = new List<ISet<NavPoint>>(
-                new HashSet<ISet<NavPoint>>(navPointClusters.Values));
-
-            // Sort list by cluster dimension (descending order)
-            clusters.Sort((clust1, clust2) => clust2.Count - clust1.Count);
+            // Get distinct clusters (sets), convert them to lists, sort them
+            // by size (descending) and convert the resulting enumerable to a
+            // list
+            _navPointClusters = navPointClusters.Values
+                .Distinct()
+                .Select(set => new List<NavPoint>(set))
+                .OrderByDescending(clust => clust.Count)
+                .ToList();
 
             // Log nav point clusters found
             log.AppendFormat(
                 "A total of {0} navigation clusters were found:\n",
-                clusters.Count);
-            for (int i = 0; i < clusters.Count; i++)
+                _navPointClusters.Count);
+            for (int i = 0; i < _navPointClusters.Count; i++)
             {
                 log.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
                     i,
-                    clusters[i].Count,
-                    clusters[i].Count / (float)_navPoints.Count);
+                    _navPointClusters[i].Count,
+                    _navPointClusters[i].Count / (float)_navPoints.Count);
             }
 
             // Show log
