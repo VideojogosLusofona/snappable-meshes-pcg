@@ -76,7 +76,7 @@ namespace SnapMeshPCG.Navigation
 
             // Build navmesh at top piece and consequently to all the child
             // pieces
-            Debug.Log($"Building NavMesh at parent piece: {nav.gameObject.name}");
+            //Debug.Log($"Building NavMesh at parent piece: {nav.gameObject.name}");
             nav.BuildNavMesh();
 
             // Create a walker character to walk around in our map and initially

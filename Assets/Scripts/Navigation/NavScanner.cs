@@ -16,6 +16,7 @@
  */
 
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -57,7 +58,6 @@ namespace SnapMeshPCG.Navigation
             // Number of successful paths and attempts to find them
             int success = 0;
             int tries = 0;
-            float percentPassable;
 
             // Where to store the calculated paths
             NavMeshPath storedPath = new NavMeshPath();
@@ -71,6 +71,12 @@ namespace SnapMeshPCG.Navigation
             // Dictionary of nav points and their clusters
             IDictionary<NavPoint, ISet<NavPoint>> navPointClusters =
                 new Dictionary<NavPoint, ISet<NavPoint>>();
+
+            // Initialize navigation logger
+            StringBuilder log = new StringBuilder("=== Nav validation log ===\n");
+
+            // Failures in finding navigation points
+            int navPointFindFailures = 0;
 
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>();
@@ -86,7 +92,14 @@ namespace SnapMeshPCG.Navigation
                 if (point.HasValue)
                     _navPoints.Add(new NavPoint(point.Value));
                 else
-                    Debug.Log($"No navmesh point found");
+                    navPointFindFailures++;
+            }
+
+            // Log any failures in finding nav points
+            if (navPointFindFailures > 0)
+            {
+                log.AppendFormat("Unable to place {0} nav points out of {1}\n",
+                    navPointFindFailures, _navPointCount);
             }
 
             // Compare each navigation point to all others and check for a
@@ -151,22 +164,32 @@ namespace SnapMeshPCG.Navigation
                 }
             }
 
-            // Determine percentage of passable/valid paths
-            percentPassable = (float)success / tries;
+            // Log good paths found vs total paths
+            log.AppendFormat(
+                "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average)\n",
+                tries, _navPointCount, success, (float)success / tries);
 
-            Debug.Log(string.Format(
-                "Scanner: Evaluated {0} paths from {1} points, found {2} good paths. -> {3:p2}",
-                tries, _navPointCount, success, percentPassable));
+            // Create a set of different clusters and convert it to a list
+            List<ISet<NavPoint>> clusters = new List<ISet<NavPoint>>(
+                new HashSet<ISet<NavPoint>>(navPointClusters.Values));
 
-            List<ISet<NavPoint>> clusters = new List<ISet<NavPoint>>(new HashSet<ISet<NavPoint>>(navPointClusters.Values));
+            // Sort list by cluster dimension (descending order)
             clusters.Sort((clust1, clust2) => clust2.Count - clust1.Count);
-            System.Text.StringBuilder sb = new System.Text.StringBuilder($"There are {clusters.Count} clusters\n");
+
+            // Log nav point clusters found
+            log.AppendFormat(
+                "A total of {0} navigation clusters were found:\n",
+                clusters.Count);
             for (int i = 0; i < clusters.Count; i++)
             {
-                sb.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2})\n",
-                    i, clusters[i].Count, clusters[i].Count / (float)_navPoints.Count);
+                log.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
+                    i,
+                    clusters[i].Count,
+                    clusters[i].Count / (float)_navPoints.Count);
             }
-            Debug.Log(sb.ToString());
+
+            // Show log
+            Debug.Log(log.ToString());
 
             // Sort nav point list by number of connections before returning
             _navPoints.Sort();
