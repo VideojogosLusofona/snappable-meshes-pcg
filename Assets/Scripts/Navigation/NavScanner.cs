@@ -348,18 +348,31 @@ namespace SnapMeshPCG.Navigation
         private void OnDrawGizmos()
         {
             // Don't show anything if the generated map has been cleared
-            if (_navPoints == null)
+            if (_navPoints == null || _clusters == null ||
+                _navPoints.Count == 0 || _clusters.Count == 0)
             {
                 return;
             }
 
-            // Draw gizmos on navigation points
-            foreach (NavPoint np in _navPoints)
+            // Are we looping through the first (largest) cluster?
+            bool first = true;
+
+            // Loop through clusters
+            foreach (Cluster cluster in _clusters)
             {
-                // If nav points have connections, show them in green
-                // Otherwise show them in red
-                Gizmos.color = (np.Connections > 0) ? Color.green : Color.red;
-                Gizmos.DrawSphere(np.Point, 0.3f);
+                // Points in first (largest) cluster will be green, other
+                // points will have red gizmos
+                Gizmos.color = first ? Color.green : Color.red;
+
+                // Loop through points in current cluster
+                foreach (NavPoint np in cluster.Points)
+                {
+                    // Draw gizmo
+                    Gizmos.DrawSphere(np.Point, 0.3f);
+                }
+
+                // We're not in the first cluster anymore
+                first = false;
             }
         }
     }
