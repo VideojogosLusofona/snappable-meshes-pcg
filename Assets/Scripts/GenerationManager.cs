@@ -257,18 +257,6 @@ namespace SnapMeshPCG
             // Create a map generation log
             StringBuilder log = new StringBuilder("=== Map generation log ===");
 
-            // If we're using a starting piece, the starting piece list cannot
-            // be empty
-            if (_useStarter
-                && (_startingPieceList is null || _startingPieceList.Count == 0))
-            {
-                EditorUtility.DisplayDialog(
-                    "Warning",
-                    "Starting piece list is empty, aborting map generation.",
-                    "Ok");
-                return;
-            }
-
             // Use predefined seed if set or one based on current time
             if (_useSeed)
                 currentSeed = _seed;
@@ -280,9 +268,6 @@ namespace SnapMeshPCG
 
             // Initialize random number generator
             Random.InitState(currentSeed);
-
-            // Invoke generation starting events
-            OnGenerationBegin.Invoke();
 
             // Work on a copy and not in the original field, since we will sort
             // this list and we don't want this to be reflected in the editor
@@ -474,19 +459,38 @@ namespace SnapMeshPCG
             // Clear any previously generated map
             ClearMap();
 
-            // Generate a new map
-            CreateMap();
+            // Invoke generation starting events
+            OnGenerationBegin.Invoke();
 
-            // Get the initial piece, which is also the parent piece of all
-            // others
-            GameObject initialPiece = _placedPieces[0].gameObject;
+            try
+            {
+                // Generate a new map
+                CreateMap();
 
-            // Add a component to identify the initial piece so we can delete
-            // it when a clear map operation is requested
-            initialPiece?.AddComponent<GeneratedObject>();
+                // Get the initial piece, which is also the parent piece of all
+                // others
+                GameObject initialPiece = _placedPieces[0].gameObject;
 
-            // Notify listeners that map generations is finished
-            OnGenerationFinish.Invoke(PlacedPieces);
+                // Add a component to identify the initial piece so we can delete
+                // it when a clear map operation is requested
+                initialPiece?.AddComponent<GeneratedObject>();
+
+                // Notify listeners that map generations is finished
+                OnGenerationFinish.Invoke(PlacedPieces);
+            }
+            catch (System.Exception ex)
+            {
+                // Inform user of error during map generation
+                EditorUtility.DisplayDialog(
+                    $"Error : {ex.GetType().Name}", ex.Message, "Ok");
+
+                // Try to clean-up as best as possible
+                ClearMap();
+                foreach (var obj in FindObjectsOfType<MapPiece>())
+                {
+                    DestroyImmediate(obj);
+                }
+            }
         }
 
         /// <summary>
