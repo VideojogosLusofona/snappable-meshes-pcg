@@ -155,7 +155,8 @@ namespace SnapMeshPCG
         // ///////////////////////////////////// //
 
         // Pieces placed in the map
-        [SerializeField] [HideInInspector]
+        [SerializeField]
+        [HideInInspector]
         private List<MapPiece> _placedPieces;
 
         // Names of known generation methods
@@ -459,11 +460,11 @@ namespace SnapMeshPCG
             // Clear any previously generated map
             ClearMap();
 
-            // Invoke generation starting events
-            OnGenerationBegin.Invoke();
-
             try
             {
+                // Invoke generation starting events
+                OnGenerationBegin.Invoke();
+
                 // Generate a new map
                 CreateMap();
 
@@ -481,8 +482,12 @@ namespace SnapMeshPCG
             catch (System.Exception ex)
             {
                 // Inform user of error during map generation
+                Debug.LogErrorFormat("{0} ({1}):\n{2}",
+                    ex.Message, ex.GetType().Name, ex.StackTrace);
                 EditorUtility.DisplayDialog(
-                    $"Error : {ex.GetType().Name}", ex.Message, "Ok");
+                    $"Error : {ex.GetType().Name}",
+                    $"{ex.Message}\nDetailed information shown in the console.",
+                    "Ok");
 
                 // Try to clean-up as best as possible
                 ClearMap();
