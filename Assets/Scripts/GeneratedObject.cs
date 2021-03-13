@@ -18,8 +18,8 @@
 using UnityEngine;
 
 /// <summary>
-/// This component indicates that a piece was placed in the map during the
+/// This component indicates that an object was placed in the map during the
 /// generation process and has to be deleted (and all its children) when a
 /// map clear operation occurs.
 /// </summary>
-public class EditorGenerationPiece : MonoBehaviour { }
+public class GeneratedObject : MonoBehaviour { }

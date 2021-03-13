@@ -226,7 +226,11 @@ namespace SnapMeshPCG
         /// <summary>
         /// Create a new map.
         /// </summary>
-        private void Create()
+        /// <remarks>
+        /// This method performs actual map creation, but should only be invoked
+        /// indirectly via the <see cref="GenerateMap()"/> method.
+        /// </remarks>
+        private void CreateMap()
         {
             // Stater piece prototype
             MapPiece starterPiecePrototype;
@@ -458,9 +462,6 @@ namespace SnapMeshPCG
                     }
                 }
             }
-
-            // Notify listeners that map generations is finished
-            OnGenerationFinish.Invoke(PlacedPieces);
         }
 
         /// <summary>
@@ -468,13 +469,13 @@ namespace SnapMeshPCG
         /// the "Generate" button in the editor.
         /// </summary>
         [Button("Generate", enabledMode: EButtonEnableMode.Editor)]
-        private void EditorGenerate()
+        private void GenerateMap()
         {
             // Clear any previously generated map
-            ClearEditorGeneration();
+            ClearMap();
 
             // Generate a new map
-            Create();
+            CreateMap();
 
             // Get the initial piece, which is also the parent piece of all
             // others
@@ -482,18 +483,21 @@ namespace SnapMeshPCG
 
             // Add a component to identify the initial piece so we can delete
             // it when a clear map operation is requested
-            initialPiece?.AddComponent<EditorGenerationPiece>();
+            initialPiece?.AddComponent<GeneratedObject>();
+
+            // Notify listeners that map generations is finished
+            OnGenerationFinish.Invoke(PlacedPieces);
         }
 
         /// <summary>
         /// Clears a map generated in editor mode.
         /// </summary>
         [Button("Clear", enabledMode: EButtonEnableMode.Editor)]
-        private void ClearEditorGeneration()
+        private void ClearMap()
         {
-            // Find any pieces with the EditorGenerationPiece component and
+            // Find any pieces with the GeneratedObject component and
             // deletes them (and all of its children)
-            foreach (var obj in FindObjectsOfType<EditorGenerationPiece>())
+            foreach (var obj in FindObjectsOfType<GeneratedObject>())
             {
                 DestroyImmediate(obj.gameObject);
             }
