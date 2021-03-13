@@ -76,7 +76,7 @@ namespace SnapMeshPCG.GenerationMethods
             // If the starter list does not contain any pieces, throw an
             // exception
             if ((starterList?.Count ?? 0) == 0)
-                throw new ArgumentException("starterList is empty or null");
+                throw new ArgumentException("List of starting pieces is empty");
 
             // Get the starting piece from the concrete generation method
             startingPiece = DoSelectStartPiece(starterList, starterConTol);
@@ -103,7 +103,7 @@ namespace SnapMeshPCG.GenerationMethods
             // If the piecesInMap list does not contain any pieces, throw an
             // exception
             if ((piecesInMap?.Count ?? 0) == 0)
-                throw new ArgumentException("piecesInMap is empty or null");
+                throw new ArgumentException("List of map pieces is empty");
 
             // If there's no last guide piece, we're in the first iteration, so
             // we can assume the last placed piece is the current guide piece
