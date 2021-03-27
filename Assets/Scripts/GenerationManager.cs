@@ -423,6 +423,16 @@ namespace SnapMeshPCG
             }
             while (guidePiece != null);
 
+            // Color each piece according to when in the generation
+            // it was placed
+            for(int i = 0; i < PlacedPieces.Count; i++)
+            {
+                Renderer ren = PlacedPieces[i].GetComponent<MeshRenderer>();
+                Material tempMat = new Material(ren.sharedMaterial);
+                float multiplier = (float)i/(PlacedPieces.Count);
+                tempMat.color = Color.cyan * multiplier;
+                ren.sharedMaterial = tempMat;
+            }
             // Show piece placing log
             Debug.Log(log);
 
