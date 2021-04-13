@@ -70,9 +70,9 @@ namespace SnapMeshPCG.Navigation
             if(unWantedNav != null) DestroyImmediate(unWantedNav);
 
             // Add a navmesh component to the top piece and use the geometry
-            // from the physics colliders
+            // from the render meshes
             NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
-            nav.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            nav.useGeometry = NavMeshCollectGeometry.RenderMeshes;
 
             // Build navmesh at top piece and consequently to all the child
             // pieces
