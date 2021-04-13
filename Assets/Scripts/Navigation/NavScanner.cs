@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 
 namespace SnapMeshPCG.Navigation
 {
@@ -176,6 +177,18 @@ namespace SnapMeshPCG.Navigation
                 }
             }
 
+            // If there are still isolated points, they should be placed in
+            // their own cluster
+            for (int i = 0; i < _navPoints.Count; i++)
+            {
+                NavPoint p = _navPoints[i];
+                if (p.Isolated)
+                {
+                    ISet<NavPoint> newCluster = new HashSet<NavPoint>() { p };
+                    navPointClusters.Add(p, newCluster);
+                }
+            }
+
             // Log good paths found vs total paths
             log.AppendFormat(
                 "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average)\n",
@@ -189,6 +202,12 @@ namespace SnapMeshPCG.Navigation
                 .Select(set => new Cluster(set))
                 .OrderByDescending(clust => clust.Points.Count)
                 .ToList();
+
+            // Verify that the total number of points in clusters is the same
+            // number of actually deployed points
+            Assert.AreEqual(
+                _navPoints.Count,
+                _clusters.Select(clust => clust.Points.Count).Sum());
 
             // Log nav point clusters found
             log.AppendFormat(
