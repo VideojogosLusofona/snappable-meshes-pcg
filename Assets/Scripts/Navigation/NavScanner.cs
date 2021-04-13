@@ -91,7 +91,7 @@ namespace SnapMeshPCG.Navigation
             int navPointFindFailures = 0;
 
             // Initialize list of navigation points
-            _navPoints = new List<NavPoint>();
+            _navPoints = new List<NavPoint>(_navPointCount);
 
             // Find random points in the navmesh and add them to the list
             for (int i = 0; i < _navPointCount; i++)
@@ -179,7 +179,7 @@ namespace SnapMeshPCG.Navigation
             // Log good paths found vs total paths
             log.AppendFormat(
                 "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average)\n",
-                tries, _navPointCount, success, (float)success / tries);
+                tries, _navPoints.Count, success, (float)success / tries);
 
             // Get distinct clusters (sets), convert them to lists, sort them
             // by size (descending) and convert the resulting enumerable to a
