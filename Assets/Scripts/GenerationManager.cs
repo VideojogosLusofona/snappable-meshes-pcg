@@ -15,14 +15,18 @@
  * limitations under the License.
  */
 
-using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 using NaughtyAttributes;
 using Array2DEditor;
 using SnapMeshPCG.GenerationMethods;
+
+// Avoid conflict with System.Diagnostics.Debug
+using Debug = UnityEngine.Debug;
 
 namespace SnapMeshPCG
 {
@@ -258,6 +262,9 @@ namespace SnapMeshPCG
             // Create a map generation log
             StringBuilder log = new StringBuilder("=== Map generation log ===");
 
+            // Measure elapsed time for the generation process
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             // Use predefined seed if set or one based on current time
             if (_useSeed)
                 currentSeed = _seed;
@@ -297,8 +304,7 @@ namespace SnapMeshPCG
 
             // Get the starter piece by cloning the prototype piece selected for
             // this purpose
-            starterPieceGObj =
-                starterPiecePrototype.ClonePiece();
+            starterPieceGObj = starterPiecePrototype.ClonePiece();
 
             // Rename piece so it's easier to determine that it's the
             // starter piece
@@ -422,6 +428,10 @@ namespace SnapMeshPCG
                 }
             }
             while (guidePiece != null);
+
+            // Log number of pieces placed and elapsed time
+            log.AppendFormat("\n\tPlaced {0} pieces in {1} ms",
+                _placedPieces.Count, stopwatch.ElapsedMilliseconds);
 
             // Show piece placing log
             Debug.Log(log);
