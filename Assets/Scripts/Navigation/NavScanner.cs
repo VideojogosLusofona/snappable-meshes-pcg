@@ -16,11 +16,15 @@
  */
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+
+// Avoid conflict with System.Diagnostics.Debug
+using Debug = UnityEngine.Debug;
 
 namespace SnapMeshPCG.Navigation
 {
@@ -90,6 +94,9 @@ namespace SnapMeshPCG.Navigation
 
             // Failures in finding navigation points
             int navPointFindFailures = 0;
+
+            // Measure how long the navigation scanning takes
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>(_navPointCount);
@@ -191,8 +198,8 @@ namespace SnapMeshPCG.Navigation
 
             // Log good paths found vs total paths
             log.AppendFormat(
-                "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average)\n",
-                tries, _navPoints.Count, success, (float)success / tries);
+                "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
+                tries, _navPoints.Count, success, (float)success / tries, stopwatch.ElapsedMilliseconds);
 
             // Get distinct clusters (sets), convert them to lists, sort them
             // by size (descending) and convert the resulting enumerable to a
