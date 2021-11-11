@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -106,18 +106,18 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.5
-    agentHeight: 2
-    agentSlope: 45
-    agentClimb: 1.04
+    agentRadius: 0.125
+    agentHeight: 0.5
+    agentSlope: 14
+    agentClimb: 0.1
     ledgeDropHeight: 40
     maxJumpAcrossDistance: 40
     minRegionArea: 2
     manualCellSize: 1
-    cellSize: 0.5
+    cellSize: 0.016
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    accuratePlacement: 1
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -199,6 +199,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -306,6 +307,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!1 &1417949382
@@ -400,13 +402,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _piecesList:
-  - {fileID: 1250729121890872323, guid: f0266bf901b0a604b837b204d09c9d38, type: 3}
-  - {fileID: 4550082696110050862, guid: 32b2d89e1d2927449af147bc2e3992d2, type: 3}
-  - {fileID: 5580773321957475689, guid: 307c953c700f0f542a165d9aeb91e79e, type: 3}
-  - {fileID: 9109512191895755785, guid: aefe349cf25bee141b6918b125e91696, type: 3}
-  - {fileID: 5159214311195075065, guid: 70f2ddc65f4aba247aa26369016e8fed, type: 3}
-  _useStarter: 0
-  _startingPieceList: []
+  - {fileID: 5173408010335370628, guid: b5b8c8cb35aa42243a81ea8fe0ac3dcd, type: 3}
+  - {fileID: -7573318826679512931, guid: 12cdd54e73814914e9fae8b2facce209, type: 3}
+  - {fileID: 6148798488885409495, guid: 447b405d905c13343a63bd8c7c8e09f5, type: 3}
+  - {fileID: 1548034931304337488, guid: bb7f5eb3ba378024a893444b22d2fcab, type: 3}
+  - {fileID: 3025701242379310650, guid: 3a243071dacf20e44b8ff50753d03510, type: 3}
+  - {fileID: 648744990604598079, guid: f866fd2a28b56d0419cf17af4d19c313, type: 3}
+  - {fileID: -2149246496814042041, guid: 5af8f44c9589c7849ab151f7ac55e513, type: 3}
+  - {fileID: 3612343452841913635, guid: 5af427538b3b52842846e1c0254ef7ad, type: 3}
+  - {fileID: 2813170107419549173, guid: 7cd0d93231b94d044bf9a0e04ec6f52c, type: 3}
+  - {fileID: 4550935236952197293, guid: e6af74d560b7dae4aa03fe1785ad0a01, type: 3}
+  - {fileID: -288569198357325618, guid: 832264c47821d484fb61f9aaf4e58ea9, type: 3}
+  - {fileID: 6805274047030939258, guid: 0ea775dc1c4c31847abe06ebc5ecea2a, type: 3}
+  _useStarter: 1
+  _startingPieceList:
+  - {fileID: -2149246496814042041, guid: 5af8f44c9589c7849ab151f7ac55e513, type: 3}
+  - {fileID: 3612343452841913635, guid: 5af427538b3b52842846e1c0254ef7ad, type: 3}
+  - {fileID: 2813170107419549173, guid: 7cd0d93231b94d044bf9a0e04ec6f52c, type: 3}
+  - {fileID: 4550935236952197293, guid: e6af74d560b7dae4aa03fe1785ad0a01, type: 3}
+  - {fileID: -288569198357325618, guid: 832264c47821d484fb61f9aaf4e58ea9, type: 3}
+  - {fileID: 6805274047030939258, guid: 0ea775dc1c4c31847abe06ebc5ecea2a, type: 3}
   _useSeed: 1
   _seed: 1234
   _pieceDistance: 0.0001
@@ -470,13 +485,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &1724673651
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +531,7 @@ MonoBehaviour:
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
+  m_AllowXRRendering: 1
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
@@ -615,7 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walker: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
+  walker: {fileID: 3366272454587344551, guid: 0a715fd2db47eb144898381c7aeabd7c, type: 3}
   OnNavMeshReady:
     m_PersistentCalls:
       m_Calls:
@@ -663,17 +672,17 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483703
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
+  m_OverrideTileSize: 1
+  m_TileSize: 16
   m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.05
+  m_VoxelSize: 0.02
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 0573cd5589e0adc46983b6f8599a20ad, type: 2}
 --- !u!114 &1975597052
 MonoBehaviour:
   m_ObjectHideFlags: 0

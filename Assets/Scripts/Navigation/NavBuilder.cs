@@ -81,8 +81,7 @@ namespace SnapMeshPCG.Navigation
 
             // Create a walker character to walk around in our map and initially
             // place it on top of the starting piece
-            up = walker.gameObject.GetComponent<MeshRenderer>().bounds.extents.y;
-            start = startBounds.center + Vector3.up * (startBounds.extents.y + up);
+            start = startBounds.center;
             Instantiate(walker.gameObject, start, Quaternion.identity);
 
             // Notify listeners that the navmesh has been baked
