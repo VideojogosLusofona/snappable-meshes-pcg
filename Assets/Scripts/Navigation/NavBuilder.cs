@@ -46,9 +46,6 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void BuildNavMesh(IReadOnlyList<MapPiece> pieces)
         {
-            // Vertical offset required for when we place the walker
-            float up;
-
             // Start position for the walker
             Vector3 start;
 
@@ -80,7 +77,7 @@ namespace SnapMeshPCG.Navigation
             nav.BuildNavMesh();
 
             // Create a walker character to walk around in our map and initially
-            // place it on top of the starting piece
+            // place it at the center of the starting piece
             start = startBounds.center;
             Instantiate(walker.gameObject, start, Quaternion.identity);
 

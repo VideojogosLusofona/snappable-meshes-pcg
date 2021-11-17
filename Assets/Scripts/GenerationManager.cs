@@ -470,7 +470,7 @@ namespace SnapMeshPCG
             // Clear any previously generated map
             ClearMap();
 
-            //try
+            try
             {
                 // Invoke generation starting events
                 OnGenerationBegin.Invoke();
@@ -489,7 +489,7 @@ namespace SnapMeshPCG
                 // Notify listeners that map generations is finished
                 OnGenerationFinish.Invoke(PlacedPieces);
             }
-            /*catch (System.Exception ex)
+            catch (System.Exception ex)
             {
                 // Inform user of error during map generation
                 Debug.LogErrorFormat("{0} ({1}):\n{2}",
@@ -505,7 +505,7 @@ namespace SnapMeshPCG
                 {
                     DestroyImmediate(obj);
                 }
-            }*/
+            }
         }
 
         /// <summary>
