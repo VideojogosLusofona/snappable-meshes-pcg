@@ -23,7 +23,7 @@ using UnityEngine.Events;
 using UnityEditor;
 using NaughtyAttributes;
 using Array2DEditor;
-using SnapMeshPCG.GenerationMethods;
+using SnapMeshPCG.SelectionMethods;
 
 // Avoid conflict with System.Diagnostics.Debug
 using Debug = UnityEngine.Debug;
@@ -43,7 +43,7 @@ namespace SnapMeshPCG
         private const string contentParams = ":: Content parameters ::";
         private const string generalParams = ":: General parameters ::";
         private const string connectionParams = ":: Connection parameters ::";
-        private const string generationParams = ":: Generation parameters ::";
+        private const string selectionParams = ":: Selection parameters ::";
         private const string events = ":: Events ::";
 
         // ////////////////// //
@@ -113,23 +113,23 @@ namespace SnapMeshPCG
         [Tooltip("Rows refer to the guide piece, columns to the tentative piece")]
         private Array2DBool _colorMatrix = null;
 
-        // ///////////////////// //
-        // Generation parameters //
-        // ///////////////////// //
+        // //////////////////// //
+        // Selection parameters //
+        // //////////////////// //
 
-        [BoxGroup(generationParams)]
+        [BoxGroup(selectionParams)]
         [SerializeField]
-        [Dropdown(nameof(GenMethods))]
-        [OnValueChanged("OnChangeGMName")]
-        private string _generationMethod;
+        [Dropdown(nameof(SelMethods))]
+        [OnValueChanged("OnChangeSMName")]
+        private string _selectionMethod;
 
-        [BoxGroup(generationParams)]
+        [BoxGroup(selectionParams)]
         [SerializeField]
         [Expandable]
-        [OnValueChanged(nameof(OnChangeGMType))]
-        private AbstractGMConfig _generationParams;
+        [OnValueChanged(nameof(OnChangeSMType))]
+        private AbstractSMConfig _selectionParams;
 
-        [BoxGroup(generationParams)]
+        [BoxGroup(selectionParams)]
         [Label("Starter Connector Count Tolerance")]
         [SerializeField]
         private uint _starterConTol = 0;
@@ -163,30 +163,30 @@ namespace SnapMeshPCG
         [HideInInspector]
         private List<MapPiece> _placedPieces;
 
-        // Names of known generation methods
+        // Names of known selection methods
         [System.NonSerialized]
-        private string[] _genMethods;
+        private string[] _selMethods;
 
         // ////////// //
         // Properties //
         // ////////// //
 
-        // Get generation method names
-        private ICollection<string> GenMethods
+        // Get selection method names
+        private ICollection<string> SelMethods
         {
             get
             {
                 // Did we initialize gen. method names already?
-                if (_genMethods is null)
+                if (_selMethods is null)
                 {
                     // Get gen. method names
-                    _genMethods = GMManager.Instance.GenMethodNames;
+                    _selMethods = SMManager.Instance.SelMethodNames;
                     // Sort them
-                    System.Array.Sort(_genMethods);
+                    System.Array.Sort(_selMethods);
                 }
 
                 // Return existing methods
-                return _genMethods;
+                return _selMethods;
             }
         }
 
@@ -199,33 +199,33 @@ namespace SnapMeshPCG
         // Methods //
         // ////// //
 
-        // Callback invoked when user changes generation method type in editor
-        private void OnChangeGMType()
+        // Callback invoked when user changes selection method type in editor
+        private void OnChangeSMType()
         {
-            if (_generationParams is null)
+            if (_selectionParams is null)
             {
                 // Cannot allow this field to be empty, so set it back to what
-                // is specified in the generation method name
+                // is specified in the selection method name
                 Debug.Log(
-                    $"The {nameof(_generationParams)} field cannot be empty");
-                OnChangeGMName();
+                    $"The {nameof(_selectionParams)} field cannot be empty");
+                OnChangeSMName();
             }
             else
             {
-                // Update generation method name accordingly to what is now set
+                // Update selection method name accordingly to what is now set
                 // in the generation configurator fields
-                _generationMethod = GMManager.Instance.GetNameFromType(
-                    _generationParams.GetType());
+                _selectionMethod = SMManager.Instance.GetNameFromType(
+                    _selectionParams.GetType());
             }
         }
 
-        // Callback invoked when user changes generation method name in editor
-        private void OnChangeGMName()
+        // Callback invoked when user changes selection method name in editor
+        private void OnChangeSMName()
         {
             // Make sure gen. method type is updated accordingly
             System.Type gmConfig =
-                GMManager.Instance.GetTypeFromName(_generationMethod);
-            _generationParams = AbstractGMConfig.GetInstance(gmConfig);
+                SMManager.Instance.GetTypeFromName(_selectionMethod);
+            _selectionParams = AbstractSMConfig.GetInstance(gmConfig);
         }
 
         /// <summary>
@@ -249,8 +249,8 @@ namespace SnapMeshPCG
             // Tentative piece prototype
             MapPiece tentPiecePrototype;
 
-            // Get chosen generation method (strategy pattern)
-            AbstractGM genMethod = _generationParams.Method;
+            // Get chosen selection method (strategy pattern)
+            AbstractSM selMethod = _selectionParams.Method;
 
             // Seed for random number generator
             int currentSeed;
@@ -292,13 +292,13 @@ namespace SnapMeshPCG
             if (_useStarter)
             {
                 // Get first piece from list of starting pieces
-                starterPiecePrototype = genMethod.SelectStartPiece(
+                starterPiecePrototype = selMethod.SelectStartPiece(
                     _startingPieceList, (int)_starterConTol);
             }
             else
             {
                 // Get first piece from list of all pieces
-                starterPiecePrototype = genMethod.SelectStartPiece(
+                starterPiecePrototype = selMethod.SelectStartPiece(
                     piecesWorkList, (int)_starterConTol);
             }
 
@@ -412,7 +412,7 @@ namespace SnapMeshPCG
                 log.Append(logSuccess);
 
                 // Select next guide piece
-                guidePiece = genMethod.SelectGuidePiece(_placedPieces);
+                guidePiece = selMethod.SelectGuidePiece(_placedPieces);
 
                 // Log new guide piece
                 if (guidePiece is null)
