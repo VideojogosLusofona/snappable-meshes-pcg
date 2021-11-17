@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 3366272454587344551}
   - component: {fileID: 7724142877472596315}
   m_Layer: 0
-  m_Name: Walker
+  m_Name: BenchmarkWalker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
