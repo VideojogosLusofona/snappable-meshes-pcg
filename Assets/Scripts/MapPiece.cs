@@ -164,7 +164,7 @@ namespace SnapMeshPCG
             }
 
             // If there are valid connections, try to enable one of them
-            // This might fail we're checking for overlaps
+            // This might fail if we're checking for overlaps
             while (validCombos.Count > 0)
             {
                 // Get a random connection from the valid connections list
@@ -216,8 +216,10 @@ namespace SnapMeshPCG
                             // Check for self overlap, or overlaps with the connected piece
                             // Ignore the collision in those cases
                             MapPiece parentMapPiece = hit.GetComponentInParent<MapPiece>();
-                            if ((parentMapPiece == other) ||
-                                (parentMapPiece == this)) continue;
+                            if ((parentMapPiece == other) || (parentMapPiece == this))
+                            {
+                                continue;
+                            }
 
 #if DEBUG_OVERLAPS
                             Debug.Log($"Can't connect {name} with {other.name}");
