@@ -46,40 +46,22 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void BuildNavMesh(IReadOnlyList<MapPiece> pieces)
         {
-            // Start position for the walker
-            Vector3 start;
-
-            // Check for the existence of the NavMeshSurface component on the
-            // game object
-            // If it's not there, add it
-            NavMeshSurface dummyNav = GetComponent<NavMeshSurface>();
-            if (dummyNav == null) gameObject.AddComponent<NavMeshSurface>();
-
             // Get starting piece which is also the parent (top) piece of all
             // the others
             GameObject topPiece = pieces[0].gameObject;
 
-            // Get the bounds of the top piece
+            // Get the bounds of the starting piece
             Bounds startBounds = topPiece.GetComponentInChildren<MeshRenderer>().bounds;
 
-            // If the top piece has the navmesh surface component, remove it
-            NavMeshSurface unWantedNav = topPiece.GetComponent<NavMeshSurface>();
-            if(unWantedNav != null) DestroyImmediate(unWantedNav);
+            // Get the NavMeshSurface component on the NavController game object
+            NavMeshSurface nav = GetComponent<NavMeshSurface>();
 
-            // Add a navmesh component to the top piece and use the geometry
-            // from the render meshes
-            NavMeshSurface nav = topPiece.AddComponent<NavMeshSurface>();
-            nav.useGeometry = NavMeshCollectGeometry.RenderMeshes;
-
-            // Build navmesh at top piece and consequently to all the child
-            // pieces
-            //Debug.Log($"Building NavMesh at parent piece: {nav.gameObject.name}");
+            // Build navmesh
             nav.BuildNavMesh();
 
             // Create a walker character to walk around in our map and initially
             // place it at the center of the starting piece
-            start = startBounds.center;
-            Instantiate(walker.gameObject, start, Quaternion.identity);
+            Instantiate(walker.gameObject, startBounds.center, Quaternion.identity);
 
             // Notify listeners that the navmesh has been baked
             OnNavMeshReady.Invoke(pieces);
