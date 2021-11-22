@@ -37,15 +37,29 @@ namespace SnapMeshPCG.Navigation
         [SerializeField]
         private int _navPointCount = 400;
 
+        // Debug nav point positioning?
+        [SerializeField]
+        private bool _debugOriginPoints = false;
+
         // List of navigation points
         [SerializeField]
         [HideInInspector]
         private List<NavPoint> _navPoints;
 
+        // List of origin points and respective nav points, for debug purposes
+        [SerializeField]
+        [HideInInspector]
+        private List<Origin2Nav> _navOriginsDebug;
+
         // List of navigation point clusters
         [SerializeField]
         [HideInInspector]
         private List<Cluster> _clusters;
+
+        // Map volume
+        [SerializeField]
+        [HideInInspector]
+        private float _mapVolume;
 
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
@@ -58,10 +72,6 @@ namespace SnapMeshPCG.Navigation
         /// cluster size (descending).
         /// </summary>
         public IReadOnlyList<Cluster> Clusters => _clusters;
-
-        // In how many volumes should we divide a map piece bounding box in
-        // order to search for near navmesh points?
-        private const int _DivideVol = 20;
 
         /// <summary>
         /// Scan the navmesh for paths between randomized navigation points and
@@ -98,8 +108,14 @@ namespace SnapMeshPCG.Navigation
             // Measure how long the navigation scanning takes
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            // Keep map volume, will be useful for debug gizmos
+            _mapVolume = pieceBounds.Last().sumVol;
+
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>(_navPointCount);
+
+            // Initialize list for debugging origin and nav points
+            _navOriginsDebug = new List<Origin2Nav>(_navPointCount);
 
             // Find random points in the navmesh and add them to the list
             for (int i = 0; i < _navPointCount; i++)
@@ -283,9 +299,6 @@ namespace SnapMeshPCG.Navigation
             // Was a nav point found?
             bool pointFound;
 
-            // Counter for quitting the nav point search loop
-            int counter = 0;
-
             // Nullable where to return the nav point, if found
             Vector3? pointInMesh = null;
 
@@ -334,26 +347,22 @@ namespace SnapMeshPCG.Navigation
                 Random.Range(bounds.min.y, bounds.max.y),
                 Random.Range(bounds.min.z, bounds.max.z));
 
-            // Determine initial radius for nav point search based on origin
-            radius = bounds.size.magnitude / _DivideVol;
+            // Set radius for searching nav point as the magnitude of the vector
+            // that defines the width, length and height of the bounding box
+            radius = bounds.size.magnitude;
 
-            // Search for nav point with increasing radius until a nav point is
-            // found or the counter reaches the limit
-            do
-            {
-                float searchRadius = (1 + counter) * radius;
-                pointFound = NavMesh.SamplePosition(
-                    origin,
-                    out hit,
-                    searchRadius,
-                    NavMesh.AllAreas);
-
-                counter++;
-
-            } while (!pointFound && counter < _DivideVol);
+            // Search for nav point using the specified radius
+            pointFound = NavMesh.SamplePosition(origin, out hit, radius, NavMesh.AllAreas);
 
             // If a point is found, save it in the nullable
-            if (pointFound) pointInMesh = hit.position;
+            if (pointFound)
+            {
+                pointInMesh = hit.position;
+
+                // Add origin point and it's respective nav point to the
+                // debug list
+                _navOriginsDebug.Add(new Origin2Nav(origin, hit.position));
+            }
 
             return pointInMesh;
         }
@@ -373,6 +382,10 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         private void OnDrawGizmos()
         {
+            // These define the size of the debugging gizmos
+            const float navSphereRadiusDiv = 600;
+            const float originSphereRadiusDiv = navSphereRadiusDiv * 2;
+
             // Don't show anything if the generated map has been cleared
             if (_navPoints == null || _clusters == null ||
                 _navPoints.Count == 0 || _clusters.Count == 0)
@@ -394,11 +407,24 @@ namespace SnapMeshPCG.Navigation
                 foreach (NavPoint np in cluster.Points)
                 {
                     // Draw gizmo
-                    Gizmos.DrawSphere(np.Point, 0.3f);
+                    Gizmos.DrawSphere(np.Point, _mapVolume / navSphereRadiusDiv);
                 }
 
                 // We're not in the first cluster anymore
                 first = false;
+            }
+
+            // Show debug visualization?
+            if (_debugOriginPoints)
+            {
+                Gizmos.color = Color.blue;
+                for (int i = 0; i < _navOriginsDebug.Count; i++)
+                {
+                    Gizmos.DrawSphere(
+                        _navOriginsDebug[i].origin, _mapVolume / originSphereRadiusDiv);
+                    Gizmos.DrawLine(
+                        _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
+                }
             }
         }
     }
