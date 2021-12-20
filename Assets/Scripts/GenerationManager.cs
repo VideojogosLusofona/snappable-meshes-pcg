@@ -404,8 +404,8 @@ namespace SnapMeshPCG
                 if (logFailures.Length > 0)
                 {
                     log.AppendFormat(
-                            "\n\t\tNo valid connections with the following tentatives: {0}",
-                            logFailures);
+                        "\n\t\tNo valid connections with the following tentatives: {0}",
+                        logFailures);
                 }
 
                 // Add success log to main log
@@ -436,10 +436,10 @@ namespace SnapMeshPCG
             // Show piece placing log
             Debug.Log(log);
 
-            // If we checked for overlaps...
+            // Are we checking for overlaps?
             if (_checkOverlaps)
             {
-                // ...remove all colliders used for the generation process
+                // Remove all colliders used for the generation process
                 foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())
                 {
                     if (boxCollider == null) continue;
