@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: CorridorSMConfig
   m_EditorClassIdentifier: Assembly-CSharp:SnapMeshPCG.SelectionMethods:CorridorSMConfig
-  _maxPieces: 5
+  _maxPieces: 20
