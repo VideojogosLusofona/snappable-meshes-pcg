@@ -61,6 +61,11 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private float _mapVolume;
 
+        // Volume of largest piece
+        [SerializeField]
+        [HideInInspector]
+        private float _maxPieceVol;
+
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
         /// number of connections (descending).
@@ -268,6 +273,9 @@ namespace SnapMeshPCG.Navigation
             // Initialize running volume sum
             float runningVol = 0;
 
+            // Reset volume of largest piece
+            _maxPieceVol = 0;
+
             foreach (MapPiece piece in mapPieces)
             {
                 // Get the bounding box for the current map piece
@@ -275,6 +283,11 @@ namespace SnapMeshPCG.Navigation
 
                 // Add the running volume
                 runningVol += bounds.size.magnitude;
+
+                // Does the current piece have a larger volume than the largest
+                // piece volume so far?
+                if (bounds.size.magnitude > _maxPieceVol)
+                    _maxPieceVol = bounds.size.magnitude;
 
                 // Keep bounds and running volume for the current map piece
                 pieceBounds.Add((runningVol, bounds));
@@ -383,7 +396,7 @@ namespace SnapMeshPCG.Navigation
         private void OnDrawGizmos()
         {
             // These define the size of the debugging gizmos
-            const float navSphereRadiusDiv = 600;
+            const float navSphereRadiusDiv = 130;
             const float originSphereRadiusDiv = navSphereRadiusDiv * 2;
 
             // Don't show anything if the generated map has been cleared
@@ -407,7 +420,7 @@ namespace SnapMeshPCG.Navigation
                 foreach (NavPoint np in cluster.Points)
                 {
                     // Draw gizmo
-                    Gizmos.DrawSphere(np.Point, _mapVolume / navSphereRadiusDiv);
+                    Gizmos.DrawSphere(np.Point, _maxPieceVol / navSphereRadiusDiv);
                 }
 
                 // We're not in the first cluster anymore
@@ -421,7 +434,7 @@ namespace SnapMeshPCG.Navigation
                 for (int i = 0; i < _navOriginsDebug.Count; i++)
                 {
                     Gizmos.DrawSphere(
-                        _navOriginsDebug[i].origin, _mapVolume / originSphereRadiusDiv);
+                        _navOriginsDebug[i].origin, _maxPieceVol / originSphereRadiusDiv);
                     Gizmos.DrawLine(
                         _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
                 }
