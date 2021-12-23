@@ -35,11 +35,15 @@ namespace SnapMeshPCG.Navigation
     {
         // Number of navigation points to use for validating navmesh
         [SerializeField]
-        private int _navPointCount = 400;
+        private int _navPointCount = 250;
 
-        // Debug nav point positioning?
+        // Show nav points on navmesh
         [SerializeField]
-        private bool _debugOriginPoints = false;
+        private bool _showNavPoints = true;
+
+        // Show origin points for each nav point?
+        [SerializeField]
+        private bool _showOriginPoints = false;
 
         // List of navigation points
         [SerializeField]
@@ -406,37 +410,47 @@ namespace SnapMeshPCG.Navigation
                 return;
             }
 
-            // Are we looping through the first (largest) cluster?
-            bool first = true;
-
-            // Loop through clusters
-            foreach (Cluster cluster in _clusters)
+            // Show nav points?
+            if (_showNavPoints)
             {
-                // Points in first (largest) cluster will be green, other
-                // points will have red gizmos
-                Gizmos.color = first ? Color.green : Color.red;
+                // Are we looping through the first (largest) cluster?
+                bool first = true;
 
-                // Loop through points in current cluster
-                foreach (NavPoint np in cluster.Points)
+                // Loop through clusters
+                foreach (Cluster cluster in _clusters)
                 {
-                    // Draw gizmo
-                    Gizmos.DrawSphere(np.Point, _maxPieceVol / navSphereRadiusDiv);
-                }
+                    // Points in first (largest) cluster will be green, other
+                    // points will have red gizmos
+                    Gizmos.color = first ? Color.green : Color.red;
 
-                // We're not in the first cluster anymore
-                first = false;
+                    // Loop through points in current cluster
+                    foreach (NavPoint np in cluster.Points)
+                    {
+                        // Draw gizmo
+                        Gizmos.DrawSphere(np.Point, _maxPieceVol / navSphereRadiusDiv);
+                    }
+
+                    // We're not in the first cluster anymore
+                    first = false;
+                }
             }
 
-            // Show debug visualization?
-            if (_debugOriginPoints)
+            // Show origin points?
+            if (_showOriginPoints)
             {
                 Gizmos.color = Color.blue;
                 for (int i = 0; i < _navOriginsDebug.Count; i++)
                 {
                     Gizmos.DrawSphere(
                         _navOriginsDebug[i].origin, _maxPieceVol / originSphereRadiusDiv);
-                    Gizmos.DrawLine(
-                        _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
+
+                    // If we also show nav points, draw a line between each origin point
+                    // and its respective nav point
+                    if (_showNavPoints)
+                    {
+                        Gizmos.DrawLine(
+                            _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
+                    }
                 }
             }
         }
