@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 525747f5fe9aec967a6bd5eb8b38b67e, type: 3}
   m_Name: StarSMConfig
   m_EditorClassIdentifier: 
-  _armLength: 8
-  armLengthVar: 2
+  _armLength: 10
+  armLengthVar: 4
