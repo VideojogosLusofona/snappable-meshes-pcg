@@ -451,6 +451,8 @@ namespace SnapMeshPCG.Navigation
             // Discard the previously found navigation points and clusters
             _navPoints = null;
             _clusters = null;
+            _navOriginsDebug = null;
+            _maxPieceVol = 0;
         }
 
         /// <summary>

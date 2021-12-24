@@ -526,6 +526,9 @@ namespace SnapMeshPCG
                 DestroyImmediate(obj.gameObject);
             }
 
+            // Clear list of placed pieces
+            _placedPieces = null;
+
             // Raise clear map event
             OnGenerationClear.Invoke();
         }
