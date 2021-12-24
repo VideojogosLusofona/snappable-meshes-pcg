@@ -11,7 +11,8 @@ constraints, and an easy-to-follow generation procedure, the method is
 accessible to game designers and/or other non-experts in PCG, AI or programming.
 
 This repository contains a prototype implementation of this technique developed
-in the Unity game engine.
+in the Unity game engine. It is currently implemented using Unity 2020.3 LTS.
+
 ## How does it work?
 
 ![01](https://user-images.githubusercontent.com/3018963/127988176-a3002b05-bc4c-4eb1-b817-b6fd955e6b85.png)
