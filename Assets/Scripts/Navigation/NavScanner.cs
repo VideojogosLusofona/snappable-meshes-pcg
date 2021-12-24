@@ -130,7 +130,6 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void ScanMesh(IReadOnlyList<MapPiece> mapPieces)
         {
-
             // Number of successful paths and attempts to find them
             int success = 0;
             int tries = 0;
@@ -441,6 +440,14 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public void ClearScanner()
         {
+            // Get reference to navmesh surface and remove its data
+            NavMeshSurface navSurf = GetComponent<NavMeshSurface>();
+            if (navSurf != null)
+            {
+                navSurf.RemoveData();
+                navSurf.navMeshData = null;
+            }
+
             // Discard the previously found navigation points and clusters
             _navPoints = null;
             _clusters = null;
