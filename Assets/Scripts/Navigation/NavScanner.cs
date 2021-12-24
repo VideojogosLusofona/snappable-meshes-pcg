@@ -154,7 +154,7 @@ namespace SnapMeshPCG.Navigation
                 new Dictionary<NavPoint, ISet<NavPoint>>();
 
             // Initialize navigation logger
-            StringBuilder log = new StringBuilder("|||| Nav Validation Log ");
+            StringBuilder log = new StringBuilder("---- Nav Validation Log ");
 
             // Reinitialize RNG if requested by user
             if (_reinitializeRNG != ReInitRNG.No)
@@ -169,7 +169,7 @@ namespace SnapMeshPCG.Navigation
             {
                 log.Append("(no RNG reseed)");
             }
-            log.Append(" ||||\n");
+            log.Append(" ----\n");
 
             // Failures in finding navigation points
             int navPointFindFailures = 0;
@@ -283,7 +283,7 @@ namespace SnapMeshPCG.Navigation
 
             // Log good paths found vs total paths
             log.AppendFormat(
-                "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
+                "\tEvaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
                 tries, _navPoints.Count, success, (float)success / tries, stopwatch.ElapsedMilliseconds);
 
             // Get distinct clusters (sets), convert them to lists, sort them
@@ -303,11 +303,11 @@ namespace SnapMeshPCG.Navigation
 
             // Log nav point clusters found
             log.AppendFormat(
-                "A total of {0} navigation clusters were found:\n",
+                "\tA total of {0} navigation clusters were found:\n",
                 _clusters.Count);
             for (int i = 0; i < _clusters.Count; i++)
             {
-                log.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
+                log.AppendFormat("\t\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
                     i,
                     _clusters[i].Points.Count,
                     _clusters[i].Points.Count / (float)_navPoints.Count);

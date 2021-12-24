@@ -260,7 +260,7 @@ namespace SnapMeshPCG
             List<MapPiece> piecesWorkList;
 
             // Create a map generation log
-            StringBuilder log = new StringBuilder("=== Map generation log ===");
+            StringBuilder log = new StringBuilder();
 
             // Measure elapsed time for the generation process
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -272,7 +272,11 @@ namespace SnapMeshPCG
                 currentSeed = (int)System.DateTime.Now.Ticks;
 
             // Log seed used for generating this map
-            log.AppendFormat("\n\tGenerating with seed = {0}", currentSeed);
+            log.AppendFormat(
+                "---- Map Generation Log (seed = {0}) ----", currentSeed);
+
+            // Position where to place log summary, right after log header
+            int logSummaryLoc = log.Length;
 
             // Initialize random number generator
             Random.InitState(currentSeed);
@@ -430,8 +434,9 @@ namespace SnapMeshPCG
             while (guidePiece != null);
 
             // Log number of pieces placed and elapsed time
-            log.AppendFormat("\n\tPlaced {0} pieces in {1} ms",
-                _placedPieces.Count, stopwatch.ElapsedMilliseconds);
+            log.Insert(logSummaryLoc, string.Format(
+                "\n\tPlaced {0} pieces in {1} ms, as follows:",
+                _placedPieces.Count, stopwatch.ElapsedMilliseconds));
 
             // Show piece placing log
             Debug.Log(log);
