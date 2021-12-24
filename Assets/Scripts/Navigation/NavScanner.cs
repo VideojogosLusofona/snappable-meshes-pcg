@@ -22,6 +22,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using NaughtyAttributes;
 
 // Avoid conflict with System.Diagnostics.Debug
 using Debug = UnityEngine.Debug;
@@ -33,17 +34,49 @@ namespace SnapMeshPCG.Navigation
     /// </summary>
     public class NavScanner : MonoBehaviour
     {
+        // Enum used internally to defined if and how to reinitialize the RNG
+        private enum ReInitRNG { No, Randomly, Seed }
+
+        // ///////// //
+        // Constants //
+        // ///////// //
+
+        private const string navPointsLabel = ":: Navigation Points ::";
+        private const string rngLabel = ":: Random Number Generator ::";
+
+        // ////////////////////////////// //
+        // Nav setup and debug parameters //
+        // ////////////////////////////// //
+
         // Number of navigation points to use for validating navmesh
         [SerializeField]
+        [BoxGroup(navPointsLabel)]
         private int _navPointCount = 250;
 
         // Show nav points on navmesh
         [SerializeField]
+        [BoxGroup(navPointsLabel)]
         private bool _showNavPoints = true;
 
         // Show origin points for each nav point?
         [SerializeField]
+        [BoxGroup(navPointsLabel)]
         private bool _showOriginPoints = false;
+
+        // Reinitialize RNG after map generation? And how?
+        [SerializeField]
+        [BoxGroup(rngLabel)]
+        private ReInitRNG _reinitializeRNG = ReInitRNG.No;
+
+        // Seed to use if user selected to reinitialize RNG with a specific seed
+        [SerializeField]
+        [BoxGroup(rngLabel)]
+        [EnableIf(nameof(UseSeed))]
+        private int _seed = 0;
+
+        // ///////////////////////////////////// //
+        // Instance variables not used in editor //
+        // ///////////////////////////////////// //
 
         // List of navigation points
         [SerializeField]
@@ -70,6 +103,13 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private float _maxPieceVol;
 
+        // ////////// //
+        // Properties //
+        // ////////// //
+
+        // Indicates if the RNG is to be initialized with a specified seed
+        private bool UseSeed => _reinitializeRNG == ReInitRNG.Seed;
+
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
         /// number of connections (descending).
@@ -82,6 +122,10 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public IReadOnlyList<Cluster> Clusters => _clusters;
 
+        // /////// //
+        // Methods //
+        // ////// //
+
         /// <summary>
         /// Scan the navmesh for paths between randomized navigation points and
         /// print the percentage of valid paths between them.
@@ -91,6 +135,7 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void ScanMesh(IReadOnlyList<MapPiece> mapPieces)
         {
+
             // Number of successful paths and attempts to find them
             int success = 0;
             int tries = 0;
@@ -109,7 +154,22 @@ namespace SnapMeshPCG.Navigation
                 new Dictionary<NavPoint, ISet<NavPoint>>();
 
             // Initialize navigation logger
-            StringBuilder log = new StringBuilder("=== Nav validation log ===\n");
+            StringBuilder log = new StringBuilder("|||| Nav Validation Log ");
+
+            // Reinitialize RNG if requested by user
+            if (_reinitializeRNG != ReInitRNG.No)
+            {
+                int seed = _reinitializeRNG == ReInitRNG.Randomly
+                    ? System.Guid.NewGuid().GetHashCode()
+                    : _seed;
+                Random.InitState(seed);
+                log.AppendFormat("(seed = {0})", seed);
+            }
+            else
+            {
+                log.Append("(no RNG reseed)");
+            }
+            log.Append(" ||||\n");
 
             // Failures in finding navigation points
             int navPointFindFailures = 0;
