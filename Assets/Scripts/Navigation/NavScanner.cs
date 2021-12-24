@@ -93,11 +93,6 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private List<Cluster> _clusters;
 
-        // Map volume
-        [SerializeField]
-        [HideInInspector]
-        private float _mapVolume;
-
         // Volume of largest piece
         [SerializeField]
         [HideInInspector]
@@ -176,9 +171,6 @@ namespace SnapMeshPCG.Navigation
 
             // Measure how long the navigation scanning takes
             Stopwatch stopwatch = Stopwatch.StartNew();
-
-            // Keep map volume, will be useful for debug gizmos
-            _mapVolume = pieceBounds.Last().sumVol;
 
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>(_navPointCount);
