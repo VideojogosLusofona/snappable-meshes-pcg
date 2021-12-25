@@ -197,7 +197,7 @@ namespace SnapMeshPCG
 
         // /////// //
         // Methods //
-        // ////// //
+        // /////// //
 
         // Callback invoked when user changes selection method type in editor
         private void OnChangeSMType()

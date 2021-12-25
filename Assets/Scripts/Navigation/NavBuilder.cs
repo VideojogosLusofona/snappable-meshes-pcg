@@ -17,9 +17,9 @@
 
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using NaughtyAttributes;
-using UnityEngine.Events;
 
 namespace SnapMeshPCG.Navigation
 {
@@ -29,10 +29,6 @@ namespace SnapMeshPCG.Navigation
     [RequireComponent(typeof(NavMeshSurface))]
     public class NavBuilder : MonoBehaviour
     {
-        // The character that will move around the map when we enter play mode
-        [SerializeField]
-        private NavWalker walker = null;
-
         // Event raised after the navigation mesh has been built
         [Foldout(":: Events ::")]
         [SerializeField]
@@ -46,22 +42,11 @@ namespace SnapMeshPCG.Navigation
         /// </param>
         public void BuildNavMesh(IReadOnlyList<MapPiece> pieces)
         {
-            // Get starting piece which is also the parent (top) piece of all
-            // the others
-            GameObject topPiece = pieces[0].gameObject;
-
-            // Get the bounds of the starting piece
-            Bounds startBounds = topPiece.GetComponentInChildren<MeshRenderer>().bounds;
-
             // Get the NavMeshSurface component on the NavController game object
             NavMeshSurface nav = GetComponent<NavMeshSurface>();
 
             // Build navmesh
             nav.BuildNavMesh();
-
-            // Create a walker character to walk around in our map and initially
-            // place it at the center of the starting piece
-            Instantiate(walker.gameObject, startBounds.center, Quaternion.identity);
 
             // Notify listeners that the navmesh has been baked
             OnNavMeshReady.Invoke(pieces);

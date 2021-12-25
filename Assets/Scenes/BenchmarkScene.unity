@@ -410,7 +410,7 @@ MonoBehaviour:
   _useStarter: 0
   _startingPieceList: []
   _useSeed: 1
-  _seed: -267402550
+  _seed: -2095385667
   _pieceDistance: 0.0001
   _maxFailures: 10
   _checkOverlaps: 1
@@ -420,8 +420,8 @@ MonoBehaviour:
   _matchingRules: -1
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _selectionMethod: Arena
-  _selectionParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
+  _selectionMethod: Corridor
+  _selectionParams: {fileID: 11400000, guid: 7bf6cf47ee2296ec6b691e82a2ac9b99, type: 2}
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
@@ -578,9 +578,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1975597050}
-  - component: {fileID: 1975597049}
   - component: {fileID: 1975597051}
+  - component: {fileID: 1975597049}
   - component: {fileID: 1975597052}
+  - component: {fileID: 1975597048}
   m_Layer: 0
   m_Name: NavController
   m_TagString: Untagged
@@ -588,6 +589,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1975597048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975597047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7809de5ffdd94747a8cbd6220a4f2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _walker: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
 --- !u!114 &1975597049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,7 +614,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walker: {fileID: 3366272454587344551, guid: d628892a7222e6948bbe12490a132be0, type: 3}
   OnNavMeshReady:
     m_PersistentCalls:
       m_Calls:
@@ -671,12 +684,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd606d33f27484bbdb246e323876b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _navPointCount: 250
+  _navPointCount: 500
   _showNavPoints: 1
-  _showOriginPoints: 0
+  _showOriginPoints: 1
   _reinitializeRNG: 0
   _seed: 1234
   _navPoints: []
   _navOriginsDebug: []
   _clusters: []
   _maxPieceVol: 0
+  OnNavInfoReady:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1975597048}
+        m_TargetAssemblyTypeName: SnapMeshPCG.Navigation.NavWalkerSpawner, Assembly-CSharp
+        m_MethodName: SpawnWalker
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1

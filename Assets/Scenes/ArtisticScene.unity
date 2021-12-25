@@ -591,9 +591,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1975597050}
-  - component: {fileID: 1975597049}
   - component: {fileID: 1975597051}
+  - component: {fileID: 1975597049}
   - component: {fileID: 1975597052}
+  - component: {fileID: 1975597048}
   m_Layer: 0
   m_Name: NavController
   m_TagString: Untagged
@@ -601,6 +602,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1975597048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975597047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7809de5ffdd94747a8cbd6220a4f2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _walker: {fileID: 3366272454587344551, guid: 0a715fd2db47eb144898381c7aeabd7c, type: 3}
 --- !u!114 &1975597049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,7 +627,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb305f050f5ab743b01b51a8ebe6a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walker: {fileID: 3366272454587344551, guid: 0a715fd2db47eb144898381c7aeabd7c, type: 3}
   OnNavMeshReady:
     m_PersistentCalls:
       m_Calls:
@@ -693,3 +706,18 @@ MonoBehaviour:
   _navOriginsDebug: []
   _clusters: []
   _maxPieceVol: 0
+  OnNavInfoReady:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1975597048}
+        m_TargetAssemblyTypeName: SnapMeshPCG.Navigation.NavWalkerSpawner, Assembly-CSharp
+        m_MethodName: SpawnWalker
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1

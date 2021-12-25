@@ -22,6 +22,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using NaughtyAttributes;
 
 // Avoid conflict with System.Diagnostics.Debug
@@ -32,7 +33,7 @@ namespace SnapMeshPCG.Navigation
     /// <summary>
     /// Determine valid percentage of paths in the generated map.
     /// </summary>
-    public class NavScanner : MonoBehaviour
+    public class NavScanner : MonoBehaviour, INavInfo
     {
         // Enum used internally to defined if and how to reinitialize the RNG
         private enum ReInitRNG { No, Randomly, Seed }
@@ -117,9 +118,19 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public IReadOnlyList<Cluster> Clusters => _clusters;
 
+        // ////// //
+        // Events //
+        // ////// //
+
+        // Event raised after the navmesh has been scanned and all navigation
+        // points have been created
+        [Foldout(":: Events ::")]
+        [SerializeField]
+        private UnityEvent<INavInfo> OnNavInfoReady = null;
+
         // /////// //
         // Methods //
-        // ////// //
+        // /////// //
 
         /// <summary>
         /// Scan the navmesh for paths between randomized navigation points and
@@ -309,6 +320,9 @@ namespace SnapMeshPCG.Navigation
 
             // Sort nav point list by number of connections before returning
             _navPoints.Sort();
+
+            // Notify listeners that navigation information is ready
+            OnNavInfoReady.Invoke(this);
         }
 
         /// <summary>
