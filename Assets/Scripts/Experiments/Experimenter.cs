@@ -24,36 +24,9 @@ using SnapMeshPCG.SelectionMethods;
 
 namespace SnapMeshPCG.Experiments
 {
-
     public class Experimenter : MonoBehaviour
     {
-        private IDictionary<string, IDictionary<string, object>> _experiments =
-            new Dictionary<string, IDictionary<string, object>>()
-            {
-                ["(a)"] = new Dictionary<string, object>()
-                {
-                    ["_useSeed"] = true,
-                    ["_seed"] = -267402550,
-                    ["_pieceDistance"] = 0.0001f,
-                    ["_maxFailures"] = (uint)10,
-                    ["_checkOverlaps"] = true,
-                    ["_matchingRules"] = SnapRules.Colours | SnapRules.Pins,
-                    ["_pinCountTolerance"] = (uint)0,
-                    ["_starterConTol"] = (uint)0,
-                    ["_selectionMethod"] = typeof(ArenaSMConfig),
-                    ["_selectionParams"] = new Dictionary<string, object>()
-                    {
-                        ["_maxPieces"] = (uint)12
-                    },
-                },
-                ["(b)"] = null,
-                ["(c)"] = null,
-                ["(d)"] = null,
-                ["(e)"] = null,
-                ["(f)"] = null,
-                ["(g)"] = null,
-                ["(h)"] = null,
-            };
+        private IExperiment _exp = new BenchmarkExperiment();
 
 
         /// <summary>
@@ -72,7 +45,11 @@ namespace SnapMeshPCG.Experiments
 
             string savedGm = JsonUtility.ToJson(gmInstance);
 
-            foreach (KeyValuePair<string, object> settings in _experiments["(a)"])
+            string savedSmCfg = null;
+
+            object gmSmParams = null;
+
+            foreach (KeyValuePair<string, object> settings in _exp.Runs["(a)"])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -100,13 +77,18 @@ namespace SnapMeshPCG.Experiments
                 FieldInfo gmFieldSmName = gmType.GetField(
                     "_selectionMethod",
                     BindingFlags.NonPublic | BindingFlags.Instance);
-                gmFieldSmName.SetValue(
-                    gmInstance,
-                    SMManager.Instance.GetNameFromType(smType));
 
                 FieldInfo gmFieldSmParams = gmType.GetField(
                     "_selectionParams",
                     BindingFlags.NonPublic | BindingFlags.Instance);
+
+                gmSmParams = gmFieldSmParams.GetValue(gmInstance);
+                savedSmCfg = JsonUtility.ToJson(gmSmParams);
+
+                gmFieldSmName.SetValue(
+                    gmInstance,
+                    SMManager.Instance.GetNameFromType(smType));
+
                 gmFieldSmParams.SetValue(gmInstance, smCfgInstance);
 
                 if (smParams != null)
@@ -125,6 +107,11 @@ namespace SnapMeshPCG.Experiments
             MethodInfo genMeth = gmType.GetMethod("GenerateMap", BindingFlags.NonPublic | BindingFlags.Instance);
 
             genMeth.Invoke(gmInstance, null);
+
+            if (savedSmCfg != null)
+            {
+                JsonUtility.FromJsonOverwrite(savedSmCfg, gmSmParams);
+            }
 
             JsonUtility.FromJsonOverwrite(savedGm, gmInstance);
 
