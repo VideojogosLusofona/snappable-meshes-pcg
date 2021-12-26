@@ -29,9 +29,19 @@ namespace SnapMeshPCG.Experiments
     {
         private IExperiment _exp = new BenchmarkExperiment();
 
+        private IDictionary<string, Type> _experiments;
+
+        [SerializeField]
+        [Dropdown(nameof(Experiment))]
+        [OnValueChanged(nameof(OnChangeExperiment))]
+        private string _experiment;
+
         [SerializeField]
         [Dropdown(nameof(Runs))]
         private string _run;
+
+        [NonSerialized]
+        private string[] _experimentNames;
 
         [NonSerialized]
         private string[] _runs;
@@ -40,13 +50,50 @@ namespace SnapMeshPCG.Experiments
         {
             get
             {
-                if (_runs == null)
+                if (_runs is null)
                 {
-                    _runs = _exp.Runs.Keys.ToArray();
-                    Array.Sort(_runs);
+                    OnChangeExperiment();
                 }
                 return _runs;
             }
+        }
+
+        private ICollection<string> Experiment
+        {
+            get
+            {
+                if (_experimentNames is null)
+                {
+                    const string toRm = "Experiment";
+
+                    // Get a reference to the class type
+                    Type expIType = typeof(IExperiment);
+
+                    // Get classes which extend or implement T and are not abstract
+                    _experiments = AppDomain.CurrentDomain
+                        .GetAssemblies()
+                        .SelectMany(a => a.GetTypes())
+                        .Where(t => !t.IsAbstract && expIType.IsAssignableFrom(t))
+                        .ToDictionary(e => e.Name.EndsWith(toRm) ? e.Name.Substring(0, e.Name.Length - toRm.Length) : e.Name, e => e);
+
+                    _experimentNames = _experiments.Keys.ToArray();
+
+                    Array.Sort(_experimentNames);
+                }
+
+                return _experimentNames;
+            }
+        }
+
+        private void OnChangeExperiment()
+        {
+            _exp = _experiments[_experiment]
+                .GetConstructor(Type.EmptyTypes)
+                .Invoke(null)
+                as IExperiment;
+            _runs = _exp.Runs.Keys.ToArray();
+            Array.Sort(_runs);
+            _run = _runs[0];
         }
 
         [Button("Set Run Config", enabledMode: EButtonEnableMode.Editor)]
