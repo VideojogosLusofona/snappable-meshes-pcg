@@ -70,6 +70,8 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smParams = null;
 
+            string savedGm = JsonUtility.ToJson(gmInstance);
+
             foreach (KeyValuePair<string, object> settings in _experiments["(a)"])
             {
                 if (settings.Key.Equals("_selectionMethod"))
@@ -123,6 +125,8 @@ namespace SnapMeshPCG.Experiments
             MethodInfo genMeth = gmType.GetMethod("GenerateMap", BindingFlags.NonPublic | BindingFlags.Instance);
 
             genMeth.Invoke(gmInstance, null);
+
+            JsonUtility.FromJsonOverwrite(savedGm, gmInstance);
 
         }
 
