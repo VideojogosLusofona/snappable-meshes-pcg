@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -334,12 +334,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1335990251}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1676127935}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1335990253
 MonoBehaviour:
@@ -428,8 +428,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1335990252}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -454,18 +453,18 @@ MonoBehaviour:
   _useStarter: 0
   _startingPieceList: []
   _useSeed: 1
-  _seed: -2095385667
+  _seed: -267402550
   _pieceDistance: 0.0001
   _maxFailures: 10
   _checkOverlaps: 1
   _collidersLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  _matchingRules: -1
+  _matchingRules: 6
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _selectionMethod: Corridor
-  _selectionParams: {fileID: 11400000, guid: 7bf6cf47ee2296ec6b691e82a2ac9b99, type: 2}
+  _selectionMethod: Arena
+  _selectionParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
