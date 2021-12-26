@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using NaughtyAttributes;
@@ -28,12 +29,28 @@ namespace SnapMeshPCG.Experiments
     {
         private IExperiment _exp = new BenchmarkExperiment();
 
+        [SerializeField]
+        [Dropdown(nameof(Runs))]
+        private string _run;
 
-        /// <summary>
-        /// Setup for experiment (a)
-        /// </summary>
-        [Button("test", enabledMode: EButtonEnableMode.Editor)]
-        private void SetupA()
+        [NonSerialized]
+        private string[] _runs;
+
+        private ICollection<string> Runs
+        {
+            get
+            {
+                if (_runs == null)
+                {
+                    _runs = _exp.Runs.Keys.ToArray();
+                    Array.Sort(_runs);
+                }
+                return _runs;
+            }
+        }
+
+        [Button("Set Run Config", enabledMode: EButtonEnableMode.Editor)]
+        private void SetRunConfig()
         {
 
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
@@ -41,15 +58,9 @@ namespace SnapMeshPCG.Experiments
             Type gmType = typeof(GenerationManager);
 
             Type smType = null;
-            IDictionary<string, object> smParams = null;
+            IDictionary<string, object> smConfig = null;
 
-            string savedGm = JsonUtility.ToJson(gmInstance);
-
-            string savedSmCfg = null;
-
-            object gmSmParams = null;
-
-            foreach (KeyValuePair<string, object> settings in _exp.Runs["(a)"])
+            foreach (KeyValuePair<string, object> settings in _exp.Runs[_run])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -58,7 +69,7 @@ namespace SnapMeshPCG.Experiments
                 }
                 else if (settings.Key.Equals("_selectionParams"))
                 {
-                    smParams = settings.Value as IDictionary<string, object>;
+                    smConfig = settings.Value as IDictionary<string, object>;
                 }
                 else
                 {
@@ -78,22 +89,19 @@ namespace SnapMeshPCG.Experiments
                     "_selectionMethod",
                     BindingFlags.NonPublic | BindingFlags.Instance);
 
-                FieldInfo gmFieldSmParams = gmType.GetField(
+                FieldInfo gmFieldSmCfg = gmType.GetField(
                     "_selectionParams",
                     BindingFlags.NonPublic | BindingFlags.Instance);
-
-                gmSmParams = gmFieldSmParams.GetValue(gmInstance);
-                savedSmCfg = JsonUtility.ToJson(gmSmParams);
 
                 gmFieldSmName.SetValue(
                     gmInstance,
                     SMManager.Instance.GetNameFromType(smType));
 
-                gmFieldSmParams.SetValue(gmInstance, smCfgInstance);
+                gmFieldSmCfg.SetValue(gmInstance, smCfgInstance);
 
-                if (smParams != null)
+                if (smConfig != null)
                 {
-                    foreach (KeyValuePair<string, object> smSettings in smParams)
+                    foreach (KeyValuePair<string, object> smSettings in smConfig)
                     {
                         FieldInfo smField = smType.GetField(
                             smSettings.Key,
@@ -104,13 +112,39 @@ namespace SnapMeshPCG.Experiments
                 }
             }
 
-            MethodInfo genMeth = gmType.GetMethod("GenerateMap", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        /// <summary>
+        /// Setup for experiment (a)
+        /// </summary>
+        [Button("Start Experiment", enabledMode: EButtonEnableMode.Editor)]
+        private void StartExperiment()
+        {
+
+            GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
+
+            Type gmType = typeof(GenerationManager);
+
+            string savedGm = JsonUtility.ToJson(gmInstance);
+
+            FieldInfo gmFieldSmCfg = gmType.GetField(
+                "_selectionParams",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+            object gmSmConfig = gmFieldSmCfg.GetValue(gmInstance);
+            string savedSmCfg = JsonUtility.ToJson(gmSmConfig);
+
+            SetRunConfig();
+
+            MethodInfo genMeth = gmType.GetMethod(
+                "GenerateMap",
+                BindingFlags.NonPublic | BindingFlags.Instance);
 
             genMeth.Invoke(gmInstance, null);
 
             if (savedSmCfg != null)
             {
-                JsonUtility.FromJsonOverwrite(savedSmCfg, gmSmParams);
+                JsonUtility.FromJsonOverwrite(savedSmCfg, gmSmConfig);
             }
 
             JsonUtility.FromJsonOverwrite(savedGm, gmInstance);
