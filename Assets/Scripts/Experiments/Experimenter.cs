@@ -95,7 +95,7 @@ namespace SnapMeshPCG.Experiments
                 .GetConstructor(Type.EmptyTypes)
                 .Invoke(null)
                 as IExperiment;
-            _runs = _experiment.Runs.Keys.ToArray();
+            _runs = _experiment.GenParamSet.Keys.ToArray();
             Array.Sort(_runs);
             _run = _runs[0];
         }
@@ -103,7 +103,6 @@ namespace SnapMeshPCG.Experiments
         [Button("Set Run Config", enabledMode: EButtonEnableMode.Editor)]
         private void SetRunConfig()
         {
-
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
 
             Type gmType = typeof(GenerationManager);
@@ -111,7 +110,7 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
-            foreach (KeyValuePair<string, object> settings in _experiment.Runs[_run])
+            foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_run])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -192,6 +191,8 @@ namespace SnapMeshPCG.Experiments
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
             genMeth.Invoke(gmInstance, null);
+
+            Debug.Log($"TOOK {gmInstance.GenTimeMillis} ms");
 
             if (savedSmCfg != null)
             {

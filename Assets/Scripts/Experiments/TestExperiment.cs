@@ -5,7 +5,7 @@ namespace SnapMeshPCG.Experiments
 {
     public class TestExperiment : IExperiment
     {
-        public IDictionary<string, IDictionary<string, object>> Runs =>
+        public IDictionary<string, IDictionary<string, object>> GenParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
                 ["hello"] = new Dictionary<string, object>()
@@ -43,6 +43,8 @@ namespace SnapMeshPCG.Experiments
                 },
 
             };
+        public IDictionary<string, IDictionary<string, object>> NavParamSet => null;
 
+        public int RunsPerCombo => 1;
     }
 }

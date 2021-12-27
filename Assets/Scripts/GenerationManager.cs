@@ -195,6 +195,11 @@ namespace SnapMeshPCG
         /// </summary>
         public IReadOnlyList<MapPiece> PlacedPieces => _placedPieces;
 
+        /// <summary>
+        /// How long did the last generation process took, in milliseconds?
+        /// </summary>
+        public int GenTimeMillis { get; private set; }
+
         // /////// //
         // Methods //
         // /////// //
@@ -437,6 +442,9 @@ namespace SnapMeshPCG
             log.Insert(logSummaryLoc, string.Format(
                 "\n\tPlaced {0} pieces in {1} ms, as follows:",
                 _placedPieces.Count, stopwatch.ElapsedMilliseconds));
+
+            // Keep elapsed time in property
+            GenTimeMillis = (int) stopwatch.ElapsedMilliseconds;
 
             // Show piece placing log
             Debug.Log(log);

@@ -36,7 +36,7 @@ namespace SnapMeshPCG.Navigation
     public class NavScanner : MonoBehaviour, INavInfo
     {
         // Enum used internally to defined if and how to reinitialize the RNG
-        private enum ReInitRNG { No, Randomly, Seed }
+        public enum ReInitRNG { No, Randomly, Seed }
 
         // ///////// //
         // Constants //
