@@ -17,9 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEditor;
 using UnityEngine;
 using NaughtyAttributes;
 using SnapMeshPCG.Navigation;
@@ -283,10 +284,26 @@ namespace SnapMeshPCG.Experiments
                 "GenerateMap",
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
+            FieldInfo gmSeed = gmType.GetField(
+                "_seed",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
             FieldInfo nsSeed = nsType.GetField(
                 "_seed", BindingFlags.NonPublic | BindingFlags.Instance);
 
             int navInitSeed = (int)nsSeed.GetValue(nsInstance);
+
+            string expResultsFolder = Path.Combine(
+                Path.GetDirectoryName(Application.dataPath),
+                "experiments");
+
+            string expResultsFile = Path.Combine(
+                expResultsFolder,
+                $"{_experimentName}-{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}.csv");
+
+            Directory.CreateDirectory(expResultsFolder);
+
+            File.WriteAllText(expResultsFile, "run,scenario,navset,tg,tv,c,ar,genseed,navseed\n");
 
             foreach (string scenario in _scenarios)
             {
@@ -313,12 +330,20 @@ namespace SnapMeshPCG.Experiments
 
                         genMeth.Invoke(gmInstance, null);
 
-                        Debug.Log($"=== EXP LOG ({_scenario}, {_navParamSet}, {i}) ===\n"
-                            + $"Generation took {gmInstance.GenTimeMillis} ms\n"
-                            + $"Nav validation took {nsInstance.ValidationTimeMillis} ms "
-                            + $"(mean conns {nsInstance.MeanValidConnections:p}, "
-                            + $"largest cluster {nsInstance.RelAreaLargestCluster:p}) "
-                            + $"with seed = {navSeed}");
+                        File.AppendAllText(
+                            expResultsFile,
+                            string.Format(
+                                CultureInfo.InvariantCulture,
+                                "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
+                                i,
+                                $"\"{_scenario}\"",
+                                $"\"{_navParamSet}\"",
+                                gmInstance.GenTimeMillis,
+                                nsInstance.ValidationTimeMillis,
+                                nsInstance.MeanValidConnections,
+                                nsInstance.RelAreaLargestCluster,
+                                gmSeed.GetValue(gmInstance),
+                                navSeed));
                     }
                 }
             }

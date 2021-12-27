@@ -53,5 +53,7 @@ crashlytics-build.properties
 
 # Other stuff
 NuGet/
+experiments/
 omnisharp.json
+
 
