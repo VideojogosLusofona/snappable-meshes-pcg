@@ -232,8 +232,10 @@ namespace SnapMeshPCG.Experiments
         {
 
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
+            NavScanner nsInstance = FindObjectOfType<NavScanner>();
 
             Type gmType = typeof(GenerationManager);
+            Type nsType = typeof(NavScanner);
 
             string savedGm = JsonUtility.ToJson(gmInstance);
 
@@ -244,7 +246,10 @@ namespace SnapMeshPCG.Experiments
             object gmSmConfig = gmFieldSmCfg.GetValue(gmInstance);
             string savedSmCfg = JsonUtility.ToJson(gmSmConfig);
 
+            string savedNs = JsonUtility.ToJson(nsInstance);
+
             SetScenarioConfig();
+            SetNavParams();
 
             MethodInfo genMeth = gmType.GetMethod(
                 "GenerateMap",
@@ -252,7 +257,9 @@ namespace SnapMeshPCG.Experiments
 
             genMeth.Invoke(gmInstance, null);
 
-            Debug.Log($"TOOK {gmInstance.GenTimeMillis} ms");
+            Debug.Log($"Generation took {gmInstance.GenTimeMillis} ms\nNav validation took {nsInstance.ValidationTimeMillis} ms (mean conns {nsInstance.MeanValidConnections:p}, largest cluster {nsInstance.RelAreaLargestCluster:p})");
+
+            JsonUtility.FromJsonOverwrite(savedNs, nsInstance);
 
             if (savedSmCfg != null)
             {

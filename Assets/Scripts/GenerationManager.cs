@@ -438,17 +438,6 @@ namespace SnapMeshPCG
             }
             while (guidePiece != null);
 
-            // Log number of pieces placed and elapsed time
-            log.Insert(logSummaryLoc, string.Format(
-                "\n\tPlaced {0} pieces in {1} ms, as follows:",
-                _placedPieces.Count, stopwatch.ElapsedMilliseconds));
-
-            // Keep elapsed time in property
-            GenTimeMillis = (int) stopwatch.ElapsedMilliseconds;
-
-            // Show piece placing log
-            Debug.Log(log);
-
             // Are we checking for overlaps?
             if (_checkOverlaps)
             {
@@ -471,6 +460,20 @@ namespace SnapMeshPCG
                     }
                 }
             }
+
+            // Stop stopwatch
+            stopwatch.Stop();
+
+            // Log number of pieces placed and elapsed time
+            log.Insert(logSummaryLoc, string.Format(
+                "\n\tPlaced {0} pieces in {1} ms, as follows:",
+                _placedPieces.Count, stopwatch.ElapsedMilliseconds));
+
+            // Keep elapsed time in property
+            GenTimeMillis = (int) stopwatch.ElapsedMilliseconds;
+
+            // Show piece placing log
+            Debug.Log(log);
         }
 
         /// <summary>

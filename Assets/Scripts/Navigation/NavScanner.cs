@@ -118,6 +118,22 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public IReadOnlyList<Cluster> Clusters => _clusters;
 
+        /// <summary>
+        /// Average percentage of valid connections between navigation points.
+        /// </summary>
+        public float MeanValidConnections { get; private set; }
+
+        /// <summary>
+        /// Relative area of the largest fully-connected (i.e.,fully-navigable)
+        /// region.
+        /// </summary>
+        public float RelAreaLargestCluster { get; private set; }
+
+        /// <summary>
+        /// Time spent validating the navigation mesh, in milliseconds.
+        /// </summary>
+        public int ValidationTimeMillis { get; private set; }
+
         // ////// //
         // Events //
         // ////// //
@@ -283,6 +299,9 @@ namespace SnapMeshPCG.Navigation
                 }
             }
 
+            // Stop stopwatch
+            stopwatch.Stop();
+
             // Log good paths found vs total paths
             log.AppendFormat(
                 "\tEvaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
@@ -320,6 +339,11 @@ namespace SnapMeshPCG.Navigation
 
             // Sort nav point list by number of connections before returning
             _navPoints.Sort();
+
+            // Update properties with this scan
+            MeanValidConnections = (float)success / tries;
+            RelAreaLargestCluster = _clusters[0].Points.Count / (float)_navPoints.Count;
+            ValidationTimeMillis = (int)stopwatch.ElapsedMilliseconds;
 
             // Notify listeners that navigation information is ready
             OnNavInfoReady.Invoke(this);
