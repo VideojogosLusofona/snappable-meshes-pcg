@@ -31,13 +31,122 @@ namespace SnapMeshPCG.Experiments
                         ["_maxPieces"] = (uint)12
                     },
                 },
-                ["(b)"] = null,
-                ["(c)"] = null,
-                ["(d)"] = null,
-                ["(e)"] = null,
-                ["(f)"] = null,
-                ["(g)"] = null,
-                ["(h)"] = null,
+                ["(b)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = -2095385667,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Colours | SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(CorridorSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_maxPieces"] = (uint)20
+                    },
+                },
+                ["(c)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = 277759099,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Colours | SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(StarSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_armLength"] = (uint)8,
+                        ["_armLengthVar"] = (uint)2
+                    },
+                },
+                ["(d)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = 1388449552,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Colours | SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(BranchSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_branchCount"] = (uint)4,
+                        ["_branchLength"] = (uint)12,
+                        ["_branchLengthVar"] = (uint)4
+                    },
+                },
+                ["(e)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = 811974397,
+                    ["_pieceDistance"] = 6f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Colours,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(ArenaSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_maxPieces"] = (uint)20
+                    },
+                },
+                ["(f)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = -359152709,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(ArenaSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_maxPieces"] = (uint)20
+                    },
+                },
+                ["(g)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = 1242840355,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = false,
+                    ["_matchingRules"] = SnapRules.Colours | SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(StarSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_armLength"] = (uint)10,
+                        ["_armLengthVar"] = (uint)4
+                    },
+                },
+                ["(h)"] =  new Dictionary<string, object>()
+                {
+                    ["_useSeed"] = true,
+                    ["_seed"] = -1444708658,
+                    ["_pieceDistance"] = 0.0001f,
+                    ["_maxFailures"] = (uint)10,
+                    ["_checkOverlaps"] = true,
+                    ["_matchingRules"] = SnapRules.Pins,
+                    ["_pinCountTolerance"] = (uint)0,
+                    ["_starterConTol"] = (uint)0,
+                    ["_selectionMethod"] = typeof(CorridorSMConfig),
+                    ["_selectionParams"] = new Dictionary<string, object>()
+                    {
+                        ["_maxPieces"] = (uint)120
+                    },
+                },
             };
 
         public IDictionary<string, IDictionary<string, object>> NavParamSet =>
