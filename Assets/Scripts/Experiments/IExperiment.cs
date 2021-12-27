@@ -6,7 +6,5 @@ namespace SnapMeshPCG.Experiments
     {
         IDictionary<string, IDictionary<string, object>> GenParamSet { get; }
         IDictionary<string, IDictionary<string, object>> NavParamSet { get; }
-
-        int RunsPerCombo { get; }
     }
 }

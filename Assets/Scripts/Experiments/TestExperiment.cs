@@ -48,7 +48,5 @@ namespace SnapMeshPCG.Experiments
             {
                 ["---"] = null
             };
-
-        public int RunsPerCombo => 1;
     }
 }

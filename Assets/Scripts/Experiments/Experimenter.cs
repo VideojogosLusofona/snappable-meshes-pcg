@@ -28,6 +28,13 @@ namespace SnapMeshPCG.Experiments
 {
     public class Experimenter : MonoBehaviour
     {
+        // ///////// //
+        // Constants //
+        // ///////// //
+
+        private const string experimentSelect = ":: Experiment selection ::";
+        private const string experimentParams = ":: Experiment parameters ::";
+
         private IExperiment _experiment;
 
         private IDictionary<string, Type> _experiments;
@@ -38,16 +45,23 @@ namespace SnapMeshPCG.Experiments
 
         [SerializeField]
         [Dropdown(nameof(Experiment))]
+        [BoxGroup(experimentSelect)]
         [OnValueChanged(nameof(OnChangeExperiment))]
         private string _experimentName;
 
         [SerializeField]
+        [BoxGroup(experimentParams)]
         [Dropdown(nameof(Scenarios))]
         private string _scenario;
 
         [SerializeField]
+        [BoxGroup(experimentParams)]
         [Dropdown(nameof(NavParamSets))]
         private string _navParamSet;
+
+        [SerializeField]
+        [BoxGroup(experimentParams)]
+        private int _runsPerScenarioNavCombo = 1;
 
         [NonSerialized]
         private string[] _experimentNames;
@@ -230,7 +244,6 @@ namespace SnapMeshPCG.Experiments
         [Button("Start Experiment", enabledMode: EButtonEnableMode.Editor)]
         private void StartExperiment()
         {
-
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
             NavScanner nsInstance = FindObjectOfType<NavScanner>();
 
@@ -247,6 +260,8 @@ namespace SnapMeshPCG.Experiments
             string savedSmCfg = JsonUtility.ToJson(gmSmConfig);
 
             string savedNs = JsonUtility.ToJson(nsInstance);
+
+
 
             SetScenarioConfig();
             SetNavParams();

@@ -62,7 +62,5 @@ namespace SnapMeshPCG.Experiments
                     ["seedStrategy"] = _seeder
                 }
             };
-
-        public int RunsPerCombo => 10;
     }
 }
