@@ -111,9 +111,7 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
-            IDictionary<string, object> gmConfig = _experiment.Runs[_run]["GenerationManager"];
-
-            foreach (KeyValuePair<string, object> settings in gmConfig)
+            foreach (KeyValuePair<string, object> settings in _experiment.Runs[_run])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
