@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using NaughtyAttributes;
+using SnapMeshPCG.Navigation;
 using SnapMeshPCG.SelectionMethods;
 
 namespace SnapMeshPCG.Experiments
@@ -31,6 +32,10 @@ namespace SnapMeshPCG.Experiments
 
         private IDictionary<string, Type> _experiments;
 
+        private Func<int, int> _navSeedStrategy;
+
+        private int _navInitSeed;
+
         [SerializeField]
         [Dropdown(nameof(Experiment))]
         [OnValueChanged(nameof(OnChangeExperiment))]
@@ -40,23 +45,18 @@ namespace SnapMeshPCG.Experiments
         [Dropdown(nameof(Scenarios))]
         private string _scenario;
 
+        [SerializeField]
+        [Dropdown(nameof(NavParamSets))]
+        private string _navParamSet;
+
         [NonSerialized]
         private string[] _experimentNames;
 
         [NonSerialized]
         private string[] _scenarios;
 
-        private ICollection<string> Scenarios
-        {
-            get
-            {
-                if (_scenarios is null)
-                {
-                    OnChangeExperiment();
-                }
-                return _scenarios;
-            }
-        }
+        [NonSerialized]
+        private string[] _navParamSets;
 
         private ICollection<string> Experiment
         {
@@ -89,18 +89,47 @@ namespace SnapMeshPCG.Experiments
             }
         }
 
+        private ICollection<string> Scenarios
+        {
+            get
+            {
+                if (_scenarios is null)
+                {
+                    OnChangeExperiment();
+                }
+                return _scenarios;
+            }
+        }
+
+        private ICollection<string> NavParamSets
+        {
+            get
+            {
+                if (_navParamSets is null)
+                {
+                    OnChangeExperiment();
+                }
+                return _navParamSets;
+            }
+        }
+
         private void OnChangeExperiment()
         {
             _experiment = _experiments[_experimentName]
                 .GetConstructor(Type.EmptyTypes)
                 .Invoke(null)
                 as IExperiment;
+
             _scenarios = _experiment.GenParamSet.Keys.ToArray();
             Array.Sort(_scenarios);
             _scenario = _scenarios[0];
+
+            _navParamSets = _experiment.NavParamSet.Keys.ToArray();
+            Array.Sort(_navParamSets);
+            _navParamSet = _navParamSets[0];
         }
 
-        [Button("Set Scenario Config in Gen. Manager", enabledMode: EButtonEnableMode.Editor)]
+        [Button("Set Scenario Params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
         private void SetScenarioConfig()
         {
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
@@ -157,11 +186,42 @@ namespace SnapMeshPCG.Experiments
                             smSettings.Key,
                             BindingFlags.NonPublic | BindingFlags.Instance);
                         smField.SetValue(smCfgInstance, smSettings.Value);
-
                     }
                 }
             }
+        }
 
+        [Button("Set Nav Params in NavController", enabledMode: EButtonEnableMode.Editor)]
+        private void SetNavParams()
+        {
+            NavScanner nsInstance = FindObjectOfType<NavScanner>();
+
+            Type nsType = typeof(NavScanner);
+
+            _navSeedStrategy = null;
+
+            foreach (KeyValuePair<string, object> settings in _experiment.NavParamSet[_navParamSet])
+            {
+                if (settings.Key.Equals("seedStrategy"))
+                {
+                    _navSeedStrategy = settings.Value as Func<int, int>;
+                }
+                else
+                {
+                    FieldInfo nsField = nsType.GetField(
+                        settings.Key,
+                        BindingFlags.NonPublic | BindingFlags.Instance);
+                    nsField.SetValue(nsInstance, settings.Value);
+                }
+            }
+
+            if (_navSeedStrategy != null)
+            {
+                FieldInfo nsField = nsType.GetField(
+                    "_seed",
+                    BindingFlags.NonPublic | BindingFlags.Instance);
+                _navInitSeed = (int) nsField.GetValue(nsInstance);
+            }
         }
 
         /// <summary>

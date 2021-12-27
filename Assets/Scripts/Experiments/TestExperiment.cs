@@ -43,7 +43,11 @@ namespace SnapMeshPCG.Experiments
                 },
 
             };
-        public IDictionary<string, IDictionary<string, object>> NavParamSet => null;
+        public IDictionary<string, IDictionary<string, object>> NavParamSet =>
+            new Dictionary<string, IDictionary<string, object>>()
+            {
+                ["---"] = null
+            };
 
         public int RunsPerCombo => 1;
     }
