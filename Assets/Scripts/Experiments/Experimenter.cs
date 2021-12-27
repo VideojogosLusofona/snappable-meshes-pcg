@@ -27,14 +27,14 @@ namespace SnapMeshPCG.Experiments
 {
     public class Experimenter : MonoBehaviour
     {
-        private IExperiment _exp = new BenchmarkExperiment();
+        private IExperiment _experiment;
 
         private IDictionary<string, Type> _experiments;
 
         [SerializeField]
         [Dropdown(nameof(Experiment))]
         [OnValueChanged(nameof(OnChangeExperiment))]
-        private string _experiment;
+        private string _experimentName;
 
         [SerializeField]
         [Dropdown(nameof(Runs))]
@@ -74,7 +74,11 @@ namespace SnapMeshPCG.Experiments
                         .GetAssemblies()
                         .SelectMany(a => a.GetTypes())
                         .Where(t => !t.IsAbstract && expIType.IsAssignableFrom(t))
-                        .ToDictionary(e => e.Name.EndsWith(toRm) ? e.Name.Substring(0, e.Name.Length - toRm.Length) : e.Name, e => e);
+                        .ToDictionary(
+                            e => e.Name.EndsWith(toRm)
+                                ? e.Name.Substring(0, e.Name.Length - toRm.Length)
+                                : e.Name,
+                            e => e);
 
                     _experimentNames = _experiments.Keys.ToArray();
 
@@ -87,11 +91,11 @@ namespace SnapMeshPCG.Experiments
 
         private void OnChangeExperiment()
         {
-            _exp = _experiments[_experiment]
+            _experiment = _experiments[_experimentName]
                 .GetConstructor(Type.EmptyTypes)
                 .Invoke(null)
                 as IExperiment;
-            _runs = _exp.Runs.Keys.ToArray();
+            _runs = _experiment.Runs.Keys.ToArray();
             Array.Sort(_runs);
             _run = _runs[0];
         }
@@ -107,7 +111,7 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
-            foreach (KeyValuePair<string, object> settings in _exp.Runs[_run])
+            foreach (KeyValuePair<string, object> settings in _experiment.Runs[_run])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -162,7 +166,7 @@ namespace SnapMeshPCG.Experiments
         }
 
         /// <summary>
-        /// Setup for experiment (a)
+        /// Star currently selected experiment.
         /// </summary>
         [Button("Start Experiment", enabledMode: EButtonEnableMode.Editor)]
         private void StartExperiment()
