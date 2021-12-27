@@ -167,7 +167,14 @@ namespace SnapMeshPCG.Experiments
                     FieldInfo gmField = gmType.GetField(
                         settings.Key,
                         BindingFlags.NonPublic | BindingFlags.Instance);
-                    gmField.SetValue(gmInstance, settings.Value);
+                    if (gmField is null)
+                    {
+                        Debug.LogWarning($"Unknown {nameof(GenerationManager)} field: '{settings.Key}'");
+                    }
+                    else
+                    {
+                        gmField.SetValue(gmInstance, settings.Value);
+                    }
                 }
             }
 
@@ -197,7 +204,15 @@ namespace SnapMeshPCG.Experiments
                         FieldInfo smField = smType.GetField(
                             smSettings.Key,
                             BindingFlags.NonPublic | BindingFlags.Instance);
-                        smField.SetValue(smCfgInstance, smSettings.Value);
+
+                        if (smField is null)
+                        {
+                            Debug.LogWarning($"Unknown {smCfgInstance.GetType().Name} field: '{smSettings.Key}'");
+                        }
+                        else
+                        {
+                            smField.SetValue(smCfgInstance, smSettings.Value);
+                        }
                     }
                 }
             }
@@ -223,7 +238,15 @@ namespace SnapMeshPCG.Experiments
                     FieldInfo nsField = nsType.GetField(
                         settings.Key,
                         BindingFlags.NonPublic | BindingFlags.Instance);
-                    nsField.SetValue(nsInstance, settings.Value);
+
+                    if (nsField is null)
+                    {
+                        Debug.LogWarning($"Unknown {nameof(NavScanner)} field: '{settings.Key}'");
+                    }
+                    else
+                    {
+                        nsField.SetValue(nsInstance, settings.Value);
+                    }
                 }
             }
         }

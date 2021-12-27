@@ -12,6 +12,7 @@ namespace SnapMeshPCG.Experiments
                 {
                     ["_useSeed"] = true,
                     ["_seed"] = 100,
+                    ["_invalid"] = "lala"
                 },
                 ["this"] = new Dictionary<string, object>()
                 {
@@ -38,7 +39,8 @@ namespace SnapMeshPCG.Experiments
                     ["_selectionMethod"] = typeof(CorridorSMConfig),
                     ["_selectionParams"] = new Dictionary<string, object>()
                     {
-                        ["_maxPieces"] = (uint)25
+                        ["_maxPieces"] = (uint)25,
+                        ["_invalid"] = 111
                     },
                 },
 
@@ -46,7 +48,10 @@ namespace SnapMeshPCG.Experiments
         public IDictionary<string, IDictionary<string, object>> NavParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
-                ["---"] = null
+                ["---"] = new Dictionary<string, object>()
+                {
+                    ["_invalid"] = 50
+                }
             };
     }
 }
