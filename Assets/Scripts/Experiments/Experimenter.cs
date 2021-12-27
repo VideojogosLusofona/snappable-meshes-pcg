@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using NaughtyAttributes;
 using SnapMeshPCG.Navigation;
@@ -59,6 +60,7 @@ namespace SnapMeshPCG.Experiments
 
         [SerializeField]
         [BoxGroup(experimentParams)]
+        [Label("Runs per Scenario+Nav combo")]
         private int _runsPerScenarioNavCombo = 1;
 
         [NonSerialized]
@@ -141,7 +143,7 @@ namespace SnapMeshPCG.Experiments
             _navParamSet = _navParamSets[0];
         }
 
-        [Button("Set Scenario Params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
+        [Button("Set scenario params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
         private void SetScenarioConfig()
         {
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
@@ -218,7 +220,7 @@ namespace SnapMeshPCG.Experiments
             }
         }
 
-        [Button("Set Nav Params in NavController", enabledMode: EButtonEnableMode.Editor)]
+        [Button("Set nav params in NavController", enabledMode: EButtonEnableMode.Editor)]
         private void SetNavParams()
         {
             NavScanner nsInstance = FindObjectOfType<NavScanner>();
@@ -254,7 +256,7 @@ namespace SnapMeshPCG.Experiments
         /// <summary>
         /// Star currently selected experiment.
         /// </summary>
-        [Button("Start Experiment", enabledMode: EButtonEnableMode.Editor)]
+        [Button("Start experiment", enabledMode: EButtonEnableMode.Editor)]
         private void StartExperiment()
         {
             string currentScenario = _scenario;
