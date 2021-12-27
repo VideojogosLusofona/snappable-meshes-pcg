@@ -37,24 +37,24 @@ namespace SnapMeshPCG.Experiments
         private string _experimentName;
 
         [SerializeField]
-        [Dropdown(nameof(Runs))]
-        private string _run;
+        [Dropdown(nameof(Scenarios))]
+        private string _scenario;
 
         [NonSerialized]
         private string[] _experimentNames;
 
         [NonSerialized]
-        private string[] _runs;
+        private string[] _scenarios;
 
-        private ICollection<string> Runs
+        private ICollection<string> Scenarios
         {
             get
             {
-                if (_runs is null)
+                if (_scenarios is null)
                 {
                     OnChangeExperiment();
                 }
-                return _runs;
+                return _scenarios;
             }
         }
 
@@ -95,13 +95,13 @@ namespace SnapMeshPCG.Experiments
                 .GetConstructor(Type.EmptyTypes)
                 .Invoke(null)
                 as IExperiment;
-            _runs = _experiment.GenParamSet.Keys.ToArray();
-            Array.Sort(_runs);
-            _run = _runs[0];
+            _scenarios = _experiment.GenParamSet.Keys.ToArray();
+            Array.Sort(_scenarios);
+            _scenario = _scenarios[0];
         }
 
-        [Button("Set Run Config", enabledMode: EButtonEnableMode.Editor)]
-        private void SetRunConfig()
+        [Button("Set Scenario Config in Gen. Manager", enabledMode: EButtonEnableMode.Editor)]
+        private void SetScenarioConfig()
         {
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
 
@@ -110,7 +110,7 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
-            foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_run])
+            foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_scenario])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -184,7 +184,7 @@ namespace SnapMeshPCG.Experiments
             object gmSmConfig = gmFieldSmCfg.GetValue(gmInstance);
             string savedSmCfg = JsonUtility.ToJson(gmSmConfig);
 
-            SetRunConfig();
+            SetScenarioConfig();
 
             MethodInfo genMeth = gmType.GetMethod(
                 "GenerateMap",
