@@ -55,12 +55,12 @@ namespace SnapMeshPCG.Experiments
                     ["_reinitializeRNG"] = NavScanner.ReInitRNG.Seed,
                     ["seedStrategy"] = _seeder
                 },
-                ["5000"] = new Dictionary<string, object>()
-                {
-                    ["_navPointCount"] = 5000,
-                    ["_reinitializeRNG"] = NavScanner.ReInitRNG.Seed,
-                    ["seedStrategy"] = _seeder
-                }
+                // ["5000"] = new Dictionary<string, object>()
+                // {
+                //     ["_navPointCount"] = 5000,
+                //     ["_reinitializeRNG"] = NavScanner.ReInitRNG.Seed,
+                //     ["seedStrategy"] = _seeder
+                // }
             };
     }
 }

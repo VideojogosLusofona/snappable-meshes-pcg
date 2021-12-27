@@ -41,8 +41,6 @@ namespace SnapMeshPCG.Experiments
 
         private Func<int, int> _navSeedStrategy;
 
-        private int _navInitSeed;
-
         [SerializeField]
         [Dropdown(nameof(Experiment))]
         [BoxGroup(experimentSelect)]
@@ -228,14 +226,6 @@ namespace SnapMeshPCG.Experiments
                     nsField.SetValue(nsInstance, settings.Value);
                 }
             }
-
-            if (_navSeedStrategy != null)
-            {
-                FieldInfo nsField = nsType.GetField(
-                    "_seed",
-                    BindingFlags.NonPublic | BindingFlags.Instance);
-                _navInitSeed = (int) nsField.GetValue(nsInstance);
-            }
         }
 
         /// <summary>
@@ -244,6 +234,9 @@ namespace SnapMeshPCG.Experiments
         [Button("Start Experiment", enabledMode: EButtonEnableMode.Editor)]
         private void StartExperiment()
         {
+            string currentScenario = _scenario;
+            string currentNavParamSet = _navParamSet;
+
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
             NavScanner nsInstance = FindObjectOfType<NavScanner>();
 
@@ -261,18 +254,49 @@ namespace SnapMeshPCG.Experiments
 
             string savedNs = JsonUtility.ToJson(nsInstance);
 
-
-
-            SetScenarioConfig();
-            SetNavParams();
-
             MethodInfo genMeth = gmType.GetMethod(
                 "GenerateMap",
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
-            genMeth.Invoke(gmInstance, null);
+            FieldInfo nsSeed = nsType.GetField(
+                "_seed", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            Debug.Log($"Generation took {gmInstance.GenTimeMillis} ms\nNav validation took {nsInstance.ValidationTimeMillis} ms (mean conns {nsInstance.MeanValidConnections:p}, largest cluster {nsInstance.RelAreaLargestCluster:p})");
+            int navInitSeed = (int)nsSeed.GetValue(nsInstance);
+
+            foreach (string scenario in _scenarios)
+            {
+                _scenario = scenario;
+                foreach (string navParamSet in _navParamSets)
+                {
+                    _navParamSet = navParamSet;
+                    SetScenarioConfig();
+                    SetNavParams();
+
+                    for (int i = 0; i < _runsPerScenarioNavCombo; i++)
+                    {
+                        int navSeed;
+
+                        if (_navSeedStrategy is null)
+                        {
+                            navSeed = (int)nsSeed.GetValue(nsInstance);
+                        }
+                        else
+                        {
+                            navSeed = _navSeedStrategy.Invoke(navInitSeed + i);
+                            nsSeed.SetValue(nsInstance, navSeed);
+                        }
+
+                        genMeth.Invoke(gmInstance, null);
+
+                        Debug.Log($"=== EXP LOG ({_scenario}, {_navParamSet}, {i}) ===\n"
+                            + $"Generation took {gmInstance.GenTimeMillis} ms\n"
+                            + $"Nav validation took {nsInstance.ValidationTimeMillis} ms "
+                            + $"(mean conns {nsInstance.MeanValidConnections:p}, "
+                            + $"largest cluster {nsInstance.RelAreaLargestCluster:p}) "
+                            + $"with seed = {navSeed}");
+                    }
+                }
+            }
 
             JsonUtility.FromJsonOverwrite(savedNs, nsInstance);
 
@@ -283,7 +307,8 @@ namespace SnapMeshPCG.Experiments
 
             JsonUtility.FromJsonOverwrite(savedGm, gmInstance);
 
+            _scenario = currentScenario;
+            _navParamSet = currentNavParamSet;
         }
-
     }
 }
