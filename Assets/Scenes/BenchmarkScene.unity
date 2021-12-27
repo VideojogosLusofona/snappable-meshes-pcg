@@ -353,6 +353,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b13ee1661f13948a29677c51799a7af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _experimentName: Benchmark
+  _run: (a)
 --- !u!1 &1417949382
 GameObject:
   m_ObjectHideFlags: 0

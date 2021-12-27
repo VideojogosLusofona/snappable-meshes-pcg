@@ -3,7 +3,7 @@ using SnapMeshPCG.SelectionMethods;
 
 namespace SnapMeshPCG.Experiments
 {
-    public class TestExperiment : IExperiment
+    public class TestExperiment //: IExperiment
     {
         public IDictionary<string, IDictionary<string, object>> Runs =>
             new Dictionary<string, IDictionary<string, object>>()

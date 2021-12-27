@@ -4,6 +4,6 @@ namespace SnapMeshPCG.Experiments
 {
     public interface IExperiment
     {
-        IDictionary<string, IDictionary<string, object>> Runs { get; }
+        IDictionary<string, IDictionary<string, IDictionary<string, object>>> Runs { get; }
     }
 }
