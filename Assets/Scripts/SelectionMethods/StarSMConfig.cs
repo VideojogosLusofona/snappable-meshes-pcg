@@ -30,12 +30,12 @@ namespace SnapMeshPCG.SelectionMethods
 
         // The maximum variation from _armLength in each arm
         [SerializeField]
-        private uint armLengthVar = 0;
+        private uint _armLengthVar = 0;
 
         /// <summary>
         /// Returns the configured star selection method.
         /// </summary>
         public override AbstractSM Method =>
-            new StarSM(_armLength, armLengthVar);
+            new StarSM(_armLength, _armLengthVar);
     }
 }
