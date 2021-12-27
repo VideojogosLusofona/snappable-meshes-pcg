@@ -17,14 +17,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
 using NaughtyAttributes;
 using SnapMeshPCG.Navigation;
 using SnapMeshPCG.SelectionMethods;
+
+// Avoid conflict with System.Diagnostics.Debug
+using Debug = UnityEngine.Debug;
 
 namespace SnapMeshPCG.Experiments
 {
@@ -255,11 +260,19 @@ namespace SnapMeshPCG.Experiments
         }
 
         /// <summary>
-        /// Star currently selected experiment.
+        /// Start currently selected experiment.
         /// </summary>
         [Button("Start experiment", enabledMode: EButtonEnableMode.Editor)]
         private void StartExperiment()
         {
+            const long saveIntervalMillis = 30000; // Save only after 30 seconds without saving
+
+            long lastSaveTime = 0;
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            StringBuilder expResultPendingSave = new StringBuilder("run,scenario,navset,tg,tv,c,ar,genseed,navseed\n");
+
             string currentScenario = _scenario;
             string currentNavParamSet = _navParamSet;
 
@@ -301,9 +314,10 @@ namespace SnapMeshPCG.Experiments
                 expResultsFolder,
                 $"{_experimentName}-{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}.csv");
 
-            Directory.CreateDirectory(expResultsFolder);
 
-            File.WriteAllText(expResultsFile, "run,scenario,navset,tg,tv,c,ar,genseed,navseed\n");
+            Debug.Log($"==== Starting experiment '{_experimentName}' ====");
+
+            Directory.CreateDirectory(expResultsFolder);
 
             foreach (string scenario in _scenarios)
             {
@@ -330,23 +344,32 @@ namespace SnapMeshPCG.Experiments
 
                         genMeth.Invoke(gmInstance, null);
 
-                        File.AppendAllText(
-                            expResultsFile,
-                            string.Format(
-                                CultureInfo.InvariantCulture,
-                                "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
-                                i,
-                                $"\"{_scenario}\"",
-                                $"\"{_navParamSet}\"",
-                                gmInstance.GenTimeMillis,
-                                nsInstance.ValidationTimeMillis,
-                                nsInstance.MeanValidConnections,
-                                nsInstance.RelAreaLargestCluster,
-                                gmSeed.GetValue(gmInstance),
-                                navSeed));
+                        expResultPendingSave.AppendFormat(
+                            CultureInfo.InvariantCulture,
+                            "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
+                            i,
+                            $"\"{_scenario}\"",
+                            $"\"{_navParamSet}\"",
+                            gmInstance.GenTimeMillis,
+                            nsInstance.ValidationTimeMillis,
+                            nsInstance.MeanValidConnections,
+                            nsInstance.RelAreaLargestCluster,
+                            gmSeed.GetValue(gmInstance),
+                            navSeed);
+
+                        if (stopwatch.ElapsedMilliseconds > lastSaveTime + saveIntervalMillis)
+                        {
+                            File.AppendAllText(
+                                expResultsFile,
+                                expResultPendingSave.ToString());
+                            expResultPendingSave.Clear();
+                            lastSaveTime = stopwatch.ElapsedMilliseconds;
+                        }
                     }
                 }
             }
+
+            File.AppendAllText(expResultsFile, expResultPendingSave.ToString());
 
             JsonUtility.FromJsonOverwrite(savedNs, nsInstance);
 
@@ -359,6 +382,8 @@ namespace SnapMeshPCG.Experiments
 
             _scenario = currentScenario;
             _navParamSet = currentNavParamSet;
+
+            Debug.Log($"==== Experiment '{_experimentName}' finished after {stopwatch.ElapsedMilliseconds} ms ====");
         }
     }
 }
