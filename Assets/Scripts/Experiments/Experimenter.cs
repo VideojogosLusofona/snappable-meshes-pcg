@@ -33,6 +33,14 @@ using Debug = UnityEngine.Debug;
 
 namespace SnapMeshPCG.Experiments
 {
+    /// <summary>
+    /// Perform research experiments with snappable meshes scenarios.
+    /// </summary>
+    /// <remarks>
+    /// This class is not required in a snappable mesh scene. It is used only
+    /// for performing experiments, controlling the parameters of
+    /// <see cref="GenerationManager"/> and <see cref="NavScanner"/>.
+    /// </remarks>
     public class Experimenter : MonoBehaviour
     {
         // ///////// //
@@ -42,41 +50,64 @@ namespace SnapMeshPCG.Experiments
         private const string experimentSelect = ":: Experiment selection ::";
         private const string experimentParams = ":: Experiment parameters ::";
 
-        private IExperiment _experiment;
+        // ///////////////////////////////////////////// //
+        // Experiment configuration parameters in editor //
+        // ///////////////////////////////////////////// //
 
-        private IDictionary<string, Type> _experiments;
-
-        private Func<int, int> _navSeedStrategy;
-
+        // Dropdown with the names of all experiments found
         [SerializeField]
         [Dropdown(nameof(Experiment))]
         [BoxGroup(experimentSelect)]
         [OnValueChanged(nameof(OnChangeExperiment))]
         private string _experimentName;
 
+        // Name of currently selected scenario
         [SerializeField]
         [BoxGroup(experimentParams)]
         [Dropdown(nameof(Scenarios))]
         private string _scenario;
 
+        // Name of currently selected nav parameter set
         [SerializeField]
         [BoxGroup(experimentParams)]
         [Dropdown(nameof(NavParamSets))]
         private string _navParamSet;
 
+        // How many runs to perform per scenario+nav param set combination
         [SerializeField]
         [BoxGroup(experimentParams)]
         [Label("Runs per Scenario+Nav combo")]
         private int _runsPerScenarioNavCombo = 1;
 
+        // ///////////////////////////////////// //
+        // Instance variables not used in editor //
+        // ///////////////////////////////////// //
+
+        // Current experiment data
+        private IExperiment _experiment;
+
+        // Dictionary all all found experiments, by name and concrete type
+        private IDictionary<string, Type> _experiments;
+
+        // Strategy to obtain seeds for the NavScanner's PRNG
+        private Func<int, int> _navSeedStrategy;
+
+        // The names of all found experiments
         [NonSerialized]
         private string[] _experimentNames;
 
+        // The names of all scenarios in the currently selected experiment
         [NonSerialized]
         private string[] _scenarios;
 
+        // The names of all nav parameter sets in the currently selected
+        // experiment
         [NonSerialized]
         private string[] _navParamSets;
+
+        // ////////// //
+        // Properties //
+        // ////////// //
 
         private ICollection<string> Experiment
         {
@@ -132,6 +163,10 @@ namespace SnapMeshPCG.Experiments
                 return _navParamSets;
             }
         }
+
+        // ////////// //
+        // Methods //
+        // ////////// //
 
         private void OnChangeExperiment()
         {
@@ -314,7 +349,6 @@ namespace SnapMeshPCG.Experiments
                 expResultsFolder,
                 $"{_experimentName}-{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}.csv");
 
-
             Debug.Log($"==== Starting experiment '{_experimentName}' ====");
 
             Directory.CreateDirectory(expResultsFolder);
@@ -383,7 +417,11 @@ namespace SnapMeshPCG.Experiments
             _scenario = currentScenario;
             _navParamSet = currentNavParamSet;
 
-            Debug.Log($"==== Experiment '{_experimentName}' finished after {stopwatch.ElapsedMilliseconds} ms ====");
+            Debug.Log(string.Format(
+                "==== Experiment '{0}' finished after {1} ms, results saved to {2} ====",
+                _experimentName,
+                stopwatch.ElapsedMilliseconds,
+                expResultsFile));
         }
     }
 }
