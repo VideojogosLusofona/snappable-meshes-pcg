@@ -21,10 +21,17 @@ using SnapMeshPCG.SelectionMethods;
 
 namespace SnapMeshPCG.Experiments
 {
+    /// <summary>
+    /// Tests several aspects of the experimenter.
+    /// </summary>
     public class TestExperiment : IExperiment
     {
+        // Basic strategy for the generation's PRNG
         private readonly Func<int, int> _seeder = i => i * 100;
 
+        /// <summary>
+        /// Generation parameter sets.
+        /// </summary>
         public IDictionary<string, IDictionary<string, object>> GenParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
@@ -70,8 +77,11 @@ namespace SnapMeshPCG.Experiments
                         ["_invalid"] = 111
                     },
                 },
-
             };
+
+        /// <summary>
+        /// Navigation parameter sets (basically nothing).
+        /// </summary>
         public IDictionary<string, IDictionary<string, object>> NavParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {

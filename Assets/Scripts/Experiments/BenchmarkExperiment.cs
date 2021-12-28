@@ -23,12 +23,20 @@ using SnapMeshPCG.SelectionMethods;
 
 namespace SnapMeshPCG.Experiments
 {
+    /// <summary>
+    /// Definition of the benchmark experiment shown in the paper
+    /// "Procedural Generation of 3D Maps with Snappable Meshes".
+    /// </summary>
     public class BenchmarkExperiment : IExperiment
     {
+        // Seed strategy for the nav scanner's PRNG
         private readonly Func<int, int> _seeder = i => int.Parse(
             Hash128.Compute(i).ToString().Substring(0, 8),
             System.Globalization.NumberStyles.HexNumber);
 
+        /// <summary>
+        /// Generation parameter sets.
+        /// </summary>
         public IDictionary<string, IDictionary<string, object>> GenParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
@@ -166,6 +174,9 @@ namespace SnapMeshPCG.Experiments
                 },
             };
 
+        /// <summary>
+        /// Navigation parameter sets.
+        /// </summary>
         public IDictionary<string, IDictionary<string, object>> NavParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {

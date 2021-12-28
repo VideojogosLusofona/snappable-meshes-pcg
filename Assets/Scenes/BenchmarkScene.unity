@@ -355,7 +355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _experimentName: Benchmark
   _genParamSet: (a)
-  _navParamSet: 500
+  _navParamSet: 50
   _runsPerGenNavCombo: 10
   _skipFirstNScenarios: 0
   _numberOfScenarios: 240
@@ -738,7 +738,7 @@ MonoBehaviour:
   _showNavPoints: 1
   _showOriginPoints: 1
   _reinitializeRNG: 2
-  _seed: -338018001
+  _seed: 123
   _navPoints: []
   _navOriginsDebug: []
   _clusters: []

@@ -19,9 +19,19 @@ using System.Collections.Generic;
 
 namespace SnapMeshPCG.Experiments
 {
+    /// <summary>
+    /// Interface all experiments must implement.
+    /// </summary>
     public interface IExperiment
     {
+        /// <summary>
+        /// Generation parameter sets.
+        /// </summary>
         IDictionary<string, IDictionary<string, object>> GenParamSet { get; }
+
+        /// <summary>
+        /// Navigation parameter sets.
+        /// </summary>
         IDictionary<string, IDictionary<string, object>> NavParamSet { get; }
     }
 }
