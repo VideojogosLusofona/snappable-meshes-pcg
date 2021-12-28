@@ -731,10 +731,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd606d33f27484bbdb246e323876b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _navPointCount: 250
+  _navPointCount: 50
   _showNavPoints: 1
   _showOriginPoints: 1
-  _reinitializeRNG: 0
+  _reinitializeRNG: 2
   _seed: -338018001
   _navPoints: []
   _navOriginsDebug: []

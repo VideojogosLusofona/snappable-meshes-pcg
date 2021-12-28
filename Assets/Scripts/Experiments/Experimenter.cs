@@ -166,9 +166,9 @@ namespace SnapMeshPCG.Experiments
             }
         }
 
-        // ////////// //
+        // /////// //
         // Methods //
-        // ////////// //
+        // /////// //
 
         private void OnChangeExperiment()
         {
@@ -179,14 +179,16 @@ namespace SnapMeshPCG.Experiments
 
             _genParamSets = _experiment.GenParamSet.Keys.ToArray();
             Array.Sort(_genParamSets);
-            _genParamSet = _genParamSets[0];
+            if (!_genParamSets.Contains(_genParamSet))
+                _genParamSet = _genParamSets[0];
 
             _navParamSets = _experiment.NavParamSet.Keys.ToArray();
             Array.Sort(_navParamSets);
-            _navParamSet = _navParamSets[0];
+            if (!_navParamSets.Contains(_navParamSet))
+                _navParamSet = _navParamSets[0];
         }
 
-        [Button("Set generation params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
+        [Button("Set gen params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
         private void SetGenParams()
         {
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
