@@ -90,6 +90,9 @@ namespace SnapMeshPCG.Experiments
         // Dictionary all all found experiments, by name and concrete type
         private IDictionary<string, Type> _experiments;
 
+        // Strategy to obtain seeds for the GenerationManager's PRNG
+        private Func<int, int> _genSeedStrategy;
+
         // Strategy to obtain seeds for the NavScanner's PRNG
         private Func<int, int> _navSeedStrategy;
 
@@ -198,11 +201,16 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
+            _genSeedStrategy = null;
+
             foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_genParamSet])
             {
-                if (settings.Key.Equals("_selectionMethod"))
+                if (settings.Key.Equals("seedStrategy"))
                 {
-
+                    _genSeedStrategy = settings.Value as Func<int, int>;
+                }
+                else if (settings.Key.Equals("_selectionMethod"))
+                {
                     smType = settings.Value as Type;
                 }
                 else if (settings.Key.Equals("_selectionParams"))
@@ -347,8 +355,6 @@ namespace SnapMeshPCG.Experiments
             FieldInfo nsSeed = nsType.GetField(
                 "_seed", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            int navInitSeed = (int)nsSeed.GetValue(nsInstance);
-
             string expResultsFolder = Path.Combine(
                 Path.GetDirectoryName(Application.dataPath),
                 "experiments");
@@ -368,14 +374,18 @@ namespace SnapMeshPCG.Experiments
             foreach (string genParamSet in _genParamSets)
             {
                 _genParamSet = genParamSet;
+                SetGenParams();
+                int genInitSeed = (int)gmSeed.GetValue(gmInstance);
+
                 foreach (string navParamSet in _navParamSets)
                 {
                     _navParamSet = navParamSet;
-                    SetGenParams();
                     SetNavParams();
+                    int navInitSeed = (int)nsSeed.GetValue(nsInstance);
 
                     for (int i = 0; i < _runsPerGenNavCombo; i++)
                     {
+                        int genSeed, navSeed;
 
                         if (EditorUtility.DisplayCancelableProgressBar(
                             $"Performing experiment '{_experimentName}'",
@@ -385,7 +395,15 @@ namespace SnapMeshPCG.Experiments
                             cancelled = true;
                         }
 
-                        int navSeed;
+                        if (_genSeedStrategy is null)
+                        {
+                            genSeed = (int)gmSeed.GetValue(gmInstance);
+                        }
+                        else
+                        {
+                            genSeed = _genSeedStrategy.Invoke(genInitSeed + i);
+                            gmSeed.SetValue(gmInstance, genSeed);
+                        }
 
                         if (_navSeedStrategy is null)
                         {
@@ -409,7 +427,7 @@ namespace SnapMeshPCG.Experiments
                             nsInstance.ValidationTimeMillis,
                             nsInstance.MeanValidConnections,
                             nsInstance.RelAreaLargestCluster,
-                            gmSeed.GetValue(gmInstance),
+                            genSeed,
                             navSeed);
 
                         if (stopwatch.ElapsedMilliseconds > lastSaveTime + saveIntervalMillis)

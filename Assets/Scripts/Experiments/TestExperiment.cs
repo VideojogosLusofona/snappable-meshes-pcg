@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 using SnapMeshPCG.SelectionMethods;
 
@@ -22,35 +23,44 @@ namespace SnapMeshPCG.Experiments
 {
     public class TestExperiment : IExperiment
     {
+        private readonly Func<int, int> _seeder = i => i * 100;
+
         public IDictionary<string, IDictionary<string, object>> GenParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
                 ["hello"] = new Dictionary<string, object>()
                 {
+                    ["seedStrategy"] = _seeder,
                     ["_useSeed"] = true,
                     ["_seed"] = 100,
                     ["_invalid"] = "lala"
                 },
                 ["this"] = new Dictionary<string, object>()
                 {
+                    ["seedStrategy"] = _seeder,
+                    ["_seed"] = -999,
+                    ["_useSeed"] = true,
                     ["_pieceDistance"] = 0.000005f,
                     ["_maxFailures"] = (uint)10,
                 },
 
                 ["is"] = new Dictionary<string, object>()
                 {
+                    ["_seed"] = 15,
                     ["_checkOverlaps"] = false,
                     ["_matchingRules"] = SnapRules.Pins,
                 },
 
                 ["a"] = new Dictionary<string, object>()
                 {
+                    ["_seed"] = 4,
                     ["_pinCountTolerance"] = (uint)3,
                     ["_starterConTol"] = (uint)2,
                 },
 
                 ["test"] = new Dictionary<string, object>()
                 {
+                    ["_seed"] = 7,
                     ["_useSeed"] = false,
                     ["_starterConTol"] = (uint)1,
                     ["_selectionMethod"] = typeof(CorridorSMConfig),
