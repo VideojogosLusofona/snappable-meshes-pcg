@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using NaughtyAttributes;
 using SnapMeshPCG.Navigation;
@@ -349,6 +350,10 @@ namespace SnapMeshPCG.Experiments
                 expResultsFolder,
                 $"{_experimentName}-{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}.csv");
 
+            int step = 0;
+            float totalSteps = _scenarios.Length * _navParamSets.Length * _runsPerScenarioNavCombo;
+            bool cancelled = false;
+
             Debug.Log($"==== Starting experiment '{_experimentName}' ====");
 
             Directory.CreateDirectory(expResultsFolder);
@@ -364,6 +369,15 @@ namespace SnapMeshPCG.Experiments
 
                     for (int i = 0; i < _runsPerScenarioNavCombo; i++)
                     {
+
+                        if (EditorUtility.DisplayCancelableProgressBar(
+                            $"Performing experiment '{_experimentName}'",
+                            $"Running scenario {step}/{totalSteps}...",
+                            step / totalSteps))
+                        {
+                            cancelled = true;
+                        }
+
                         int navSeed;
 
                         if (_navSeedStrategy is null)
@@ -399,9 +413,17 @@ namespace SnapMeshPCG.Experiments
                             expResultPendingSave.Clear();
                             lastSaveTime = stopwatch.ElapsedMilliseconds;
                         }
+
+                        step++;
+
+                        if (cancelled) break;
                     }
+                    if (cancelled) break;
                 }
+                if (cancelled) break;
             }
+
+            EditorUtility.ClearProgressBar();
 
             File.AppendAllText(expResultsFile, expResultPendingSave.ToString());
 
