@@ -62,11 +62,11 @@ namespace SnapMeshPCG.Experiments
         [OnValueChanged(nameof(OnChangeExperiment))]
         private string _experimentName;
 
-        // Name of currently selected scenario
+        // Name of currently selected generation parameter set
         [SerializeField]
         [BoxGroup(experimentParams)]
-        [Dropdown(nameof(Scenarios))]
-        private string _scenario;
+        [Dropdown(nameof(GenParamSets))]
+        private string _genParamSet;
 
         // Name of currently selected nav parameter set
         [SerializeField]
@@ -74,11 +74,11 @@ namespace SnapMeshPCG.Experiments
         [Dropdown(nameof(NavParamSets))]
         private string _navParamSet;
 
-        // How many runs to perform per scenario+nav param set combination
+        // How many runs to perform per gen+nav param set combination
         [SerializeField]
         [BoxGroup(experimentParams)]
-        [Label("Runs per Scenario+Nav combo")]
-        private int _runsPerScenarioNavCombo = 1;
+        [Label("Runs per Gen+Nav combo")]
+        private int _runsPerGenNavCombo = 1;
 
         // ///////////////////////////////////// //
         // Instance variables not used in editor //
@@ -97,9 +97,10 @@ namespace SnapMeshPCG.Experiments
         [NonSerialized]
         private string[] _experimentNames;
 
-        // The names of all scenarios in the currently selected experiment
+        // The names of all generation parameter sets in the currently selected
+        // experiment
         [NonSerialized]
-        private string[] _scenarios;
+        private string[] _genParamSets;
 
         // The names of all nav parameter sets in the currently selected
         // experiment
@@ -141,15 +142,15 @@ namespace SnapMeshPCG.Experiments
             }
         }
 
-        private ICollection<string> Scenarios
+        private ICollection<string> GenParamSets
         {
             get
             {
-                if (_scenarios is null)
+                if (_genParamSets is null)
                 {
                     OnChangeExperiment();
                 }
-                return _scenarios;
+                return _genParamSets;
             }
         }
 
@@ -176,17 +177,17 @@ namespace SnapMeshPCG.Experiments
                 .Invoke(null)
                 as IExperiment;
 
-            _scenarios = _experiment.GenParamSet.Keys.ToArray();
-            Array.Sort(_scenarios);
-            _scenario = _scenarios[0];
+            _genParamSets = _experiment.GenParamSet.Keys.ToArray();
+            Array.Sort(_genParamSets);
+            _genParamSet = _genParamSets[0];
 
             _navParamSets = _experiment.NavParamSet.Keys.ToArray();
             Array.Sort(_navParamSets);
             _navParamSet = _navParamSets[0];
         }
 
-        [Button("Set scenario params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
-        private void SetScenarioConfig()
+        [Button("Set generation params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
+        private void SetGenParams()
         {
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
 
@@ -195,7 +196,7 @@ namespace SnapMeshPCG.Experiments
             Type smType = null;
             IDictionary<string, object> smConfig = null;
 
-            foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_scenario])
+            foreach (KeyValuePair<string, object> settings in _experiment.GenParamSet[_genParamSet])
             {
                 if (settings.Key.Equals("_selectionMethod"))
                 {
@@ -307,9 +308,9 @@ namespace SnapMeshPCG.Experiments
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            StringBuilder expResultPendingSave = new StringBuilder("run,scenario,navset,tg,tv,c,ar,genseed,navseed\n");
+            StringBuilder expResultPendingSave = new StringBuilder("run,genset,navset,tg,tv,c,ar,genseed,navseed\n");
 
-            string currentScenario = _scenario;
+            string currentGenParamSet = _genParamSet;
             string currentNavParamSet = _navParamSet;
 
             GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
@@ -351,23 +352,23 @@ namespace SnapMeshPCG.Experiments
                 $"{_experimentName}-{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}.csv");
 
             int step = 0;
-            float totalSteps = _scenarios.Length * _navParamSets.Length * _runsPerScenarioNavCombo;
+            float totalSteps = _genParamSets.Length * _navParamSets.Length * _runsPerGenNavCombo;
             bool cancelled = false;
 
             Debug.Log($"==== Starting experiment '{_experimentName}' ====");
 
             Directory.CreateDirectory(expResultsFolder);
 
-            foreach (string scenario in _scenarios)
+            foreach (string genParamSet in _genParamSets)
             {
-                _scenario = scenario;
+                _genParamSet = genParamSet;
                 foreach (string navParamSet in _navParamSets)
                 {
                     _navParamSet = navParamSet;
-                    SetScenarioConfig();
+                    SetGenParams();
                     SetNavParams();
 
-                    for (int i = 0; i < _runsPerScenarioNavCombo; i++)
+                    for (int i = 0; i < _runsPerGenNavCombo; i++)
                     {
 
                         if (EditorUtility.DisplayCancelableProgressBar(
@@ -396,7 +397,7 @@ namespace SnapMeshPCG.Experiments
                             CultureInfo.InvariantCulture,
                             "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
                             i,
-                            $"\"{_scenario}\"",
+                            $"\"{_genParamSet}\"",
                             $"\"{_navParamSet}\"",
                             gmInstance.GenTimeMillis,
                             nsInstance.ValidationTimeMillis,
@@ -436,7 +437,7 @@ namespace SnapMeshPCG.Experiments
 
             JsonUtility.FromJsonOverwrite(savedGm, gmInstance);
 
-            _scenario = currentScenario;
+            _genParamSet = currentGenParamSet;
             _navParamSet = currentNavParamSet;
 
             Debug.Log(string.Format(
