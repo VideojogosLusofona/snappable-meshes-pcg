@@ -319,6 +319,9 @@ namespace SnapMeshPCG
             // starter piece
             starterPieceGObj.name += " : Starter Piece";
 
+            // Set generation manager as parent of the starter piece
+            starterPieceGObj.transform.SetParent(transform);
+
             // Add starter piece script component to list of placed pieces
             _placedPieces.Add(starterPieceGObj.GetComponent<MapPiece>());
 
