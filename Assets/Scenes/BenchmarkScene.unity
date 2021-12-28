@@ -354,9 +354,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _experimentName: Benchmark
-  _scenario: (a)
+  _genParamSet: (a)
   _navParamSet: 50
-  _runsPerScenarioNavCombo: 3
+  _runsPerGenNavCombo: 2
 --- !u!1 &1417949382
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,11 +731,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd606d33f27484bbdb246e323876b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _navPointCount: 50
+  _navPointCount: 250
   _showNavPoints: 1
   _showOriginPoints: 1
-  _reinitializeRNG: 2
-  _seed: -1691947859
+  _reinitializeRNG: 0
+  _seed: -338018001
   _navPoints: []
   _navOriginsDebug: []
   _clusters: []
