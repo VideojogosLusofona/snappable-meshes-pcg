@@ -78,7 +78,25 @@ namespace SnapMeshPCG.Experiments
         [SerializeField]
         [BoxGroup(experimentParams)]
         [Label("Runs per Gen+Nav combo")]
+        [OnValueChanged(nameof(OnChangeNumberOfScenarios))]
         private int _runsPerGenNavCombo = 1;
+
+        // How many scenarios to skip before starting? This can be useful if a
+        // previous run was cancelled at some point for some reason
+        [SerializeField]
+        [BoxGroup(experimentParams)]
+        [OnValueChanged(nameof(OnChangeNumberOfScenarios))]
+        private int _skipFirstNScenarios = 0;
+
+        [SerializeField]
+        [ReadOnly]
+        [BoxGroup(experimentParams)]
+        private int _numberOfScenarios = 0;
+
+        [SerializeField]
+        [ReadOnly]
+        [BoxGroup(experimentParams)]
+        private int _scenariosToRun = 0;
 
         // ///////////////////////////////////// //
         // Instance variables not used in editor //
@@ -189,6 +207,15 @@ namespace SnapMeshPCG.Experiments
             Array.Sort(_navParamSets);
             if (!_navParamSets.Contains(_navParamSet))
                 _navParamSet = _navParamSets[0];
+
+            OnChangeNumberOfScenarios();
+        }
+
+        private void OnChangeNumberOfScenarios()
+        {
+            _numberOfScenarios = _genParamSets.Length *_navParamSets.Length * _runsPerGenNavCombo;
+            _scenariosToRun = _numberOfScenarios - _skipFirstNScenarios;
+            if (_scenariosToRun < 0) _scenariosToRun = 0;
         }
 
         [Button("Set gen params in GenerationManager", enabledMode: EButtonEnableMode.Editor)]
@@ -387,12 +414,20 @@ namespace SnapMeshPCG.Experiments
                     {
                         int genSeed, navSeed;
 
+                        step++;
+
                         if (EditorUtility.DisplayCancelableProgressBar(
                             $"Performing experiment '{_experimentName}'",
-                            $"Running scenario {step}/{totalSteps}...",
+                            $"Running scenario {step}/{(int)totalSteps}...",
                             step / totalSteps))
                         {
                             cancelled = true;
+                            break;
+                        }
+
+                        if (_skipFirstNScenarios >= step)
+                        {
+                            continue;
                         }
 
                         if (_genSeedStrategy is null)
@@ -439,9 +474,6 @@ namespace SnapMeshPCG.Experiments
                             lastSaveTime = stopwatch.ElapsedMilliseconds;
                         }
 
-                        step++;
-
-                        if (cancelled) break;
                     }
                     if (cancelled) break;
                 }

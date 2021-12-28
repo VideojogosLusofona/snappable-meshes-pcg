@@ -355,8 +355,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _experimentName: Benchmark
   _genParamSet: (a)
-  _navParamSet: 50
-  _runsPerGenNavCombo: 2
+  _navParamSet: 500
+  _runsPerGenNavCombo: 10
+  _skipFirstNScenarios: 0
+  _numberOfScenarios: 240
+  _scenariosToRun: 240
 --- !u!1 &1417949382
 GameObject:
   m_ObjectHideFlags: 0
