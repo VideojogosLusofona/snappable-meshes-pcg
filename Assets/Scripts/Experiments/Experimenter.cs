@@ -334,6 +334,10 @@ namespace SnapMeshPCG.Experiments
                 "GenerateMap",
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
+            MethodInfo clearMeth = gmType.GetMethod(
+                "ClearMap",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
             FieldInfo gmSeed = gmType.GetField(
                 "_seed",
                 BindingFlags.NonPublic | BindingFlags.Instance);
@@ -439,6 +443,8 @@ namespace SnapMeshPCG.Experiments
 
             _genParamSet = currentGenParamSet;
             _navParamSet = currentNavParamSet;
+
+            clearMeth.Invoke(gmInstance, null);
 
             Debug.Log(string.Format(
                 "==== Experiment '{0}' finished after {1} ms, results saved to {2} ====",
