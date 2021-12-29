@@ -417,7 +417,7 @@ namespace SnapMeshPCG.Experiments
             // This StringBuilder will contain the temporary results, before
             // being flushed to a file
             StringBuilder expResultPendingSave =
-                new StringBuilder("run,genset,navset,tg,tv,c,ar,genseed,navseed\n");
+                new StringBuilder("run,genset,navset,tg,tv,c,ar,nclu,genseed,navseed\n");
 
             // Currently selected parameter sets, to be restored when the
             // experiment finishes
@@ -568,7 +568,7 @@ namespace SnapMeshPCG.Experiments
                         // Take note of results for current scenario/run
                         expResultPendingSave.AppendFormat(
                             CultureInfo.InvariantCulture,
-                            "{0},{1},{2},{3},{4},{5},{6},{7},{8}\n",
+                            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n",
                             i,
                             $"\"{_genParamSet}\"",
                             $"\"{_navParamSet}\"",
@@ -576,6 +576,7 @@ namespace SnapMeshPCG.Experiments
                             nsInstance.ValidationTimeMillis,
                             nsInstance.MeanValidConnections,
                             nsInstance.RelAreaLargestCluster,
+                            nsInstance.Clusters.Count,
                             genSeed,
                             navSeed);
 
