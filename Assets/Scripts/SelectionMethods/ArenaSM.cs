@@ -77,7 +77,7 @@ namespace SnapMeshPCG.SelectionMethods
         protected override MapPiece DoSelectGuidePiece(IList<MapPiece> piecesInMap)
         {
             // Select the guide piece to return
-            if (piecesInMap.Count > _maxPieces)
+            if (piecesInMap.Count >= _maxPieces)
             {
                 // If we're over the maximum number of pieces, return null to
                 // signal the end of the map generation

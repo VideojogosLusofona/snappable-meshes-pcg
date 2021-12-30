@@ -53,7 +53,7 @@ namespace SnapMeshPCG.Experiments
                     ["_selectionMethod"] = typeof(ArenaSMConfig),
                     ["_selectionParams"] = new Dictionary<string, object>()
                     {
-                        ["_maxPieces"] = (uint)12
+                        ["_maxPieces"] = (uint)13
                     },
                 },
                 ["(b)"] =  new Dictionary<string, object>()
@@ -120,7 +120,7 @@ namespace SnapMeshPCG.Experiments
                     ["_selectionMethod"] = typeof(ArenaSMConfig),
                     ["_selectionParams"] = new Dictionary<string, object>()
                     {
-                        ["_maxPieces"] = (uint)20
+                        ["_maxPieces"] = (uint)21
                     },
                 },
                 ["(f)"] =  new Dictionary<string, object>()
@@ -136,7 +136,7 @@ namespace SnapMeshPCG.Experiments
                     ["_selectionMethod"] = typeof(ArenaSMConfig),
                     ["_selectionParams"] = new Dictionary<string, object>()
                     {
-                        ["_maxPieces"] = (uint)20
+                        ["_maxPieces"] = (uint)21
                     },
                 },
                 ["(g)"] =  new Dictionary<string, object>()
