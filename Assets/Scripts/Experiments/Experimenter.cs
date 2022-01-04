@@ -165,6 +165,11 @@ namespace SnapMeshPCG.Experiments
 
                     // Sort experiment names
                     Array.Sort(_experimentNames);
+
+                    // Set first experiment as default if current experiment
+                    // name does not exist in list of existing experiments
+                    if (!_experiments.ContainsKey(_experimentName))
+                        _experimentName = _experimentNames[0];
                 }
 
                 // Return experiment names
