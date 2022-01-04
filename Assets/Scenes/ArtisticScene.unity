@@ -123,6 +123,56 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &363459076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 363459078}
+  - component: {fileID: 363459077}
+  m_Layer: 0
+  m_Name: Experimenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &363459077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363459076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b13ee1661f13948a29677c51799a7af2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _experimentName: Artistic
+  _genParamSet: Star
+  _navParamSet: 100
+  _runsPerGenNavCombo: 1
+  _skipFirstNScenarios: 0
+  _numberOfScenarios: 4
+  _scenariosToRun: 4
+--- !u!4 &363459078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363459076}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.3380165, y: -15.443611, z: 16.557154}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,18 +473,18 @@ MonoBehaviour:
   - {fileID: -288569198357325618, guid: 832264c47821d484fb61f9aaf4e58ea9, type: 3}
   - {fileID: 6805274047030939258, guid: 0ea775dc1c4c31847abe06ebc5ecea2a, type: 3}
   _useSeed: 1
-  _seed: -1779992662
+  _seed: 209636004
   _pieceDistance: 0.0001
   _maxFailures: 10
   _checkOverlaps: 1
   _collidersLayer:
     serializedVersion: 2
     m_Bits: 1073741824
-  _matchingRules: -1
+  _matchingRules: 6
   _pinCountTolerance: 0
   _colorMatrix: {fileID: 11400000, guid: ab25e538701ac984da0b178d04ec7e56, type: 2}
-  _selectionMethod: Arena
-  _selectionParams: {fileID: 11400000, guid: 681cf3662d045719cb7328001afc4280, type: 2}
+  _selectionMethod: Star
+  _selectionParams: {fileID: 11400000, guid: f0db8b8279e4c96a99c494a4dc12bea0, type: 2}
   _starterConTol: 0
   OnGenerationBegin:
     m_PersistentCalls:
