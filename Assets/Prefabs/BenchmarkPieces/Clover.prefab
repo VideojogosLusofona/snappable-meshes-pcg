@@ -145,12 +145,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 1
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 1
 --- !u!1 &4922867932572182887
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,12 +194,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 4
 --- !u!1 &5189247530134762411
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,12 +243,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 4
 --- !u!1 &5896662218701665196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,12 +1356,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 4
 --- !u!1 &8693739196114803964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1390,7 +1386,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8693739196114803964}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.66, z: 0.7491}
+  m_LocalPosition: {x: 0, y: 0.66, z: 0.7452}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7130728261216493426}
@@ -1409,9 +1405,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 4
