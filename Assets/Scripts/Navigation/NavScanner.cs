@@ -22,6 +22,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
+using NaughtyAttributes;
 
 // Avoid conflict with System.Diagnostics.Debug
 using Debug = UnityEngine.Debug;
@@ -31,15 +33,51 @@ namespace SnapMeshPCG.Navigation
     /// <summary>
     /// Determine valid percentage of paths in the generated map.
     /// </summary>
-    public class NavScanner : MonoBehaviour
+    public class NavScanner : MonoBehaviour, INavInfo
     {
+        // Enum used internally to defined if and how to reinitialize the RNG
+        public enum ReInitRNG { No, Randomly, Seed }
+
+        // ///////// //
+        // Constants //
+        // ///////// //
+
+        private const string navPointsLabel = ":: Navigation Points ::";
+        private const string rngLabel = ":: Random Number Generator ::";
+
+        // ////////////////////////////// //
+        // Nav setup and debug parameters //
+        // ////////////////////////////// //
+
         // Number of navigation points to use for validating navmesh
         [SerializeField]
-        private int _navPointCount = 400;
+        [BoxGroup(navPointsLabel)]
+        private int _navPointCount = 250;
 
-        // Debug nav point positioning?
+        // Show nav points on navmesh
         [SerializeField]
-        private bool _debugOriginPoints = false;
+        [BoxGroup(navPointsLabel)]
+        private bool _showNavPoints = true;
+
+        // Show origin points for each nav point?
+        [SerializeField]
+        [BoxGroup(navPointsLabel)]
+        private bool _showOriginPoints = false;
+
+        // Reinitialize RNG after map generation? And how?
+        [SerializeField]
+        [BoxGroup(rngLabel)]
+        private ReInitRNG _reinitializeRNG = ReInitRNG.No;
+
+        // Seed to use if user selected to reinitialize RNG with a specific seed
+        [SerializeField]
+        [BoxGroup(rngLabel)]
+        [EnableIf(nameof(UseSeed))]
+        private int _seed = 0;
+
+        // ///////////////////////////////////// //
+        // Instance variables not used in editor //
+        // ///////////////////////////////////// //
 
         // List of navigation points
         [SerializeField]
@@ -56,10 +94,17 @@ namespace SnapMeshPCG.Navigation
         [HideInInspector]
         private List<Cluster> _clusters;
 
-        // Map volume
+        // Volume of largest piece
         [SerializeField]
         [HideInInspector]
-        private float _mapVolume;
+        private float _maxPieceVol;
+
+        // ////////// //
+        // Properties //
+        // ////////// //
+
+        // Indicates if the RNG is to be initialized with a specified seed
+        private bool UseSeed => _reinitializeRNG == ReInitRNG.Seed;
 
         /// <summary>
         /// Read-only accessor to the list of navigation points, ordered by
@@ -72,6 +117,36 @@ namespace SnapMeshPCG.Navigation
         /// cluster size (descending).
         /// </summary>
         public IReadOnlyList<Cluster> Clusters => _clusters;
+
+        /// <summary>
+        /// Average percentage of valid connections between navigation points.
+        /// </summary>
+        public float MeanValidConnections { get; private set; }
+
+        /// <summary>
+        /// Relative area of the largest fully-connected (i.e.,fully-navigable)
+        /// region.
+        /// </summary>
+        public float RelAreaLargestCluster { get; private set; }
+
+        /// <summary>
+        /// Time spent validating the navigation mesh, in milliseconds.
+        /// </summary>
+        public int ValidationTimeMillis { get; private set; }
+
+        // ////// //
+        // Events //
+        // ////// //
+
+        // Event raised after the navmesh has been scanned and all navigation
+        // points have been created
+        [Foldout(":: Events ::")]
+        [SerializeField]
+        private UnityEvent<INavInfo> OnNavInfoReady = null;
+
+        // /////// //
+        // Methods //
+        // /////// //
 
         /// <summary>
         /// Scan the navmesh for paths between randomized navigation points and
@@ -100,16 +175,28 @@ namespace SnapMeshPCG.Navigation
                 new Dictionary<NavPoint, ISet<NavPoint>>();
 
             // Initialize navigation logger
-            StringBuilder log = new StringBuilder("=== Nav validation log ===\n");
+            StringBuilder log = new StringBuilder("---- Nav Validation Log ");
+
+            // Reinitialize RNG if requested by user
+            if (_reinitializeRNG != ReInitRNG.No)
+            {
+                int seed = _reinitializeRNG == ReInitRNG.Randomly
+                    ? System.Guid.NewGuid().GetHashCode()
+                    : _seed;
+                Random.InitState(seed);
+                log.AppendFormat("(seed = {0})", seed);
+            }
+            else
+            {
+                log.Append("(no RNG reseed)");
+            }
+            log.Append(" ----\n");
 
             // Failures in finding navigation points
             int navPointFindFailures = 0;
 
             // Measure how long the navigation scanning takes
             Stopwatch stopwatch = Stopwatch.StartNew();
-
-            // Keep map volume, will be useful for debug gizmos
-            _mapVolume = pieceBounds.Last().sumVol;
 
             // Initialize list of navigation points
             _navPoints = new List<NavPoint>(_navPointCount);
@@ -212,9 +299,12 @@ namespace SnapMeshPCG.Navigation
                 }
             }
 
+            // Stop stopwatch
+            stopwatch.Stop();
+
             // Log good paths found vs total paths
             log.AppendFormat(
-                "Evaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
+                "\tEvaluated {0} paths from {1} points, found {2} good paths ({3:p2} average), took {4} ms\n",
                 tries, _navPoints.Count, success, (float)success / tries, stopwatch.ElapsedMilliseconds);
 
             // Get distinct clusters (sets), convert them to lists, sort them
@@ -234,11 +324,11 @@ namespace SnapMeshPCG.Navigation
 
             // Log nav point clusters found
             log.AppendFormat(
-                "A total of {0} navigation clusters were found:\n",
+                "\tA total of {0} navigation clusters were found:\n",
                 _clusters.Count);
             for (int i = 0; i < _clusters.Count; i++)
             {
-                log.AppendFormat("\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
+                log.AppendFormat("\t\tCluster {0:d2} has {1} points ({2:p2} of total)\n",
                     i,
                     _clusters[i].Points.Count,
                     _clusters[i].Points.Count / (float)_navPoints.Count);
@@ -249,6 +339,14 @@ namespace SnapMeshPCG.Navigation
 
             // Sort nav point list by number of connections before returning
             _navPoints.Sort();
+
+            // Update properties with this scan
+            MeanValidConnections = (float)success / tries;
+            RelAreaLargestCluster = _clusters[0].Points.Count / (float)_navPoints.Count;
+            ValidationTimeMillis = (int)stopwatch.ElapsedMilliseconds;
+
+            // Notify listeners that navigation information is ready
+            OnNavInfoReady.Invoke(this);
         }
 
         /// <summary>
@@ -268,6 +366,9 @@ namespace SnapMeshPCG.Navigation
             // Initialize running volume sum
             float runningVol = 0;
 
+            // Reset volume of largest piece
+            _maxPieceVol = 0;
+
             foreach (MapPiece piece in mapPieces)
             {
                 // Get the bounding box for the current map piece
@@ -275,6 +376,11 @@ namespace SnapMeshPCG.Navigation
 
                 // Add the running volume
                 runningVol += bounds.size.magnitude;
+
+                // Does the current piece have a larger volume than the largest
+                // piece volume so far?
+                if (bounds.size.magnitude > _maxPieceVol)
+                    _maxPieceVol = bounds.size.magnitude;
 
                 // Keep bounds and running volume for the current map piece
                 pieceBounds.Add((runningVol, bounds));
@@ -372,9 +478,19 @@ namespace SnapMeshPCG.Navigation
         /// </summary>
         public void ClearScanner()
         {
+            // Get reference to navmesh surface and remove its data
+            NavMeshSurface navSurf = GetComponent<NavMeshSurface>();
+            if (navSurf != null)
+            {
+                navSurf.RemoveData();
+                navSurf.navMeshData = null;
+            }
+
             // Discard the previously found navigation points and clusters
             _navPoints = null;
             _clusters = null;
+            _navOriginsDebug = null;
+            _maxPieceVol = 0;
         }
 
         /// <summary>
@@ -383,7 +499,7 @@ namespace SnapMeshPCG.Navigation
         private void OnDrawGizmos()
         {
             // These define the size of the debugging gizmos
-            const float navSphereRadiusDiv = 600;
+            const float navSphereRadiusDiv = 130;
             const float originSphereRadiusDiv = navSphereRadiusDiv * 2;
 
             // Don't show anything if the generated map has been cleared
@@ -393,37 +509,47 @@ namespace SnapMeshPCG.Navigation
                 return;
             }
 
-            // Are we looping through the first (largest) cluster?
-            bool first = true;
-
-            // Loop through clusters
-            foreach (Cluster cluster in _clusters)
+            // Show nav points?
+            if (_showNavPoints)
             {
-                // Points in first (largest) cluster will be green, other
-                // points will have red gizmos
-                Gizmos.color = first ? Color.green : Color.red;
+                // Are we looping through the first (largest) cluster?
+                bool first = true;
 
-                // Loop through points in current cluster
-                foreach (NavPoint np in cluster.Points)
+                // Loop through clusters
+                foreach (Cluster cluster in _clusters)
                 {
-                    // Draw gizmo
-                    Gizmos.DrawSphere(np.Point, _mapVolume / navSphereRadiusDiv);
-                }
+                    // Points in first (largest) cluster will be green, other
+                    // points will have red gizmos
+                    Gizmos.color = first ? Color.green : Color.red;
 
-                // We're not in the first cluster anymore
-                first = false;
+                    // Loop through points in current cluster
+                    foreach (NavPoint np in cluster.Points)
+                    {
+                        // Draw gizmo
+                        Gizmos.DrawSphere(np.Point, _maxPieceVol / navSphereRadiusDiv);
+                    }
+
+                    // We're not in the first cluster anymore
+                    first = false;
+                }
             }
 
-            // Show debug visualization?
-            if (_debugOriginPoints)
+            // Show origin points?
+            if (_showOriginPoints)
             {
                 Gizmos.color = Color.blue;
                 for (int i = 0; i < _navOriginsDebug.Count; i++)
                 {
                     Gizmos.DrawSphere(
-                        _navOriginsDebug[i].origin, _mapVolume / originSphereRadiusDiv);
-                    Gizmos.DrawLine(
-                        _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
+                        _navOriginsDebug[i].origin, _maxPieceVol / originSphereRadiusDiv);
+
+                    // If we also show nav points, draw a line between each origin point
+                    // and its respective nav point
+                    if (_showNavPoints)
+                    {
+                        Gizmos.DrawLine(
+                            _navOriginsDebug[i].origin, _navOriginsDebug[i].nav);
+                    }
                 }
             }
         }

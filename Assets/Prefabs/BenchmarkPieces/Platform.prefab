@@ -199,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5976855989695609305}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.5005, y: 0.213, z: 0.305}
+  m_LocalPosition: {x: -0.5005, y: 0.179, z: 0.305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5976855989571285221}
@@ -218,12 +218,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 4
-  pins: 1
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 4
+  pins: 1
 --- !u!1 &5976855990536354074
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +248,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5976855990536354074}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.502, y: 0.213, z: -0.305}
+  m_LocalPosition: {x: -0.502, y: 0.179, z: -0.305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5976855989571285221}
@@ -268,12 +267,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 3
-  pins: 1
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 3
+  pins: 1
 --- !u!1 &5976855990683632111
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +297,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5976855990683632111}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.5028, y: 0.213, z: 0.015}
+  m_LocalPosition: {x: 0.5028, y: 0.179, z: 0.015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5976855989571285221}
@@ -318,9 +316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   match: {fileID: 0}
-  isUsed: 0
-  connColor: 0
-  pins: 4
   _pinSpacing: 0.5
   _gizmoTransparency: 1
   _gizmoLooks: 0
+  connColor: 0
+  pins: 4

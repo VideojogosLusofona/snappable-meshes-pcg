@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f884d6772329dc069dde3f424299638, type: 3}
   m_Name: ArenaSMConfig
   m_EditorClassIdentifier: 
-  _maxPieces: 12
+  _maxPieces: 13

@@ -195,9 +195,14 @@ namespace SnapMeshPCG
         /// </summary>
         public IReadOnlyList<MapPiece> PlacedPieces => _placedPieces;
 
+        /// <summary>
+        /// How long did the last generation process took, in milliseconds?
+        /// </summary>
+        public int GenTimeMillis { get; private set; }
+
         // /////// //
         // Methods //
-        // ////// //
+        // /////// //
 
         // Callback invoked when user changes selection method type in editor
         private void OnChangeSMType()
@@ -260,7 +265,7 @@ namespace SnapMeshPCG
             List<MapPiece> piecesWorkList;
 
             // Create a map generation log
-            StringBuilder log = new StringBuilder("=== Map generation log ===");
+            StringBuilder log = new StringBuilder();
 
             // Measure elapsed time for the generation process
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -272,7 +277,11 @@ namespace SnapMeshPCG
                 currentSeed = (int)System.DateTime.Now.Ticks;
 
             // Log seed used for generating this map
-            log.AppendFormat("\n\tGenerating with seed = {0}", currentSeed);
+            log.AppendFormat(
+                "---- Map Generation Log (seed = {0}) ----", currentSeed);
+
+            // Position where to place log summary, right after log header
+            int logSummaryLoc = log.Length;
 
             // Initialize random number generator
             Random.InitState(currentSeed);
@@ -309,6 +318,9 @@ namespace SnapMeshPCG
             // Rename piece so it's easier to determine that it's the
             // starter piece
             starterPieceGObj.name += " : Starter Piece";
+
+            // Set generation manager as parent of the starter piece
+            starterPieceGObj.transform.SetParent(transform);
 
             // Add starter piece script component to list of placed pieces
             _placedPieces.Add(starterPieceGObj.GetComponent<MapPiece>());
@@ -404,8 +416,8 @@ namespace SnapMeshPCG
                 if (logFailures.Length > 0)
                 {
                     log.AppendFormat(
-                            "\n\t\tNo valid connections with the following tentatives: {0}",
-                            logFailures);
+                        "\n\t\tNo valid connections with the following tentatives: {0}",
+                        logFailures);
                 }
 
                 // Add success log to main log
@@ -429,17 +441,10 @@ namespace SnapMeshPCG
             }
             while (guidePiece != null);
 
-            // Log number of pieces placed and elapsed time
-            log.AppendFormat("\n\tPlaced {0} pieces in {1} ms",
-                _placedPieces.Count, stopwatch.ElapsedMilliseconds);
-
-            // Show piece placing log
-            Debug.Log(log);
-
-            // If we checked for overlaps...
+            // Are we checking for overlaps?
             if (_checkOverlaps)
             {
-                // ...remove all colliders used for the generation process
+                // Remove all colliders used for the generation process
                 foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())
                 {
                     if (boxCollider == null) continue;
@@ -458,6 +463,20 @@ namespace SnapMeshPCG
                     }
                 }
             }
+
+            // Stop stopwatch
+            stopwatch.Stop();
+
+            // Log number of pieces placed and elapsed time
+            log.Insert(logSummaryLoc, string.Format(
+                "\n\tPlaced {0} pieces in {1} ms, as follows:",
+                _placedPieces.Count, stopwatch.ElapsedMilliseconds));
+
+            // Keep elapsed time in property
+            GenTimeMillis = (int) stopwatch.ElapsedMilliseconds;
+
+            // Show piece placing log
+            Debug.Log(log);
         }
 
         /// <summary>
@@ -520,6 +539,9 @@ namespace SnapMeshPCG
             {
                 DestroyImmediate(obj.gameObject);
             }
+
+            // Clear list of placed pieces
+            _placedPieces = null;
 
             // Raise clear map event
             OnGenerationClear.Invoke();

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2021 Snappable Meshes PCG contributors
  * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
@@ -15,27 +15,23 @@
  * limitations under the License.
  */
 
-using UnityEngine;
+using System.Collections.Generic;
 
-namespace SnapMeshPCG.SelectionMethods
+namespace SnapMeshPCG.Experiments
 {
     /// <summary>
-    /// Configures the star selection method.
+    /// Interface all experiments must implement.
     /// </summary>
-    public class StarSMConfig : AbstractSMConfig
+    public interface IExperiment
     {
-        // The base amount of pieces an arm of the star will have
-        [SerializeField]
-        private uint _armLength = 0;
-
-        // The maximum variation from _armLength in each arm
-        [SerializeField]
-        private uint _armLengthVar = 0;
+        /// <summary>
+        /// Generation parameter sets.
+        /// </summary>
+        IDictionary<string, IDictionary<string, object>> GenParamSet { get; }
 
         /// <summary>
-        /// Returns the configured star selection method.
+        /// Navigation parameter sets.
         /// </summary>
-        public override AbstractSM Method =>
-            new StarSM(_armLength, _armLengthVar);
+        IDictionary<string, IDictionary<string, object>> NavParamSet { get; }
     }
 }

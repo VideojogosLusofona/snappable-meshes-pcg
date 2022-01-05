@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2021 Snappable Meshes PCG contributors
  * (https://github.com/VideojogosLusofona/snappable-meshes-pcg)
  *
@@ -15,27 +15,25 @@
  * limitations under the License.
  */
 
-using UnityEngine;
+using System.Collections.Generic;
 
-namespace SnapMeshPCG.SelectionMethods
+namespace SnapMeshPCG.Navigation
 {
     /// <summary>
-    /// Configures the star selection method.
+    /// Provides a simplified view for an object providing navigation info.
     /// </summary>
-    public class StarSMConfig : AbstractSMConfig
+    public interface INavInfo
     {
-        // The base amount of pieces an arm of the star will have
-        [SerializeField]
-        private uint _armLength = 0;
-
-        // The maximum variation from _armLength in each arm
-        [SerializeField]
-        private uint _armLengthVar = 0;
+        /// <summary>
+        /// Read-only accessor to the list of navigation points, ordered by
+        /// number of connections (descending).
+        /// </summary>
+        IReadOnlyList<NavPoint> NavPoints { get; }
 
         /// <summary>
-        /// Returns the configured star selection method.
+        /// Read-only accessor to the list of nav point clusters, ordered by
+        /// cluster size (descending).
         /// </summary>
-        public override AbstractSM Method =>
-            new StarSM(_armLength, _armLengthVar);
+        IReadOnlyList<Cluster> Clusters { get; }
     }
 }
