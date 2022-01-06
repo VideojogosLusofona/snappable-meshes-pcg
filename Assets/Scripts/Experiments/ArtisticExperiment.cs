@@ -36,7 +36,7 @@ namespace SnapMeshPCG.Experiments
         public IDictionary<string, IDictionary<string, object>> GenParamSet =>
             new Dictionary<string, IDictionary<string, object>>()
             {
-                ["Arena"] = new Dictionary<string, object>()
+                ["Arena.18"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
                     ["_seed"] = -552867222,
@@ -52,7 +52,7 @@ namespace SnapMeshPCG.Experiments
                         ["_maxPieces"] = (uint)18
                     },
                 },
-                ["Branch"] = new Dictionary<string, object>()
+                ["Branch.3.9.12"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
                     ["_seed"] = 867031608,
@@ -71,7 +71,7 @@ namespace SnapMeshPCG.Experiments
                     },
                 },
 
-                ["Corridor"] = new Dictionary<string, object>()
+                ["Corridor.12"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
                     ["_seed"] = -1189877736,
@@ -88,7 +88,7 @@ namespace SnapMeshPCG.Experiments
                     },
                 },
 
-                ["Star"] = new Dictionary<string, object>()
+                ["Star.5.2"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
                     ["_seed"] = 209636004,
