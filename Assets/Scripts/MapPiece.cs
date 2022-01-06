@@ -199,8 +199,10 @@ namespace SnapMeshPCG
                     // Get box colliders in layer and loop through them
                     foreach (BoxCollider boxCollider in GetBoxColliders(other, collidersLayer))
                     {
+                        var bounds = boxCollider.bounds;
+
                         // Get the center and extents of the current box collider
-                        Vector3 center = boxCollider.center + boxCollider.transform.position;
+                        Vector3 center = boxCollider.transform.rotation * boxCollider.center + boxCollider.transform.position;
                         Vector3 extents = new Vector3(0.5f * boxCollider.size.x * boxCollider.transform.lossyScale.x,
                                                       0.5f * boxCollider.size.y * boxCollider.transform.lossyScale.y,
                                                       0.5f * boxCollider.size.z * boxCollider.transform.lossyScale.z);
@@ -209,6 +211,7 @@ namespace SnapMeshPCG
                         Collider[] hits = Physics.OverlapBox(
                             center, extents, boxCollider.transform.rotation, collidersLayer);
 
+                        //Collider[] hits = Physics.OverlapBox(bounds.center, bounds.extents, Quaternion.identity, collidersLayer);
                         // Loop through the colliders that overlap with the
                         // current box
                         foreach (Collider hit in hits)
