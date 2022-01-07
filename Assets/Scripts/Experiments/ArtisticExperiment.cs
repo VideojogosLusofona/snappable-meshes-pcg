@@ -39,7 +39,7 @@ namespace SnapMeshPCG.Experiments
                 ["Arena.18"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
-                    ["_seed"] = -552867222,
+                    ["_seed"] = 1740802932,
                     ["_pieceDistance"] = 0.0001f,
                     ["_maxFailures"] = (uint)10,
                     ["_checkOverlaps"] = true,
@@ -52,10 +52,10 @@ namespace SnapMeshPCG.Experiments
                         ["_maxPieces"] = (uint)18
                     },
                 },
-                ["Branch.3.9.12"] = new Dictionary<string, object>()
+                ["Branch.5.12.2"] = new Dictionary<string, object>()
                 {
                     ["_useSeed"] = true,
-                    ["_seed"] = 867031608,
+                    ["_seed"] = -35343304,
                     ["_pieceDistance"] = 0.0001f,
                     ["_maxFailures"] = (uint)10,
                     ["_checkOverlaps"] = true,
@@ -65,8 +65,8 @@ namespace SnapMeshPCG.Experiments
                     ["_selectionMethod"] = typeof(BranchSMConfig),
                     ["_selectionParams"] = new Dictionary<string, object>()
                     {
-                        ["_branchCount"] = (uint)3,
-                        ["_branchLength"] = (uint)9,
+                        ["_branchCount"] = (uint)5,
+                        ["_branchLength"] = (uint)12,
                         ["_branchLengthVar"] = (uint)2
                     },
                 },
