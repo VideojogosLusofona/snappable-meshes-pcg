@@ -21,8 +21,9 @@ in the Unity game engine. It is currently implemented using Unity 2020.3 LTS.
 
 ## More information
 
-e Silva, R. C., Fachada, de Andrade, D., N. & N. Códices (2021). Procedural
-Generation of 3D Maps with Snappable Meshes. arXiv preprint, <https://arxiv.org/abs/2108.00056>
+e Silva, R. C., Fachada, N., de Andrade, D., & Códices, N. (2022). Procedural
+Generation of 3D Maps with Snappable Meshes. IEEE Access, 10.
+<https://doi.org/10.1109/ACCESS.2022.3168832>
 
 ## Third-party plugins
 
