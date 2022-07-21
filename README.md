@@ -19,11 +19,19 @@ in the Unity game engine. It is currently implemented using Unity 2020.3 LTS.
 ![02](https://user-images.githubusercontent.com/3018963/127988173-6c761e64-6e91-464d-b5e0-6449a7ac3978.jpg)
 ![03](https://user-images.githubusercontent.com/3018963/147121060-0631634a-be54-46e6-8e06-bf867b03a845.png)
 
-## More information
+## Published research
 
-e Silva, R. C., Fachada, N., de Andrade, D., & Códices, N. (2022). Procedural
-Generation of 3D Maps with Snappable Meshes. IEEE Access, 10.
-<https://doi.org/10.1109/ACCESS.2022.3168832>
+* Fachada, N., e Silva, R.C., de Andrade, D. & Códices, N. (2022). Unity
+  Snappable Meshes. Software Impacts, 13, 100363.
+  <https://doi.org/10.1016/j.simpa.2022.100363>
+* e Silva, R. C., Fachada, N., de Andrade, D., & Códices, N. (2022). Procedural
+  Generation of 3D Maps with Snappable Meshes. IEEE Access, 10.
+  <https://doi.org/10.1109/ACCESS.2022.3168832>
+* e Silva, R. C., Fachada, N. Códices, N. & de Andrade, D. (2020). Procedural
+  Game Level Generation by Joining Geometry with Hand-Placed Connectors. In
+  Proceedings of Videojogos 2020 - 12th International Videogame Sciences and
+  Arts Conference, VJ '20 (pp. 80-93), Mirandela, Portugal. SPCV.
+  <http://videojogos2020.ipb.pt/docs/ProceedingsVJ2020.pdf#page=80>
 
 ## Third-party plugins
 
