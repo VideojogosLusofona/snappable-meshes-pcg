@@ -20,6 +20,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 namespace SnapMeshPCG
 {
@@ -114,12 +115,20 @@ namespace SnapMeshPCG
         /// <param name="colorMatrix">
         /// Valid color combinations for matching connectors.
         /// </param>
+        /// <param name="allPieces">
+        /// All pieces already generated, to be able to check overlaps.
+        /// </param>
+        /// <param name="stepId">
+        /// A step ID, used for debugging purposes
+        /// </param>
         /// <returns>True if snap was successful, false otherwise.</returns>
         public bool TrySnapWith(
             SnapRules rules, MapPiece other,
             bool checkOverlaps, LayerMask collidersLayer,
             float pieceDistance = 0.00f, uint pinTolerance = 0,
-            bool[,] colorMatrix = null)
+            bool[,] colorMatrix = null,
+            List<MapPiece> allPieces = null,
+            int stepId = -1)
         {
             // List of valid connector combinations
             List<(Connector curr, Connector other)> validCombos =
@@ -174,6 +183,11 @@ namespace SnapMeshPCG
                 (Connector curr, Connector other) chosenCombo =
                     validCombos[chosenIndex];
 
+                // Remove this combo from the pool (so it can't be selected again:
+                // if it has failed before, it will fail again - we risk an 
+                // infinite loop otherwise
+                validCombos.Remove(chosenCombo);
+
                 // Get current PRS components from the other piece, since it
                 // may be necessary to undo the transformation if we're checking
                 // for overlaps
@@ -194,10 +208,97 @@ namespace SnapMeshPCG
                 if (checkOverlaps)
                 {
                     // Assume there are no overlaps
-                    bool overlaps = false;
+                    bool                overlaps = false;
+
+                    // Get colliders (voxel and box colliders) of new piece
+                    VoxelCollider       voxelCollider = GetVoxelCollider(other, collidersLayer);
+                    List<BoxCollider>   boxColliders = GetBoxColliders(other, collidersLayer);
+                    // Create OBBs from BoxColliders
+                    List<OBB>           OBBs = new List<OBB>();
+                    foreach (var box in boxColliders)
+                    {
+                        OBB obb = new OBB(box.center, box.size);
+                        obb.Transform(other.transform.localToWorldMatrix);
+                        OBBs.Add(obb);
+                    }
+
+                    // For all pieces
+                    foreach (var piece in allPieces)
+                    {
+                        if (voxelCollider)
+                        {
+                            // If the current piece has a voxel collider
+                            // Get a voxel collider on the other pieces
+                            VoxelCollider otherVoxelCollider = GetVoxelCollider(piece, collidersLayer);
+                            if (otherVoxelCollider)
+                            {
+                                if (voxelCollider.Intersect(otherVoxelCollider, 0.95f))
+                                {
+#if DEBUG_OVERLAPS
+                                        Debug.Log($"Can't connect {name} with {other.name}");
+                                        Debug.Log($"Connector {chosenCombo.chosenMine.name} / {chosenCombo.chosenOther.name}");
+                                        Debug.Log($"Overlap detected with {piece.name}");
+
+                                        // Create a copy for later debug
+                                        MapPiece newObject = Instantiate(other);
+                                        newObject.name = $"OverlapError {interError++}";
+                                        newObject.transform.position += Vector3.up * 20;
+                                        newObject.transform.SetParent(null);
+                                        newObject.gameObject.SetActive(false);
+                                        Debug.Log($"New object = {newObject.name}");
+#endif
+
+                                    overlaps = true;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // If the current piece only has box colliders
+                            // Fetch all box colliders in the other pieces
+                            List<BoxCollider>    existingBoxColliders = GetBoxColliders(piece, collidersLayer);
+
+                            // Check all the colliders against the other colliders
+                            foreach (var obb in OBBs)
+                            {
+                                DebugGizmo.AddWireOBB($"Type=OBBTest;Subtype=Tentative;step={stepId}", obb, Color.cyan);
+                                foreach (var otherBoxCollider in existingBoxColliders)
+                                {
+                                    OBB otherObb = new OBB(otherBoxCollider.center, otherBoxCollider.size);
+                                    otherObb.Transform(otherBoxCollider.transform.localToWorldMatrix);
+
+                                    DebugGizmo.AddWireOBB($"Type=OBBTest;Subtype=Existing;step={stepId}", otherObb, Color.magenta);
+
+                                    if (obb.Intersect(otherObb))
+                                    {
+#if DEBUG_OVERLAPS
+                                        Debug.Log($"Can't connect {name} with {other.name}");
+                                        Debug.Log($"Connector {chosenCombo.chosenMine.name} / {chosenCombo.chosenOther.name}");
+                                        Debug.Log($"Overlap detected with {piece.name}");
+
+                                        // Create a copy for later debug
+                                        MapPiece newObject = Instantiate(other);
+                                        newObject.name = $"OverlapError {interError++}";
+                                        newObject.transform.position += Vector3.up * 20;
+                                        newObject.transform.SetParent(null);
+                                        newObject.gameObject.SetActive(false);
+                                        Debug.Log($"New object = {newObject.name}");
+#endif
+
+                                        overlaps = true;
+                                        break;
+                                    }
+                                }
+
+                                if (overlaps) break;
+                            }
+                        }
+                        if (overlaps) break;
+                    }
 
                     // Get box colliders in layer and loop through them
-                    foreach (BoxCollider boxCollider in GetBoxColliders(other, collidersLayer))
+/*                    foreach (BoxCollider boxCollider in GetBoxColliders(other, collidersLayer))
                     {
                         // Get the center and extents of the current box collider
                         Vector3 center = boxCollider.transform.rotation * boxCollider.center + boxCollider.transform.position;
@@ -245,7 +346,7 @@ namespace SnapMeshPCG
 
                         if (overlaps) break; // hit found, not need to check more box colliders
 
-                    } // for each box collider
+                    } // for each box collider*/
 
                     if (overlaps)
                     {
@@ -331,26 +432,60 @@ namespace SnapMeshPCG
             if (mc == null && rb != null)
                 mc = rb.gameObject.AddComponent<MeshCollider>();
 
-            rb.isKinematic = true;
+            if (rb != null)
+                rb.isKinematic = true;
         }
 
         /// <summary>
-        /// Retrieves the box colliders of the appropriate layer for the given piece
+        /// Retrieves the box colliders of the appropriate layer for the given piece. It will only go into 
+        /// the immediate children of the piece.
         /// </summary>
         /// <param name="go">The map piece.</param>
         /// <param name="mask">The layer containing the colliders.</param>
         /// <returns>
         /// The box colliders of the appropriate layer for the given piece.
         /// </returns>
-        private static IEnumerable<BoxCollider> GetBoxColliders(MapPiece go, LayerMask mask)
+        private static List<BoxCollider> GetBoxColliders(MapPiece go, LayerMask mask)
         {
-            foreach (BoxCollider collider in go.GetComponentsInChildren<BoxCollider>())
+            List <BoxCollider> ret = new List<BoxCollider>();
+
+            foreach (Transform child in go.transform)
             {
-                if ((mask.value & (1 << collider.gameObject.layer)) != 0)
+                if ((mask.value & (1 << child.gameObject.layer)) != 0)
                 {
-                    yield return collider;
+                    BoxCollider[] colliders = child.GetComponents<BoxCollider>();
+                    foreach (var collider in colliders)
+                    {
+                        ret.Add(collider);
+                    }
                 }
             }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Retrieves the first voxel collider of the appropriate layer for the given piece. It will only go into 
+        /// the immediate children of the piece.
+        /// </summary>
+        /// <param name="go">The map piece.</param>
+        /// <param name="mask">The layer containing the colliders.</param>
+        /// <returns>
+        /// The voxel collider of the appropriate layer for the given piece.
+        /// </returns>
+        private static VoxelCollider GetVoxelCollider(MapPiece go, LayerMask mask)
+        {
+            foreach (Transform child in go.transform)
+            {
+                VoxelCollider collider = child.GetComponent<VoxelCollider>();
+                if (collider == null) continue;
+                if ((mask.value & (1 << child.gameObject.layer)) != 0)
+                {
+                    return collider;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

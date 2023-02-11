@@ -167,6 +167,11 @@ namespace SnapMeshPCG
         [System.NonSerialized]
         private string[] _selMethods;
 
+        // Step by step generation
+        private int     genStep = -1;              // Current step of generation, -1 not started, 0 is initialized, rest is steps in generation
+        private bool    isComplete = false;     // If generation is complete
+        private bool    isStepActive = false;   // If function should return when a step is complete
+
         // ////////// //
         // Properties //
         // ////////// //
@@ -233,6 +238,33 @@ namespace SnapMeshPCG
             _selectionParams = AbstractSMConfig.GetInstance(gmConfig);
         }
 
+        struct CreateMapData
+        {
+            // Stater piece prototype
+            public MapPiece         starterPiecePrototype;
+            // Starter piece game object
+            public GameObject       starterPieceGObj;
+            // Current guide piece
+            public MapPiece         guidePiece;
+            // Tentative piece prototype
+            public MapPiece         tentPiecePrototype;
+            // Get chosen selection method (strategy pattern)
+            public AbstractSM       selMethod;
+            // Seed for random number generator
+            public int              currentSeed;
+            // List of map pieces which will be manipulated by the generator,
+            // initially copied from _piecesList
+            public List<MapPiece>   piecesWorkList;
+            // Create a map generation log
+            public StringBuilder    log;
+            // Position where to place log summary, right after log header
+            public int              logSummaryLoc;
+            // Measure elapsed time for the generation process
+            public Stopwatch        stopwatch;
+        }
+
+        private CreateMapData createMapData;
+
         /// <summary>
         /// Create a new map.
         /// </summary>
@@ -242,97 +274,104 @@ namespace SnapMeshPCG
         /// </remarks>
         private void CreateMap()
         {
-            // Stater piece prototype
-            MapPiece starterPiecePrototype;
-
-            // Starter piece game object
-            GameObject starterPieceGObj;
-
-            // Current guide piece
-            MapPiece guidePiece;
-
-            // Tentative piece prototype
-            MapPiece tentPiecePrototype;
-
-            // Get chosen selection method (strategy pattern)
-            AbstractSM selMethod = _selectionParams.Method;
-
-            // Seed for random number generator
-            int currentSeed;
-
-            // List of map pieces which will be manipulated by the generator,
-            // initially copied from _piecesList
-            List<MapPiece> piecesWorkList;
-
-            // Create a map generation log
-            StringBuilder log = new StringBuilder();
-
-            // Measure elapsed time for the generation process
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            // Use predefined seed if set or one based on current time
-            if (_useSeed)
-                currentSeed = _seed;
-            else
-                currentSeed = (int)System.DateTime.Now.Ticks;
-
-            // Log seed used for generating this map
-            log.AppendFormat(
-                "---- Map Generation Log (seed = {0}) ----", currentSeed);
-
-            // Position where to place log summary, right after log header
-            int logSummaryLoc = log.Length;
-
-            // Initialize random number generator
-            Random.InitState(currentSeed);
-
-            // Work on a copy and not in the original field, since we will sort
-            // this list and we don't want this to be reflected in the editor
-            piecesWorkList = new List<MapPiece>(_piecesList);
-
-            // Sort list of pieces to use according to the pieces natural order
-            // (descending number of connectors)
-            piecesWorkList.Sort();
-
-            // Initialize list of pieces already placed in the map
-            _placedPieces = new List<MapPiece>();
-
-            // Get first piece to place in the map
-            if (_useStarter)
+            if (genStep == -1)
             {
-                // Get first piece from list of starting pieces
-                starterPiecePrototype = selMethod.SelectStartPiece(
-                    _startingPieceList, (int)_starterConTol);
+                createMapData = new CreateMapData();
+                // Get chosen selection method (strategy pattern)
+                createMapData.selMethod = _selectionParams.Method;
+                createMapData.log = new StringBuilder();
+                createMapData.stopwatch = Stopwatch.StartNew();
+                // Use predefined seed if set or one based on current time
+                if (_useSeed)
+                    createMapData.currentSeed = _seed;
+                else
+                    createMapData.currentSeed = (int)System.DateTime.Now.Ticks;
+
+                // Log seed used for generating this map
+                createMapData.log.AppendFormat(
+                    "---- Map Generation Log (seed = {0}) ----", createMapData.currentSeed);
+
+                // Position where to place log summary, right after log header
+                createMapData.logSummaryLoc = createMapData.log.Length;
+
+                // Initialize random number generator
+                Random.InitState(createMapData.currentSeed);
+
+                // Work on a copy and not in the original field, since we will sort
+                // this list and we don't want this to be reflected in the editor
+                createMapData.piecesWorkList = new List<MapPiece>(_piecesList);
+
+                // Sort list of pieces to use according to the pieces natural order
+                // (descending number of connectors)
+                createMapData.piecesWorkList.Sort();
+
+                // Initialize list of pieces already placed in the map
+                _placedPieces = new List<MapPiece>();
+
+                // Get first piece to place in the map
+                if (_useStarter)
+                {
+                    // Get first piece from list of starting pieces
+                    createMapData.starterPiecePrototype = createMapData.selMethod.SelectStartPiece(
+                        _startingPieceList, (int)_starterConTol);
+                }
+                else
+                {
+                    // Get first piece from list of all pieces
+                    createMapData.starterPiecePrototype = createMapData.selMethod.SelectStartPiece(
+                        createMapData.piecesWorkList, (int)_starterConTol);
+                }
+
+                // Get the starter piece by cloning the prototype piece selected for
+                // this purpose
+                createMapData.starterPieceGObj = createMapData.starterPiecePrototype.ClonePiece();
+
+                // Rename piece so it's easier to determine that it's the
+                // starter piece
+                createMapData.starterPieceGObj.name += " : Starter Piece";
+
+                // Set generation manager as parent of the starter piece
+                createMapData.starterPieceGObj.transform.SetParent(transform);
+
+                // Add starter piece script component to list of placed pieces
+                _placedPieces.Add(createMapData.starterPieceGObj.GetComponent<MapPiece>());
+
+                // Initially, the guide piece is the starting piece
+                createMapData.guidePiece = _placedPieces[0];
+
+                // Log starting piece
+                createMapData.log.AppendFormat(
+                    "\n\tStarting piece is '{0}' with {1} free connectors",
+                    createMapData.starterPieceGObj.name,
+                    createMapData.starterPieceGObj.GetComponent<MapPiece>().FreeConnectorCount);
+
+                // Get the initial piece, which is also the parent piece of all
+                // others
+                GameObject initialPiece = _placedPieces[0].gameObject;
+                // Set the position/rotation of the initial piece as the same as GenerationManager
+                // Don't touch scale, because it might influence the size of pieces, etc
+                initialPiece.transform.position = transform.position;
+                initialPiece.transform.rotation = transform.rotation;
+
+                // Add a component to identify the initial piece so we can delete
+                // it when a clear map operation is requested
+                initialPiece?.AddComponent<GeneratedObject>();
+
+                genStep = 0;
+                if (isStepActive) return;
             }
-            else
+
+            if (isStepActive)
             {
-                // Get first piece from list of all pieces
-                starterPiecePrototype = selMethod.SelectStartPiece(
-                    piecesWorkList, (int)_starterConTol);
+                if (createMapData.guidePiece)
+                {
+                    Debug.Log($"Current guide piece = {createMapData.guidePiece.name}");
+                }
+                else
+                {
+                    Debug.LogWarning("No guide piece!");
+                }
             }
-
-            // Get the starter piece by cloning the prototype piece selected for
-            // this purpose
-            starterPieceGObj = starterPiecePrototype.ClonePiece();
-
-            // Rename piece so it's easier to determine that it's the
-            // starter piece
-            starterPieceGObj.name += " : Starter Piece";
-
-            // Set generation manager as parent of the starter piece
-            starterPieceGObj.transform.SetParent(transform);
-
-            // Add starter piece script component to list of placed pieces
-            _placedPieces.Add(starterPieceGObj.GetComponent<MapPiece>());
-
-            // Initially, the guide piece is the starting piece
-            guidePiece = _placedPieces[0];
-
-            // Log starting piece
-            log.AppendFormat(
-                "\n\tStarting piece is '{0}' with {1} free connectors",
-                starterPieceGObj.name,
-                starterPieceGObj.GetComponent<MapPiece>().FreeConnectorCount);
 
             // Enter main generation loop
             do
@@ -341,7 +380,7 @@ namespace SnapMeshPCG
                 int failCount = 0;
 
                 // Result of trying two snap two pieces together
-                bool snapResult;
+                bool snapResult = false;
 
                 // Log for current guide piece
                 StringBuilder logFailures = new StringBuilder();
@@ -352,62 +391,86 @@ namespace SnapMeshPCG
                 // Tentative piece selection and placement loop
                 do
                 {
-                    // Randomly get a tentative piece prototype
-                    int rng = Random.Range(0, piecesWorkList.Count);
-                    tentPiecePrototype = piecesWorkList[rng];
+                    var     potentialPieces = new List<MapPiece>(createMapData.piecesWorkList);
 
-                    // Get a tentative piece by cloning the tentative piece prototype
-                    GameObject tentPieceGObj =
-                        tentPiecePrototype.ClonePiece();
-
-                    // Get the script associated with the tentative piece
-                    MapPiece tentPiece = tentPieceGObj.GetComponent<MapPiece>();
-
-                    // Try and snap the tentative piece with the current guide piece
-                    snapResult = guidePiece.TrySnapWith(
-                        _matchingRules,
-                        tentPiece,
-                        _checkOverlaps,
-                        _collidersLayer,
-                        _pieceDistance,
-                        _pinCountTolerance,
-                        _colorMatrix.GetCells());
-
-                    // Was the snap successful?
-                    if (snapResult)
+                    while (potentialPieces.Count > 0)
                     {
-                        tentPieceGObj.name += $" - {_placedPieces.Count}";
-                        tentPieceGObj.transform.SetParent(guidePiece.transform);
-                        _placedPieces.Add(tentPiece);
-                        OnConnectionMade.Invoke(tentPiece);
+                        // Randomly get a tentative piece prototype
+                        int rng = Random.Range(0, potentialPieces.Count);
+                        createMapData.tentPiecePrototype = potentialPieces[rng];
 
-                        logSuccess = string.Format(
-                            "\n\t\tSnap successful with '{0}' (piece no. {1} in the map)",
-                            tentPieceGObj.name,
-                            _placedPieces.Count);
-                    }
-                    else
-                    {
-                        // No valid connections
+                        // Remove this piece from the list, we won't need it again - if it 
+                        // fails once, it will fail again
+                        potentialPieces.Remove(createMapData.tentPiecePrototype);
 
-                        // Log occurrence
-                        if (logFailures.Length > 0) logFailures.Append(", ");
-                        logFailures.AppendFormat(
-                            "'{0}'", tentPieceGObj.name);
+                        // Get a tentative piece by cloning the tentative piece prototype
+                        GameObject tentPieceGObj =
+                            createMapData.tentPiecePrototype.ClonePiece();
 
-                        // Destroy tentative piece game object
-                        DestroyImmediate(tentPieceGObj);
+                        // Get the script associated with the tentative piece
+                        MapPiece tentPiece = tentPieceGObj.GetComponent<MapPiece>();
 
-                        // Increase count of failed attempts
-                        failCount++;
+                        // Try and snap the tentative piece with the current guide piece
+                        snapResult = createMapData.guidePiece.TrySnapWith(
+                            _matchingRules,
+                            tentPiece,
+                            _checkOverlaps,
+                            _collidersLayer,
+                            _pieceDistance,
+                            _pinCountTolerance,
+                            _colorMatrix.GetCells(),
+                            _placedPieces,
+                            genStep);
 
-                        // If max failures is reached, log occurrence
-                        if (failCount >= _maxFailures)
+                        // Was the snap successful?
+                        if (snapResult)
                         {
-                            logFailures.AppendFormat(
-                                " and gave up after {0} attempts",
-                                failCount);
+                            tentPieceGObj.name += $" - {_placedPieces.Count}";
+                            tentPieceGObj.transform.SetParent(createMapData.guidePiece.transform);
+                            _placedPieces.Add(tentPiece);
+                            OnConnectionMade.Invoke(tentPiece);
+
+                            logSuccess = string.Format(
+                                "\n\t\tSnap successful with '{0}' (piece no. {1} in the map)",
+                                tentPieceGObj.name,
+                                _placedPieces.Count);
+
+                            // Break out of the inner loop, since we don't need to test another
+                            // piece
+                            break;
                         }
+                        else
+                        {
+                            // No valid connections
+
+                            // Log occurrence
+                            if (logFailures.Length > 0) logFailures.Append(", ");
+                            logFailures.AppendFormat(
+                                "'{0}'", tentPieceGObj.name);
+
+                            // Destroy tentative piece game object
+                            DestroyImmediate(tentPieceGObj);
+
+                            // Increase count of failed attempts
+                            failCount++;
+
+                            // If max failures is reached, log occurrence
+                            if (failCount >= _maxFailures)
+                            {
+                                logFailures.AppendFormat(
+                                    " and gave up after {0} attempts",
+                                    failCount);
+                                
+                                // Break out of the inner loop, since max failures has 
+                                // already been exceeded
+                                break;
+                            }
+                        }
+                    }
+                    if (failCount >= _maxFailures)
+                    {
+                        // Break again, since max failures has been exceeded
+                        break;
                     }
                 }
                 while (!snapResult && failCount < _maxFailures);
@@ -415,31 +478,35 @@ namespace SnapMeshPCG
                 // Add failures log to main log
                 if (logFailures.Length > 0)
                 {
-                    log.AppendFormat(
+                    createMapData.log.AppendFormat(
                         "\n\t\tNo valid connections with the following tentatives: {0}",
                         logFailures);
                 }
 
                 // Add success log to main log
-                log.Append(logSuccess);
+                createMapData.log.Append(logSuccess);
 
                 // Select next guide piece
-                guidePiece = selMethod.SelectGuidePiece(_placedPieces);
+                createMapData.guidePiece = createMapData.selMethod.SelectGuidePiece(_placedPieces);
+
+                genStep++;
 
                 // Log new guide piece
-                if (guidePiece is null)
+                if (createMapData.guidePiece is null)
                 {
-                    log.Append("\n\tGuide piece is null, generation over");
+                    createMapData.log.Append("\n\tGuide piece is null, generation over");
                 }
                 else
                 {
-                    log.AppendFormat(
+                    createMapData.log.AppendFormat(
                         "\n\tGuide piece is '{0}' with {1} free connectors",
-                        guidePiece.name,
-                        guidePiece.FreeConnectorCount);
+                        createMapData.guidePiece.name,
+                        createMapData.guidePiece.FreeConnectorCount);
+
+                    if (isStepActive) return;
                 }
             }
-            while (guidePiece != null);
+            while (createMapData.guidePiece != null);
 
             // Are we checking for overlaps?
             if (_checkOverlaps)
@@ -462,21 +529,41 @@ namespace SnapMeshPCG
                         }
                     }
                 }
+                foreach (VoxelCollider voxelCollider in FindObjectsOfType<VoxelCollider>())
+                {
+                    if (voxelCollider == null) continue;
+
+                    if (((1 << voxelCollider.gameObject.layer) & (_collidersLayer.value)) != 0)
+                    {
+                        GameObject go = voxelCollider.gameObject;
+
+                        DestroyImmediate(voxelCollider);
+
+                        if (go.GetComponents<Component>().Length == 1)
+                        {
+                            // Object was just a container for the voxel colliders, delete it
+                            DestroyImmediate(go);
+                        }
+                    }
+                }
             }
 
             // Stop stopwatch
-            stopwatch.Stop();
-
-            // Log number of pieces placed and elapsed time
-            log.Insert(logSummaryLoc, string.Format(
-                "\n\tPlaced {0} pieces in {1} ms, as follows:",
-                _placedPieces.Count, stopwatch.ElapsedMilliseconds));
+            createMapData.stopwatch.Stop();
 
             // Keep elapsed time in property
-            GenTimeMillis = (int) stopwatch.ElapsedMilliseconds;
+            GenTimeMillis = (int)createMapData.stopwatch.ElapsedMilliseconds;
+
+            // Log number of pieces placed and elapsed time
+            createMapData.log.Insert(createMapData.logSummaryLoc, string.Format(
+                "\n\tPlaced {0} pieces in {1} ms, as follows:",
+                _placedPieces.Count, GenTimeMillis));
+
 
             // Show piece placing log
-            Debug.Log(log);
+            Debug.Log(createMapData.log);
+
+            isComplete = true;
         }
 
         /// <summary>
@@ -489,6 +576,9 @@ namespace SnapMeshPCG
             // Clear any previously generated map
             ClearMap();
 
+            isStepActive = false;
+
+
             try
             {
                 // Invoke generation starting events
@@ -496,17 +586,6 @@ namespace SnapMeshPCG
 
                 // Generate a new map
                 CreateMap();
-
-                // Get the initial piece, which is also the parent piece of all
-                // others
-                GameObject initialPiece = _placedPieces[0].gameObject;
-
-                // Add a component to identify the initial piece so we can delete
-                // it when a clear map operation is requested
-                initialPiece?.AddComponent<GeneratedObject>();
-
-                // Notify listeners that map generations is finished
-                OnGenerationFinish.Invoke(PlacedPieces);
             }
             catch (System.Exception ex)
             {
@@ -527,6 +606,49 @@ namespace SnapMeshPCG
             }
         }
 
+        [Button("Start Generation")]
+        private void StartGeneration()
+        {
+            ClearMap();
+
+            Debug.Log($"Starting generation...");
+
+            genStep = -1;
+            isComplete = false;
+            isStepActive = true;
+
+            OnGenerationBegin.Invoke();
+
+            CreateMap();
+        }
+
+        [Button("Generate Next Step")]
+        private void NextStep()
+        {
+            if ((!isStepActive) || (genStep < 0))
+            {
+                Debug.LogError($"Need to start the process with the Start Generation button!");
+                return;
+            }
+            if (isComplete)
+            {
+                Debug.LogWarning($"Process was already complete (in {genStep} steps), restart it with Start Generation button!");
+                return;
+            }
+
+            Debug.Log($"Running step {genStep}");
+
+            CreateMap();
+
+            if (isComplete)
+            {
+                // Notify listeners that map generations is finished
+                OnGenerationFinish.Invoke(PlacedPieces);
+
+                Debug.Log($"Process complete in {genStep} steps!");
+            }
+        }
+
         /// <summary>
         /// Clears a map generated in editor mode.
         /// </summary>
@@ -542,6 +664,10 @@ namespace SnapMeshPCG
 
             // Clear list of placed pieces
             _placedPieces = null;
+
+            // Reset steps
+            genStep = -1;
+            isComplete = false;
 
             // Raise clear map event
             OnGenerationClear.Invoke();

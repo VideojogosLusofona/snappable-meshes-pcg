@@ -84,7 +84,11 @@ namespace SnapMeshPCG
         /// <summary>
         /// Number of pins in this connector.
         /// </summary>
-        public int Pins => pins;
+        public int Pins
+        {
+            set { pins = value; }
+            get { return pins; }
+        }
 
         /// <summary>
         /// The color of this connector.
