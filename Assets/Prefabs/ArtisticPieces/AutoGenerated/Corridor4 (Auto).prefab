@@ -1,0 +1,5107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &114280009050927373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1881951503684716611}
+  - component: {fileID: 486968223387804376}
+  - component: {fileID: 7657691078448793085}
+  m_Layer: 0
+  m_Name: Corridor4 (Auto)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1881951503684716611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114280009050927373}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.06, y: 0, z: 18.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3501082389335796644}
+  - {fileID: 4838530356185605764}
+  - {fileID: 6872668789353464478}
+  - {fileID: 7820870228805785044}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486968223387804376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114280009050927373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577b0b5e3d196aa49944d107d4bbcc88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7657691078448793085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114280009050927373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985a17525a9743d4895ee0d4be265955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 85c7e0f94a92e474c966f8ba75288686, type: 2}
+  connectorEdges:
+  - p0: {x: -1.31, y: 0.39999998, z: 6.249997}
+    p1: {x: 1.0900002, y: 0.39999998, z: 6.2500014}
+    normal: {x: 0, y: 1, z: -0}
+    perp: {x: -0.0000017881392, y: 0, z: 1}
+  - p0: {x: 1.2900004, y: 0.39999998, z: -6.249997}
+    p1: {x: -1.1099997, y: 0.39999998, z: -6.2500014}
+    normal: {x: 0, y: 1, z: 0}
+    perp: {x: 0.0000017881392, y: 0, z: -1}
+--- !u!1 &1997777219383517456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7820870228805785044}
+  - component: {fileID: 1852602377603847755}
+  m_Layer: 30
+  m_Name: SnappableColliders
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7820870228805785044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997777219383517456}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1881951503684716611}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1852602377603847755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997777219383517456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbbec62263f584741b5aeb75abf5be97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _voxelTree:
+    maxVoxelsPerLeaf: 8
+    isOccupancyMap: 1
+    voxelSize: {x: 0.24341002, y: 0.20199998, z: 0.24278858}
+    baseOffset: {x: -2.4341, y: -0.009999931, z: -6.3125033}
+    nodes:
+    - id: 0
+      parentId: -1
+      isFull: 0
+      bounds:
+        m_Center: {x: 0.00000023841858, y: 0.9999999, z: 0}
+        m_Extent: {x: 2.4341002, y: 1.0099999, z: 6.3125033}
+      voxelCount: {x: 20, y: 10, z: 52}
+      voxelOffset: {x: 0, y: 0, z: 0}
+      voxels: 
+      childrenId: 01000000480000007c000000c8000000ef000000360100006a010000b9010000
+    - id: 1
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.2170498, y: 0.495, z: -3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.50499994, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 0, y: 0, z: 0}
+      voxels: 
+      childrenId: 020000000f00000010000000290000002e0000002f0000003000000043000000
+    - id: 2
+      parentId: 1
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.19200005, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 0, z: 0}
+      voxels: 
+      childrenId: 0300000004000000050000000a0000000b0000000c0000000d0000000e000000
+    - id: 3
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.09100006, z: -5.584138}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 4
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.09100006, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 5
+      parentId: 2
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 0.29300004, z: -5.584138}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 1, z: 0}
+      voxels: 
+      childrenId: 06000000070000000800000009000000
+    - id: 6
+      parentId: 5
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.29300004, z: -5.9483204}
+        m_Extent: {x: 0.121705055, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 1, z: 0}
+      voxels: 000101
+      childrenId: 
+    - id: 7
+      parentId: 5
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.29300004, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 1, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 8
+      parentId: 5
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.29300004, z: -5.2199545}
+        m_Extent: {x: 0.121705055, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 1, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 9
+      parentId: 5
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.29300004, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 1, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 10
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.29300004, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 1, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 11
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.09100006, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 0, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 12
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.09100006, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 0, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 13
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.29300004, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 1, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 14
+      parentId: 2
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.29300004, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 1, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 15
+      parentId: 1
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.19200005, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 5, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 16
+      parentId: 1
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 2, z: 0}
+      voxels: 
+      childrenId: 1100000012000000130000001c00000021000000220000002300000024000000
+    - id: 17
+      parentId: 16
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 18
+      parentId: 16
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 19
+      parentId: 16
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: -5.584138}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 3, z: 0}
+      voxels: 
+      childrenId: 1400000015000000160000001700000018000000190000001a0000001b000000
+    - id: 20
+      parentId: 19
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.697, z: -5.9483204}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 3, z: 0}
+      voxels: 000101
+      childrenId: 
+    - id: 21
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.697, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 3, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 22
+      parentId: 19
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.8989999, z: -5.9483204}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 4, z: 0}
+      voxels: 000101
+      childrenId: 
+    - id: 23
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.8989999, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 4, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 24
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.697, z: -5.2199545}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 3, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 25
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.697, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 3, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 26
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.8989999, z: -5.2199545}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 4, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 27
+      parentId: 19
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.8989999, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 4, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 28
+      parentId: 16
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 3, z: 0}
+      voxels: 
+      childrenId: 1d0000001e0000001f00000020000000
+    - id: 29
+      parentId: 28
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 30
+      parentId: 28
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 31
+      parentId: 28
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 32
+      parentId: 28
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 33
+      parentId: 16
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 34
+      parentId: 16
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 35
+      parentId: 16
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 3, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 36
+      parentId: 16
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 3, z: 6}
+      voxels: 
+      childrenId: 25000000260000002700000028000000
+    - id: 37
+      parentId: 36
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -4.491589}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 38
+      parentId: 36
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -4.491589}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 39
+      parentId: 36
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 3, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 40
+      parentId: 36
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 4, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 41
+      parentId: 1
+      isFull: 0
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.697, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 5, y: 2, z: 0}
+      voxels: 
+      childrenId: 2a0000002b0000002c0000002d000000
+    - id: 42
+      parentId: 41
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 5, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 43
+      parentId: 41
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 7, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 44
+      parentId: 41
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 5, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 45
+      parentId: 41
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 7, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 46
+      parentId: 1
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.19200005, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 0, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 47
+      parentId: 1
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.19200005, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 5, y: 0, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 48
+      parentId: 1
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 2, z: 13}
+      voxels: 
+      childrenId: 310000003200000033000000340000003b0000003c0000003d0000003e000000
+    - id: 49
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 50
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 51
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 3, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 52
+      parentId: 48
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 3, z: 13}
+      voxels: 
+      childrenId: 35000000360000003700000038000000390000003a000000
+    - id: 53
+      parentId: 52
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 54
+      parentId: 52
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 55
+      parentId: 52
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 56
+      parentId: 52
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 0.697, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 3, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 57
+      parentId: 52
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 58
+      parentId: 52
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 0.8989999, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 4, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 59
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 60
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 61
+      parentId: 48
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 3, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 62
+      parentId: 48
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 3, z: 19}
+      voxels: 
+      childrenId: 3f000000400000004100000042000000
+    - id: 63
+      parentId: 62
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 64
+      parentId: 62
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 65
+      parentId: 62
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 3, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 66
+      parentId: 62
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 4, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 67
+      parentId: 1
+      isFull: 0
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.697, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 5, y: 2, z: 13}
+      voxels: 
+      childrenId: 44000000450000004600000047000000
+    - id: 68
+      parentId: 67
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 5, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 69
+      parentId: 67
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 7, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 70
+      parentId: 67
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 5, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 71
+      parentId: 67
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 7, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 72
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.2170503, y: 0.495, z: -3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.50499994, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 10, y: 0, z: 0}
+      voxels: 
+      childrenId: 490000004a000000570000005c0000006b0000006c0000006d00000072000000
+    - id: 73
+      parentId: 72
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.19200005, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 10, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 74
+      parentId: 72
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.19200005, z: -4.7343774}
+        m_Extent: {x: 0.6085251, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 0, z: 0}
+      voxels: 
+      childrenId: 4b0000004c0000004d0000004e00000053000000540000005500000056000000
+    - id: 75
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.09100006, z: -5.584138}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 76
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.09100006, z: -5.584138}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 0, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 77
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.29300004, z: -5.584138}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 1, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 78
+      parentId: 74
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.29300004, z: -5.584138}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 1, z: 0}
+      voxels: 
+      childrenId: 4f000000500000005100000052000000
+    - id: 79
+      parentId: 78
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.29300004, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 1, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 80
+      parentId: 78
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.29300004, z: -5.9483204}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 1, z: 0}
+      voxels: 010001010301
+      childrenId: 
+    - id: 81
+      parentId: 78
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.29300004, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 1, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 82
+      parentId: 78
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.29300004, z: -5.2199545}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 1, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 83
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.09100006, z: -4.006012}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 0, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 84
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.09100006, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 0, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 85
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.29300004, z: -4.006012}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 1, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 86
+      parentId: 74
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.29300004, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 1, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 87
+      parentId: 72
+      isFull: 0
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.697, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 10, y: 2, z: 0}
+      voxels: 
+      childrenId: 58000000590000005a0000005b000000
+    - id: 88
+      parentId: 87
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 10, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 89
+      parentId: 87
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 12, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 90
+      parentId: 87
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 10, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 91
+      parentId: 87
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 12, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 92
+      parentId: 72
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.697, z: -4.7343774}
+        m_Extent: {x: 0.6085251, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 2, z: 0}
+      voxels: 
+      childrenId: 5d0000005e0000005f00000068000000690000006a000000
+    - id: 93
+      parentId: 92
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 94
+      parentId: 92
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: -5.584138}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 2, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 95
+      parentId: 92
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: -5.584138}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 3, z: 0}
+      voxels: 
+      childrenId: 6000000061000000620000006300000064000000650000006600000067000000
+    - id: 96
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.697, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 3, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 97
+      parentId: 95
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.697, z: -5.9483204}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 3, z: 0}
+      voxels: 010001010301
+      childrenId: 
+    - id: 98
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.8989999, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 4, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 99
+      parentId: 95
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.8989999, z: -5.9483204}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 4, z: 0}
+      voxels: 010001010301
+      childrenId: 
+    - id: 100
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.697, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 3, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 101
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.697, z: -5.2199545}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 3, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 102
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.8989999, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 4, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 103
+      parentId: 95
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.8989999, z: -5.2199545}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 4, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 104
+      parentId: 92
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 105
+      parentId: 92
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 2, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 106
+      parentId: 92
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 3, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 107
+      parentId: 72
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.19200005, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 10, y: 0, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 108
+      parentId: 72
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.19200005, z: -1.5781258}
+        m_Extent: {x: 0.6085251, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 0, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 109
+      parentId: 72
+      isFull: 0
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.697, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 10, y: 2, z: 13}
+      voxels: 
+      childrenId: 6e0000006f0000007000000071000000
+    - id: 110
+      parentId: 109
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 10, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 111
+      parentId: 109
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 12, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 112
+      parentId: 109
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 10, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 113
+      parentId: 109
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 12, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 114
+      parentId: 72
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.697, z: -1.5781258}
+        m_Extent: {x: 0.6085251, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 2, z: 13}
+      voxels: 
+      childrenId: 73000000740000007500000078000000790000007a0000007b000000
+    - id: 115
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 116
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 2, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 117
+      parentId: 114
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.798, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 15, y: 3, z: 13}
+      voxels: 
+      childrenId: 7600000077000000
+    - id: 118
+      parentId: 117
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 0.697, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 3, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 119
+      parentId: 117
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 0.8989999, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 4, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 120
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 3, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 121
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 122
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 2, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 123
+      parentId: 114
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 3, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 124
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.2170498, y: 1.5049999, z: -3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.5049999, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 0, y: 5, z: 0}
+      voxels: 
+      childrenId: 7d0000008f0000009d000000b0000000
+    - id: 125
+      parentId: 124
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.2019999, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 5, z: 0}
+      voxels: 
+      childrenId: 7e0000008300000086000000870000008a0000008d000000
+    - id: 126
+      parentId: 125
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: -5.584138}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 5, z: 0}
+      voxels: 
+      childrenId: 7f000000800000008100000082000000
+    - id: 127
+      parentId: 126
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.101, z: -5.9483204}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 5, z: 0}
+      voxels: 000101
+      childrenId: 
+    - id: 128
+      parentId: 126
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.101, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 5, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 129
+      parentId: 126
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.101, z: -5.2199545}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 5, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 130
+      parentId: 126
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.101, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 5, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 131
+      parentId: 125
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: -5.584138}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 5, z: 0}
+      voxels: 
+      childrenId: 8400000085000000
+    - id: 132
+      parentId: 131
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 133
+      parentId: 131
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 134
+      parentId: 125
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 5, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 135
+      parentId: 125
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 5, z: 6}
+      voxels: 
+      childrenId: 8800000089000000
+    - id: 136
+      parentId: 135
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -4.491589}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 137
+      parentId: 135
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 5, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 138
+      parentId: 125
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 6, z: 6}
+      voxels: 
+      childrenId: 8b0000008c000000
+    - id: 139
+      parentId: 138
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.303, z: -3.641829}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 6, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 140
+      parentId: 138
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.303, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 6, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 141
+      parentId: 125
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 6, z: 6}
+      voxels: 
+      childrenId: 8e000000
+    - id: 142
+      parentId: 141
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 6, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 143
+      parentId: 124
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.7069998, z: -4.7343774}
+        m_Extent: {x: 0.60852504, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 7, z: 0}
+      voxels: 
+      childrenId: 9000000093000000950000009a000000
+    - id: 144
+      parentId: 143
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 7, z: 6}
+      voxels: 
+      childrenId: 9100000092000000
+    - id: 145
+      parentId: 144
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.5049999, z: -3.641829}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 7, z: 9}
+      voxels: 00010101
+      childrenId: 
+    - id: 146
+      parentId: 144
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.5049999, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 7, z: 9}
+      voxels: 00010103
+      childrenId: 
+    - id: 147
+      parentId: 143
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 7, z: 6}
+      voxels: 
+      childrenId: 94000000
+    - id: 148
+      parentId: 147
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 7, z: 9}
+      voxels: 00010101
+      childrenId: 
+    - id: 149
+      parentId: 143
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: -4.006012}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 8, z: 6}
+      voxels: 
+      childrenId: 96000000970000009800000099000000
+    - id: 150
+      parentId: 149
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.707, z: -3.641829}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 8, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 151
+      parentId: 149
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.707, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 8, z: 9}
+      voxels: 00000103
+      childrenId: 
+    - id: 152
+      parentId: 149
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.9089998, z: -3.641829}
+        m_Extent: {x: 0.121705055, y: 0.10099995, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 9, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 153
+      parentId: 149
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.9089998, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 9, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 154
+      parentId: 143
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: -4.006012}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 8, z: 6}
+      voxels: 
+      childrenId: 9b0000009c000000
+    - id: 155
+      parentId: 154
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 8, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 156
+      parentId: 154
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 9, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 157
+      parentId: 124
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.2019999, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 5, z: 13}
+      voxels: 
+      childrenId: 9e0000009f000000a3000000a4000000a8000000a9000000ac000000ad000000
+    - id: 158
+      parentId: 157
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 5, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 159
+      parentId: 157
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 5, z: 13}
+      voxels: 
+      childrenId: a0000000a1000000a2000000
+    - id: 160
+      parentId: 159
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 161
+      parentId: 159
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 162
+      parentId: 159
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.101, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 5, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 163
+      parentId: 157
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 6, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 164
+      parentId: 157
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 6, z: 13}
+      voxels: 
+      childrenId: a5000000a6000000a7000000
+    - id: 165
+      parentId: 164
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 166
+      parentId: 164
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 167
+      parentId: 164
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.303, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 6, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 168
+      parentId: 157
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 5, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 169
+      parentId: 157
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 5, z: 19}
+      voxels: 
+      childrenId: aa000000ab000000
+    - id: 170
+      parentId: 169
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 171
+      parentId: 169
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 5, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 172
+      parentId: 157
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 6, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 173
+      parentId: 157
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 6, z: 19}
+      voxels: 
+      childrenId: ae000000af000000
+    - id: 174
+      parentId: 173
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 175
+      parentId: 173
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 6, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 176
+      parentId: 124
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.7069998, z: -1.5781258}
+        m_Extent: {x: 0.60852504, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 7, z: 13}
+      voxels: 
+      childrenId: b1000000b2000000b6000000b7000000be000000bf000000c2000000c3000000
+    - id: 177
+      parentId: 176
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 7, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 178
+      parentId: 176
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 7, z: 13}
+      voxels: 
+      childrenId: b3000000b4000000b5000000
+    - id: 179
+      parentId: 178
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 180
+      parentId: 178
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 181
+      parentId: 178
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.5049999, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 7, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 182
+      parentId: 176
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: -2.427886}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 8, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 183
+      parentId: 176
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: -2.427886}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 8, z: 13}
+      voxels: 
+      childrenId: b8000000b9000000ba000000bb000000bc000000bd000000
+    - id: 184
+      parentId: 183
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 185
+      parentId: 183
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: -2.792069}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 186
+      parentId: 183
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 187
+      parentId: 183
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.707, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 8, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 188
+      parentId: 183
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 16}
+      voxels: 
+      childrenId: 
+    - id: 189
+      parentId: 183
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.9089998, z: -2.063703}
+        m_Extent: {x: 0.24340999, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 9, z: 16}
+      voxels: 000001000100
+      childrenId: 
+    - id: 190
+      parentId: 176
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 7, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 191
+      parentId: 176
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 7, z: 19}
+      voxels: 
+      childrenId: c0000000c1000000
+    - id: 192
+      parentId: 191
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 193
+      parentId: 191
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 7, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 194
+      parentId: 176
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: -0.8497602}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 8, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 195
+      parentId: 176
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: -0.8497602}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 8, z: 19}
+      voxels: 
+      childrenId: c4000000c5000000c6000000c7000000
+    - id: 196
+      parentId: 195
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 197
+      parentId: 195
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: -1.3353374}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 198
+      parentId: 195
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 8, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 199
+      parentId: 195
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: -0.48557734}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.48557717}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 9, z: 22}
+      voxels: 
+      childrenId: 
+    - id: 200
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.2170503, y: 1.5049999, z: -3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.5049999, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 10, y: 5, z: 0}
+      voxels: 
+      childrenId: c9000000d3000000dc000000e5000000
+    - id: 201
+      parentId: 200
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.2019999, z: -4.7343774}
+        m_Extent: {x: 0.6085251, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 5, z: 0}
+      voxels: 
+      childrenId: ca000000cf000000d0000000
+    - id: 202
+      parentId: 201
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: -5.584138}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 5, z: 0}
+      voxels: 
+      childrenId: cb000000cc000000cd000000ce000000
+    - id: 203
+      parentId: 202
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.101, z: -5.9483204}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 5, z: 0}
+      voxels: 
+      childrenId: 
+    - id: 204
+      parentId: 202
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.101, z: -5.9483204}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 5, z: 0}
+      voxels: 010001010101
+      childrenId: 
+    - id: 205
+      parentId: 202
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.101, z: -5.2199545}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 5, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 206
+      parentId: 202
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.101, z: -5.2199545}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 5, z: 3}
+      voxels: 
+      childrenId: 
+    - id: 207
+      parentId: 201
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 5, z: 6}
+      voxels: 
+      childrenId: 
+    - id: 208
+      parentId: 201
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 6, z: 6}
+      voxels: 
+      childrenId: d1000000d2000000
+    - id: 209
+      parentId: 208
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.303, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 6, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 210
+      parentId: 208
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.303, z: -3.641829}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 6, z: 9}
+      voxels: 
+      childrenId: 
+    - id: 211
+      parentId: 200
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.7069998, z: -4.7343774}
+        m_Extent: {x: 0.6085251, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 7, z: 0}
+      voxels: 
+      childrenId: d4000000d7000000
+    - id: 212
+      parentId: 211
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 7, z: 6}
+      voxels: 
+      childrenId: d5000000d6000000
+    - id: 213
+      parentId: 212
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.5049999, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 7, z: 9}
+      voxels: 00010101
+      childrenId: 
+    - id: 214
+      parentId: 212
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.5049999, z: -3.641829}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 7, z: 9}
+      voxels: 0000010101010301
+      childrenId: 
+    - id: 215
+      parentId: 211
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: -4.006012}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 8, z: 6}
+      voxels: 
+      childrenId: d8000000d9000000da000000db000000
+    - id: 216
+      parentId: 215
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.707, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 8, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 217
+      parentId: 215
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.707, z: -3.641829}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 8, z: 9}
+      voxels: 0000000001010301
+      childrenId: 
+    - id: 218
+      parentId: 215
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.9089998, z: -3.641829}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 9, z: 9}
+      voxels: 00000101
+      childrenId: 
+    - id: 219
+      parentId: 215
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.9089998, z: -3.641829}
+        m_Extent: {x: 0.24340999, y: 0.10099995, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 9, z: 9}
+      voxels: 0000000001010101
+      childrenId: 
+    - id: 220
+      parentId: 200
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.2019999, z: -1.5781258}
+        m_Extent: {x: 0.6085251, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 5, z: 13}
+      voxels: 
+      childrenId: dd000000df000000e0000000e2000000e3000000e4000000
+    - id: 221
+      parentId: 220
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.101, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 5, z: 13}
+      voxels: 
+      childrenId: de000000
+    - id: 222
+      parentId: 221
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.101, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 5, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 223
+      parentId: 220
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 5, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 224
+      parentId: 220
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.303, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 6, z: 13}
+      voxels: 
+      childrenId: e1000000
+    - id: 225
+      parentId: 224
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.303, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 6, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 226
+      parentId: 220
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 6, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 227
+      parentId: 220
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 5, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 228
+      parentId: 220
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 6, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 229
+      parentId: 200
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.7069998, z: -1.5781258}
+        m_Extent: {x: 0.6085251, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 7, z: 13}
+      voxels: 
+      childrenId: e6000000e8000000e9000000ec000000ed000000ee000000
+    - id: 230
+      parentId: 229
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.5049999, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 7, z: 13}
+      voxels: 
+      childrenId: e7000000
+    - id: 231
+      parentId: 230
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.5049999, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 7, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 232
+      parentId: 229
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 7, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 233
+      parentId: 229
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.808, z: -2.427886}
+        m_Extent: {x: 0.24341005, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 15, y: 8, z: 13}
+      voxels: 
+      childrenId: ea000000eb000000
+    - id: 234
+      parentId: 233
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.707, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 8, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 235
+      parentId: 233
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.9089998, z: -2.063703}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 9, z: 16}
+      voxels: 000101
+      childrenId: 
+    - id: 236
+      parentId: 229
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: -2.427886}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 8, z: 13}
+      voxels: 
+      childrenId: 
+    - id: 237
+      parentId: 229
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 7, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 238
+      parentId: 229
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: -0.8497602}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 8, z: 19}
+      voxels: 
+      childrenId: 
+    - id: 239
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.2170498, y: 0.495, z: 3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.50499994, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 0, y: 0, z: 26}
+      voxels: 
+      childrenId: f0000000f1000000f2000000050100000a010000170100001801000031010000
+    - id: 240
+      parentId: 239
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.19200005, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 0, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 241
+      parentId: 239
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.19200005, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 5, y: 0, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 242
+      parentId: 239
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 2, z: 26}
+      voxels: 
+      childrenId: f3000000f4000000f5000000f6000000fb000000fc000000fd000000fe000000
+    - id: 243
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 244
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 245
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 3, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 246
+      parentId: 242
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 3, z: 26}
+      voxels: 
+      childrenId: f7000000f8000000f9000000fa000000
+    - id: 247
+      parentId: 246
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 248
+      parentId: 246
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 249
+      parentId: 246
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 250
+      parentId: 246
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 251
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 252
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 253
+      parentId: 242
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 3, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 254
+      parentId: 242
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 3, z: 32}
+      voxels: 
+      childrenId: ff0000000001000001010000020100000301000004010000
+    - id: 255
+      parentId: 254
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 256
+      parentId: 254
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 0.697, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 3, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 257
+      parentId: 254
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 258
+      parentId: 254
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 0.8989999, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 4, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 259
+      parentId: 254
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 3, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 260
+      parentId: 254
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 4, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 261
+      parentId: 239
+      isFull: 0
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.697, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 5, y: 2, z: 26}
+      voxels: 
+      childrenId: 06010000070100000801000009010000
+    - id: 262
+      parentId: 261
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 5, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 263
+      parentId: 261
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 7, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 264
+      parentId: 261
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 5, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 265
+      parentId: 261
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 7, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 266
+      parentId: 239
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.19200005, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 0, z: 39}
+      voxels: 
+      childrenId: 0b0100000c0100000d0100000e0100000f010000100100001101000016010000
+    - id: 267
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.09100006, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 268
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.09100006, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 269
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.29300004, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 1, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 270
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.29300004, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 1, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 271
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.09100006, z: 5.462743}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 0, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 272
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.09100006, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 0, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 273
+      parentId: 266
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 0.29300004, z: 5.462743}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 1, z: 45}
+      voxels: 
+      childrenId: 12010000130100001401000015010000
+    - id: 274
+      parentId: 273
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.29300004, z: 4.9771657}
+        m_Extent: {x: 0.121705055, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 275
+      parentId: 273
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.29300004, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 276
+      parentId: 273
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.29300004, z: 5.8269258}
+        m_Extent: {x: 0.121705055, y: 0.10099999, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 1, z: 48}
+      voxels: 01010100
+      childrenId: 
+    - id: 277
+      parentId: 273
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.29300004, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 1, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 278
+      parentId: 266
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.29300004, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 279
+      parentId: 239
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.19200005, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 5, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 280
+      parentId: 239
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 2, z: 39}
+      voxels: 
+      childrenId: 190100001a0100001b0100001c0100002101000022010000230100002c010000
+    - id: 281
+      parentId: 280
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 282
+      parentId: 280
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 283
+      parentId: 280
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 3, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 284
+      parentId: 280
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 3, z: 39}
+      voxels: 
+      childrenId: 1d0100001e0100001f01000020010000
+    - id: 285
+      parentId: 284
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 286
+      parentId: 284
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 287
+      parentId: 284
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 42}
+      voxels: 
+      childrenId: 
+    - id: 288
+      parentId: 284
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 42}
+      voxels: 
+      childrenId: 
+    - id: 289
+      parentId: 280
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.24340999, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 290
+      parentId: 280
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 291
+      parentId: 280
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 0.798, z: 5.462743}
+        m_Extent: {x: 0.24340999, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 3, z: 45}
+      voxels: 
+      childrenId: 2401000025010000260100002701000028010000290100002a0100002b010000
+    - id: 292
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.697, z: 4.9771657}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 3, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 293
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.697, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 3, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 294
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.8989999, z: 4.9771657}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 4, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 295
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.8989999, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 4, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 296
+      parentId: 291
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.697, z: 5.8269258}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 3, z: 48}
+      voxels: 01010100
+      childrenId: 
+    - id: 297
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.697, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 3, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 298
+      parentId: 291
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 0.8989999, z: 5.8269258}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 4, z: 48}
+      voxels: 01010100
+      childrenId: 
+    - id: 299
+      parentId: 291
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 0.8989999, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 4, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 300
+      parentId: 280
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 0.798, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 3, z: 45}
+      voxels: 
+      childrenId: 2d0100002e0100002f01000030010000
+    - id: 301
+      parentId: 300
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 3, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 302
+      parentId: 300
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 4, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 303
+      parentId: 300
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.697, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 3, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 304
+      parentId: 300
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 0.8989999, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 4, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 305
+      parentId: 239
+      isFull: 0
+      bounds:
+        m_Center: {x: -0.6085248, y: 0.697, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 5, y: 2, z: 39}
+      voxels: 
+      childrenId: 32010000330100003401000035010000
+    - id: 306
+      parentId: 305
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 5, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 307
+      parentId: 305
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 7, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 308
+      parentId: 305
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.97363985, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 5, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 309
+      parentId: 305
+      isFull: 1
+      bounds:
+        m_Center: {x: -0.3651147, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 7, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 310
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.2170503, y: 0.495, z: 3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.50499994, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 10, y: 0, z: 26}
+      voxels: 
+      childrenId: 3701000038010000390100003e0100004801000049010000560100005b010000
+    - id: 311
+      parentId: 310
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.19200005, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 10, y: 0, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 312
+      parentId: 310
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.19200005, z: 1.5781256}
+        m_Extent: {x: 0.6085251, y: 0.20199998, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 0, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 313
+      parentId: 310
+      isFull: 0
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.697, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 10, y: 2, z: 26}
+      voxels: 
+      childrenId: 3a0100003b0100003c0100003d010000
+    - id: 314
+      parentId: 313
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 10, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 315
+      parentId: 313
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 12, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 316
+      parentId: 313
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 10, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 317
+      parentId: 313
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 12, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 318
+      parentId: 310
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.697, z: 1.5781256}
+        m_Extent: {x: 0.6085251, y: 0.30299997, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 2, z: 26}
+      voxels: 
+      childrenId: 3f010000400100004101000042010000430100004401000047010000
+    - id: 319
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 320
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 2, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 321
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 3, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 322
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 323
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 2, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 324
+      parentId: 318
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.798, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 15, y: 3, z: 32}
+      voxels: 
+      childrenId: 4501000046010000
+    - id: 325
+      parentId: 324
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 0.697, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 3, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 326
+      parentId: 324
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 0.8989999, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 4, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 327
+      parentId: 318
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 3, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 328
+      parentId: 310
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.19200005, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.20199998, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 10, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 329
+      parentId: 310
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.19200005, z: 4.734377}
+        m_Extent: {x: 0.6085251, y: 0.20199998, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 0, z: 39}
+      voxels: 
+      childrenId: 4a0100004b0100004c0100004d0100004e0100004f0100005001000051010000
+    - id: 330
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.09100006, z: 3.884617}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 331
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.09100006, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 0, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 332
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.29300004, z: 3.884617}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 1, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 333
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.29300004, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 1, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 334
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.09100006, z: 5.462743}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 0, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 335
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.09100006, z: 5.462743}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 0, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 336
+      parentId: 329
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.29300004, z: 5.462743}
+        m_Extent: {x: 0.24341005, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 337
+      parentId: 329
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.29300004, z: 5.462743}
+        m_Extent: {x: 0.3651151, y: 0.10099999, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 1, z: 45}
+      voxels: 
+      childrenId: 52010000530100005401000055010000
+    - id: 338
+      parentId: 337
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.29300004, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 339
+      parentId: 337
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.29300004, z: 4.9771657}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 1, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 340
+      parentId: 337
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.29300004, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099999, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 1, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 341
+      parentId: 337
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.29300004, z: 5.8269258}
+        m_Extent: {x: 0.24340999, y: 0.10099999, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 1, z: 48}
+      voxels: 0301030101010100
+      childrenId: 
+    - id: 342
+      parentId: 310
+      isFull: 0
+      bounds:
+        m_Center: {x: 0.6085253, y: 0.697, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.30299997, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 10, y: 2, z: 39}
+      voxels: 
+      childrenId: 5701000058010000590100005a010000
+    - id: 343
+      parentId: 342
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 10, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 344
+      parentId: 342
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 12, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 345
+      parentId: 342
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.24341032, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.24341002, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 10, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 346
+      parentId: 342
+      isFull: 1
+      bounds:
+        m_Center: {x: 0.8519354, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 12, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 347
+      parentId: 310
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 0.697, z: 4.734377}
+        m_Extent: {x: 0.6085251, y: 0.30299997, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 2, z: 39}
+      voxels: 
+      childrenId: 5c0100005d0100005e0100005f0100006001000061010000
+    - id: 348
+      parentId: 347
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 15, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 349
+      parentId: 347
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 2, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 350
+      parentId: 347
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 3, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 351
+      parentId: 347
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.4604604, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.24341005, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 352
+      parentId: 347
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.495, z: 5.462743}
+        m_Extent: {x: 0.3651151, y: 0.100999996, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 2, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 353
+      parentId: 347
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 0.798, z: 5.462743}
+        m_Extent: {x: 0.3651151, y: 0.20199999, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 3, z: 45}
+      voxels: 
+      childrenId: 6201000063010000640100006501000066010000670100006801000069010000
+    - id: 354
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.697, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 3, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 355
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.697, z: 4.9771657}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 3, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 356
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.8989999, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 4, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 357
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.8989999, z: 4.9771657}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 4, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 358
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.697, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 3, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 359
+      parentId: 353
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.697, z: 5.8269258}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 3, z: 48}
+      voxels: 0301030101010100
+      childrenId: 
+    - id: 360
+      parentId: 353
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 0.8989999, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 4, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 361
+      parentId: 353
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 0.8989999, z: 5.8269258}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 4, z: 48}
+      voxels: 0301030101010100
+      childrenId: 
+    - id: 362
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.2170498, y: 1.5049999, z: 3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.5049999, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 0, y: 5, z: 26}
+      voxels: 
+      childrenId: 6b0100007e01000096010000ab010000
+    - id: 363
+      parentId: 362
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.2019999, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 5, z: 26}
+      voxels: 
+      childrenId: 6c0100006d01000070010000710100007401000075010000790100007a010000
+    - id: 364
+      parentId: 363
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 5, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 365
+      parentId: 363
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 5, z: 26}
+      voxels: 
+      childrenId: 6e0100006f010000
+    - id: 366
+      parentId: 365
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 367
+      parentId: 365
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 368
+      parentId: 363
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 6, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 369
+      parentId: 363
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 6, z: 26}
+      voxels: 
+      childrenId: 7201000073010000
+    - id: 370
+      parentId: 369
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 371
+      parentId: 369
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 372
+      parentId: 363
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 5, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 373
+      parentId: 363
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 5, z: 32}
+      voxels: 
+      childrenId: 760100007701000078010000
+    - id: 374
+      parentId: 373
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 375
+      parentId: 373
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.101, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 5, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 376
+      parentId: 373
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 5, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 377
+      parentId: 363
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 6, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 378
+      parentId: 363
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 6, z: 32}
+      voxels: 
+      childrenId: 7b0100007c0100007d010000
+    - id: 379
+      parentId: 378
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 380
+      parentId: 378
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.303, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 6, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 381
+      parentId: 378
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 6, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 382
+      parentId: 362
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.7069998, z: 1.5781256}
+        m_Extent: {x: 0.60852504, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 7, z: 26}
+      voxels: 
+      childrenId: 7f010000800100008301000084010000890100008a0100008e0100008f010000
+    - id: 383
+      parentId: 382
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 7, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 384
+      parentId: 382
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 7, z: 26}
+      voxels: 
+      childrenId: 8101000082010000
+    - id: 385
+      parentId: 384
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 386
+      parentId: 384
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 387
+      parentId: 382
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: 0.72836554}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 8, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 388
+      parentId: 382
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: 0.72836554}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 8, z: 26}
+      voxels: 
+      childrenId: 85010000860100008701000088010000
+    - id: 389
+      parentId: 388
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 390
+      parentId: 388
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: 0.3641827}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 391
+      parentId: 388
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 392
+      parentId: 388
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: 1.0925484}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.3641829}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 29}
+      voxels: 
+      childrenId: 
+    - id: 393
+      parentId: 382
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 7, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 394
+      parentId: 382
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 7, z: 32}
+      voxels: 
+      childrenId: 8b0100008c0100008d010000
+    - id: 395
+      parentId: 394
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 396
+      parentId: 394
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.5049999, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 7, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 397
+      parentId: 394
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 7, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 398
+      parentId: 382
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: 2.3064914}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 0, y: 8, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 399
+      parentId: 382
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: 2.3064914}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 2, y: 8, z: 32}
+      voxels: 
+      childrenId: 900100009101000092010000930100009401000095010000
+    - id: 400
+      parentId: 399
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 401
+      parentId: 399
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.707, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 8, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 402
+      parentId: 399
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 403
+      parentId: 399
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.4604598, y: 1.9089998, z: 1.8209143}
+        m_Extent: {x: 0.24340999, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 3, y: 9, z: 32}
+      voxels: 000001000100
+      childrenId: 
+    - id: 404
+      parentId: 399
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 8, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 405
+      parentId: 399
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: 2.6706743}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.48557723}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 9, z: 35}
+      voxels: 
+      childrenId: 
+    - id: 406
+      parentId: 362
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.2019999, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.20199999, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 0, y: 5, z: 39}
+      voxels: 
+      childrenId: 97010000980100009b010000a0010000a3010000a8010000
+    - id: 407
+      parentId: 406
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 5, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 408
+      parentId: 406
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 5, z: 39}
+      voxels: 
+      childrenId: 990100009a010000
+    - id: 409
+      parentId: 408
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 410
+      parentId: 408
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 42}
+      voxels: 
+      childrenId: 
+    - id: 411
+      parentId: 406
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.303, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 6, z: 39}
+      voxels: 
+      childrenId: 9c0100009d0100009e0100009f010000
+    - id: 412
+      parentId: 411
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.303, z: 3.5204344}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 6, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 413
+      parentId: 411
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.303, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 6, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 414
+      parentId: 411
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.303, z: 4.2488}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 6, z: 42}
+      voxels: 010000
+      childrenId: 
+    - id: 415
+      parentId: 411
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.303, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 6, z: 42}
+      voxels: 010000
+      childrenId: 
+    - id: 416
+      parentId: 406
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.303, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 6, z: 39}
+      voxels: 
+      childrenId: a1010000a2010000
+    - id: 417
+      parentId: 416
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 418
+      parentId: 416
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.303, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 6, z: 42}
+      voxels: 010000
+      childrenId: 
+    - id: 419
+      parentId: 406
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.101, z: 5.462743}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 0, y: 5, z: 45}
+      voxels: 
+      childrenId: a4010000a5010000a6010000a7010000
+    - id: 420
+      parentId: 419
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.101, z: 4.9771657}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 5, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 421
+      parentId: 419
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.101, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 5, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 422
+      parentId: 419
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.101, z: 5.8269258}
+        m_Extent: {x: 0.121705055, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 0, y: 5, z: 48}
+      voxels: 01010100
+      childrenId: 
+    - id: 423
+      parentId: 419
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.101, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 1, y: 5, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 424
+      parentId: 406
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.101, z: 5.462743}
+        m_Extent: {x: 0.36511505, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 2, y: 5, z: 45}
+      voxels: 
+      childrenId: a9010000aa010000
+    - id: 425
+      parentId: 424
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 5, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 426
+      parentId: 424
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.101, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 2, y: 5, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 427
+      parentId: 362
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.7069998, z: 4.734377}
+        m_Extent: {x: 0.60852504, y: 0.3029999, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 0, y: 7, z: 39}
+      voxels: 
+      childrenId: ac010000af010000b1010000b6010000
+    - id: 428
+      parentId: 427
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.5049999, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 2, y: 1, z: 6}
+      voxelOffset: {x: 0, y: 7, z: 39}
+      voxels: 
+      childrenId: ad010000ae010000
+    - id: 429
+      parentId: 428
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.5049999, z: 3.5204344}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 7, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 430
+      parentId: 428
+      isFull: 1
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.5049999, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 7, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 431
+      parentId: 427
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.5049999, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 2, y: 7, z: 39}
+      voxels: 
+      childrenId: b0010000
+    - id: 432
+      parentId: 431
+      isFull: 1
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.5049999, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 7, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 433
+      parentId: 427
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.19069, y: 1.808, z: 3.884617}
+        m_Extent: {x: 0.24340999, y: 0.20200002, z: 0.72836566}
+      voxelCount: {x: 2, y: 2, z: 6}
+      voxelOffset: {x: 0, y: 8, z: 39}
+      voxels: 
+      childrenId: b2010000b3010000b4010000b5010000
+    - id: 434
+      parentId: 433
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.707, z: 3.5204344}
+        m_Extent: {x: 0.121705055, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 8, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 435
+      parentId: 433
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.707, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 8, z: 39}
+      voxels: 030100
+      childrenId: 
+    - id: 436
+      parentId: 433
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.3123949, y: 1.9089998, z: 3.5204344}
+        m_Extent: {x: 0.121705055, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 0, y: 9, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 437
+      parentId: 433
+      isFull: 0
+      bounds:
+        m_Center: {x: -2.0689847, y: 1.9089998, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 1, y: 9, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 438
+      parentId: 427
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.5821649, y: 1.808, z: 3.884617}
+        m_Extent: {x: 0.36511505, y: 0.20200002, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 2, y: 8, z: 39}
+      voxels: 
+      childrenId: b7010000b8010000
+    - id: 439
+      parentId: 438
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.707, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 8, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 440
+      parentId: 438
+      isFull: 0
+      bounds:
+        m_Center: {x: -1.8255749, y: 1.9089998, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 2, y: 9, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 441
+      parentId: 0
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.2170503, y: 1.5049999, z: 3.1562517}
+        m_Extent: {x: 1.2170501, y: 0.5049999, z: 3.1562517}
+      voxelCount: {x: 10, y: 5, z: 26}
+      voxelOffset: {x: 10, y: 5, z: 26}
+      voxels: 
+      childrenId: ba010000c3010000cd010000d9010000
+    - id: 442
+      parentId: 441
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.2019999, z: 1.5781256}
+        m_Extent: {x: 0.6085251, y: 0.20199999, z: 1.5781258}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 5, z: 26}
+      voxels: 
+      childrenId: bb010000bc010000bd010000bf010000c0010000c2010000
+    - id: 443
+      parentId: 442
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 5, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 444
+      parentId: 442
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 6, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 445
+      parentId: 442
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.101, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 5, z: 32}
+      voxels: 
+      childrenId: be010000
+    - id: 446
+      parentId: 445
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.101, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 5, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 447
+      parentId: 442
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 5, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 448
+      parentId: 442
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.303, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 6, z: 32}
+      voxels: 
+      childrenId: c1010000
+    - id: 449
+      parentId: 448
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.303, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 6, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 450
+      parentId: 442
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 6, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 451
+      parentId: 441
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.7069998, z: 1.5781256}
+        m_Extent: {x: 0.6085251, y: 0.3029999, z: 1.5781258}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 7, z: 26}
+      voxels: 
+      childrenId: c4010000c5010000c6010000c8010000c9010000cc010000
+    - id: 452
+      parentId: 451
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.7283658}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 7, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 453
+      parentId: 451
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: 0.72836554}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.7283658}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 8, z: 26}
+      voxels: 
+      childrenId: 
+    - id: 454
+      parentId: 451
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.5049999, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 2, y: 1, z: 7}
+      voxelOffset: {x: 15, y: 7, z: 32}
+      voxels: 
+      childrenId: c7010000
+    - id: 455
+      parentId: 454
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.5049999, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 7, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 456
+      parentId: 451
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 7, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 457
+      parentId: 451
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.4604604, y: 1.808, z: 2.3064914}
+        m_Extent: {x: 0.24341005, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 2, y: 2, z: 7}
+      voxelOffset: {x: 15, y: 8, z: 32}
+      voxels: 
+      childrenId: ca010000cb010000
+    - id: 458
+      parentId: 457
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.707, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 8, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 459
+      parentId: 457
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.5821655, y: 1.9089998, z: 1.8209143}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 16, y: 9, z: 32}
+      voxels: 000101
+      childrenId: 
+    - id: 460
+      parentId: 451
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: 2.3064914}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.84976006}
+      voxelCount: {x: 3, y: 2, z: 7}
+      voxelOffset: {x: 17, y: 8, z: 32}
+      voxels: 
+      childrenId: 
+    - id: 461
+      parentId: 441
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.2019999, z: 4.734377}
+        m_Extent: {x: 0.6085251, y: 0.20199999, z: 1.5781257}
+      voxelCount: {x: 5, y: 2, z: 13}
+      voxelOffset: {x: 15, y: 5, z: 39}
+      voxels: 
+      childrenId: ce010000cf010000d4010000
+    - id: 462
+      parentId: 461
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 5, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 463
+      parentId: 461
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.303, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 6, z: 39}
+      voxels: 
+      childrenId: d0010000d1010000d2010000d3010000
+    - id: 464
+      parentId: 463
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.303, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 6, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 465
+      parentId: 463
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.303, z: 3.5204344}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 6, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 466
+      parentId: 463
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.303, z: 4.2488}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 6, z: 42}
+      voxels: 010000
+      childrenId: 
+    - id: 467
+      parentId: 463
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.303, z: 4.2488}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418283}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 6, z: 42}
+      voxels: 010100000000
+      childrenId: 
+    - id: 468
+      parentId: 461
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.101, z: 5.462743}
+        m_Extent: {x: 0.3651151, y: 0.10099998, z: 0.84976006}
+      voxelCount: {x: 3, y: 1, z: 7}
+      voxelOffset: {x: 17, y: 5, z: 45}
+      voxels: 
+      childrenId: d5010000d6010000d7010000d8010000
+    - id: 469
+      parentId: 468
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.101, z: 4.9771657}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 5, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 470
+      parentId: 468
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.101, z: 4.9771657}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 5, z: 45}
+      voxels: 
+      childrenId: 
+    - id: 471
+      parentId: 468
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.101, z: 5.8269258}
+        m_Extent: {x: 0.121704996, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 1, y: 1, z: 4}
+      voxelOffset: {x: 17, y: 5, z: 48}
+      voxels: 
+      childrenId: 
+    - id: 472
+      parentId: 468
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.101, z: 5.8269258}
+        m_Extent: {x: 0.24340999, y: 0.10099998, z: 0.4855771}
+      voxelCount: {x: 2, y: 1, z: 4}
+      voxelOffset: {x: 18, y: 5, z: 48}
+      voxels: 0101010101010100
+      childrenId: 
+    - id: 473
+      parentId: 441
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255756, y: 1.7069998, z: 4.734377}
+        m_Extent: {x: 0.6085251, y: 0.3029999, z: 1.5781257}
+      voxelCount: {x: 5, y: 3, z: 13}
+      voxelOffset: {x: 15, y: 7, z: 39}
+      voxels: 
+      childrenId: da010000dd010000
+    - id: 474
+      parentId: 473
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.5049999, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.10100001, z: 0.72836566}
+      voxelCount: {x: 3, y: 1, z: 6}
+      voxelOffset: {x: 17, y: 7, z: 39}
+      voxels: 
+      childrenId: db010000dc010000
+    - id: 475
+      parentId: 474
+      isFull: 1
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.5049999, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 7, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 476
+      parentId: 474
+      isFull: 1
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.5049999, z: 3.5204344}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 7, z: 39}
+      voxels: 
+      childrenId: 
+    - id: 477
+      parentId: 473
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.0689855, y: 1.808, z: 3.884617}
+        m_Extent: {x: 0.3651151, y: 0.20200002, z: 0.72836566}
+      voxelCount: {x: 3, y: 2, z: 6}
+      voxelOffset: {x: 17, y: 8, z: 39}
+      voxels: 
+      childrenId: de010000df010000e0010000e1010000
+    - id: 478
+      parentId: 477
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.707, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 8, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 479
+      parentId: 477
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.707, z: 3.5204344}
+        m_Extent: {x: 0.24340999, y: 0.10100001, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 8, z: 39}
+      voxels: 030101010000
+      childrenId: 
+    - id: 480
+      parentId: 477
+      isFull: 0
+      bounds:
+        m_Center: {x: 1.8255754, y: 1.9089998, z: 3.5204344}
+        m_Extent: {x: 0.121704996, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 1, y: 1, z: 3}
+      voxelOffset: {x: 17, y: 9, z: 39}
+      voxels: 010100
+      childrenId: 
+    - id: 481
+      parentId: 477
+      isFull: 0
+      bounds:
+        m_Center: {x: 2.1906905, y: 1.9089998, z: 3.5204344}
+        m_Extent: {x: 0.24340999, y: 0.10099995, z: 0.36418295}
+      voxelCount: {x: 2, y: 1, z: 3}
+      voxelOffset: {x: 18, y: 9, z: 39}
+      voxels: 010101010000
+      childrenId: 
+  debugRender: 0
+  debugRenderLevel: 0
+--- !u!1 &6837297174209347539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6872668789353464478}
+  - component: {fileID: 1284663358988768842}
+  m_Layer: 0
+  m_Name: Connector2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6872668789353464478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6837297174209347539}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0.0000008940696}
+  m_LocalPosition: {x: 0.09000039, y: 0.39999998, z: -6.249999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1881951503684716611}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1284663358988768842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6837297174209347539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  match: {fileID: 0}
+  _pinSpacing: 0.5
+  _gizmoTransparency: 1
+  _gizmoLooks: 0
+  connColor: 0
+  pins: 3
+--- !u!1 &8292988621893342612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4838530356185605764}
+  - component: {fileID: 7844129204976659017}
+  m_Layer: 0
+  m_Name: Connector1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4838530356185605764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292988621893342612}
+  m_LocalRotation: {x: 0, y: -0.0000008940696, z: -0, w: 1}
+  m_LocalPosition: {x: -0.109999895, y: 0.39999998, z: 6.249999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1881951503684716611}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7844129204976659017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292988621893342612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef3e4be6c9bec04d9a61d919a011f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  match: {fileID: 0}
+  _pinSpacing: 0.5
+  _gizmoTransparency: 1
+  _gizmoLooks: 0
+  connColor: 0
+  pins: 3
+--- !u!1001 &3971311339426614351
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1881951503684716611}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+      propertyPath: m_Name
+      value: Mesh
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+--- !u!4 &3501082389335796644 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 077ff6f5d2772384da926aa0b655fc21, type: 3}
+  m_PrefabInstance: {fileID: 3971311339426614351}
+  m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefb2033c72dfae4595e4968de9a5c24, type: 3}
+  m_Name: AutoGenPiece_Benchmark
+  m_EditorClassIdentifier: 
+  agentRadius: 0.25
+  agentHeight: 1.96
+  agentStep: 0.1
+  agentMaxSlope: 60
+  voxelDensity: 25
+  verticalDensityMultiplier: 1
+  minArea: 5
+  sampleLength: 0.05
+  sampleDirTolerance: 5
+  edgeMaxAngleWithXZ: 180
+  probeCount: 16
+  probeRadiusScale: 1.25
+  directionAngleTolerance: 10
+  normalAngleTolerance: 45
+  mergeAngleTolerance: 15
+  mergeDistanceTolerance: 0.25
+  connectorStrategy: 2
+  pinCount: 1
+  pinsPerUnit: 5
