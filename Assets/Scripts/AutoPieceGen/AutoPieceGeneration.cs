@@ -95,6 +95,10 @@ namespace SnapMeshPCG
             System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
             long t0 = 0;
+            long t2 = 0;
+            long msg0 = 0, msg1 = 0;
+            long gbv0 = 0, gbv1 = 0;
+            long oct0 = 0, oct1 = 0;
 
             t0 = stopwatch.ElapsedMilliseconds;
 
@@ -106,10 +110,9 @@ namespace SnapMeshPCG
             {
                 UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Creating mesh octree...", 0.0f);
 
+                oct0 = stopwatch.ElapsedMilliseconds;
                 meshOctree = sourceMesh.GetOctree(sourceMeshMatrix);
-
-                var t1 = stopwatch.ElapsedMilliseconds;
-                //Debug.Log($"Mesh octree construction time = {t1 - t0} ms");
+                oct1 = stopwatch.ElapsedMilliseconds;
 
                 UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Creating nav mesh...", 0.1f);
 
@@ -145,13 +148,14 @@ namespace SnapMeshPCG
                 recast.AddMesh(sourceMesh, sourceMeshFilter.gameObject);
                 recast.ComputeSystem();
 
-                var t2 = stopwatch.ElapsedMilliseconds;
                 //Debug.Log("Navmesh generation = " + (t2 - t1));
                 //Debug.Log("Navmesh generation = " + (t2 - t1));
 
                 navMesh = recast.GetPolyMesh(transform.worldToLocalMatrix);
 
                 DebugGizmo.AddMesh($"Type=NavMesh", navMesh, new Color(0.1f, 0.8f, 0.1f, 0.5f), transform.localToWorldMatrix, DebugGizmo.MeshDrawSolid | DebugGizmo.MeshDrawWire);
+
+                t2 = stopwatch.ElapsedMilliseconds;
 
                 UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Detecting connector edges...", 0.25f);
                  
@@ -171,9 +175,9 @@ namespace SnapMeshPCG
                     DebugGizmo.AddLine($"Type=CandidateEdge;edgeId={i}", edge.center, edge.center + edge.perp, Color.blue, transform.localToWorldMatrix);
                 }
 
-                long msg0 = stopwatch.ElapsedMilliseconds;
+                msg0 = stopwatch.ElapsedMilliseconds;
                 MatchSourceGeometry(sourceMesh, sourceMeshMatrix);
-                long msg1 = stopwatch.ElapsedMilliseconds;
+                msg1 = stopwatch.ElapsedMilliseconds;
                 //Debug.Log($"Match source geometry = {msg1 - msg0} ms");
 
                 MergeEdges(transform.localToWorldMatrix);
@@ -190,9 +194,11 @@ namespace SnapMeshPCG
 
                 if (config.boundingVolumeStrategy != AutoPieceGenerationConfig.BoundingVolumeStrategy.None)
                 {
+                    gbv0 = stopwatch.ElapsedMilliseconds;
                     UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Generating bounding volumes...", 0.80f);
                     ResetBoundingVolumes();
                     GenerateBoundingVolumes(sourceMesh, sourceMeshMatrix);
+                    gbv1 = stopwatch.ElapsedMilliseconds;
                 }
 
                 UnityEditor.EditorUtility.ClearProgressBar();
@@ -200,6 +206,18 @@ namespace SnapMeshPCG
 
             stopwatch.Stop();
             //Debug.Log("Mesh generation time = " + (stopwatch.ElapsedMilliseconds - t0));
+
+            var scale = sourceMeshMatrix.lossyScale;
+            float volume = (sourceMesh.bounds.extents.x * 2.0f * scale.x) * (sourceMesh.bounds.extents.y * 2.0f * scale.y) * (sourceMesh.bounds.extents.z * 2.0f * scale.z);
+
+            Debug.Log($"Vertex={sourceMesh.vertexCount}, Tris={sourceMesh.GetIndexCount(0) / 3}");
+            Debug.Log($"Volume={volume}");
+            Debug.Log($"Octree generation = {oct1 - oct0}ms");
+            Debug.Log($"Navmesh generation = {t2 - oct1}ms");
+            Debug.Log($"Connector detection = {msg0 - t2}ms");
+            Debug.Log($"Match source geometry = {msg1 - msg0}ms");
+            Debug.Log($"Generate bounding volume = {gbv1 - gbv0}ms");
+            Debug.Log($"Total time =  {stopwatch.ElapsedMilliseconds - t0}ms");
 
             return true;
         }
@@ -1185,7 +1203,7 @@ namespace SnapMeshPCG
                 // Clamping deeper gets the same issue as removing leaf voxels.
                 // voxelTree.ClampDepth(5);
 
-                Debug.Log($"Node count = {voxelTree.countNodes}");
+                //Debug.Log($"Node count = {voxelTree.countNodes}");
                 collider.voxelTree = voxelTree;
 
                 
