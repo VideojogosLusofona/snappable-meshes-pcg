@@ -21,15 +21,15 @@ in the Unity game engine.
 ![02](https://user-images.githubusercontent.com/3018963/127988173-6c761e64-6e91-464d-b5e0-6449a7ac3978.jpg)
 ![03](https://user-images.githubusercontent.com/3018963/147121060-0631634a-be54-46e6-8e06-bf867b03a845.png)
 
-## Published research
+## Releases and published research
 
-### v2.0.0 - Automatic generation of map piece metadata
+### [v2.0.0] - Automatic generation of map piece metadata
 
 * de Andrade, D. & Fachada, N. (2023). Automated Generation of Map Pieces for
   Snappable Meshes. In Proceedings of Foundations of Digital Games 2023, FDG
   '23, Lisbon, Portugal. ACM. <https://doi.org/10.1145/3582437.3582483>
 
-### v1.0.0 - Original Snappable Meshes implementation
+### [v1.0.0] - Original Snappable Meshes implementation
 
 * Fachada, N., e Silva, R.C., de Andrade, D. & Códices, N. (2022). Unity
   Snappable Meshes. Software Impacts, 13, 100363.
@@ -38,7 +38,7 @@ in the Unity game engine.
   Generation of 3D Maps with Snappable Meshes. IEEE Access, 10.
   <https://doi.org/10.1109/ACCESS.2022.3168832>
 
-### v0.0.1 - Preliminary work
+### [v0.0.1] - Preliminary work
 
 * e Silva, R. C., Fachada, N. Códices, N. & de Andrade, D. (2020). Procedural
   Game Level Generation by Joining Geometry with Hand-Placed Connectors. In
@@ -58,5 +58,6 @@ This software uses the following third-party plugins:
 
 [Apache 2.0](LICENSE)
 
-[v1.0.0]:https://github.com/VideojogosLusofona/snappable-meshes-pcg/releases/tag/v1.0.0
 [v2.0.0]:https://github.com/VideojogosLusofona/snappable-meshes-pcg/releases/tag/v2.0.0
+[v1.0.0]:https://github.com/VideojogosLusofona/snappable-meshes-pcg/releases/tag/v1.0.0
+[v0.0.1]:https://github.com/VideojogosLusofona/snappable-meshes-pcg/releases/tag/v0.0.1
