@@ -512,7 +512,7 @@ namespace SnapMeshPCG
             if (_checkOverlaps)
             {
                 // Remove all colliders used for the generation process
-                foreach (BoxCollider boxCollider in FindObjectsOfType<BoxCollider>())
+                foreach (BoxCollider boxCollider in FindObjectsByType<BoxCollider>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
                 {
                     if (boxCollider == null) continue;
 
@@ -529,7 +529,7 @@ namespace SnapMeshPCG
                         }
                     }
                 }
-                foreach (VoxelCollider voxelCollider in FindObjectsOfType<VoxelCollider>())
+                foreach (VoxelCollider voxelCollider in FindObjectsByType<VoxelCollider>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
                 {
                     if (voxelCollider == null) continue;
 
@@ -599,7 +599,7 @@ namespace SnapMeshPCG
 
                 // Try to clean-up as best as possible
                 ClearMap();
-                foreach (var obj in FindObjectsOfType<MapPiece>())
+                foreach (var obj in FindObjectsByType<MapPiece>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
                 {
                     DestroyImmediate(obj);
                 }
@@ -657,7 +657,7 @@ namespace SnapMeshPCG
         {
             // Find any pieces with the GeneratedObject component and
             // deletes them (and all of its children)
-            foreach (var obj in FindObjectsOfType<GeneratedObject>())
+            foreach (var obj in FindObjectsByType<GeneratedObject>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
                 DestroyImmediate(obj.gameObject);
             }

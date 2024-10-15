@@ -256,7 +256,7 @@ namespace SnapMeshPCG.Experiments
         private void SetGenParams()
         {
             // Get reference to the GenerationManager
-            GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
+            GenerationManager gmInstance = FindAnyObjectByType<GenerationManager>(FindObjectsInactive.Exclude);
 
             // Get GenerationManager's class type
             Type gmType = typeof(GenerationManager);
@@ -369,7 +369,7 @@ namespace SnapMeshPCG.Experiments
         private void SetNavParams()
         {
             // Get reference to the NavScanner
-            NavScanner nsInstance = FindObjectOfType<NavScanner>();
+            NavScanner nsInstance = FindAnyObjectByType<NavScanner>(FindObjectsInactive.Exclude);
 
             // Get NavScanner's class type
             Type nsType = typeof(NavScanner);
@@ -430,8 +430,8 @@ namespace SnapMeshPCG.Experiments
             string currentNavParamSet = _navParamSet;
 
             // Obtain the existing instances of the generation manager and nav scanner
-            GenerationManager gmInstance = FindObjectOfType<GenerationManager>();
-            NavScanner nsInstance = FindObjectOfType<NavScanner>();
+            GenerationManager gmInstance = FindAnyObjectByType<GenerationManager>(FindObjectsInactive.Exclude);
+            NavScanner nsInstance = FindAnyObjectByType<NavScanner>(FindObjectsInactive.Exclude);
 
             // Determine class types of the generation manager and nav scanner
             Type gmType = typeof(GenerationManager);

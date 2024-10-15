@@ -12,11 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefb2033c72dfae4595e4968de9a5c24, type: 3}
   m_Name: AutoGenPiece_Artistic
   m_EditorClassIdentifier: 
-  agentRadius: 0.4
-  agentHeight: 2
-  agentStep: 0.4
-  agentMaxSlope: 60
-  minAreaInAgents: 7
+  navMeshProperties: {fileID: 11400000, guid: a58374597a83bb74e9b199e2e1b25eda, type: 2}
   upDirection: {x: 0, y: 1, z: 0}
   sampleLength: 0.2
   sampleHeight: 0.01

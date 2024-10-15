@@ -82,6 +82,9 @@ namespace SnapMeshPCG
 
         MeshOctree  meshOctree;
         Mesh        navMesh;
+        float agentRadius => (config) ? (config.agentRadius) : (1.0f);
+        float agentStep => (config) ? (config.agentStep) : (0.4f);
+        float agentMaxSlope => (config) ? (config.agentMaxSlope) : (60.0f);
 
         RecastMeshParams navMeshParams;
 
@@ -117,18 +120,18 @@ namespace SnapMeshPCG
                 UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Creating nav mesh...", 0.1f);
 
                 navMeshParams = new RecastMeshParams();
-                navMeshParams.m_cellSize = config.agentRadius / 4.0f;// 1.0f / config.voxelDensity;
+                navMeshParams.m_cellSize = config.navMeshProperties.agentRadius / 4.0f;// 1.0f / config.voxelDensity;
                 navMeshParams.m_cellHeight = navMeshParams.m_cellSize / 2.0f; // 1.0f / (config.voxelDensity * config.verticalDensityMultiplier);
 
                 navMeshParams.m_agentHeight = navMeshParams.m_cellHeight;
-                navMeshParams.m_agentRadius = config.agentRadius;
-                navMeshParams.m_agentMaxClimb = config.agentStep;
-                navMeshParams.m_agentMaxSlope = config.agentMaxSlope;
+                navMeshParams.m_agentRadius = config.navMeshProperties.agentRadius;
+                navMeshParams.m_agentMaxClimb = config.navMeshProperties.agentStep;
+                navMeshParams.m_agentMaxSlope = config.navMeshProperties.agentMaxSlope;
 
                 //Debug.Log($"Voxel size = {navMeshParams.m_cellSize}, {navMeshParams.m_cellHeight}, {navMeshParams.m_cellSize}");
                 //Debug.Log($"Agent size = {navMeshParams.m_agentRadius}/{navMeshParams.m_agentHeight}");
 
-                navMeshParams.m_regionMinSize = (navMeshParams.m_agentRadius * config.minAreaInAgents) / navMeshParams.m_cellSize; // config.minArea;
+                navMeshParams.m_regionMinSize = (navMeshParams.m_agentRadius * config.navMeshProperties.minAreaInAgents) / navMeshParams.m_cellSize; // config.minArea;
                 navMeshParams.m_regionMergeSize = navMeshParams.m_regionMinSize * 5.0f; // config.minArea * 10.0f;
                 navMeshParams.m_monotonePartitioning = false;
 
@@ -183,7 +186,7 @@ namespace SnapMeshPCG
                 MergeEdges(transform.localToWorldMatrix);
 
                 // Remove short edges - need to account for the sourceMeshMatrix because of eventual scaling
-                connectorEdges.RemoveAll((edge) => (edge.length < config.agentRadius));
+                connectorEdges.RemoveAll((edge) => (edge.length < config.navMeshProperties.agentRadius));
 
                 if (config.connectorStrategy != AutoPieceGenerationConfig.ConnectorStrategy.None)
                 {
@@ -276,7 +279,7 @@ namespace SnapMeshPCG
             float angle = startAngle;
             for (int j = 0; j < config.probeCount; j++)
             {
-                float l = Mathf.Max(range, config.agentRadius * config.probeRadiusScale);
+                float l = Mathf.Max(range, agentRadius * config.probeRadiusScale);
                 Vector3 probeEnd = pt + cosDir * l * Mathf.Cos(Mathf.Deg2Rad * angle) + sinDir * l * Mathf.Sin(Mathf.Deg2Rad * angle);
 
                 angle += incAngle;
@@ -312,13 +315,13 @@ namespace SnapMeshPCG
 
             var topology = new Topology(navMesh, Matrix4x4.identity);
             topology.ComputeTriangleNormals();
-            boundary = topology.GetBoundary();
+            boundary = topology.GetBoundaries();
 
             if (boundary == null) return;
 
             connectorEdges = new List<Edge>();
 
-            float step = config.agentRadius;
+            float step = agentRadius;
             float angleTolerance = Mathf.Cos(config.sampleDirTolerance * Mathf.Deg2Rad);
 
             int totalEdges = 0;
@@ -369,19 +372,19 @@ namespace SnapMeshPCG
                     {
                         sampleId++;
 
-                        Vector3     raycastPos = pt + config.agentStep * nNorm;
+                        Vector3     raycastPos = pt + agentStep * nNorm;
                         float       t = float.MaxValue;
                         Triangle    triangle = new Triangle();
                         Vector3     raycastTriNormal = Vector3.zero;
 
                         DebugGizmo.AddSphere($"Type=SamplePoint;subtype=RaycastPos;sampleId={sampleId};edgeId={edgeId}", pt, 0.025f, new Color(1.0f, 0.5f, 0.0f, 1.0f), transform.localToWorldMatrix);
 
-                        if (meshOctree.Raycast(raycastPos, -nNorm, config.agentStep * 4.0f, ref triangle, ref t))
+                        if (meshOctree.Raycast(raycastPos, -nNorm, agentStep * 4.0f, ref triangle, ref t))
                         {
                             raycastTriNormal = triangle.normal;
                             raycastPos = raycastPos - nNorm * t;
                         }
-                        else if (meshOctree.Raycast(raycastPos, nNorm, config.agentStep * 4.0f, ref triangle, ref t))
+                        else if (meshOctree.Raycast(raycastPos, nNorm, agentStep * 4.0f, ref triangle, ref t))
                         {
                             raycastTriNormal = triangle.normal;
                             raycastPos = raycastPos + nNorm * t;
@@ -391,8 +394,8 @@ namespace SnapMeshPCG
                             Debug.LogError("Can't raycast to surface!");
 
                             DebugGizmo.AddSphere($"Type=SamplePoint;subtype=RaycastError;sampleId={sampleId};edgeId={edgeId}", raycastPos, 0.025f, new Color(1.0f, 0.5f, 0.0f, 1.0f), transform.localToWorldMatrix);
-                            DebugGizmo.AddLine($"Type=SamplePoint;subtype=RaycastError;sampleId={sampleId};edgeId={edgeId}", raycastPos, raycastPos - nNorm * config.agentStep * 4.0f, new Color(1.0f, 1.0f, 0.0f, 1.0f), transform.localToWorldMatrix);
-                            DebugGizmo.AddLine($"Type=SamplePoint;subtype=RaycastError;sampleId={sampleId};edgeId={edgeId}", raycastPos, raycastPos + nNorm * config.agentStep * 4.0f, new Color(1.0f, 0.0f, 0.0f, 1.0f), transform.localToWorldMatrix);
+                            DebugGizmo.AddLine($"Type=SamplePoint;subtype=RaycastError;sampleId={sampleId};edgeId={edgeId}", raycastPos, raycastPos - nNorm * agentStep * 4.0f, new Color(1.0f, 1.0f, 0.0f, 1.0f), transform.localToWorldMatrix);
+                            DebugGizmo.AddLine($"Type=SamplePoint;subtype=RaycastError;sampleId={sampleId};edgeId={edgeId}", raycastPos, raycastPos + nNorm * agentStep * 4.0f, new Color(1.0f, 0.0f, 0.0f, 1.0f), transform.localToWorldMatrix);
                         }
 
                         raycastPos = raycastPos + raycastTriNormal * config.sampleHeight;
@@ -419,8 +422,8 @@ namespace SnapMeshPCG
                         else if ((!canStart) && (canEnd)) color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
 
                         DebugGizmo.AddSphere($"Type=SamplePoint;subType=Actual;sampleId={sampleId};edgeId={edgeId};canStart={canStart};canEnd={canEnd}", raycastPos, 0.1f, color, transform.localToWorldMatrix);
-                        DebugGizmo.AddLine($"Type=SamplePoint;subType=Normal;sampleId={sampleId};edgeId={edgeId};canStart={canStart};canEnd={canEnd}", raycastPos, raycastPos + raycastTriNormal * config.agentStep, Color.magenta, transform.localToWorldMatrix);
-                        DebugGizmo.AddLine($"Type=SamplePoint;subType=Raycast;sampleId={sampleId};edgeId={edgeId};canStart={canStart};canEnd={canEnd}", pt, pt - nNorm * config.agentStep * 4.0f, Color.blue, transform.localToWorldMatrix);
+                        DebugGizmo.AddLine($"Type=SamplePoint;subType=Normal;sampleId={sampleId};edgeId={edgeId};canStart={canStart};canEnd={canEnd}", raycastPos, raycastPos + raycastTriNormal * agentStep, Color.magenta, transform.localToWorldMatrix);
+                        DebugGizmo.AddLine($"Type=SamplePoint;subType=Raycast;sampleId={sampleId};edgeId={edgeId};canStart={canStart};canEnd={canEnd}", pt, pt - nNorm * agentStep * 4.0f, Color.blue, transform.localToWorldMatrix);
 
                         pt = pt + edgeDir * config.sampleLength;
                         n = n + nInc * config.sampleLength;
@@ -475,7 +478,7 @@ namespace SnapMeshPCG
                                 Vector3 normal = ((startPoint.normal + currentSample.normal) * 0.5f).normalized;
                                 Vector3 perp_dir = Vector3.Cross(main_dir, normal);
 
-                                if (!CanReachInfinitePerpendicular(meshOctree, startPoint.position, currentSample.position, 4 * config.agentRadius, perp_dir))
+                                if (!CanReachInfinitePerpendicular(meshOctree, startPoint.position, currentSample.position, 4 * agentRadius, perp_dir))
                                 {
                                     // Can't reach on the new sample point, so add this one and skip to next point
                                     AddConnectorEdge(meshOctree, startPoint.position, endPoint.position, startPoint.normal, endPoint.normal, sampleList.isCW);
@@ -547,7 +550,7 @@ namespace SnapMeshPCG
             Vector3 normal = ((n1 + n2) * 0.5f).normalized;
             Vector3 perp_dir = Vector3.Cross(main_dir, normal);
 
-            if (!CanReachInfinitePerpendicular(meshOctree, p0, p1, 4 * config.agentRadius, perp_dir))
+            if (!CanReachInfinitePerpendicular(meshOctree, p0, p1, 4 * agentRadius, perp_dir))
             {
                 return false;
             }
@@ -592,10 +595,10 @@ namespace SnapMeshPCG
             var topology = new Topology(srcMesh, srcMeshMatrix);
             topology.ComputeTriangleNormals();
 
-            float cosSlopeTolerance = Mathf.Cos(Mathf.Deg2Rad * config.agentMaxSlope);
+            float cosSlopeTolerance = Mathf.Cos(Mathf.Deg2Rad * agentMaxSlope);
             float cosDirectionTolerance = Mathf.Cos(config.directionAngleTolerance * Mathf.Deg2Rad);
             float cosNormalTolerance = Mathf.Cos(config.normalAngleTolerance * Mathf.Deg2Rad);
-            float toleranceRange = 15.0f * config.agentRadius;
+            float toleranceRange = 15.0f * agentRadius;
 
             int edgeId = 0;
 
@@ -669,7 +672,7 @@ namespace SnapMeshPCG
 
                     // Remove edges that exceed a certain vertical threshould (we never want this, I believe, even if the heuristic then 
                     // throws it away
-                    if (Mathf.Abs(edgeCenter.y - (e1.y + e2.y) * 0.5f) > config.agentStep * 2.0f) continue;
+                    if (Mathf.Abs(edgeCenter.y - (e1.y + e2.y) * 0.5f) > agentStep * 2.0f) continue;
 
                     var eC = (e1 + e2) * 0.5f;
 
@@ -741,7 +744,7 @@ namespace SnapMeshPCG
                         // Compute distance fom ray (how close the raycast was of hitting)
                         if (tLine < 0) tLine = Mathf.Abs(tLine) * (e2XZ - e1XZ).magnitude;
                         else if (tLine > 1) tLine = (tLine - 1) * (e2XZ - e1XZ).magnitude;
-                        tLine = 1 - Mathf.Clamp01(tLine / config.agentRadius);
+                        tLine = 1 - Mathf.Clamp01(tLine / agentRadius);
 
                         intersectionScore += 3 * tLine;
                     }
@@ -764,7 +767,7 @@ namespace SnapMeshPCG
                         // Compute distance fom ray (how close the raycast was of hitting)
                         if (tLine < 0) tLine = Mathf.Abs(tLine) * (e2XZ - e1XZ).magnitude;
                         else if (tLine > 1) tLine = (tLine - 1) * (e2XZ - e1XZ).magnitude;
-                        tLine = 1 - Mathf.Clamp01(tLine / config.agentRadius);
+                        tLine = 1 - Mathf.Clamp01(tLine / agentRadius);
 
                         intersectionScore += 3 * tLine;
                     }
@@ -833,7 +836,7 @@ namespace SnapMeshPCG
         void MergeEdges(Matrix4x4 matrix)
         {
             float cosTolerance = Mathf.Cos(Mathf.Deg2Rad * config.mergeAngleTolerance);
-            float dist = config.mergeDistanceTolerance * config.agentRadius;
+            float dist = config.mergeDistanceTolerance * agentRadius;
             bool retry = true;
 
             while (retry)

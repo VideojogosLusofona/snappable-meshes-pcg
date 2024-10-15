@@ -12,14 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefb2033c72dfae4595e4968de9a5c24, type: 3}
   m_Name: AutoGenPiece_Benchmark
   m_EditorClassIdentifier: 
-  agentRadius: 0.25
-  agentHeight: 1.96
-  agentStep: 0.1
-  agentMaxSlope: 60
-  voxelDensity: 25
-  verticalDensityMultiplier: 1
-  minArea: 5
+  navMeshProperties: {fileID: 11400000, guid: 5d0b4205eba761e4697aa7643168a672, type: 2}
+  upDirection: {x: 0, y: 1, z: 0}
   sampleLength: 0.05
+  sampleHeight: 0.1
   sampleDirTolerance: 5
   edgeMaxAngleWithXZ: 180
   probeCount: 16
@@ -29,5 +25,12 @@ MonoBehaviour:
   mergeAngleTolerance: 15
   mergeDistanceTolerance: 0.25
   connectorStrategy: 2
+  forceUpDirection: 0
   pinCount: 1
   pinsPerUnit: 5
+  maxPinCount: 0
+  deleteLargeConnectors: 0
+  boundingVolumeStrategy: 0
+  boundingVolumeLayer: 0
+  boundingVolumeVoxelSize: 0.25
+  boundingVolumeMaxDepth: 4

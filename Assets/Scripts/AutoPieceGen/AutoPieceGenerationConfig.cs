@@ -9,12 +9,8 @@ namespace SnapMeshPCG
         public enum ConnectorStrategy { None, Simple, LengthBased };
         public enum BoundingVolumeStrategy { None, Box, Voxel };
 
-        [Header("Navmesh Generation Properties")]
-        public float agentRadius = 0.1f;
-        public float agentHeight = 0.5f;
-        public float agentStep = 0.1f;
-        public float agentMaxSlope = 45.0f;
-        public float minAreaInAgents = 7.0f;
+        [Expandable]
+        public NavMeshGeneratorConfig   navMeshProperties;
 
         [Header("Connector Generation")]
         public Vector3              upDirection = new Vector3(0.0f, 1.0f, 0.0f);
@@ -55,5 +51,8 @@ namespace SnapMeshPCG
         [ShowIf("isBoxVolume")]
         public int                      boundingVolumeMaxDepth = 4;
 
+        public float agentRadius => (navMeshProperties) ? (navMeshProperties.agentRadius) : 1.0f;
+        public float agentStep => (navMeshProperties) ? (navMeshProperties.agentStep) : 0.4f;
+        public float agentMaxSlope => (navMeshProperties) ? (navMeshProperties.agentMaxSlope) : 60.0f;
     }
 }
