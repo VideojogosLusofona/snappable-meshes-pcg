@@ -14,9 +14,7 @@ namespace SnapMeshPCG
 
         public void Build()
         {
-            MeshFilter sourceMeshFilter = GetComponentInChildren<MeshFilter>();
-            Mesh sourceMesh = (sourceMeshFilter) ? (sourceMeshFilter.sharedMesh) : (null);
-            Matrix4x4 sourceMeshMatrix = sourceMeshFilter.transform.GetLocalMatrix();
+            var sourceMeshFilters = GetComponentsInChildren<MeshFilter>();
 
             UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Creating nav mesh...", 0.1f);
 
@@ -49,7 +47,14 @@ namespace SnapMeshPCG
             recast.SetNavMeshParams(navMeshParams);
             recast.ClearComputedData();
             recast.ClearMesh();
-            recast.AddMesh(sourceMesh, sourceMeshFilter.gameObject);
+
+            foreach (var meshFilter in sourceMeshFilters)
+            {
+                Mesh sourceMesh = meshFilter.sharedMesh;
+                if (sourceMesh == null) continue;
+
+                recast.AddMesh(sourceMesh, meshFilter.gameObject);
+            }
             recast.ComputeSystem();
 
             UnityEditor.EditorUtility.ClearProgressBar();
