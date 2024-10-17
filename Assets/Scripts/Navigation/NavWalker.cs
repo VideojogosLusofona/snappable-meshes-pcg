@@ -17,18 +17,18 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 namespace SnapMeshPCG.Navigation
 {
     /// <summary>
     /// Represents the AI bot that will navigate the map as a demonstration.
     /// </summary>
-    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     public class NavWalker : MonoBehaviour
     {
         // Reference to the navmesh agent component
-        private NavMeshAgent _agent;
+        private UnityEngine.AI.NavMeshAgent _agent;
 
         // Reference to the nav point list
         private IReadOnlyList<NavPoint> _navPoints;
@@ -40,7 +40,7 @@ namespace SnapMeshPCG.Navigation
             _navPoints = GetComponentInParent<INavInfo>().NavPoints;
 
             // Get the NavMeshAgent component
-            _agent = GetComponent<NavMeshAgent>();
+            _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
             // Disable main camera, since we want to use the walker cam for the demo
             Camera.main.gameObject.SetActive(false);
@@ -52,10 +52,10 @@ namespace SnapMeshPCG.Navigation
         // Update is called once per frame
         private void Update()
         {
-            NavMeshPathStatus pathStatus = _agent.pathStatus;
+            UnityEngine.AI.NavMeshPathStatus pathStatus = _agent.pathStatus;
 
             // If current path is unable to be complete, get a new one
-            if (pathStatus != NavMeshPathStatus.PathComplete)
+            if (pathStatus != UnityEngine.AI.NavMeshPathStatus.PathComplete)
                 GetNewPath();
 
             // If walker has reached destination, get a new path

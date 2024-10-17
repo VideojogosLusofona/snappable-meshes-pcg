@@ -88,6 +88,9 @@ namespace SnapMeshPCG
 
         RecastMeshParams navMeshParams;
 
+        [SerializeField, Header("Debug Display Options")]
+        private bool displayFinalConnectorEdges = false;
+
         [Button("Build")]
         public bool Run()
         {
@@ -1083,7 +1086,7 @@ namespace SnapMeshPCG
                 Gizmos.matrix = prevMatrixGizmos;
             }//*/
 
-            if (connectorEdges != null)
+            if ((connectorEdges != null) && (displayFinalConnectorEdges))
             {
                 var prevMatrixHandles = UnityEditor.Handles.matrix;
                 var prevMatrixGizmos = Gizmos.matrix;
@@ -1207,9 +1210,7 @@ namespace SnapMeshPCG
                 // voxelTree.ClampDepth(5);
 
                 //Debug.Log($"Node count = {voxelTree.countNodes}");
-                collider.voxelTree = voxelTree;
-
-                
+                collider.voxelTree = voxelTree;                
             }
         }
     }

@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.AI;
+using Unity.AI.Navigation;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 using NaughtyAttributes;
@@ -162,7 +162,7 @@ namespace SnapMeshPCG.Navigation
             int tries = 0;
 
             // Where to store the calculated paths
-            NavMeshPath storedPath = new NavMeshPath();
+            UnityEngine.AI.NavMeshPath storedPath = new UnityEngine.AI.NavMeshPath();
 
             // Obtain list of map piece bounds with running sum box volume
             // This will be required to evenly distribute nav points through
@@ -236,14 +236,14 @@ namespace SnapMeshPCG.Navigation
                     NavPoint p2 = _navPoints[j];
 
                     // Try and calculate a path between the two current points
-                    bool path = NavMesh.CalculatePath(
-                        p1.Point, p2.Point, NavMesh.AllAreas, storedPath);
+                    bool path = UnityEngine.AI.NavMesh.CalculatePath(
+                        p1.Point, p2.Point, UnityEngine.AI.NavMesh.AllAreas, storedPath);
 
                     // Increment number of tries
                     tries++;
 
                     // Has a complete path been found?
-                    if (path && storedPath.status == NavMeshPathStatus.PathComplete)
+                    if (path && storedPath.status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
                     {
                         // Cluster generation
                         if (p1.Isolated && p2.Isolated)
@@ -400,7 +400,7 @@ namespace SnapMeshPCG.Navigation
             IReadOnlyList<(float sumVol, Bounds bounds)> pieceBounds)
         {
             // Location of the nav point in the nav mesh
-            NavMeshHit hit;
+            UnityEngine.AI.NavMeshHit hit;
 
             // Was a nav point found?
             bool pointFound;
@@ -458,7 +458,7 @@ namespace SnapMeshPCG.Navigation
             radius = bounds.size.magnitude;
 
             // Search for nav point using the specified radius
-            pointFound = NavMesh.SamplePosition(origin, out hit, radius, NavMesh.AllAreas);
+            pointFound = UnityEngine.AI.NavMesh.SamplePosition(origin, out hit, radius, UnityEngine.AI.NavMesh.AllAreas);
 
             // If a point is found, save it in the nullable
             if (pointFound)

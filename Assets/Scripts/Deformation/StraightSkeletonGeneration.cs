@@ -2,24 +2,14 @@ using UnityEngine;
 using SnapMeshPCG;
 using NaughtyAttributes;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine.ProBuilder;
-using static UnityEditor.Searcher.Searcher.AnalyticsEvent;
-using System;
 
-public class SkeletonGeneration : MonoBehaviour
+public class StraightSkeletonGeneration : MonoBehaviour
 {
-    public enum SkeletonGenerationType { Straight };
-
     // Needed for the navmesh generation configuration
     [SerializeField] 
     private NavMeshGeneratorConfig navMeshConfig;
-    [SerializeField] 
-    private SkeletonGenerationType  genType = SkeletonGenerationType.Straight;
     [SerializeField]
     private int                     maxSteps = 100;
-    [SerializeField, Header("Debug Options")]
-    private bool displayNavmesh = false;
     [SerializeField]
     private bool displayBoundary = false;
     [SerializeField]
@@ -43,10 +33,10 @@ public class SkeletonGeneration : MonoBehaviour
     private Topology    meshTopology;
     private Boundary    navigationBoundaries;
 
-    private List<DeformationState>  states;
+    private List<StraightSkeletonState>  states;
 
-    [Button("Setup Deformation")]
-    public void SetupDeformation()
+    [Button("Setup")]
+    public void Setup()
     {
         var navMesh = GetComponent<LocalNavMesh>();
         if (navMesh == null)
@@ -72,7 +62,7 @@ public class SkeletonGeneration : MonoBehaviour
 
         navMesh.Build();
 
-        navigationMesh = navMesh.GetMesh(transform.worldToLocalMatrix);
+        navigationMesh = navMesh.GetMesh();
 
         meshTopology = new Topology(navigationMesh, Matrix4x4.identity);
         meshTopology.ComputeTriangleNormals();
@@ -109,13 +99,13 @@ public class SkeletonGeneration : MonoBehaviour
     {
         if (navigationBoundaries == null)
         {
-            SetupDeformation();
+            Setup();
         }
 
-        var startState = new DeformationState();
+        var startState = new StraightSkeletonState();
         startState.BuildVertices(navigationBoundaries);
 
-        states = new List<DeformationState>
+        states = new List<StraightSkeletonState>
         {
             startState
         };
@@ -127,9 +117,9 @@ public class SkeletonGeneration : MonoBehaviour
     }
 
     [Button("Straight Skeleton Generation: Step")]
-    DeformationState StraightSkeletonStep()
+    StraightSkeletonState StraightSkeletonStep()
     {
-        List<DeformationState.Event> events = new();
+        List<StraightSkeletonState.Event> events = new();
 
         var state = GetState(straightSkeletonTime);
         state.GetNextEvent(events);
@@ -147,13 +137,13 @@ public class SkeletonGeneration : MonoBehaviour
         return newState;
     }
 
-    DeformationState GetState(float t)
+    StraightSkeletonState GetState(float t)
     {
         // This assumes the states are placed in ordered fashion
         if (states == null) return null;
         if (states.Count == 0) return null;
 
-        DeformationState currentState = null;
+        StraightSkeletonState currentState = null;
         foreach (var state in states)         
         {
             if (state.startTime > t) return currentState;
@@ -166,13 +156,6 @@ public class SkeletonGeneration : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if ((displayNavmesh) && (navigationMesh))
-        {
-            Gizmos.color = Color.black;
-            Gizmos.DrawWireMesh(navigationMesh);
-            Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
-            Gizmos.DrawMesh(navigationMesh);
-        }
         if ((displayBoundary) && (navigationBoundaries != null))
         {
             Gizmos.color = new Color(1, 1, 0, 0.25f);
@@ -190,7 +173,7 @@ public class SkeletonGeneration : MonoBehaviour
         }
 
         if (debugTime < 0) debugTime = 0;
-        DeformationState state = GetState(debugTime);
+        StraightSkeletonState state = GetState(debugTime);
         if (state != null)
         {
             state.OnDrawGizmos(displayVertices, displayBorderOverTime, debugIntersection, debugEdge, debugVertex, debugTime);          

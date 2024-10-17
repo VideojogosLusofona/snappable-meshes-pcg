@@ -16,7 +16,7 @@
  */
 
 using UnityEngine;
-using UnityEngine.AI;
+using Unity.AI.Navigation;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using NaughtyAttributes;

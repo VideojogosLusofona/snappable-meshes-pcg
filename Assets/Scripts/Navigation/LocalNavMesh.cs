@@ -1,6 +1,9 @@
 using SnapMeshPCG;
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace SnapMeshPCG
 {
@@ -8,12 +11,17 @@ namespace SnapMeshPCG
     {
         [SerializeField]
         private NavMeshGeneratorConfig navMeshConfig;
+        [SerializeField]
+        private bool                   displayNavmesh;
 
         RcdtcsUnityUtils.SystemHelper       recast;
         RcdtcsUnityUtils.RecastMeshParams   navMeshParams;
+        Mesh                                navigationMesh;
 
         public void Build()
         {
+            if (navMeshConfig == null) return;
+
             var sourceMeshFilters = GetComponentsInChildren<MeshFilter>();
 
             UnityEditor.EditorUtility.DisplayProgressBar("Building...", "Creating nav mesh...", 0.1f);
@@ -57,6 +65,8 @@ namespace SnapMeshPCG
             }
             recast.ComputeSystem();
 
+            navigationMesh = recast.GetPolyMesh(Matrix4x4.identity);
+
             UnityEditor.EditorUtility.ClearProgressBar();
         }
 
@@ -65,11 +75,71 @@ namespace SnapMeshPCG
             navMeshConfig = config;
         }
 
-        public Mesh GetMesh(Matrix4x4 matrix)
+        public Mesh GetMesh()
         {
-            if (recast == null) return null;
+            if (navigationMesh == null)
+            {
+                Build();
+            }
 
-            return recast.GetPolyMesh(matrix);
+            return navigationMesh;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (displayNavmesh)
+            {
+                if (navigationMesh == null)
+                {
+                    navigationMesh = GetMesh();
+                }
+                if (navigationMesh != null)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawWireMesh(navigationMesh);
+                    Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
+                    Gizmos.DrawMesh(navigationMesh);
+                }
+            }
+        }
+
+        public Polyline GetPath(Vector3 start, Vector3 end, bool includeEndpoints)
+        {
+            if ((recast == null) || (recast.m_navQuery == null))
+            {
+                Build();
+                if (recast == null) return null;
+            }
+            var path = RcdtcsUnityUtils.ComputeSmoothPath(recast.m_navQuery, start, end);
+            if (path == null) return null;
+
+            Polyline polyline = new Polyline();
+            for (int i = 0; i < path.m_nsmoothPath * 3; i+=3)
+            {
+                polyline.Add(new Vector3(path.m_smoothPath[i], path.m_smoothPath[i + 1], path.m_smoothPath[i + 2]));
+            }
+
+            if (includeEndpoints)
+            {
+                if (Vector3.Distance(start, polyline[0]) > 1e-3)
+                {
+                    polyline.Insert(0, start);
+                }
+                if (Vector3.Distance(end, polyline[polyline.Count - 1]) > 1e-3)
+                {
+                    polyline.Add(end);
+                }
+            }
+
+            return polyline;
+        }
+
+        public Vector3 GetPointInNavmesh(Vector3 center)
+        {
+            var p = new float[] { center.x, center.y, center.z };
+            p = RcdtcsUnityUtils.GetClosestPointOnNavMesh(recast.m_navQuery, p);
+
+            return new Vector3(p[0], p[1], p[2]);
         }
     }
 }

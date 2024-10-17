@@ -16,7 +16,6 @@
  */
 
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace SnapMeshPCG.Navigation
 {
@@ -40,7 +39,7 @@ namespace SnapMeshPCG.Navigation
             NavWalker realWalker = Instantiate(_walker, transform);
 
             // Get the NavMeshAgent component from the walker agent
-            NavMeshAgent navMeshAgent = realWalker.GetComponent<NavMeshAgent>();
+            UnityEngine.AI.NavMeshAgent navMeshAgent = realWalker.GetComponent<UnityEngine.AI.NavMeshAgent>();
 
             // Select the most connected nav point as the agent's spawn point
             Vector3 spawnPoint =  navInfo.NavPoints[0].Point;
