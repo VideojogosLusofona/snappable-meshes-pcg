@@ -1,0 +1,54 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GravityPointForTesting : MonoBehaviour
+{
+    [SerializeField]
+    private List<GravityPointForTesting> links;
+
+    public int  group = 0;
+    public bool debugRender = true;
+    public bool locked = false;
+
+    public void ResetLinks()
+    {
+        links = new List<GravityPointForTesting>();
+    }
+
+    internal void AddLink(GravityPointForTesting nextPoint)
+    {
+        links.Add(nextPoint);
+    }
+
+    internal List<GravityPointForTesting> GetLinks() => links;
+
+    public static readonly Color[] Colors = new Color[]
+    {
+        Color.green,
+        Color.red,
+        Color.cyan,
+        Color.yellow,
+        Color.magenta,
+        Color.blue,
+    };
+
+    private void OnDrawGizmos()
+    {
+        if (!debugRender) return;
+
+        Gizmos.color = Colors[group].ChangeAlpha(0.5f);
+        Gizmos.DrawSphere(transform.position, 0.25f);
+
+        if (links != null)
+        {
+            Gizmos.color = Colors[group];
+            foreach (var p in links)
+            {
+                if (p != null)
+                {
+                    Gizmos.DrawLine(transform.position, p.transform.position);
+                }
+            }
+        }
+    }
+}
