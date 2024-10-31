@@ -167,7 +167,7 @@ MonoBehaviour:
   - {fileID: 1607458743}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &18498063
 GameObject:
@@ -217,7 +217,7 @@ MonoBehaviour:
   - {fileID: 422939295}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &30136975
 GameObject:
@@ -301,7 +301,7 @@ MonoBehaviour:
   links: []
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!4 &65507381
 Transform:
@@ -351,7 +351,7 @@ MonoBehaviour:
   - {fileID: 1594832950}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &128222227
 Transform:
@@ -401,7 +401,7 @@ MonoBehaviour:
   - {fileID: 1407796628}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &137605923
 Transform:
@@ -451,7 +451,7 @@ MonoBehaviour:
   - {fileID: 793204431}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &162471301
 Transform:
@@ -21204,7 +21204,7 @@ MonoBehaviour:
   - {fileID: 1960728977}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &243143573
 Transform:
@@ -21304,7 +21304,7 @@ MonoBehaviour:
   - {fileID: 799714823}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &284411338
 Transform:
@@ -21788,7 +21788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMeshConfig: {fileID: 11400000, guid: a58374597a83bb74e9b199e2e1b25eda, type: 2}
-  displayNavmesh: 0
+  displayNavmesh: 1
 --- !u!4 &374589352 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3665738226975136361, guid: aa4b9324950e90144a54299ca160374d, type: 3}
@@ -21807,7 +21807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMeshConfig: {fileID: 11400000, guid: a58374597a83bb74e9b199e2e1b25eda, type: 2}
-  showPaths: 0
+  showPaths: 1
   debugPath: -1
   showCenter: 1
 --- !u!1 &386279433
@@ -21908,7 +21908,7 @@ MonoBehaviour:
   - {fileID: 1144975264}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &435594974
 GameObject:
@@ -22007,7 +22007,7 @@ MonoBehaviour:
   - {fileID: 957377116}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!1 &483101964
 GameObject:
@@ -22244,7 +22244,7 @@ MonoBehaviour:
   - {fileID: 593608413}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &550475299
 GameObject:
@@ -22294,7 +22294,7 @@ MonoBehaviour:
   - {fileID: 511987233}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!1 &552103004
 GameObject:
@@ -22344,7 +22344,7 @@ MonoBehaviour:
   - {fileID: 1453984274}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &563383377
 GameObject:
@@ -22444,7 +22444,7 @@ MonoBehaviour:
   - {fileID: 867142437}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &603867526
 GameObject:
@@ -22694,7 +22694,7 @@ MonoBehaviour:
   - {fileID: 942126710}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &660689987
 GameObject:
@@ -22900,7 +22900,7 @@ MonoBehaviour:
   - {fileID: 1123058488}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &677848252
 Transform:
@@ -22950,7 +22950,7 @@ MonoBehaviour:
   - {fileID: 1040759124}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &701942696
 Transform:
@@ -23015,7 +23015,7 @@ MonoBehaviour:
   - {fileID: 721258096}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &713589931
 GameObject:
@@ -23050,7 +23050,7 @@ MonoBehaviour:
   - {fileID: 162471300}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &713589933
 Transform:
@@ -23165,7 +23165,7 @@ MonoBehaviour:
   - {fileID: 552103006}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &722617919
 GameObject:
@@ -23351,7 +23351,7 @@ MonoBehaviour:
   - {fileID: 848760738}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &793204432
 Transform:
@@ -23401,7 +23401,7 @@ MonoBehaviour:
   - {fileID: 701942695}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &799714824
 Transform:
@@ -23466,7 +23466,7 @@ MonoBehaviour:
   - {fileID: 1826152201}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!1 &848760737
 GameObject:
@@ -23501,7 +23501,7 @@ MonoBehaviour:
   - {fileID: 128222226}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &848760739
 Transform:
@@ -23566,7 +23566,7 @@ MonoBehaviour:
   - {fileID: 18498065}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &875727292
 GameObject:
@@ -23666,7 +23666,7 @@ MonoBehaviour:
   - {fileID: 709153852}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &896139333
 GameObject:
@@ -23766,7 +23766,7 @@ MonoBehaviour:
   - {fileID: 2968083}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &942126708
 GameObject:
@@ -23816,7 +23816,7 @@ MonoBehaviour:
   - {fileID: 1825368556}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &946596053
 GameObject:
@@ -23916,7 +23916,7 @@ MonoBehaviour:
   - {fileID: 653277289}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &980955572
 GameObject:
@@ -23950,7 +23950,7 @@ MonoBehaviour:
   links: []
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!4 &980955574
 Transform:
@@ -24000,7 +24000,7 @@ MonoBehaviour:
   - {fileID: 980955573}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1022160308
 Transform:
@@ -24050,7 +24050,7 @@ MonoBehaviour:
   - {fileID: 65507380}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1040759125
 Transform:
@@ -24199,7 +24199,7 @@ MonoBehaviour:
   - {fileID: 1022160307}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1123058489
 Transform:
@@ -24264,7 +24264,7 @@ MonoBehaviour:
   - {fileID: 1395447131}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1146996395
 GameObject:
@@ -24361,7 +24361,7 @@ MonoBehaviour:
   links: []
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 1
 --- !u!1 &1219079972
 GameObject:
@@ -24505,14 +24505,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSimulationOnStart: 1
-  gravityConstant: 0.00001
+  gravityConstant: 1
   minDist: 0.15
   maxDist: 3.4028235e+38
   timeStep: 0.01
   realtimeTimeStep: 1
   runStepsAtStart: 0
   autoMaxSteps: 1000
-  currentSteps: 0
+  currentSteps: 73
 --- !u!1 &1234474465
 GameObject:
   m_ObjectHideFlags: 0
@@ -24562,7 +24562,7 @@ MonoBehaviour:
   - {fileID: 898412459}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1239896344
 GameObject:
@@ -24747,7 +24747,7 @@ MonoBehaviour:
   - {fileID: 137605922}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1318871085
 Transform:
@@ -24862,7 +24862,7 @@ MonoBehaviour:
   - {fileID: 713589932}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1407796627
 GameObject:
@@ -24897,7 +24897,7 @@ MonoBehaviour:
   - {fileID: 677848251}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1407796629
 Transform:
@@ -25069,7 +25069,7 @@ MonoBehaviour:
   - {fileID: 243143572}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1462958492
 GameObject:
@@ -25251,14 +25251,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSimulationOnStart: 1
-  gravityConstant: 0.00001
+  gravityConstant: 1
   minDist: 0.15
   maxDist: 3.4028235e+38
   timeStep: 0.01
   realtimeTimeStep: 1
   runStepsAtStart: 0
   autoMaxSteps: 1000
-  currentSteps: 375
+  currentSteps: 1000
 --- !u!4 &1554611210
 Transform:
   m_ObjectHideFlags: 0
@@ -25404,7 +25404,7 @@ MonoBehaviour:
   - {fileID: 2115791408}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1594832951
 Transform:
@@ -25454,7 +25454,7 @@ MonoBehaviour:
   - {fileID: 1318871084}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1607458744
 Transform:
@@ -25519,7 +25519,7 @@ MonoBehaviour:
   - {fileID: 885936597}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1642964891
 GameObject:
@@ -25904,7 +25904,7 @@ MonoBehaviour:
   - {fileID: 284411337}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1800021158
 Transform:
@@ -26019,7 +26019,7 @@ MonoBehaviour:
   - {fileID: 1234474467}
   group: 2
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1826152199
 GameObject:
@@ -26069,7 +26069,7 @@ MonoBehaviour:
   - {fileID: 1626783077}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!1 &1834721683
 GameObject:
@@ -26521,7 +26521,7 @@ MonoBehaviour:
   - {fileID: 1800021157}
   group: 3
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &1960728978
 Transform:
@@ -26671,7 +26671,7 @@ MonoBehaviour:
   - {fileID: 1175702531}
   group: 1
   mass: 1
-  debugRender: 1
+  debugRender: 0
   locked: 0
 --- !u!4 &2115791409
 Transform:
