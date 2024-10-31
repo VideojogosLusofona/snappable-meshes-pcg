@@ -34,6 +34,7 @@ public class GravitySimulation
     {
         public int      index;
         public Vector3  position;
+        public Vector3  normal;
         public Vector3  velocity;
         public float    mass;
         public int      externalId;
@@ -62,6 +63,13 @@ public class GravitySimulation
     Dictionary<int, (int i1, int i2)> revParentGroups = new();
 
     Dictionary<int, int> childPoint = new();
+
+    float _planarAngularTolerance;
+    public float planarAngularTolerance
+    {
+        get { return Mathf.Acos(_planarAngularTolerance) * Mathf.Rad2Deg; }
+        set { _planarAngularTolerance = Mathf.Cos(value * Mathf.Deg2Rad); }
+    }
 
     internal int pointCount => points.Count;
 
@@ -95,11 +103,11 @@ public class GravitySimulation
         }
     }
 
-    public void AddPoint(Vector3 position, int gravityGroup, float mass, bool locked)
+    public void AddPoint(Vector3 position, Vector3 normal, int gravityGroup, float mass, bool locked)
     {
         Group group = GetGroup(gravityGroup);
 
-        var pt = new Point { index = points.Count, position = position, velocity = Vector3.zero, mass = mass, groupId = gravityGroup, externalId = points.Count, locked = locked };
+        var pt = new Point { index = points.Count, position = position, normal = normal, velocity = Vector3.zero, mass = mass, groupId = gravityGroup, externalId = points.Count, locked = locked };
 
         points.Add(pt);
         group.points.Add(pt);
@@ -271,20 +279,16 @@ public class GravitySimulation
                 foreach (var pt1 in grp1.points)
                 {
                     foreach (var pt2 in grp2.points)
-                    {
-                        if ((pt1.index == 0) && (pt2.index == 48))
-                        {
-                            int b = 10;
-                        }
-                        if (!distanceCache.TryGetValue((pt1.index, pt2.index), out var tmp))
-                        {
-                            int a = 10;
-                        }
+                    {                        
                         (float d, float d2, Vector3 v) = distanceCache[(pt1.index, pt2.index)];
                         if ((d2 > minSqDist) && (d2 < maxSqDist))
                         {
-                            float str = pt1.mass * pt2.mass / d2;
-                            pt1.velocity += v * str;
+                            // Check for the plane
+                            if (Vector3.Dot(pt1.normal, pt2.normal) > _planarAngularTolerance)
+                            {
+                                float str = pt2.mass / d2;
+                                pt1.velocity += v * str;
+                            }
                         }
                     }
                 }

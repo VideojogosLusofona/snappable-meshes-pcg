@@ -6,9 +6,10 @@ public class GravityPointForTesting : MonoBehaviour
     [SerializeField]
     private List<GravityPointForTesting> links;
 
-    public int  group = 0;
-    public bool debugRender = true;
-    public bool locked = false;
+    public int      group = 0;
+    public float    mass = 1;
+    public bool     debugRender = true;
+    public bool     locked = false;
 
     public void ResetLinks()
     {
@@ -36,8 +37,10 @@ public class GravityPointForTesting : MonoBehaviour
     {
         if (!debugRender) return;
 
+        float sizePerMass = Mathf.Log(mass + 1.0f);
+
         Gizmos.color = Colors[group].ChangeAlpha(0.5f);
-        Gizmos.DrawSphere(transform.position, 0.25f);
+        Gizmos.DrawSphere(transform.position, 0.25f * sizePerMass);
 
         if (links != null)
         {

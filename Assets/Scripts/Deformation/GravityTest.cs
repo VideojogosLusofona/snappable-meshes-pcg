@@ -138,10 +138,11 @@ public class GravityTest : MonoBehaviour
         simulation.maxDist = maxDist;
         simulation.mergeDistance = 0.3f;
         simulation.groupSelfInfluence = false;
+        simulation.planarAngularTolerance = 10;
 
         foreach (var pt in allPoints)
         {
-            simulation.AddPoint(pt.transform.position, pt.group, 1.0f, pt.locked);
+            simulation.AddPoint(pt.transform.position, pt.transform.up, pt.group, pt.mass, pt.locked);
         }
 
         SetVisibility(false);
@@ -155,6 +156,10 @@ public class GravityTest : MonoBehaviour
     [Button("Step Simulation")]
     void StepSimulation()
     {
+        if (simulation == null)
+        {
+            StartSimulation();
+        }
         currentSteps++;
         simulation.Step(timeStep);
     }
@@ -194,8 +199,11 @@ public class GravityTest : MonoBehaviour
         Color.blue,
     };
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
+        if (Selection.activeGameObject == null) return;
+        if ((Selection.activeGameObject != gameObject) && (!Selection.activeGameObject.transform.IsChildOf(transform))) return;
+
         if (simulation != null)
         {
             Gizmos.color = Color.green;
