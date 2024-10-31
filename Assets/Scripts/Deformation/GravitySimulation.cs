@@ -286,7 +286,7 @@ public class GravitySimulation
                             // Check for the plane
                             if (Vector3.Dot(pt1.normal, pt2.normal) > _planarAngularTolerance)
                             {
-                                float str = pt2.mass / d2;
+                                float str = gravityConstant * pt2.mass / d2;
                                 pt1.velocity += v * str;
                             }
                         }

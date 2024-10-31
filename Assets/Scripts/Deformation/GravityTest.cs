@@ -138,7 +138,7 @@ public class GravityTest : MonoBehaviour
         simulation.maxDist = maxDist;
         simulation.mergeDistance = 0.3f;
         simulation.groupSelfInfluence = false;
-        simulation.planarAngularTolerance = 10;
+        simulation.planarAngularTolerance = -90.0f;
 
         foreach (var pt in allPoints)
         {
