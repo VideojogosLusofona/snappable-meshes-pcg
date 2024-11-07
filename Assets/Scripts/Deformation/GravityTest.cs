@@ -7,12 +7,15 @@ public class GravityTest : MonoBehaviour
 {
     [SerializeField] bool   runSimulationOnStart = true;
     [SerializeField] float  gravityConstant = 0.001f;
+    [SerializeField] float  planarAngularTolerance = 10.0f;
+    [SerializeField] int    nSubsteps = 1;
     [SerializeField] float  minDist = 1e-3f;
     [SerializeField] float  maxDist = float.MaxValue;
     [SerializeField] float  timeStep = 0.01f;
     [SerializeField] float  realtimeTimeStep = 0.1f;
     [SerializeField] int    runStepsAtStart = 0;
     [SerializeField] int    autoMaxSteps = 1000;
+    [SerializeField] bool   displayNormals;
 
     const int maxChains = 4;
 
@@ -28,7 +31,7 @@ public class GravityTest : MonoBehaviour
 
     private void Update()
     {
-        if (runSimulationOnStart)
+        if (simulation != null)
         {
             currentSteps++;
             simulation.Step(Time.deltaTime * realtimeTimeStep);
@@ -36,6 +39,7 @@ public class GravityTest : MonoBehaviour
             if (simulation.totalDelta <= 1e-3f)
             {
                 Debug.Log("Simulation done!");
+                currentSteps--;
             }
         }
     }
@@ -130,6 +134,13 @@ public class GravityTest : MonoBehaviour
     {
         currentSteps = 0;
 
+        var meshOctree = GetComponent<MeshOctreeComponent>();
+        if (meshOctree == null)
+        {
+            meshOctree = gameObject.AddComponent<MeshOctreeComponent>();
+        }
+        meshOctree.Build();
+
         GravityPointForTesting[] allPoints = GetComponentsInChildren<GravityPointForTesting>();
 
         simulation = new GravitySimulation();
@@ -138,7 +149,13 @@ public class GravityTest : MonoBehaviour
         simulation.maxDist = maxDist;
         simulation.mergeDistance = 0.3f;
         simulation.groupSelfInfluence = false;
-        simulation.planarAngularTolerance = -90.0f;
+        simulation.planarAngularTolerance = planarAngularTolerance;
+        simulation.validPairCallback = (p1, p2) => 
+        {
+            Triangle hitInfo = null;
+            float    hitT = float.MaxValue;
+            return !meshOctree.Linecast(p1.position + Vector3.up * 0.05f, p2.position + Vector3.up * 0.05f, ref hitInfo, ref hitT);
+        };
 
         foreach (var pt in allPoints)
         {
@@ -161,7 +178,12 @@ public class GravityTest : MonoBehaviour
             StartSimulation();
         }
         currentSteps++;
-        simulation.Step(timeStep);
+        simulation.Step(timeStep, Mathf.Max(1, nSubsteps));
+        if (simulation.totalDelta < 1e-3)
+        {
+            Debug.Log("Simulation done!");
+            currentSteps--;
+        }
     }
 
     [Button("Run Until End")]
@@ -216,6 +238,12 @@ public class GravityTest : MonoBehaviour
                 Vector3 pos = pt.position;
                 Gizmos.color = Colors[pt.groupId % Colors.Length];
                 Gizmos.DrawSphere(pos, 0.15f);
+
+                if (displayNormals)
+                {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(pt.position, pt.position + pt.normal * 1.0f);
+                }
 
                 // Convert the world position to screen space
                 Vector3 screenPos = Camera.current.WorldToScreenPoint(pos);

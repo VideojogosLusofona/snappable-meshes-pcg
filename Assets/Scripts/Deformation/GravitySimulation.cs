@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class GravitySimulation
 {
+    public delegate bool ValidPairCallback(Point pt1, Point pt2);
+
     private float minSqDist = 1e-3f;
     private float maxSqDist = float.MaxValue;
     private float mergeSqDistance = 0.0f;
@@ -29,6 +31,8 @@ public class GravitySimulation
         get { return Mathf.Sqrt(mergeSqDistance); }
         set { mergeSqDistance = value * value; }
     }
+
+    public ValidPairCallback validPairCallback { get; set; }
 
     public class Point
     {
@@ -65,6 +69,7 @@ public class GravitySimulation
     Dictionary<int, int> childPoint = new();
 
     float _planarAngularTolerance;
+
     public float planarAngularTolerance
     {
         get { return Mathf.Acos(_planarAngularTolerance) * Mathf.Rad2Deg; }
@@ -286,6 +291,8 @@ public class GravitySimulation
                             // Check for the plane
                             if (Vector3.Dot(pt1.normal, pt2.normal) > _planarAngularTolerance)
                             {
+                                if ((validPairCallback != null) && (!validPairCallback(pt1, pt2))) continue;
+
                                 float str = gravityConstant * pt2.mass / d2;
                                 pt1.velocity += v * str;
                             }
@@ -322,8 +329,9 @@ public class GravitySimulation
             {
                 var p1 = points[dc.Key.i1];
                 var p2 = points[dc.Key.i2];
-                // Point was already destroyed
+                // Check if point is already destroyed, or schedulled for destruction
                 if ((p1 == null) || (p2 == null) || (p1.index == p2.index)) continue;
+                if (toRemove.Find(((p) => (p.index == p1.index) || (p.index == p2.index))) != null) continue;
 
                 // Create new point
                 var mergeGroup = GetGroup(p1.groupId, p2.groupId);
@@ -332,6 +340,7 @@ public class GravitySimulation
                 {
                     index = points.Count,
                     position = (p1.position + p2.position) * 0.5f,
+                    normal = (p1.normal + p2.normal).normalized,
                     velocity = Vector3.zero,
                     mass = (p1.mass + p2.mass),
                     groupId = mergeGroup.id,
@@ -374,30 +383,33 @@ public class GravitySimulation
         }
     }
 
-    internal void Step(float deltaTime)
+    internal void Step(float deltaTime, int subSteps = 1)
     {
         totalDelta = 0.0f;
 
-        // Reset velocity - inertia might be used in the future, but for this case I don't believe it is necessary
-        ResetVelocity();
-
-        // Cache distances
-        BuildCacheDistances();
-
-        // Compute velocity on this step
-        ComputeVelocities();
-
-        // Update positions
-        ComputePositions(deltaTime);
-
-
-        if (mergeDistance > 0.0f)
+        float dt = deltaTime / subSteps;
+        for (int i = 0; i < subSteps; i++)
         {
-            // Cache distances
-            UpdateSquareDistances();
+            // Reset velocity - inertia might be used in the future, but for this case I don't believe it is necessary
+            ResetVelocity();
 
-            // Merge points
-            MergePoints();
+            // Cache distances
+            BuildCacheDistances();
+
+            // Compute velocity on this step
+            ComputeVelocities();
+
+            // Update positions
+            ComputePositions(dt);
+
+            if (mergeDistance > 0.0f)
+            {
+                // Cache distances
+                UpdateSquareDistances();
+
+                // Merge points
+                MergePoints();
+            }
         }
     }
 
