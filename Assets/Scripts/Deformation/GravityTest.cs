@@ -1,21 +1,28 @@
+using Mono.Cecil;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using static DebugGizmo;
 
 public class GravityTest : MonoBehaviour
 {
-    [SerializeField] bool   runSimulationOnStart = true;
-    [SerializeField] float  gravityConstant = 0.001f;
-    [SerializeField] float  planarAngularTolerance = 10.0f;
-    [SerializeField] int    nSubsteps = 1;
-    [SerializeField] float  minDist = 1e-3f;
-    [SerializeField] float  maxDist = float.MaxValue;
-    [SerializeField] float  timeStep = 0.01f;
-    [SerializeField] float  realtimeTimeStep = 0.1f;
-    [SerializeField] int    runStepsAtStart = 0;
-    [SerializeField] int    autoMaxSteps = 1000;
-    [SerializeField] bool   displayNormals;
+    enum IntersectionMode { None, LOS, SegmentIntegrity };
+
+    [SerializeField] bool               runSimulationOnStart = true;
+    [SerializeField] float              gravityConstant = 0.001f;
+    [SerializeField] float              planarAngularTolerance = 10.0f;
+    [SerializeField] IntersectionMode   intersectionMode;
+    [SerializeField] int                nSubsteps = 1;
+    [SerializeField] float              minDist = 1e-3f;
+    [SerializeField] float              maxDist = float.MaxValue;
+    [SerializeField] float              timeStep = 0.01f;
+    [SerializeField] float              realtimeTimeStep = 0.1f;
+    [SerializeField] int                runStepsAtStart = 0;
+    [SerializeField] int                autoMaxSteps = 1000;
+    [SerializeField] bool               displayNormals;
 
     const int maxChains = 4;
 
@@ -150,12 +157,35 @@ public class GravityTest : MonoBehaviour
         simulation.mergeDistance = 0.3f;
         simulation.groupSelfInfluence = false;
         simulation.planarAngularTolerance = planarAngularTolerance;
-        simulation.validPairCallback = (p1, p2) => 
+        if ((intersectionMode == IntersectionMode.LOS) ||
+            (intersectionMode == IntersectionMode.SegmentIntegrity))
+        { 
+            simulation.validPairCallback = (p1, p2) => 
+            {
+                Triangle hitInfo = null;
+                float    hitT = float.MaxValue;
+                return !meshOctree.Linecast(p1.position + Vector3.up * 0.05f, p2.position + Vector3.up * 0.05f, ref hitInfo, ref hitT);
+            };
+        }
+        if (intersectionMode == IntersectionMode.SegmentIntegrity)
         {
-            Triangle hitInfo = null;
-            float    hitT = float.MaxValue;
-            return !meshOctree.Linecast(p1.position + Vector3.up * 0.05f, p2.position + Vector3.up * 0.05f, ref hitInfo, ref hitT);
-        };
+            simulation.canMoveCallback = (pt, deltaTime) =>
+            {
+                Triangle hitInfo = null;
+                float hitT = float.MaxValue;
+                var allPoints = simulation.GetPointsInSameGroup(pt.groupId, true);
+                foreach (var otherP in allPoints)
+                {
+                    if (otherP == pt) continue;
+
+                    if (meshOctree.Linecast(pt.position + pt.velocity * deltaTime + Vector3.up * 0.05f, otherP.position + Vector3.up * 0.05f, ref hitInfo, ref hitT))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            };
+        }
 
         foreach (var pt in allPoints)
         {

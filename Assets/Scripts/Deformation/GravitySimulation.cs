@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static GravitySimulation;
 
 public class GravitySimulation
 {
     public delegate bool ValidPairCallback(Point pt1, Point pt2);
+    public delegate bool CanMoveCallback(Point pt, float deltaTime);
 
     private float minSqDist = 1e-3f;
     private float maxSqDist = float.MaxValue;
@@ -33,6 +35,7 @@ public class GravitySimulation
     }
 
     public ValidPairCallback validPairCallback { get; set; }
+    public CanMoveCallback canMoveCallback { get; set; }
 
     public class Point
     {
@@ -305,12 +308,29 @@ public class GravitySimulation
 
     void ComputePositions(float deltaTime)
     {
-        foreach (var pt in points)
+        if (canMoveCallback != null)
         {
-            if ((pt != null) && (!pt.locked))
+            foreach (var pt in points)
             {
-                pt.position += pt.velocity * deltaTime;
-                totalDelta += pt.velocity.sqrMagnitude;
+                if ((pt != null) && (!pt.locked))
+                {
+                    if (canMoveCallback(pt, deltaTime))
+                    {
+                        pt.position += pt.velocity * deltaTime;
+                        totalDelta += pt.velocity.sqrMagnitude;
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (var pt in points)
+            {
+                if ((pt != null) && (!pt.locked))
+                {
+                    pt.position += pt.velocity * deltaTime;
+                    totalDelta += pt.velocity.sqrMagnitude;
+                }
             }
         }
     }
@@ -429,5 +449,24 @@ public class GravitySimulation
 
         pos = Vector3.zero;
         return false;
+    }
+
+    public List<Point> GetPointsInSameGroup(int groupId, bool includeRelatedGroup)
+    {
+        List<Point> ret = new List<Point>();
+
+        foreach (var pt in points)
+        {
+            if (pt != null)
+            {
+                if (pt.groupId == groupId) ret.Add(pt);
+                else if (includeRelatedGroup)
+                {
+                    if (IsChildOf(pt.groupId, groupId)) ret.Add(pt);
+                }
+            }
+        }
+
+        return ret;
     }
 }
