@@ -12,11 +12,15 @@ public class GravitySimulation
     private float minSqDist = 1e-3f;
     private float maxSqDist = float.MaxValue;
     private float mergeSqDistance = 0.0f;
+    public float maxVelocity { get; set; }
 
     public float gravityConstant = 1.0f;
     public bool  groupSelfInfluence = true;
 
     public float totalDelta { get; private set; }
+
+    public int nPoints => points.Count;
+
 
     public float minDist
     {
@@ -113,12 +117,21 @@ public class GravitySimulation
 
     public void AddPoint(Vector3 position, Vector3 normal, int gravityGroup, float mass, bool locked)
     {
+        if ((normal == Vector3.zero) && (_planarAngularTolerance > -1.0f))
+        {
+            Debug.LogWarning("Angular tolerance is enabled, but point doesn't have a normal, this will fail!");
+        }
         Group group = GetGroup(gravityGroup);
 
         var pt = new Point { index = points.Count, position = position, normal = normal, velocity = Vector3.zero, mass = mass, groupId = gravityGroup, externalId = points.Count, locked = locked };
 
         points.Add(pt);
         group.points.Add(pt);
+    }
+
+    public void SetLocked(int index, bool locked)
+    {
+        points[index].locked = locked;
     }
 
     Group GetGroup(int gravityGroup)
@@ -205,6 +218,8 @@ public class GravitySimulation
         if (!groupSelfInfluence) DisableInfluence(newGroup.id, newGroup.id);
         if (!group1.selfInfluence) DisableInfluence(group1.id, newGroup.id, false);
         if (!group2.selfInfluence) DisableInfluence(group2.id, newGroup.id, false);
+
+        Debug.Log($"New group {newGroup.id} = {group1.id} + {group2.id}");
 
         return newGroup;
     }
@@ -301,6 +316,17 @@ public class GravitySimulation
                             }
                         }
                     }
+                }
+            }
+        }
+        if (maxVelocity < float.MaxValue)
+        {
+            foreach (var pt in points)
+            {
+                if (pt != null)
+                {
+                    float m = pt.velocity.magnitude;
+                    if (m > maxVelocity) pt.velocity = pt.velocity.normalized * maxVelocity;
                 }
             }
         }

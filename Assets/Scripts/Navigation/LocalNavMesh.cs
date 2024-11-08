@@ -1,9 +1,5 @@
-using SnapMeshPCG;
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
+using static Recast;
 
 namespace SnapMeshPCG
 {
@@ -103,7 +99,7 @@ namespace SnapMeshPCG
             }
         }
 
-        public Polyline GetPath(Vector3 start, Vector3 end, bool includeEndpoints)
+        public Polyline GetPath(Vector3 start, Vector3 end, bool includeEndpoints, bool computeNormals)
         {
             if ((recast == null) || (recast.m_navQuery == null))
             {
@@ -128,6 +124,56 @@ namespace SnapMeshPCG
                 if (Vector3.Distance(end, polyline[polyline.Count - 1]) > 1e-3)
                 {
                     polyline.Add(end);
+                }
+            }
+
+            if (computeNormals)
+            {
+                polyline.normalCount = polyline.Count;
+
+                var navQuery = recast.m_navQuery;
+                var filter = new Detour.dtQueryFilter();
+                var extents = new float[3] { 10.0f, 10.0f, 10.0f };
+                var polyMesh = recast.m_pmesh;
+                var bmin = new Vector3(recast.m_cfg.bmin[0], recast.m_cfg.bmin[1], recast.m_cfg.bmin[2]);
+
+                for (int i = 0; i < polyline.Count; i++)
+                {
+                    Vector3 pos = polyline[i];
+                    var p = new float[3] { pos.x, pos.y, pos.z };
+
+                    // Step 1: Find the nearest polygon
+                    uint    nearestRef = 0;
+                    var     nearestPoint = new float[3] { 0.0f, 0.0f, 0.0f };
+                    uint    polyRef = navQuery.findNearestPoly(p, extents, filter, ref nearestRef, ref nearestPoint);
+
+                    if (polyRef == 0)
+                    {
+                        polyline.SetNormal(i, Vector3.up);
+                        continue;
+                    }
+
+                    // Step 2: Get the vertices of the polygon
+                    Vector3[] vertices = recast.GetPoly(polyRef);
+
+                    if (vertices.Length < 3)
+                    {
+                        polyline.SetNormal(i, Vector3.up); // Default to an upward normal if not enough vertices
+                        continue;
+                    }
+
+                    // Step 3: Calculate the normal
+                    Vector3 v0 = vertices[0];
+                    Vector3 v1 = vertices[1];
+                    Vector3 v2 = vertices[2];
+
+                    Vector3 edge1 = v1 - v0;
+                    Vector3 edge2 = v2 - v0;
+
+                    Vector3 normal = Vector3.Cross(edge1, edge2).normalized;
+
+                    // Step 4: Add the position and normal to the polyline
+                    polyline.SetNormal(i, normal);
                 }
             }
 

@@ -18,6 +18,7 @@ public class GravityPointForTesting : MonoBehaviour
 
     internal void AddLink(GravityPointForTesting nextPoint)
     {
+        if (links == null) ResetLinks();
         links.Add(nextPoint);
     }
 

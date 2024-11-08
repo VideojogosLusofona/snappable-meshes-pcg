@@ -9,20 +9,22 @@ using static DebugGizmo;
 
 public class GravityTest : MonoBehaviour
 {
-    enum IntersectionMode { None, LOS, SegmentIntegrity };
+    public enum IntersectionMode { None, LOS, SegmentIntegrity };
 
-    [SerializeField] bool               runSimulationOnStart = true;
-    [SerializeField] float              gravityConstant = 0.001f;
-    [SerializeField] float              planarAngularTolerance = 10.0f;
-    [SerializeField] IntersectionMode   intersectionMode;
-    [SerializeField] int                nSubsteps = 1;
-    [SerializeField] float              minDist = 1e-3f;
-    [SerializeField] float              maxDist = float.MaxValue;
-    [SerializeField] float              timeStep = 0.01f;
-    [SerializeField] float              realtimeTimeStep = 0.1f;
-    [SerializeField] int                runStepsAtStart = 0;
-    [SerializeField] int                autoMaxSteps = 1000;
-    [SerializeField] bool               displayNormals;
+    public bool               runSimulationOnStart = true;
+    public float              gravityConstant = 1.0f;
+    public float              maxVelocity = float.MaxValue;
+    public float              planarAngularTolerance = 10.0f;
+    public IntersectionMode   intersectionMode = IntersectionMode.LOS;
+    public int                nSubsteps = 5;
+    public float              minDist = 1e-3f;
+    public float              maxDist = float.MaxValue;
+    public float              mergeDist = 1e-3f;
+    public float              timeStep = 0.01f;
+    public float              realtimeTimeStep = 0.1f;
+    public int                runStepsAtStart = 0;
+    public int                autoMaxSteps = 1000;
+    public bool               displayNormals;
 
     const int maxChains = 4;
 
@@ -152,9 +154,10 @@ public class GravityTest : MonoBehaviour
 
         simulation = new GravitySimulation();
         simulation.gravityConstant = gravityConstant;
+        simulation.maxVelocity = maxVelocity;
         simulation.minDist = minDist;
         simulation.maxDist = maxDist;
-        simulation.mergeDistance = 0.3f;
+        simulation.mergeDistance = mergeDist;
         simulation.groupSelfInfluence = false;
         simulation.planarAngularTolerance = planarAngularTolerance;
         if ((intersectionMode == IntersectionMode.LOS) ||

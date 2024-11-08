@@ -6,6 +6,31 @@ using static Recast;
 
 public static class RcdttcsExtensions 
 {
+    public static Vector3[] GetPoly(this SystemHelper recast, uint polyIndex)
+    {
+        rcPolyMesh polyMesh = recast.m_pmesh;
+        Vector3 bmin = new Vector3(recast.m_cfg.bmin[0], recast.m_cfg.bmin[1], recast.m_cfg.bmin[2]);
+
+        List<Vector3> poly = new List<Vector3>();
+        uint pIndex = (uint)(polyIndex * polyMesh.nvp * 2);
+
+        for (int j = 0; j < polyMesh.nvp; j++)
+        {
+            if (polyMesh.polys[pIndex + j] == Recast.RC_MESH_NULL_IDX)
+                break;
+
+            int vIndex = polyMesh.polys[pIndex + j] * 3;
+
+            Vector3 vertex = new Vector3(bmin.x + polyMesh.verts[vIndex + 0] * polyMesh.cs,
+                                         bmin.y + polyMesh.verts[vIndex + 1] * polyMesh.ch + 0.001f,
+                                         bmin.z + polyMesh.verts[vIndex + 2] * polyMesh.cs);
+
+            poly.Add(vertex);
+        }
+
+        return poly.ToArray();
+    }
+
     public static Mesh GetPolyMesh(this SystemHelper recast, Matrix4x4 transform)
     {
         rcPolyMesh polyMesh = recast.m_pmesh;
