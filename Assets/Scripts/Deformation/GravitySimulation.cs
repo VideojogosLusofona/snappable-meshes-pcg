@@ -106,11 +106,11 @@ public class GravitySimulation
         grp.BitmaskDisableGroupInfluence(grp2);
         if (propagate)
         {
-            if (IsMergeGroup(grp2))
+            if (IsMergeGroup(grp1))
             {
-                var parents = revParentGroups[grp2];
-                DisableInfluence(grp1, parents.i1, true);
-                DisableInfluence(grp1, parents.i2, true);
+                var parents = revParentGroups[grp1];
+                DisableInfluence(parents.i1, grp2, true);
+                DisableInfluence(parents.i2, grp2, true);
             }
         }
     }
@@ -216,12 +216,27 @@ public class GravitySimulation
         revParentGroups.Add(newGroup.id, (grp1, grp2));
 
         if (!groupSelfInfluence) DisableInfluence(newGroup.id, newGroup.id);
-        if (!group1.selfInfluence) DisableInfluence(group1.id, newGroup.id, false);
-        if (!group2.selfInfluence) DisableInfluence(group2.id, newGroup.id, false);
+        //if (!group1.selfInfluence) DisableInfluence(group1.id, newGroup.id, false);
+        //if (!group2.selfInfluence) DisableInfluence(group2.id, newGroup.id, false);
 
-        Debug.Log($"New group {newGroup.id} = {group1.id} + {group2.id}");
+        /*Debug.Log($"New group {newGroup.id} = {group1.id} + {group2.id}");
+        Debug.Log($"  Group 1 = {GetMask(group1.mask)}");
+        Debug.Log($"  Group 2 = {GetMask(group2.mask)}");
+        Debug.Log($"  New     = {GetMask(newGroup.mask)}");*/
 
         return newGroup;
+    }
+
+    string GetMask(uint mask)
+    {
+        string ret = "";
+
+        for (int i = 0; i < 32; i++)
+        {
+            ret = (((mask & (1 << i)) != 0) ? ("1") : ("0")) + ret;
+        }
+
+        return ret;
     }
 
     public Point GetPoint(int index)

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GravityPointForTesting : MonoBehaviour
+public class TestPoint : MonoBehaviour
 {
     [SerializeField]
-    private List<GravityPointForTesting> links;
+    private List<TestPoint> links;
 
     public int      group = 0;
     public float    mass = 1;
@@ -13,16 +13,16 @@ public class GravityPointForTesting : MonoBehaviour
 
     public void ResetLinks()
     {
-        links = new List<GravityPointForTesting>();
+        links = new List<TestPoint>();
     }
 
-    internal void AddLink(GravityPointForTesting nextPoint)
+    internal void AddLink(TestPoint nextPoint)
     {
         if (links == null) ResetLinks();
         links.Add(nextPoint);
     }
 
-    internal List<GravityPointForTesting> GetLinks() => links;
+    internal List<TestPoint> GetLinks() => links;
 
     public static readonly Color[] Colors = new Color[]
     {

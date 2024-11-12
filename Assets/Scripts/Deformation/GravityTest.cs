@@ -1,11 +1,7 @@
-using Mono.Cecil;
 using NaughtyAttributes;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using static DebugGizmo;
 
 public class GravityTest : MonoBehaviour
 {
@@ -56,7 +52,7 @@ public class GravityTest : MonoBehaviour
     [Button("Toggle visibility")]
     void ToggleVisibility()
     {
-        GravityPointForTesting[] allPoints = GetComponentsInChildren<GravityPointForTesting>();
+        TestPoint[] allPoints = GetComponentsInChildren<TestPoint>();
 
         bool b = !allPoints[0].debugRender;
 
@@ -65,7 +61,7 @@ public class GravityTest : MonoBehaviour
 
     void SetVisibility(bool b)
     {
-        GravityPointForTesting[] allPoints = GetComponentsInChildren<GravityPointForTesting>();
+        TestPoint[] allPoints = GetComponentsInChildren<TestPoint>();
 
         foreach (var pt in allPoints)
         {
@@ -86,7 +82,7 @@ public class GravityTest : MonoBehaviour
 
         if (!confirm) return;
 
-        List<GravityPointForTesting> allPoints = new(GetComponentsInChildren<GravityPointForTesting>());
+        List<TestPoint> allPoints = new(GetComponentsInChildren<TestPoint>());
 
         foreach (var pt in allPoints)
         {
@@ -104,7 +100,7 @@ public class GravityTest : MonoBehaviour
 
             while (currentPoint != null)
             {
-                ProbList<GravityPointForTesting> candidates = new();
+                ProbList<TestPoint> candidates = new();
 
                 for (int j = 0; j < allPoints.Count; j++)
                 {
@@ -150,7 +146,7 @@ public class GravityTest : MonoBehaviour
         }
         meshOctree.Build();
 
-        GravityPointForTesting[] allPoints = GetComponentsInChildren<GravityPointForTesting>();
+        TestPoint[] allPoints = GetComponentsInChildren<TestPoint>();
 
         simulation = new GravitySimulation();
         simulation.gravityConstant = gravityConstant;
@@ -269,7 +265,7 @@ public class GravityTest : MonoBehaviour
                 var pt = simulation.GetPoint(i);
                 if (pt == null) continue;
                 Vector3 pos = pt.position;
-                Gizmos.color = Colors[pt.groupId % Colors.Length];
+                Gizmos.color = Colors[pt.groupId % Colors.Length].ChangeAlpha(0.5f);
                 Gizmos.DrawSphere(pos, 0.15f);
 
                 if (displayNormals)
@@ -293,7 +289,7 @@ public class GravityTest : MonoBehaviour
             }
 
             // Draw segments
-            List<GravityPointForTesting> allPoints = new(GetComponentsInChildren<GravityPointForTesting>());
+            List<TestPoint> allPoints = new(GetComponentsInChildren<TestPoint>());
 
             for (int i = 0; i < allPoints.Count; i++)
             {

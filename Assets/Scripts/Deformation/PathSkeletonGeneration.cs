@@ -264,7 +264,7 @@ public class PathSkeletonGeneration : MonoBehaviour
             var polyline = path.path;
             if (polyline == null) continue;
 
-            GravityPointForTesting prevPoint = null;
+            TestPoint prevPoint = null;
 
             for (int i = 0; i < polyline.Count; i++)
             {                
@@ -273,7 +273,7 @@ public class PathSkeletonGeneration : MonoBehaviour
                 pointObj.transform.SetParent(go.transform);
                 pointObj.transform.position = polyline[i];
                 pointObj.transform.rotation = Quaternion.LookRotation(Vector3.forward, polyline.GetNormal(i));
-                var gravityPoint = pointObj.AddComponent<GravityPointForTesting>();
+                var gravityPoint = pointObj.AddComponent<TestPoint>();
                 gravityPoint.group = nPaths;
                 gravityPoint.mass = 1.0f;
                 gravityPoint.locked = (i == 0) || (i == polyline.Count - 1);
