@@ -40,12 +40,12 @@ public class TestPoint : MonoBehaviour
 
         float sizePerMass = Mathf.Log(mass + 1.0f);
 
-        Gizmos.color = Colors[group].ChangeAlpha(0.5f);
+        Gizmos.color = Colors[group % Colors.Length].ChangeAlpha(0.5f);
         Gizmos.DrawSphere(transform.position, 0.25f * sizePerMass);
 
         if (links != null)
         {
-            Gizmos.color = Colors[group];
+            Gizmos.color = Colors[group % Colors.Length];
             foreach (var p in links)
             {
                 if (p != null)

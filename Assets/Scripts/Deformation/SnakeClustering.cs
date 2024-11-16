@@ -52,20 +52,75 @@ public class SnakeClustering
             return (minDist, index);
         }
 
-        public (float, int) GetDistanceEndpoints(Vector3 position)
+        public bool GetDistanceEndpoints(Vector3 position, float angularToleranceRadians, out float distance, out int index)
         {
-            float minDist = Vector3.Distance(previousPoints[0], position);
+            Vector3 snakeDir = avgDirection;
+            distance = float.MaxValue;
+            index = -1;
 
-            float d = Vector3.Distance(previousPoints[previousPoints.Count - 1], position);
-            if (d < minDist) return (d, previousPoints.Count - 1);
+            if (snakeDir.sqrMagnitude < 1e-3) return false;
 
-            return (minDist, 0);
+            float cosTolerance = Mathf.Cos(angularToleranceRadians);
+
+            Vector3 toStart = (previousPoints[0] - position).normalized;
+            bool    canExtendStart = Vector3.Dot(toStart, snakeDir) > cosTolerance;
+            Vector3 fromEnd = (position - previousPoints.Last()).normalized;
+            bool    canExtendEnd = Vector3.Dot(fromEnd, snakeDir) > cosTolerance;
+
+            if (!canExtendStart && !canExtendEnd) return false;
+            if (canExtendStart)
+            {
+                float distanceStart = Vector3.Distance(previousPoints[0], position);
+                if (!canExtendEnd) 
+                {
+                    distance = distanceStart;
+                    index = 0;
+                    return true;
+                }
+                else
+                {
+                    float distanceEnd = Vector3.Distance(previousPoints.Last(), position);
+                    if (distanceEnd < distanceStart)
+                    {
+                        distance = distanceEnd;
+                        index = previousPoints.Count - 1;
+                    }
+                    else
+                    {
+                        distance = distanceStart;
+                        index = 0;
+                    }
+                    return true;
+                }
+            }
+            else
+            {
+                distance = Vector3.Distance(previousPoints.Last(), position);
+                index = previousPoints.Count - 1;
+                return true;
+            }
         }
 
         public void Invert()
         {
             previousPoints.Reverse();
             heads = null;
+        }
+
+        public Vector3 avgDirection
+        {
+            get
+            {
+                Vector3 dir = Vector3.zero;
+                if ((previousPoints == null) || (previousPoints.Count < 2)) return dir;
+
+                for (int i = 0; i < previousPoints.Count - 1; i++)
+                {
+                    dir = dir + (previousPoints[i + 1] - previousPoints[i]);
+                }
+
+                return dir.normalized;
+            }
         }
     };
 
@@ -76,11 +131,6 @@ public class SnakeClustering
     {
         get { return _angularTolerance; }
         set { _angularTolerance = value; _cosAngularTolerance = Mathf.Cos(value * Mathf.Deg2Rad); }
-    }
-    public float subAngularTolerance
-    {
-        get { return _subAngularTolerance; }
-        set { _subAngularTolerance = value; _cosSubAngularTolerance = Mathf.Cos(value * Mathf.Deg2Rad); }
     }
     public IsSegmentIntersecting isSegmentIntersecting { get; set; }
     public SnakeMode snakeMode
@@ -117,8 +167,6 @@ public class SnakeClustering
     private CreateSnakeMode             _createSnakeMode = CreateSnakeMode.None;
     private float                       _cosAngularTolerance;
     private float                       _angularTolerance;
-    private float                       _cosSubAngularTolerance;
-    private float                       _subAngularTolerance;
 
     private List<Point>     points = new();
     private List<Snake>     snakes = new();
@@ -318,9 +366,9 @@ public class SnakeClustering
             {
                 // Find active point closest to a snake
                 (var newPoint, Snake snake, int index) = GetClosestSnakeEndpoints(allActivePoints);
-                newPoint.active = false;
-                if ((index == 0) || (index == snake.previousPoints.Count - 1))
+                if ((snake != null) && ((index == 0) || (index == snake.previousPoints.Count - 1)))
                 {
+                    newPoint.active = false;
                     if (index == 0) snake.Invert();     // Invert snake so that we begin from the same start point as before
 
                     snake.currentPosition = newPoint.position;
@@ -329,6 +377,10 @@ public class SnakeClustering
                 }
                 else
                 {
+                    // Couldn't find a valid point at the endpoints, find closest point
+                    (newPoint, snake, index) = GetClosestSnake(allActivePoints);
+                    newPoint.active = false;
+
                     // Create a new snake from here
                     snake = AddSnake(newPoint.position, true);
                 }
@@ -608,13 +660,18 @@ public class SnakeClustering
         {
             foreach (var snake in snakes)
             {
-                (float d, int index) = snake.GetDistanceEndpoints(p.position);
-                if (d < minDist)
+                float   d = float.MaxValue;
+                int     index = -1;
+
+                if (snake.GetDistanceEndpoints(p.position, _cosAngularTolerance, out d, out index))
                 {
-                    minDist = d;
-                    retPoint = p;
-                    retSnake = snake;
-                    retIndex = index;
+                    if (d < minDist)
+                    {
+                        minDist = d;
+                        retPoint = p;
+                        retSnake = snake;
+                        retIndex = index;
+                    }
                 }
             }
         }

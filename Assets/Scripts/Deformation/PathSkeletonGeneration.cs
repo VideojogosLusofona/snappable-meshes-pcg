@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using Mono.Cecil;
 using System.IO;
+using UnityEditor;
 
 public class PathSkeletonGeneration : MonoBehaviour
 {
@@ -288,6 +289,66 @@ public class PathSkeletonGeneration : MonoBehaviour
 
             nPaths++;
         }
+    }
+
+    [Button("Path Skeleton Generation: Build Snake Clustering Experiment")]
+    void BuildSnakeClusteringExperiment()
+    {
+        Setup();
+
+        // Find an object with the right name
+        GameObject go = GameObject.Find($"{name} - Experiment");
+        if (go != null)
+        {
+            DestroyImmediate(go);
+        }
+        go = new GameObject();
+        go.name = $"{name} - Experiment";
+        SnakeClusteringTest experiment = go.AddComponent<SnakeClusteringTest>();
+        experiment.distanceTolerance = 1;
+        experiment.angularTolerance = 45;
+        experiment.snakeMode = SnakeClustering.SnakeMode.Hydra;
+        experiment.computeDirectionMode = SnakeClustering.ComputeDirectionMode.Weighted;
+        experiment.updatePositionMode = SnakeClustering.UpdateSnakePositionMode.AverageBox;
+        experiment.updateDirectionMode = SnakeClustering.UpdateSnakeDirectionMode.AdjustWithHistory;
+        experiment.createSnakeMode = SnakeClustering.CreateSnakeMode.SnakeEndpoints;
+        if (useLOS)
+        {
+            experiment.intersectionMode = SnakeClusteringTest.IntersectionMode.LOS;
+        }
+        experiment.autoMaxSteps = maxSteps;
+
+        int nPaths = 0;
+        foreach (var path in paths)
+        {
+            var polyline = path.path;
+            if (polyline == null) continue;
+
+            TestPoint prevPoint = null;
+
+            for (int i = 0; i < polyline.Count; i++)
+            {
+                GameObject pointObj = new GameObject();
+                pointObj.name = $"Point {i}/Segment {nPaths}";
+                pointObj.transform.SetParent(go.transform);
+                pointObj.transform.position = polyline[i];
+                pointObj.transform.rotation = Quaternion.LookRotation(Vector3.forward, polyline.GetNormal(i));
+                var point = pointObj.AddComponent<TestPoint>();
+                point.group = nPaths;
+                point.mass = 1.0f;
+                point.locked = (i == 0) || (i == polyline.Count - 1);
+
+                if (prevPoint)
+                {
+                    prevPoint.AddLink(point);
+                }
+
+                prevPoint = point;
+            }
+
+            nPaths++;
+        }
+        Selection.activeGameObject = go;
     }
 
     private void OnDrawGizmosSelected()

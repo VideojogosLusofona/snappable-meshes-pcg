@@ -10,7 +10,6 @@ public class SnakeClusteringTest : MonoBehaviour
     public bool                                     runSimulationOnStart = true;
     public float                                    distanceTolerance = 1.0f;
     public float                                    angularTolerance = 45.0f;
-    public float                                    subAngularTolerance = 5.0f;
     public SnakeClustering.SnakeMode                snakeMode = SnakeClustering.SnakeMode.Normal;
     public SnakeClustering.CreateSnakeMode          createSnakeMode = SnakeClustering.CreateSnakeMode.None;
     public SnakeClustering.ComputeDirectionMode     computeDirectionMode = SnakeClustering.ComputeDirectionMode.Average;
@@ -87,7 +86,6 @@ public class SnakeClusteringTest : MonoBehaviour
         snakeClustering = new SnakeClustering();
         snakeClustering.distanceTolerance = distanceTolerance;
         snakeClustering.angularTolerance = angularTolerance;
-        snakeClustering.subAngularTolerance = subAngularTolerance;
         snakeClustering.snakeMode = snakeMode;
         snakeClustering.createSnakeMode = createSnakeMode;
         snakeClustering.computeDirectionMode = computeDirectionMode;
