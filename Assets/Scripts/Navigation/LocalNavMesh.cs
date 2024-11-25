@@ -14,7 +14,7 @@ namespace SnapMeshPCG
         RcdtcsUnityUtils.RecastMeshParams   navMeshParams;
         Mesh                                navigationMesh;
 
-        public void Build()
+        public void Build(bool worldSpace = true)
         {
             if (navMeshConfig == null) return;
 
@@ -61,7 +61,7 @@ namespace SnapMeshPCG
             }
             recast.ComputeSystem();
 
-            navigationMesh = recast.GetPolyMesh(Matrix4x4.identity);
+            navigationMesh = recast.GetPolyMesh((worldSpace) ? (Matrix4x4.identity) : (transform.worldToLocalMatrix));
 
             UnityEditor.EditorUtility.ClearProgressBar();
         }
@@ -71,11 +71,11 @@ namespace SnapMeshPCG
             navMeshConfig = config;
         }
 
-        public Mesh GetMesh()
+        public Mesh GetMesh(bool worldSpace = true)
         {
             if (navigationMesh == null)
             {
-                Build();
+                Build(worldSpace);
             }
 
             return navigationMesh;
