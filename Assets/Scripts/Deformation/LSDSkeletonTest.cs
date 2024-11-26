@@ -8,24 +8,57 @@ using Mono.Cecil;
 [RequireComponent(typeof(GeodesicDistanceComponent))]
 public class LSDSkeletonTest : MonoBehaviour
 {
+    [SerializeField] private float  polyhedronExtrusionAmount = 0.1f;
+    [SerializeField] private int    subdivisions = 1;
+
     [SerializeField] private bool displayContours;
     [SerializeField] private bool displayContourGroup;
-    [SerializeField] private bool displaySkeleton;
+    [SerializeField] private bool displaySkeleton = true;
+    [SerializeField] private bool displayMesh = true;
 
     [SerializeField, HideInInspector]
     LevelSetDiagram levelSetDiagram;
 
+    Mesh workMesh;
+
     [Button("Rebuild")]
     void Rebuild()
     {
-        var navMesh = GetComponent<LocalNavMesh>();        
+        var navMesh = GetComponent<LocalNavMesh>();
+
+        workMesh = navMesh.GetMesh(false);
+
+        for (int i = 0; i < subdivisions; i++)
+        {
+            workMesh = MeshTools.SubdivideMidpoint(workMesh, MeshTools.MidpointStrategy.Divide4);
+        }
+
+        var shellMesh = MeshTools.ExtrudeMesh(workMesh, Vector3.up * polyhedronExtrusionAmount, Vector3.down * polyhedronExtrusionAmount);
+
+        workMesh = shellMesh;
 
         var topologyComponent = GetComponent<TopologyComponent>();
-        topologyComponent.Build(navMesh.GetMesh(false), transform.localToWorldMatrix);
+        topologyComponent.Build(workMesh, transform.localToWorldMatrix);
         var topology = topologyComponent.topology;
 
         var geodesicDistanceComponent = GetComponent<GeodesicDistanceComponent>();
-        geodesicDistanceComponent.Build(topology);
+        if (geodesicDistanceComponent.hasSourcePoint)
+        {
+            geodesicDistanceComponent.Build(topology, null);
+        }
+        else
+        {
+            var connector = GetComponentInChildren<Connector>();
+            if (connector != null)
+            {
+                geodesicDistanceComponent.Build(topology, connector.transform.position);
+            }
+            else
+            {
+                Debug.LogError("No source point defined!");
+                return;
+            }
+        }
         var geodesicDistance = geodesicDistanceComponent.geodesicDistance;
 
         levelSetDiagram = new LevelSetDiagram();
@@ -87,15 +120,23 @@ public class LSDSkeletonTest : MonoBehaviour
                 DrawSkeleton(rootContour.polyline.GetCenter(), rootContour);
             }
         }
+
+        if ((displayMesh) && (workMesh != null))
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireMesh(workMesh);
+            Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
+            Gizmos.DrawMesh(workMesh);
+        }
     }
 
     void DrawSkeleton(Vector3 prevPos, LevelSetDiagram.SingleContour contour)
     {
-        Vector3 centerPos = contour.polyline.GetCenter();
+        Vector3 centerPos = contour.nodePos;
 
         if (centerPos != prevPos)
         {
-            UnityEditor.Handles.DrawBezier(prevPos, centerPos, prevPos, centerPos, Color.cyan, null, 5.0f);
+            UnityEditor.Handles.DrawBezier(prevPos, centerPos, prevPos, centerPos, Color.magenta, null, 5.0f);
         }
 
         if (contour.children != null)

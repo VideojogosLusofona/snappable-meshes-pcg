@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using static Recast;
 
@@ -9,10 +10,13 @@ namespace SnapMeshPCG
         private NavMeshGeneratorConfig navMeshConfig;
         [SerializeField]
         private bool                   displayNavmesh;
+        [SerializeField]
+        private bool                    displayShellMesh;        
 
         RcdtcsUnityUtils.SystemHelper       recast;
         RcdtcsUnityUtils.RecastMeshParams   navMeshParams;
         Mesh                                navigationMesh;
+        Mesh                                shellMesh;
 
         public void Build(bool worldSpace = true)
         {
@@ -95,6 +99,16 @@ namespace SnapMeshPCG
                     Gizmos.DrawWireMesh(navigationMesh);
                     Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
                     Gizmos.DrawMesh(navigationMesh);
+                }
+            }
+            if (displayShellMesh)
+            {
+                if (shellMesh != null)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawWireMesh(shellMesh);
+                    Gizmos.color = new Color(0.9f, 0.4f, 0.2f, 0.5f);
+                    Gizmos.DrawMesh(shellMesh);
                 }
             }
         }
@@ -186,6 +200,18 @@ namespace SnapMeshPCG
             p = RcdtcsUnityUtils.GetClosestPointOnNavMesh(recast.m_navQuery, p);
 
             return new Vector3(p[0], p[1], p[2]);
+        }
+
+        [Button("Build Shell Mesh")]
+        void BuildShellMesh()
+        {
+            if (navigationMesh == null)
+            {
+                navigationMesh = GetMesh();
+            }
+            if (navigationMesh == null) return;
+
+            shellMesh = MeshTools.ExtrudeMesh(navigationMesh, Vector3.up * 0.1f, Vector3.down * 0.1f);
         }
     }
 }
