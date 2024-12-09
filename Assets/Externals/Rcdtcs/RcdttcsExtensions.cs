@@ -31,6 +31,20 @@ public static class RcdttcsExtensions
         return poly.ToArray();
     }
 
+    public static Vector3 GetPolyNormal(this SystemHelper recast, uint polyIndex)
+    {
+        var vertices = recast.GetPoly(polyIndex);
+        if (vertices.Length < 3)
+        {
+            return Vector3.up;
+        }
+
+        var edge1 = vertices[1] - vertices[0];
+        var edge2 = vertices[2] - vertices[0];
+
+        return Vector3.Cross(edge1, edge2).normalized;
+    }
+
     public static Mesh GetPolyMesh(this SystemHelper recast, Matrix4x4 transform)
     {
         rcPolyMesh polyMesh = recast.m_pmesh;

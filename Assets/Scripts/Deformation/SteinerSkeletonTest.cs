@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class SteinerSkeletonTest : MonoBehaviour
 {
     [SerializeField] private int subdivisions = 1;
+    [SerializeField] private bool simplifyWithLOS = false;
     [SerializeField] private bool displayGraph;
     [SerializeField, ShowIf(nameof(displayGraph))] private bool displayNodeID;
     [SerializeField, ShowIf(nameof(displayGraph))] private bool displayWeights;
@@ -16,9 +17,10 @@ public class SteinerSkeletonTest : MonoBehaviour
     Graph<Vector3> graph;
 
     [Button("Build Skeleton")]
-    void BuildSkeleton()
+    public void BuildSkeleton()
     {
         var navMeshComponent = GetComponent<LocalNavMesh>();
+        if (!navMeshComponent.isInit) navMeshComponent.Build();
         var topologyComponent = GetComponent<TopologyComponent>();
 
         var navMesh = navMeshComponent.GetMesh();
@@ -65,6 +67,69 @@ public class SteinerSkeletonTest : MonoBehaviour
         }
 
         graph = SteinerTree.Build(graph, terminalNodes);
+
+        if (simplifyWithLOS)
+        {
+            SimplifyLOS(graph, navMeshComponent);
+        }
+    }
+
+    public static void SimplifyLOS(Graph<Vector3> graph, LocalNavMesh navMeshComponent)
+    {
+        var alreadyAdded = new List<int>();
+        var openNodes = graph.GetLeaves();
+
+        while (openNodes.Count > 0)
+        {
+            int nodeId = openNodes[0];
+            openNodes.RemoveAt(0);
+
+            // Get node this one is connected
+            var connectedNodes = graph.FindLinkedNodes(nodeId);
+            if (connectedNodes.Count == 1)
+            {
+                var parentNodeId = connectedNodes[0];
+
+                connectedNodes = graph.FindLinkedNodes(parentNodeId);
+                if (connectedNodes.Count == 2)
+                {
+                    var parentOfParentNodeId = -1;
+                    
+                    foreach (var i in connectedNodes) if (i != nodeId) parentOfParentNodeId = i;
+
+                    Vector3 startPos = graph.GetNode(nodeId);
+                    startPos = navMeshComponent.GetPointInNavmesh(startPos);
+                    Vector3 endPos = graph.GetNode(parentOfParentNodeId);
+                    endPos = navMeshComponent.GetPointInNavmesh(endPos);
+
+                    if (navMeshComponent.HasPlanarLOS(startPos, endPos, 45.0f))
+                    {
+                        // Delete middle node
+                        graph.RemoveNode(parentNodeId);
+                        // Change node IDs on openNodes (we removed one node)
+                        for (int i = 0; i < openNodes.Count; i++) if (openNodes[i] > parentNodeId) openNodes[i]--;
+                        for (int i = 0; i < alreadyAdded.Count; i++) if (alreadyAdded[i] > parentNodeId) alreadyAdded[i]--;
+                        // Remove node IDs on nodes I'm still working on
+                        if (nodeId > parentNodeId) nodeId--;
+                        if (parentOfParentNodeId > parentNodeId) parentOfParentNodeId--;
+                        // Add connection between node and parent of parent
+                        graph.Add(nodeId, parentOfParentNodeId);
+                        // Re-add this node for more simplification
+                        openNodes.Add(nodeId);
+
+                    }
+                }
+                else if (connectedNodes.Count > 2)
+                {
+                    // Add this node to the simplification list, if it hasn't been added before
+                    if (!alreadyAdded.Contains(parentNodeId))
+                    {
+                        openNodes.Add(parentNodeId);
+                        alreadyAdded.Add(parentNodeId);
+                    }
+                }
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

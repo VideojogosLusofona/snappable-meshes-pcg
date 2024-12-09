@@ -1,5 +1,9 @@
 using NaughtyAttributes;
+using System;
+using System.Reflection;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static Detour;
 using static Recast;
 
 namespace SnapMeshPCG
@@ -11,6 +15,10 @@ namespace SnapMeshPCG
         [SerializeField]
         private bool                   displayNavmesh;
         [SerializeField]
+        private bool                   displayWireframeTriangles = true;
+        [SerializeField, ShowIf(nameof(canShowNormals))]
+        private bool                   displayNormals = true;
+        [SerializeField]
         private bool                    displayShellMesh;        
 
         RcdtcsUnityUtils.SystemHelper       recast;
@@ -18,6 +26,10 @@ namespace SnapMeshPCG
         Mesh                                navigationMesh;
         Mesh                                shellMesh;
 
+        private bool canShowNormals => displayNavmesh && (!displayWireframeTriangles);
+        public bool isInit => recast != null;
+
+        [Button("Build")]
         public void Build(bool worldSpace = true)
         {
             if (navMeshConfig == null) return;
@@ -83,34 +95,6 @@ namespace SnapMeshPCG
             }
 
             return navigationMesh;
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (displayNavmesh)
-            {
-                if (navigationMesh == null)
-                {
-                    navigationMesh = GetMesh();
-                }
-                if (navigationMesh != null)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawWireMesh(navigationMesh);
-                    Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
-                    Gizmos.DrawMesh(navigationMesh);
-                }
-            }
-            if (displayShellMesh)
-            {
-                if (shellMesh != null)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawWireMesh(shellMesh);
-                    Gizmos.color = new Color(0.9f, 0.4f, 0.2f, 0.5f);
-                    Gizmos.DrawMesh(shellMesh);
-                }
-            }
         }
 
         public Polyline GetPath(Vector3 start, Vector3 end, bool includeEndpoints, bool computeNormals)
@@ -202,8 +186,103 @@ namespace SnapMeshPCG
             return new Vector3(p[0], p[1], p[2]);
         }
 
+        // Temporary variables for HasLOS
+        float[] hitNormal = new float[3];
+        uint[] path = new uint[1024];
+
+        public bool HasLOS(Vector3 start, Vector3 end)
+        {
+            if ((recast == null) || (recast.m_navQuery == null))
+            {
+                Build();
+                if (recast == null) return false;
+            }
+
+            var navQuery = recast.m_navQuery;
+            var filter = new Detour.dtQueryFilter();
+            var extents = new float[3] { navMeshParams.m_agentRadius, navMeshParams.m_agentHeight, navMeshParams.m_agentRadius };
+
+            // Convert start and end to float arrays
+            var startArray = new float[] { start.x, start.y, start.z };
+            var endArray = new float[] { end.x, end.y, end.z };
+
+            // Find nearest polygons to start and end points
+            uint startRef = 0, endRef = 0;
+            float[] nearestStart = new float[3];
+            float[] nearestEnd = new float[3];
+            navQuery.findNearestPoly(startArray, extents, filter, ref startRef, ref nearestStart);
+            navQuery.findNearestPoly(endArray, extents, filter, ref endRef, ref nearestEnd);
+
+            if (startRef == 0 || endRef == 0)
+            {
+                return false; // One or both points are outside the navmesh
+            }
+
+            // Perform a raycast
+            float   t = 0.0f;
+            int     pathCount = 0;
+            navQuery.raycast(startRef, nearestStart, nearestEnd, filter, ref t, hitNormal, path, ref pathCount, path.Length);
+
+            // Check if the ray reached the target
+            return t >= 1.0f;
+        }
+
+        public bool HasPlanarLOS(Vector3 start, Vector3 end, float toleranceDegrees = 20.0f)
+        {
+            if ((recast == null) || (recast.m_navQuery == null))
+            {
+                Build();
+                if (recast == null) return false;
+            }
+
+            var navQuery = recast.m_navQuery;
+            var filter = new Detour.dtQueryFilter();
+            var extents = new float[3] { navMeshParams.m_agentRadius, navMeshParams.m_agentHeight, navMeshParams.m_agentRadius };
+
+            // Convert start and end to float arrays
+            var startArray = new float[] { start.x, start.y, start.z };
+            var endArray = new float[] { end.x, end.y, end.z };
+
+            // Find nearest polygons to start and end points
+            uint startRef = 0, endRef = 0;
+            float[] nearestStart = new float[3];
+            float[] nearestEnd = new float[3];
+            navQuery.findNearestPoly(startArray, extents, filter, ref startRef, ref nearestStart);
+            navQuery.findNearestPoly(endArray, extents, filter, ref endRef, ref nearestEnd);
+
+            if (startRef == 0 || endRef == 0)
+            {
+                return false; // One or both points are outside the navmesh
+            }
+
+            // Get the normals of the polygons
+            Vector3 startNormal = GetPolygonNormal(startRef);
+            Vector3 endNormal = GetPolygonNormal(endRef);
+
+            float dp = Vector3.Dot(startNormal, endNormal);
+            if (Mathf.Abs(dp) < Mathf.Cos(Mathf.Deg2Rad * toleranceDegrees))
+            {
+                return false;
+            }
+
+            // Perform a raycast
+            float t = 0.0f;
+            int pathCount = 0;
+            navQuery.raycast(startRef, nearestStart, nearestEnd, filter, ref t, hitNormal, path, ref pathCount, path.Length);
+
+            // Check if the ray reached the target
+            return t >= 1.0f;
+        }
+
+        private Vector3 GetPolygonNormal(uint polyRef)
+        {
+            uint polyIndex = recast.m_navMesh.decodePolyIdPoly(polyRef);
+
+            return recast.GetPolyNormal(polyIndex);        
+        }
+
         [Button("Build Shell Mesh")]
-        void BuildShellMesh()
+        public void BuildShellMesh()
         {
             if (navigationMesh == null)
             {
@@ -212,6 +291,61 @@ namespace SnapMeshPCG
             if (navigationMesh == null) return;
 
             shellMesh = MeshTools.ExtrudeMesh(navigationMesh, Vector3.up * 0.1f, Vector3.down * 0.1f);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (displayNavmesh)
+            {
+                if (navigationMesh == null)
+                {
+                    navigationMesh = GetMesh();
+                }
+                if (navigationMesh != null)
+                {
+                    if (displayWireframeTriangles)
+                    {
+                        Gizmos.color = Color.black;
+                        Gizmos.DrawWireMesh(navigationMesh);
+                    }
+                    else if ((recast != null) && (recast.m_pmesh != null))
+                    {
+                        for (uint i = 0; i < recast.m_pmesh.npolys; i++)
+                        {
+                            var vertices = recast.GetPoly(i);
+                            var center = Vector3.zero;
+                            for (int j = 0; j < vertices.Length; j++)
+                            {
+                                Gizmos.color = Color.black;
+                                Gizmos.DrawLine(vertices[j], vertices[(j + 1) % vertices.Length]);
+                                center += vertices[j];
+                            }
+
+                            center /= vertices.Length;
+
+                            if (displayNormals)
+                            {
+                                var n = recast.GetPolyNormal(i);
+
+                                Gizmos.color = Color.cyan;
+                                Gizmos.DrawLine(center, center + n);
+                            }
+                        }
+                    }
+                    Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
+                    Gizmos.DrawMesh(navigationMesh);
+                }
+            }
+            if (displayShellMesh)
+            {
+                if (shellMesh != null)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawWireMesh(shellMesh);
+                    Gizmos.color = new Color(0.9f, 0.4f, 0.2f, 0.5f);
+                    Gizmos.DrawMesh(shellMesh);
+                }
+            }
         }
     }
 }

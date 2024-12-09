@@ -2489,7 +2489,7 @@ public static partial class Detour{
         /// (no wall hit), meaning it reached the end position. This is one example of why
         /// this method is meant for short distance checks.
         ///
-        dtStatus raycast(dtPolyRef startRef, float[] startPos, float[] endPos,
+        public dtStatus raycast(dtPolyRef startRef, float[] startPos, float[] endPos,
 								         dtQueryFilter filter,
 								         ref float t, float[] hitNormal, dtPolyRef[] path, ref int pathCount, int maxPath)
         {
