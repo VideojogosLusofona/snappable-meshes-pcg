@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -346,6 +347,31 @@ namespace SnapMeshPCG
                     Gizmos.DrawMesh(shellMesh);
                 }
             }
+        }
+
+        public int GetPolyCount()
+        {
+            rcPolyMesh polyMesh = recast.m_pmesh;
+            return polyMesh.npolys;
+        }
+
+        public Vector3 GetPolyCentroid(uint i)
+        {
+            return recast.GetPolyCentroid(i);
+        }
+        public Vector3 GetPolyBoundCenter(uint i)
+        {
+            return recast.GetPolyBoundCenter(i);
+        }
+
+        public Vector3 GetPolyNormal(uint i)
+        {
+            return recast.GetPolyNormal(i);
+        }
+
+        internal List<uint> GetNeighbours(uint i)
+        {
+            return recast.GetNeighbours(i);
         }
     }
 }
