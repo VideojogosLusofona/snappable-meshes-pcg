@@ -14,6 +14,8 @@ public class SteinerSkeletonTest : MonoBehaviour
     private SourceMode source = SourceMode.TriangleNavMesh;
     [SerializeField, ShowIf(nameof(source), SourceMode.NavMesh)]
     private bool useSkips;
+    [SerializeField, ShowIf(nameof(source), SourceMode.NavMesh)]
+    private bool useCentroid;
     [SerializeField, ShowIf(nameof(source), SourceMode.TriangleNavMesh)] 
     private int subdivisions = 1;
     [SerializeField] 
@@ -43,10 +45,12 @@ public class SteinerSkeletonTest : MonoBehaviour
     [SerializeField, HideInInspector]
     Tree<Node> tree;
 
+    LocalNavMesh navMeshComponent;
+
     [Button("Build Skeleton")]
     public void BuildSkeleton()
     {
-        var navMeshComponent = GetComponent<LocalNavMesh>();
+        navMeshComponent = GetComponent<LocalNavMesh>();
         if (!navMeshComponent.isInit) navMeshComponent.Build();
 
         tree = null;
@@ -76,7 +80,7 @@ public class SteinerSkeletonTest : MonoBehaviour
 
     private void BuildGraphFromTriangleNavMesh(List<int> terminalNodes)
     {
-        var navMeshComponent = GetComponent<LocalNavMesh>();
+        navMeshComponent = GetComponent<LocalNavMesh>();
         if (!navMeshComponent.isInit) navMeshComponent.Build();
 
         var topologyComponent = GetComponent<TopologyComponent>();
@@ -126,12 +130,13 @@ public class SteinerSkeletonTest : MonoBehaviour
 
     private void BuildGraphFromNavMesh(List<int> terminalNodes, bool buildSkips)
     {
-        var navMeshComponent = GetComponent<LocalNavMesh>();
+        navMeshComponent = GetComponent<LocalNavMesh>();
 
         graph = new Graph<Node>(false);
         for (uint i = 0; i < navMeshComponent.GetPolyCount(); i++)
         {
-            var polyCenter = navMeshComponent.GetPolyBoundCenter(i);
+            var polyCenter = (useCentroid) ? (navMeshComponent.GetPolyCentroid(i)) : (navMeshComponent.GetPolyBoundCenter(i));
+            polyCenter = navMeshComponent.GetPointInNavmesh(polyCenter);
             graph.Add(new Node(polyCenter, navMeshComponent.GetPolyNormal(i)));
         }
 
@@ -232,13 +237,26 @@ public class SteinerSkeletonTest : MonoBehaviour
 
         tree = trees[0];
 
-        tree.Simplify((tree, grandParentId, parentId, nodeId) => 
-                        (Vector3.Angle(tree.GetNode(grandParentId).normal, tree.GetNode(parentId).normal) < 10.0f) &&
-                        (Vector3.Angle(tree.GetNode(parentId).normal, tree.GetNode(nodeId).normal) < 10.0f) &&
-                        (Vector3.Angle(tree.GetNode(grandParentId).normal, tree.GetNode(nodeId).normal) < 10.0f) &&
-                        (navMeshComponent.HasLOS(tree.GetNode(grandParentId).pos, tree.GetNode(nodeId).pos)));
-
+        // Just consider the difference between the grandparent and the parent - if they have approximately the same slope, they can be simplified.
+        tree.Simplify(CanSimplify);
         graph = null;
+    }
+
+    private bool CanSimplify(Tree<Node> tree, int grandParentId, int parentId, int nodeId)
+    {
+        Vector3 endNodePos = tree.GetNode(nodeId).pos;
+
+        if (tree.IsLeaf(nodeId))
+        {
+            // Check if end point is on the navmesh, if not we can't simplify this segment
+            if (Vector3.Distance(endNodePos, navMeshComponent.GetPointInNavmesh(endNodePos)) > 0.1f)
+            {
+                return false;
+            }
+        }
+
+        return (Vector3.Angle(tree.GetNode(grandParentId).normal, tree.GetNode(parentId).normal) < 10.0f) &&
+               (navMeshComponent.HasLOS(tree.GetNode(grandParentId).pos, endNodePos, 0.0f));
     }
 
     static Color[] TreeLeveLColors = { Color.red, Color.yellow, Color.cyan, Color.green, Color.magenta, Color.white };
