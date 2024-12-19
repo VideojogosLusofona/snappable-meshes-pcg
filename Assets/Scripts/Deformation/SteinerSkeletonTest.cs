@@ -18,6 +18,10 @@ public class SteinerSkeletonTest : MonoBehaviour
     private int subdivisions = 1;
     [SerializeField] 
     private bool simplifyWithLOS = false;
+    [SerializeField]
+    private bool rebalanceTree = true;
+    [SerializeField]
+    private bool useCenterPoint = false;
     [SerializeField] 
     private bool displayGraph;
     [SerializeField, ShowIf(nameof(displayGraph))] private bool displayNodeID;
@@ -43,6 +47,9 @@ public class SteinerSkeletonTest : MonoBehaviour
     [SerializeField, HideInInspector]
     Tree<Node> tree;
 
+    [SerializeField, HideInInspector]
+    Vector3 centerPos;
+
     [Button("Build Skeleton")]
     public void BuildSkeleton()
     {
@@ -65,13 +72,54 @@ public class SteinerSkeletonTest : MonoBehaviour
             default:
                 break;
         }
+        
+        if (useCenterPoint)
+        {
+            centerPos = Vector3.zero;
+            foreach (var node in terminalNodes)
+            {
+                centerPos += graph.GetNode(node).pos;
+            }
+            centerPos /= terminalNodes.Count;
+
+            var nodeId = GetClosestNodeId(centerPos);
+
+            if (nodeId != -1)
+            {
+                // Add the node closer to the center node to the terminal nodes list
+                centerPos = graph.GetNode(nodeId).pos;
+                terminalNodes.Add(nodeId);
+            }
+        }
 
         graph = SteinerTree.Build(graph, terminalNodes);
 
         if (simplifyWithLOS)
         {
             SimplifyLOS(navMeshComponent);
+            if (rebalanceTree)
+            {
+                tree.Balance();
+            }
         }
+    }
+
+    private int GetClosestNodeId(Vector3 pos)
+    {
+        float minDist = float.MaxValue;
+        int nodeId = -1;
+
+        for (int i = 0; i < graph.nodeCount; i++)
+        {
+            float d = Vector3.Distance(pos, graph.GetNode(i).pos);
+            if (d < minDist)
+            {
+                minDist = d;
+                nodeId = i;
+            }
+        }
+
+        return nodeId;
     }
 
     private void BuildGraphFromTriangleNavMesh(List<int> terminalNodes)
@@ -298,6 +346,12 @@ public class SteinerSkeletonTest : MonoBehaviour
             {
                 DrawTreeNode(tree.rootNodeId, 0);
             }
+
+            if (useCenterPoint)
+            {
+                Gizmos.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+                Gizmos.DrawSphere(centerPos, nodeRadius * 2.0f);
+            }
         }
     }
 
@@ -310,6 +364,10 @@ public class SteinerSkeletonTest : MonoBehaviour
 
         Gizmos.color = TreeLeveLColors[depth % TreeLeveLColors.Length].ChangeAlpha(0.5f);
         Gizmos.DrawSphere(node.pos, radius);
+        if (displayNodeID)
+        {
+            DebugHelpers.DrawTextAt(node.pos, Vector3.zero, 16, Color.white, $"{nodeId}", true);
+        }
 
         foreach (var childNodeId in tree.GetChildren(nodeId))
         {

@@ -11,7 +11,7 @@ namespace SnapMeshPCG
 {
     public class LocalNavMesh : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, Expandable]
         private NavMeshGeneratorConfig navMeshConfig;
         [SerializeField]
         private bool                   displayNavmesh;
