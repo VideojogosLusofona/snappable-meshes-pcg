@@ -2720,7 +2720,7 @@ public static partial class Detour{
         /// If the result arrays are to small to hold the entire result set, they will be 
         /// filled to capacity.
         /// 
-        dtStatus findPolysAroundCircle(dtPolyRef startRef, float[] centerPos, float radius,
+        public dtStatus findPolysAroundCircle(dtPolyRef startRef, float[] centerPos, float radius,
 											           dtQueryFilter filter,
 											           dtPolyRef[] resultRef, dtPolyRef[] resultParent, float[] resultCost,
 											           ref int resultCount, int maxResult)

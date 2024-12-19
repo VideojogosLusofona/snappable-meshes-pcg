@@ -53,6 +53,12 @@ This software uses the following third-party plugins:
 * [NaughtyAttributes](https://github.com/dbrizov/NaughtyAttributes)
   (MIT License)
 * [Array2DEditor](https://github.com/Eldoir/Array2DEditor) (MIT License)
+* [UnityCommon](https://github.com/DiogoDeAndrade/UnityCommon)
+  (MIT License)
+* [NuGet for Unity](https://github.com/GlitchEnzo/NuGetForUnity)
+  (MIT License)
+* [Math.NET Numerics](https://github.com/mathnet/mathnet-numerics)
+  (MIT License)
 
 ## License
 

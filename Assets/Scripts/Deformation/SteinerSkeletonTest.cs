@@ -3,12 +3,14 @@ using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System;
-using JetBrains.Annotations;
+using MathNet.Numerics.LinearAlgebra;
+using System.Linq;
 
 [RequireComponent(typeof(LocalNavMesh))]
 public class SteinerSkeletonTest : MonoBehaviour
 {
-    public enum SourceMode { TriangleNavMesh, NavMesh };
+    public enum SourceMode { TriangleNavMesh, NavMesh, DetailMesh };
+    public enum ComputeCentralityMode { Degree, Closeness, Betweenness, Eigenvector, WeightedEigenvector, Katz, WeightedKatz, Harmonic };
 
     [SerializeField] 
     private SourceMode source = SourceMode.TriangleNavMesh;
@@ -16,10 +18,12 @@ public class SteinerSkeletonTest : MonoBehaviour
     private bool useSkips;
     [SerializeField, ShowIf(nameof(source), SourceMode.NavMesh)]
     private bool useCentroid;
-    [SerializeField, ShowIf(nameof(source), SourceMode.TriangleNavMesh)] 
+    [SerializeField, ShowIf(nameof(supportSubdivs))] 
     private int subdivisions = 1;
     [SerializeField] 
     private bool simplifyWithLOS = false;
+    [SerializeField, ShowIf(nameof(simplifyWithLOS))]
+    private ComputeCentralityMode centralityMode = ComputeCentralityMode.Betweenness;
     [SerializeField]
     private bool rebalanceTree = true;
     [SerializeField]
@@ -53,8 +57,12 @@ public class SteinerSkeletonTest : MonoBehaviour
     Vector3 centerPos;
     LocalNavMesh navMeshComponent;
 
-    [Button("Build Skeleton")]
-    public void BuildSkeleton()
+    List<int> terminalNodes;
+
+    private bool supportSubdivs => (source == SourceMode.TriangleNavMesh) || (source == SourceMode.DetailMesh);
+
+    [Button("Build Base Graph")]
+    public void BuildBaseGraph()
     {
         navMeshComponent = GetComponent<LocalNavMesh>();
         if (!navMeshComponent.isInit) navMeshComponent.Build();
@@ -62,20 +70,23 @@ public class SteinerSkeletonTest : MonoBehaviour
         tree = null;
         graph = null;
 
-        var terminalNodes = new List<int>();
+        terminalNodes = new List<int>();
 
         switch (source)
         {
             case SourceMode.TriangleNavMesh:
-                BuildGraphFromTriangleNavMesh(terminalNodes);
+                BuildGraphFromTriangleNavMesh(terminalNodes, false);
                 break;
             case SourceMode.NavMesh:
-                BuildGraphFromNavMesh(terminalNodes, useSkips);
+                BuildGraphFromNavMesh(terminalNodes, useSkips, false);
+                break;
+            case SourceMode.DetailMesh:
+                BuildGraphFromTriangleNavMesh(terminalNodes, true);
                 break;
             default:
                 break;
         }
-        
+
         if (useCenterPoint)
         {
             centerPos = Vector3.zero;
@@ -94,6 +105,12 @@ public class SteinerSkeletonTest : MonoBehaviour
                 terminalNodes.Add(nodeId);
             }
         }
+    }
+
+    [Button("Build Skeleton")]
+    public void BuildSkeleton()
+    {
+        BuildBaseGraph();
 
         graph = SteinerTree.Build(graph, terminalNodes);
 
@@ -125,14 +142,14 @@ public class SteinerSkeletonTest : MonoBehaviour
         return nodeId;
     }
 
-    private void BuildGraphFromTriangleNavMesh(List<int> terminalNodes)
+    private void BuildGraphFromTriangleNavMesh(List<int> terminalNodes, bool useDetail)
     {
         navMeshComponent = GetComponent<LocalNavMesh>();
         if (!navMeshComponent.isInit) navMeshComponent.Build();
 
         var topologyComponent = GetComponent<TopologyComponent>();
 
-        var navMesh = navMeshComponent.GetMesh();
+        var navMesh = (useDetail) ? (navMeshComponent.GetDetailMesh()) : (navMeshComponent.GetMesh());
         if (subdivisions > 0)
         {
             for (int i = 0; i < subdivisions; i++)
@@ -175,11 +192,11 @@ public class SteinerSkeletonTest : MonoBehaviour
         }
     }
 
-    private void BuildGraphFromNavMesh(List<int> terminalNodes, bool buildSkips)
+    private void BuildGraphFromNavMesh(List<int> terminalNodes, bool buildSkips, bool directed)
     {
         navMeshComponent = GetComponent<LocalNavMesh>();
 
-        graph = new Graph<Node>(false);
+        graph = new Graph<Node>(directed);
         for (uint i = 0; i < navMeshComponent.GetPolyCount(); i++)
         {
             var polyCenter = (useCentroid) ? (navMeshComponent.GetPolyCentroid(i)) : (navMeshComponent.GetPolyBoundCenter(i));
@@ -192,7 +209,9 @@ public class SteinerSkeletonTest : MonoBehaviour
             var neighbours = navMeshComponent.GetNeighbours(i);
             foreach (var n in neighbours)
             {
-                graph.Add((int)i, (int)n, Vector3.Distance(graph.GetNode((int)i).pos, graph.GetNode((int)n).pos));
+                float d = Vector3.Distance(graph.GetNode((int)i).pos, graph.GetNode((int)n).pos);
+                graph.Add((int)i, (int)n, d);
+                if (directed) graph.Add((int)n, (int)i, d);
             }
         }
 
@@ -213,12 +232,17 @@ public class SteinerSkeletonTest : MonoBehaviour
                     {
                         if (navMeshComponent.HasLOS(p1, p2))
                         {
-                            graph.Add(i, j, Vector3.Distance(p1, p2));
+                            float d = Vector3.Distance(p1, p2);
+
+                            graph.Add(i, j, d);
+                            if (directed) graph.Add(j, i, d);
                         }
                     }
                 }
             }
         }
+
+        int baseNodeCount = graph.nodeCount;
 
         var connectors = GetComponentsInChildren<Connector>();
         foreach (var connector in connectors)
@@ -226,8 +250,19 @@ public class SteinerSkeletonTest : MonoBehaviour
             int connectorId = graph.Add(new Node(connector.transform.position, connector.transform.up));
             terminalNodes.Add(connectorId);
 
+            // Create links to all nodes that have LOS to the closest point on the surface
+            /*Vector3 pStart = navMeshComponent.GetPointInNavmesh(connector.transform.position);
+            for (int i = 0; i < baseNodeCount; i++)
+            {
+                Vector3 pEnd = navMeshComponent.GetPointInNavmesh(graph.GetNode(i).pos);
+                if (navMeshComponent.HasLOS(pStart, pEnd))
+                {
+                    graph.Add(connectorId, i, Vector3.Distance(connector.transform.position, pEnd));
+                }
+            }//*/
+
             // Find closest node
-            int     closest = -1;
+            /*int     closest = -1;
             float   minDist = float.MaxValue;
             for (int i = 0; i < graph.nodeCount - 1; i++)
             {
@@ -239,7 +274,13 @@ public class SteinerSkeletonTest : MonoBehaviour
                 }
             }
 
-            graph.Add(connectorId, closest, Vector3.Distance(graph.GetNode(closest).pos, connector.transform.position));
+            graph.Add(connectorId, closest, Vector3.Distance(graph.GetNode(closest).pos, connector.transform.position));//*/
+
+            var polys = navMeshComponent.GetPolysInCircle(connector.transform.position, navMeshComponent.agentRadius * 2.0f);
+            foreach (var p in polys)
+            {
+                graph.Add((int)p, connectorId, 2.0f * Vector3.Distance(graph.GetNode((int)p).pos, connector.transform.position));
+            }//*/
         }
     }
 
@@ -269,7 +310,36 @@ public class SteinerSkeletonTest : MonoBehaviour
 
     public void SimplifyLOS(LocalNavMesh navMeshComponent)
     {
-        var trees = graph.BuildTrees(Graph<Node>.TreeBuildMode.HighestDegree, SimplifyLOS_SelectPointFromCandidates);
+        switch (centralityMode)
+        {
+            case ComputeCentralityMode.Degree:
+                graph.ComputeCentrality(Graph<Node>.ComputeCentralityMode.Degree);
+                break;
+            case ComputeCentralityMode.Closeness:
+                graph.ComputeCentrality(Graph<Node>.ComputeCentralityMode.Closeness);
+                break;
+            case ComputeCentralityMode.Betweenness:
+                graph.ComputeCentrality(Graph<Node>.ComputeCentralityMode.Betweenness);
+                break;
+            case ComputeCentralityMode.Eigenvector:
+                graph.SetCentrality(ComputeEigenVectorCentrality(graph, false));
+                break;
+            case ComputeCentralityMode.WeightedEigenvector:
+                graph.SetCentrality(ComputeEigenVectorCentrality(graph, true));
+                break;
+            case ComputeCentralityMode.Katz:
+                graph.SetCentrality(ComputeKatzCentrality(graph, 0.1f, 1.0f, false));
+                break;
+            case ComputeCentralityMode.WeightedKatz:
+                graph.SetCentrality(ComputeKatzCentrality(graph, 0.1f, 1.0f, true));
+                break;
+            case ComputeCentralityMode.Harmonic:
+                graph.ComputeCentrality(Graph<Node>.ComputeCentralityMode.Harmonic);
+                break;
+            default:
+                break;
+        }
+        var trees = graph.BuildTrees(Graph<Node>.TreeBuildMode.Centrality, SimplifyLOS_SelectPointFromCandidates);
 
         if (trees.Count == 0)
         {
@@ -287,6 +357,98 @@ public class SteinerSkeletonTest : MonoBehaviour
         // Just consider the difference between the grandparent and the parent - if they have approximately the same slope, they can be simplified.
         tree.Simplify(CanSimplify);
         graph = null;
+    }
+
+    private List<float> ComputeEigenVectorCentrality(Graph<Node> graph, bool weighted)
+    {
+        var adjacencyMatrix = Matrix<float>.Build.Dense(graph.nodeCount, graph.nodeCount);
+        if (weighted)
+        {
+            for (int n1 = 0; n1 < graph.nodeCount; n1++)
+            {
+                for (int n2 = 0; n2 < graph.nodeCount; n2++)
+                {
+                    adjacencyMatrix[n1, n2] = graph.GetWeigth(n1, n2);
+                }
+            }
+        }
+        else
+        {
+            for (int n1 = 0; n1 < graph.nodeCount; n1++)
+            {
+                for (int n2 = 0; n2 < graph.nodeCount; n2++)
+                {
+                    if (graph.HasLink(n1, n2)) adjacencyMatrix[n1, n2] = 1;
+                }
+            }
+        }
+
+        // Step 2: Compute eigenvalues and eigenvectors
+        var evd = adjacencyMatrix.Evd();
+        var eigenvalues = evd.EigenValues.Real();
+        var eigenvectors = evd.EigenVectors;
+
+        // Step 3: Find the index of the largest eigenvalue
+        int maxEigenIndex = 0;
+        for (int i = 1; i < eigenvalues.Count; i++)
+        {
+            if (eigenvalues[i] > eigenvalues[maxEigenIndex]) maxEigenIndex = i;
+        }
+
+        // Step 4: Extract the corresponding eigenvector
+        var centralityVector = eigenvectors.Column(maxEigenIndex);
+
+        // Step 5: Normalize the eigenvector
+        var normalizedCentrality = centralityVector / centralityVector.Sum();
+
+        // Step 6: Convert to a list and return
+        return normalizedCentrality.ToList();
+    }
+
+    private List<float> ComputeKatzCentrality(Graph<Node> graph, float alpha = 0.1f, float beta = 1.0f, bool weighted = false)
+    {
+        var adjacencyMatrix = Matrix<float>.Build.Dense(graph.nodeCount, graph.nodeCount);
+        if (weighted)
+        {
+            for (int n1 = 0; n1 < graph.nodeCount; n1++)
+            {
+                for (int n2 = 0; n2 < graph.nodeCount; n2++)
+                {
+                    adjacencyMatrix[n1, n2] = graph.GetWeigth(n1, n2);
+                }
+            }
+        }
+        else
+        {
+            for (int n1 = 0; n1 < graph.nodeCount; n1++)
+            {
+                for (int n2 = 0; n2 < graph.nodeCount; n2++)
+                {
+                    if (graph.HasLink(n1, n2)) adjacencyMatrix[n1, n2] = 1;
+                }
+            }
+        }
+
+        // Step 2: Create the identity matrix
+        var identityMatrix = Matrix<float>.Build.DenseIdentity(graph.nodeCount);
+
+        // Step 3: Compute (I - alpha * A)
+        var katzMatrix = identityMatrix - (adjacencyMatrix * alpha);
+
+        // Step 4: Invert the matrix
+        var invertedMatrix = katzMatrix.Inverse();
+
+        // Step 5: Create the beta vector (constant value for all nodes)
+        var betaVector = Vector<float>.Build.Dense(graph.nodeCount, beta);
+
+        // Step 6: Compute Katz centrality: (I - alpha * A)^(-1) * beta
+        var centralityVector = invertedMatrix * betaVector;
+
+        // Step 7: Normalize the centrality vector
+        var normalizedCentrality = centralityVector / centralityVector.Sum();
+
+        // Step 8: Convert to a list and return
+        return normalizedCentrality.ToList();
     }
 
     private bool CanSimplify(Tree<Node> tree, int grandParentId, int parentId, int nodeId)

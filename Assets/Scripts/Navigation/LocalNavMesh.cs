@@ -32,6 +32,10 @@ namespace SnapMeshPCG
 
         private bool canShowNormals => displayNavmesh && (!displayWireframeTriangles);
         public bool isInit => recast != null;
+        public float agentRadius => navMeshConfig.agentRadius;
+
+        /*public Transform testPoint;
+        public float     testRadius = 5.0f;//*/
 
         [Button("Build")]
         public void Build(bool worldSpace = true)
@@ -386,6 +390,21 @@ namespace SnapMeshPCG
                     Gizmos.DrawMesh(shellMesh);
                 }
             }
+
+            /*if (testPoint != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(testPoint.position, testRadius);
+                
+                var polys = GetPolysInCircle(testPoint.position, testRadius);
+                foreach (var poly in polys)
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawSphere(GetPolyCentroid(poly), testRadius * 0.5f);
+                }
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawSphere(GetPointInNavmesh(testPoint.position), testRadius * 0.25f);
+            }//*/
         }
 
         public int GetPolyCount()
@@ -411,6 +430,41 @@ namespace SnapMeshPCG
         internal List<uint> GetNeighbours(uint i)
         {
             return recast.GetNeighbours(i);
+        }
+
+        public List<uint> GetPolysInCircle(Vector3 center, float radius)
+        {
+            // Step 1: Find the nearest polygon to the center point
+            uint startRef = 0;
+            float[] nearestPoint = new float[3];
+            float[] centerArray = new float[] { center.x, center.y, center.z };
+            var extents = new float[] { radius, radius, radius };
+
+            var filter = new Detour.dtQueryFilter();
+            recast.m_navQuery.findNearestPoly(centerArray, extents, filter, ref startRef, ref nearestPoint);
+
+            var ret = new List<uint>();
+            if (startRef == 0)
+            {
+                return ret; // No valid starting polygon found
+            }
+
+            // Step 2: Query polygons within the radius
+            uint[] resultRef = new uint[256];
+            uint[] resultParent = new uint[256];
+            float[] resultCost = new float[256];
+            int resultCount = 0;
+
+            recast.m_navQuery.findPolysAroundCircle(startRef, centerArray, radius, filter, resultRef, resultParent, resultCost, ref resultCount, 256);
+
+            for (int i = 0; i < resultCount; i++)
+            {
+                uint polyIndex = recast.m_navMesh.decodePolyIdPoly(resultRef[i]);
+
+                ret.Add(polyIndex);
+            }
+
+            return ret;
         }
     }
 }
