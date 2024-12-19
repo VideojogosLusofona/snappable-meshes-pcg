@@ -20,11 +20,14 @@ namespace SnapMeshPCG
         [SerializeField, ShowIf(nameof(canShowNormals))]
         private bool                   displayNormals = true;
         [SerializeField]
+        private bool                   displayDetailMesh;
+        [SerializeField]
         private bool                    displayShellMesh;        
 
         RcdtcsUnityUtils.SystemHelper       recast;
         RcdtcsUnityUtils.RecastMeshParams   navMeshParams;
         Mesh                                navigationMesh;
+        Mesh                                detailMesh;
         Mesh                                shellMesh;
 
         private bool canShowNormals => displayNavmesh && (!displayWireframeTriangles);
@@ -79,6 +82,7 @@ namespace SnapMeshPCG
             recast.ComputeSystem();
 
             navigationMesh = recast.GetPolyMesh((worldSpace) ? (Matrix4x4.identity) : (transform.worldToLocalMatrix));
+            detailMesh = recast.GetDetailMesh((worldSpace) ? (Matrix4x4.identity) : (transform.worldToLocalMatrix));
 
             UnityEditor.EditorUtility.ClearProgressBar();
         }
@@ -96,6 +100,16 @@ namespace SnapMeshPCG
             }
 
             return navigationMesh;
+        }
+
+        public Mesh GetDetailMesh(bool worldSpace = true)
+        {
+            if (detailMesh == null)
+            {
+                Build(worldSpace);
+            }
+
+            return detailMesh;
         }
 
         public Polyline GetPath(Vector3 start, Vector3 end, bool includeEndpoints, bool computeNormals)
@@ -191,7 +205,7 @@ namespace SnapMeshPCG
         float[] hitNormal = new float[3];
         uint[] path = new uint[1024];
 
-        public bool HasLOS(Vector3 start, Vector3 end)
+        public bool HasLOS(Vector3 start, Vector3 end, float tolerance = -float.MaxValue)
         {
             if ((recast == null) || (recast.m_navQuery == null))
             {
@@ -201,7 +215,16 @@ namespace SnapMeshPCG
 
             var navQuery = recast.m_navQuery;
             var filter = new Detour.dtQueryFilter();
-            var extents = new float[3] { navMeshParams.m_agentRadius, navMeshParams.m_agentHeight, navMeshParams.m_agentRadius };
+            float[] extents;
+
+            if (tolerance == -float.MaxValue)
+            {
+                extents = new float[3] { navMeshParams.m_agentRadius, navMeshParams.m_agentHeight, navMeshParams.m_agentRadius };
+            }
+            else
+            {
+                extents = new float[3] { tolerance, tolerance, tolerance };
+            }
 
             // Convert start and end to float arrays
             var startArray = new float[] { start.x, start.y, start.z };
@@ -335,6 +358,22 @@ namespace SnapMeshPCG
                     }
                     Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.5f);
                     Gizmos.DrawMesh(navigationMesh);
+                }
+            }
+            if (displayDetailMesh)
+            {
+                if (detailMesh == null)
+                {
+                    detailMesh = GetDetailMesh();
+                }
+                if (detailMesh != null)
+                {
+                    // Detail mesh doesn't have polygons, it uses triangles
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawWireMesh(detailMesh);
+
+                    Gizmos.color = new Color(0.8f, 0.4f, 0.2f, 0.5f);
+                    Gizmos.DrawMesh(detailMesh);
                 }
             }
             if (displayShellMesh)
